@@ -7,7 +7,7 @@ export default function App() {
       <Text>The Girls Write Now Team!</Text>
       <Text>Akshay</Text>
       <Text>Brenda</Text>
-      <Text>...</Text>
+      <Text>Emily</Text>
       <Text>...</Text>
       <Text>...</Text>
       <Text>...</Text>

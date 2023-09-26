@@ -5,12 +5,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>The Girls Write Now Team!</Text>
-      <Text>Akshay</Text>
-      <Text>Brenda</Text>
-      <Text>...</Text>
-      <Text>...</Text>
-      <Text>...</Text>
-      <Text>...</Text>
       <StatusBar style="auto" />
     </View>
   );

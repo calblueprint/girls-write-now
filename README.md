@@ -1,8 +1,8 @@
 # Girls Write Now
 
-This project is designed and developed by a team of UC Berkeley students through one of [Cal Blueprint](https://calblueprint.org/)'s project teams during the 2022-23 academic year.
+This project is designed and developed by a team of UC Berkeley students through one of [Cal Blueprint](https://calblueprint.org/)'s project teams during the 2023-24 academic year.
 
-Learn more about [Vouchers 4 Veggies](https://girlswritenow.org/) and [Cal Blueprint](https://calblueprint.org/).
+Learn more about [Girls Write Now](https://girlswritenow.org/) and [Cal Blueprint](https://calblueprint.org/).
 
 ---
 

@@ -63,9 +63,9 @@ export default function Login() {
           leftIcon={{ type: 'font-awesome', name: 'lock' }}
           onChangeText={text => setPassword(text)}
           value={password}
-          secureTextEntry
+          secureTextEntry={true}
           placeholder="Password"
-          autoCapitalize="none"
+          autoCapitalize={'none'}
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>

@@ -3,10 +3,10 @@ import { supabase } from '../utils/supabase';
 import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { Session } from '@supabase/supabase-js';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthday, setBirthday] = useState(new Date());
@@ -24,9 +24,7 @@ export default function Account({ session }: { session: Session }) {
 
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(
-          `username, first_name, last_name, birthday, gender, race_ethnicity`,
-        )
+        .select(`first_name, last_name, birthday, gender, race_ethnicity`)
         .eq('user_id', session?.user.id)
         .single();
 
@@ -35,25 +33,28 @@ export default function Account({ session }: { session: Session }) {
       }
 
       if (data) {
-        console.log(`user data on sign in: ${data}`);
-        setUsername(data.username);
-        setFirstName(data.first_name);
-        setLastName(data.last_name);
-        setBirthday(data.birthday);
-        setGender(data.gender);
-        setRaceEthnicity(data.race_ethnicity);
+        setFirstName(data.first_name || firstName);
+        setLastName(data.last_name || lastName);
+        setBirthday(new Date(data.birthday) || birthday);
+        setGender(data.gender || gender);
+        setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert(error.message);
+        Alert.alert(`Get profile error: ${error.message}`);
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const updateProfile = async (updatedInfo: {
-    username: string | undefined;
+  const updateProfile = async ({
+    firstName,
+    lastName,
+    gender,
+    birthday,
+    raceEthnicity,
+  }: {
     firstName: string | undefined;
     lastName: string | undefined;
     gender: string | undefined;
@@ -64,36 +65,34 @@ export default function Account({ session }: { session: Session }) {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
 
-      const updates = {
-        first_name: firstName,
-        last_name: lastName,
-        race_ethnicity: raceEthnicity,
-        birthday,
-        gender,
+      // Only update value that are not blank
+      let updates = {
+        ...(firstName && { first_name: firstName }),
+        ...(lastName && { last_name: lastName }),
+        ...(gender && { gender }),
+        ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
+        ...(birthday && { birthday }),
       };
 
       // Check if user exists
-      const { data, count } = await supabase
+      const { count } = await supabase
         .from('profiles')
         .select(`*`, { count: 'exact' })
         .eq('user_id', session?.user.id);
 
-      console.log(data);
       if (count && count >= 1) {
         // Update user if they exist
-        console.log(`Updates: ${JSON.stringify(updates)}`);
-        let { data, error } = await supabase
+        let { error } = await supabase
           .from('profiles')
           .update(updates)
           .eq('user_id', session?.user.id)
           .select('*');
 
-        console.log(`Updated user data: ${JSON.stringify(data)}`);
-        console.log(`Updated user error: ${JSON.stringify(error)}`);
         if (error) throw error;
       } else {
         // Create user if they don't exist
         let { error } = await supabase.from('profiles').insert(updates);
+
         if (error) throw error;
       }
 
@@ -113,7 +112,6 @@ export default function Account({ session }: { session: Session }) {
         <Input label="Email" value={session?.user?.email} disabled />
       </View>
 
-      <UserStringInput label="Username" value={username} set={setUsername} />
       <UserStringInput
         label="First Name"
         value={firstName}
@@ -127,20 +125,19 @@ export default function Account({ session }: { session: Session }) {
         set={setRaceEthnicity}
       />
 
-      {/* <View style={styles.verticallySpaced}> */}
-      {/*   <Input */}
-      {/*     label="Birthday" */}
-      {/*     value={birthday.toString() || ''} */}
-      {/*     onChangeText={date => setBirthday(date)} */}
-      {/*   /> */}
-      {/* </View> */}
-
+      <DateTimePicker
+        testID="dateTimePicker"
+        value={birthday}
+        mode={'date'}
+        onChange={date => {
+          setBirthday(new Date(date.nativeEvent.timestamp));
+        }}
+      />
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title={loading ? 'Loading ...' : 'Update'}
           onPress={() =>
             updateProfile({
-              username,
               firstName,
               lastName,
               gender,

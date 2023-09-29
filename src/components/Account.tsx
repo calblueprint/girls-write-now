@@ -70,7 +70,6 @@ export default function Account({ session }: { session: Session }) {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
 
-      // Only update values that are not blank
       const updates = {
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),

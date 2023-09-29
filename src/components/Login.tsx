@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { supabase } from '../lib/supabase';
 import { Button, Input } from 'react-native-elements';
+import { supabase } from '../lib/supabase';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,8 +11,8 @@ export default function Login() {
   const signInWithEmail = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email,
+      password,
     });
 
     if (error) Alert.alert(error.message);
@@ -22,8 +22,8 @@ export default function Login() {
   const signUpWithEmail = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+      email,
+      password,
     });
 
     if (error) Alert.alert(error.message);
@@ -39,7 +39,7 @@ export default function Login() {
           onChangeText={text => setEmail(text)}
           value={email}
           placeholder="email@address.com"
-          autoCapitalize={'none'}
+          autoCapitalize="none"
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -48,9 +48,9 @@ export default function Login() {
           leftIcon={{ type: 'font-awesome', name: 'lock' }}
           onChangeText={text => setPassword(text)}
           value={password}
-          secureTextEntry={true}
+          secureTextEntry
           placeholder="Password"
-          autoCapitalize={'none'}
+          autoCapitalize="none"
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>

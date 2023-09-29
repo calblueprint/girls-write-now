@@ -72,7 +72,6 @@ export default function Account({ session }: { session: Session }) {
 
       // Only update values that are not blank
       const updates = {
-<<<<<<< HEAD
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),
         ...(gender && { gender }),

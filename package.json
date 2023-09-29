@@ -18,6 +18,7 @@
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/material-bottom-tabs": "^6.2.17",
     "@react-native-async-storage/async-storage": "^1.19.3",
+    "@react-native-community/datetimepicker": "^7.6.0",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
     "@react-navigation/stack": "^6.3.18",

@@ -157,15 +157,7 @@ export default function Account({ session }: { session: Session }) {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title={loading ? 'Loading ...' : 'Update'}
-          onPress={() =>
-            updateProfile({
-              firstName,
-              lastName,
-              gender,
-              raceEthnicity,
-              birthday,
-            })
-          }
+          onPress={() => updateProfile()}
           disabled={loading}
         />
       </View>

@@ -63,10 +63,8 @@ export default function Account({ session }: { session: Session }) {
     try {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
-      console.log(session?.user);
 
       const updates = {
-        user_id: session?.user.id,
         first_name: firstName,
         last_name: lastName,
         race_ethnicity: raceEthnicity,
@@ -74,13 +72,32 @@ export default function Account({ session }: { session: Session }) {
         gender,
       };
 
-      console.log(`updates: ${JSON.stringify(updates)}`);
-      let { error } = await supabase.from('profiles').upsert(updates);
+      // Check if user exists
+      const { data, count } = await supabase
+        .from('profiles')
+        .select(`*`, { count: 'exact' })
+        .eq('user_id', session?.user.id);
 
-      if (error) {
-        console.error(error);
-        throw error;
+      console.log(data);
+      if (count && count >= 1) {
+        // Update user if they exist
+        console.log(`Updates: ${JSON.stringify(updates)}`);
+        let { data, error } = await supabase
+          .from('profiles')
+          .update(updates)
+          .eq('user_id', session?.user.id)
+          .select('*');
+
+        console.log(`Updated user data: ${JSON.stringify(data)}`);
+        console.log(`Updated user error: ${JSON.stringify(error)}`);
+        if (error) throw error;
+      } else {
+        // Create user if they don't exist
+        let { error } = await supabase.from('profiles').insert(updates);
+        if (error) throw error;
       }
+
+      Alert.alert('Succesfully updated user!');
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);

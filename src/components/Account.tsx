@@ -3,7 +3,40 @@ import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { Session } from '@supabase/supabase-js';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { supabase } from '../lib/supabase';
+import supabase from '../lib/supabase';
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 40,
+    padding: 12,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  mt20: {
+    marginTop: 20,
+  },
+});
+
+type UserDataInputProps = {
+  label: string;
+  value: string;
+  set: React.Dispatch<React.SetStateAction<string>>;
+};
+
+function UserStringInput({ label, value, set }: UserDataInputProps) {
+  return (
+    <View style={styles.verticallySpaced}>
+      <Input
+        label={label}
+        value={value || ''}
+        onChangeText={text => set(text)}
+      />
+    </View>
+  );
+}
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
@@ -12,10 +45,6 @@ export default function Account({ session }: { session: Session }) {
   const [birthday, setBirthday] = useState(new Date());
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
-
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
 
   const getProfile = async () => {
     try {
@@ -48,19 +77,11 @@ export default function Account({ session }: { session: Session }) {
     }
   };
 
-  const updateProfile = async ({
-    firstName,
-    lastName,
-    gender,
-    birthday,
-    raceEthnicity,
-  }: {
-    firstName: string | undefined;
-    lastName: string | undefined;
-    gender: string | undefined;
-    birthday: Date | undefined;
-    raceEthnicity: string | undefined;
-  }) => {
+  useEffect(() => {
+    if (session) getProfile();
+  }, [session]);
+
+  const updateProfile = async () => {
     try {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
@@ -155,36 +176,3 @@ export default function Account({ session }: { session: Session }) {
     </ScrollView>
   );
 }
-
-type UserDataInputProps = {
-  label: string;
-  value: string;
-  set: React.Dispatch<React.SetStateAction<string>>;
-};
-
-function UserStringInput({ label, value, set }: UserDataInputProps) {
-  return (
-    <View style={styles.verticallySpaced}>
-      <Input
-        label={label}
-        value={value || ''}
-        onChangeText={text => set(text)}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});

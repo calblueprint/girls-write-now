@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { Session } from '@supabase/supabase-js';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { supabase } from '../lib/supabase';
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export default function Account({ session }: { session: Session }) {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
 
-      let { data, error, status } = await supabase
+      const { data, error, status } = await supabase
         .from('profiles')
         .select(`first_name, last_name, birthday, gender, race_ethnicity`)
         .eq('user_id', session?.user.id)
@@ -66,7 +66,7 @@ export default function Account({ session }: { session: Session }) {
       if (!session?.user) throw new Error('No user on the session!');
 
       // Only update value that are not blank
-      let updates = {
+      const updates = {
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),
         ...(gender && { gender }),
@@ -82,7 +82,7 @@ export default function Account({ session }: { session: Session }) {
 
       if (count && count >= 1) {
         // Update user if they exist
-        let { error } = await supabase
+        const { error } = await supabase
           .from('profiles')
           .update(updates)
           .eq('user_id', session?.user.id)
@@ -91,7 +91,7 @@ export default function Account({ session }: { session: Session }) {
         if (error) throw error;
       } else {
         // Create user if they don't exist
-        let { error } = await supabase.from('profiles').insert(updates);
+        const { error } = await supabase.from('profiles').insert(updates);
 
         if (error) throw error;
       }
@@ -128,7 +128,7 @@ export default function Account({ session }: { session: Session }) {
       <DateTimePicker
         testID="dateTimePicker"
         value={birthday}
-        mode={'date'}
+        mode="date"
         onChange={date => {
           setBirthday(new Date(date.nativeEvent.timestamp));
         }}
@@ -162,7 +162,7 @@ type UserDataInputProps = {
   set: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const UserStringInput = ({ label, value, set }: UserDataInputProps) => {
+function UserStringInput({ label, value, set }: UserDataInputProps) {
   return (
     <View style={styles.verticallySpaced}>
       <Input
@@ -172,7 +172,7 @@ const UserStringInput = ({ label, value, set }: UserDataInputProps) => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

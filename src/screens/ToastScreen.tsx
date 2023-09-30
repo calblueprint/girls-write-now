@@ -17,7 +17,7 @@ const toast = () => {
     // onHide: () => {},
     // onHidden: () => {}
   });
-}
+};
 
 export default function ToastScreen() {
   return (
@@ -33,5 +33,3 @@ export default function ToastScreen() {
     </RootSiblingParent>
   );
 }
-
-

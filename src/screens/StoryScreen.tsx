@@ -19,7 +19,7 @@ export default function StoryScreen() {
       setTitle(json.title.rendered);
       setContent(json.content.rendered);
     } catch (error) {
-      // console.log(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

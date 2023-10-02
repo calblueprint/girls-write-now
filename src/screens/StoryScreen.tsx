@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
-
-// type Story = {
-//   content: string;
-// };
+import { ActivityIndicator, ScrollView, View } from 'react-native';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import HTMLView from 'react-native-htmlview';
 
 export default function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -31,16 +29,13 @@ export default function StoryScreen() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Story Page</Text>
-
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <Text>
-          {title}
-          {'\n'}
-          {content}
-        </Text> // title shows weird symbols and content shows
+        <ScrollView>
+          <HTMLView value={title} />
+          <HTMLView value={content} />
+        </ScrollView>
       )}
     </View>
   );

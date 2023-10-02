@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export default function HomeScreen() {
+export default function SearchScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>GIRLS WRITE NOW!</Text>
+      <Text>Search Screen</Text>
     </View>
   );
 }

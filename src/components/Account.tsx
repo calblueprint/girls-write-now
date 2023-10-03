@@ -29,6 +29,11 @@ export default function Account({ session }: { session: Session }) {
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
 
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    if (session) getProfile();
+  }, [session]);
+
   const getProfile = async () => {
     try {
       setLoading(true);
@@ -60,16 +65,12 @@ export default function Account({ session }: { session: Session }) {
     }
   };
 
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
-
   const updateProfile = async () => {
     try {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
 
-      // Only update value that are not blank
+      // Only update values that are not blank
       const updates = {
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),
@@ -115,7 +116,6 @@ export default function Account({ session }: { session: Session }) {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input label="Email" value={session?.user?.email} disabled />
       </View>
-
       <UserStringInput
         label="First Name"
         value={firstName}
@@ -132,13 +132,14 @@ export default function Account({ session }: { session: Session }) {
         value={raceEthnicity}
         onChange={setRaceEthnicity}
       />
-
       <DateTimePicker
         testID="dateTimePicker"
         value={birthday}
         mode="date"
         onChange={date => {
-          setBirthday(new Date(date.nativeEvent.timestamp));
+          if (date.nativeEvent.timestamp) {
+            setBirthday(new Date(date.nativeEvent.timestamp));
+          }
         }}
       />
       <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -148,7 +149,6 @@ export default function Account({ session }: { session: Session }) {
           disabled={loading}
         />
       </View>
-
       <View style={styles.verticallySpaced}>
         <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
       </View>

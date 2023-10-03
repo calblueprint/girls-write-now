@@ -6,7 +6,7 @@ import { Session } from '@supabase/supabase-js';
 import Login from '../components/Login';
 import Account from '../components/Account';
 
-export default function App() {
+export default function LoginScreen() {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {

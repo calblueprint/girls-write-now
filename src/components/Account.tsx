@@ -3,7 +3,8 @@ import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { Session } from '@supabase/supabase-js';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import supabase from '../lib/supabase';
+import UserStringInput from './UserStringInput';
+import supabase from '../utils/supabase';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,24 +21,6 @@ const styles = StyleSheet.create({
   },
 });
 
-type UserDataInputProps = {
-  label: string;
-  value: string;
-  set: React.Dispatch<React.SetStateAction<string>>;
-};
-
-function UserStringInput({ label, value, set }: UserDataInputProps) {
-  return (
-    <View style={styles.verticallySpaced}>
-      <Input
-        label={label}
-        value={value || ''}
-        onChangeText={text => set(text)}
-      />
-    </View>
-  );
-}
-
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
@@ -45,6 +28,11 @@ export default function Account({ session }: { session: Session }) {
   const [birthday, setBirthday] = useState(new Date());
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    if (session) getProfile();
+  }, [session]);
 
   const getProfile = async () => {
     try {
@@ -77,16 +65,12 @@ export default function Account({ session }: { session: Session }) {
     }
   };
 
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
-
   const updateProfile = async () => {
     try {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
 
-      // Only update value that are not blank
+      // Only update values that are not blank
       const updates = {
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),
@@ -132,7 +116,6 @@ export default function Account({ session }: { session: Session }) {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input label="Email" value={session?.user?.email} disabled />
       </View>
-
       <UserStringInput
         label="First Name"
         value={firstName}
@@ -145,13 +128,14 @@ export default function Account({ session }: { session: Session }) {
         value={raceEthnicity}
         set={setRaceEthnicity}
       />
-
       <DateTimePicker
         testID="dateTimePicker"
         value={birthday}
         mode="date"
         onChange={date => {
-          setBirthday(new Date(date.nativeEvent.timestamp));
+          if (date.nativeEvent.timestamp) {
+            setBirthday(new Date(date.nativeEvent.timestamp));
+          }
         }}
       />
       <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -161,7 +145,6 @@ export default function Account({ session }: { session: Session }) {
           disabled={loading}
         />
       </View>
-
       <View style={styles.verticallySpaced}>
         <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
       </View>

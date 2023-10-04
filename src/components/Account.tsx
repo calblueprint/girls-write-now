@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import supabase from '../utils/supabase';
 import { StyleSheet, View, Alert, ScrollView } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { Session } from '@supabase/supabase-js';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import supabase from '../utils/supabase';
 import UserStringInput from './UserStringInput';
 
 const styles = StyleSheet.create({

@@ -18,6 +18,7 @@ export default function LoginScreen() {
       setSession(newSession);
     });
   }, []);
+
   return (
     <View>
       {session && session.user ? (

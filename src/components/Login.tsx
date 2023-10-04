@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+<<<<<<< HEAD
 import supabase from '../utils/supabase';
 import { Button, Input } from 'react-native-elements';
+=======
+import { Button, Input } from 'react-native-elements';
+import supabase from '../utils/supabase';
+>>>>>>> 142e05f30de7c365f135becc2ab6a97884ef93fe
 
 const styles = StyleSheet.create({
   container: {

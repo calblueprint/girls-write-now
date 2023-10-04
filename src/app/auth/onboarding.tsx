@@ -1,16 +1,31 @@
-import { Link } from 'expo-router';
-import { Button, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import globalStyles from '../../../globalStyles';
+import { useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { Session } from '@supabase/supabase-js';
+import supabase from '../../utils/supabase';
+import Login from '../../components/Login';
+import Account from '../../components/Account';
 
 function OnboardingScreen() {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session: newSession } }) => {
+      setSession(newSession);
+    });
+
+    supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+  }, []);
+
   return (
-    <SafeAreaView style={globalStyles.container}>
-      <Text style={globalStyles.h1}>Onboarding</Text>
-      <Link href="/home" asChild>
-        <Button title="Update Profile" />
-      </Link>
-    </SafeAreaView>
+    <View>
+      {session && session.user ? (
+        <Account key={session.user.id} session={session} />
+      ) : (
+        <Login />
+      )}
+    </View>
   );
 }
 

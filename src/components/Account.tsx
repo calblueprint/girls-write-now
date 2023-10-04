@@ -29,11 +29,6 @@ export default function Account({ session }: { session: Session }) {
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (session) getProfile();
-  }, [session]);
-
   const getProfile = async () => {
     try {
       setLoading(true);
@@ -64,6 +59,10 @@ export default function Account({ session }: { session: Session }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (session) getProfile();
+  }, [session]);
 
   const updateProfile = async () => {
     try {

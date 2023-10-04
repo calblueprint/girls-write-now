@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { Session } from '@supabase/supabase-js';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -28,6 +28,7 @@ export default function Account({ session }: { session: Session }) {
   const [birthday, setBirthday] = useState(new Date());
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
 
   const getProfile = async () => {
     try {
@@ -131,16 +132,19 @@ export default function Account({ session }: { session: Session }) {
         value={raceEthnicity}
         onChange={setRaceEthnicity}
       />
-      <DateTimePicker
-        testID="dateTimePicker"
-        value={birthday}
-        mode="date"
-        onChange={date => {
-          if (date.nativeEvent.timestamp) {
-            setBirthday(new Date(date.nativeEvent.timestamp));
-          }
-        }}
-      />
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={birthday}
+          mode="date"
+          onChange={date => {
+            setShowDatePicker(Platform.OS === 'ios');
+            if (date.nativeEvent.timestamp) {
+              setBirthday(new Date(date.nativeEvent.timestamp));
+            }
+          }}
+        />
+      )}
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title={loading ? 'Loading ...' : 'Update'}

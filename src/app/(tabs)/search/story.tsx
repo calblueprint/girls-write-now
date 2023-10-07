@@ -26,11 +26,10 @@ function StoryScreen() {
   const htmlParser = (html: string) => {
     const regex = /<p>(.*?)<\/p>/;
     const corresp = regex.exec(html);
-    const firstParagraph = (corresp) ? corresp[0] : "" // <p>text1</p>
-    const firstParagraphWithoutHtml = (corresp) ? corresp[1] : "" // text1
+    const firstParagraph = corresp ? corresp[0] : ''; // <p>text1</p>
+    const firstParagraphWithoutHtml = corresp ? corresp[1] : ''; // text1
     return firstParagraph;
   };
-  
 
   useEffect(() => {
     getStory('170947');

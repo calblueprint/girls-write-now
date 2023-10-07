@@ -132,6 +132,13 @@ export default function Account({ session }: { session: Session }) {
         value={raceEthnicity}
         onChange={setRaceEthnicity}
       />
+
+      {Platform.OS !== 'ios' && (
+        <Button
+          title="Change Birthday"
+          onPress={() => setShowDatePicker(true)}
+        />
+      )}
       {showDatePicker && (
         <DateTimePicker
           testID="dateTimePicker"

@@ -67,13 +67,16 @@ export function AuthContextProvider({
     setSession(null);
   };
 
-  const authContextValue = useMemo(() => ({
+  const authContextValue = useMemo(
+    () => ({
       session,
       signUp,
       signIn,
       signInWithEmail,
       signOut,
-    }), [session]);
+    }),
+    [session],
+  );
 
   return (
     <AuthContext.Provider value={authContextValue}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import supabase from '../utils/supabase';
+import { useSession } from '../utils/AuthContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,16 +19,14 @@ const styles = StyleSheet.create({
 });
 
 export default function Login() {
+  const sessionHandler = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const signInWithEmail = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
     setLoading(false);
@@ -36,13 +34,16 @@ export default function Login() {
 
   const signUpWithEmail = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { error } = await sessionHandler.signUp(email, password);
 
-    if (error) Alert.alert(error.message);
-    console.error(error);
+    if (error) {
+      Alert.alert(error.message);
+      console.error(error);
+    } else {
+      Alert.alert(
+        'Please follow the directions in the confirmation email to activate your account.',
+      );
+    }
     setLoading(false);
   };
 

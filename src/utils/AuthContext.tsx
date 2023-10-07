@@ -1,47 +1,22 @@
-import { Session } from '@supabase/supabase-js';
+import { AuthResponse, Session } from '@supabase/supabase-js';
 import React, {
   createContext,
   useContext,
   useEffect,
   useMemo,
-  useReducer,
+  useState,
 } from 'react';
 import supabase from './supabase';
 
 export interface AuthState {
   session: Session | null;
-  isLoading: boolean;
+  signIn: (newSession: Session | null) => void;
+  signUp: (email: string, password: string) => Promise<AuthResponse>;
+  signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
+  signOut: () => void;
 }
-enum AuthActionType {
-  SIGN_IN,
-  SIGN_OUT,
-}
-type AuthContextAction =
-  | { type: AuthActionType.SIGN_IN; session: Session }
-  | { type: AuthActionType.SIGN_OUT };
 
 const AuthContext = createContext({} as AuthState);
-
-const useAuthReducer = () =>
-  useReducer(
-    (prevState: AuthState, action: AuthContextAction) => {
-      switch (action.type) {
-        case AuthActionType.SIGN_IN:
-          return {
-            session: action.session,
-            isLoading: false,
-          };
-        case AuthActionType.SIGN_OUT:
-          return {
-            session: null,
-            isLoading: false,
-          };
-        default:
-          return prevState;
-      }
-    },
-    { session: null, isLoading: false },
-  );
 
 export function useSession() {
   const value = useContext(AuthContext);
@@ -61,29 +36,44 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [authState, dispatch] = useAuthReducer();
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: newSession } }) => {
-      if (newSession) {
-        dispatch({ type: AuthActionType.SIGN_IN, session: newSession });
-      }
+      setSession(newSession);
     });
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
-      if (newSession) {
-        dispatch({ type: AuthActionType.SIGN_IN, session: newSession });
-      }
+      setSession(newSession);
     });
   }, []);
 
-  const authContextValue = useMemo(
-    () => ({
-      ...authState,
-      dispatch,
-    }),
-    [authState, dispatch],
-  );
+  const signIn = (newSession: Session | null) => {
+    setSession(newSession);
+  };
+
+  const signInWithEmail = async (email: string, password: string) =>
+    supabase.auth.signInWithPassword({
+      email,
+      password,
+    }); // will trigger the use effect to update the session
+  const signUp = async (email: string, password: string) =>
+    supabase.auth.signUp({
+      email,
+      password,
+    }); // will trigger the use effect to update the session
+  const signOut = () => {
+    supabase.auth.signOut();
+    setSession(null);
+  };
+
+  const authContextValue = useMemo(() => ({
+      session,
+      signUp,
+      signIn,
+      signInWithEmail,
+      signOut,
+    }), [session]);
 
   return (
     <AuthContext.Provider value={authContextValue}>

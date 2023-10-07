@@ -8,11 +8,7 @@ function OnboardingScreen() {
 
   return (
     <View>
-      {session && session.user ? (
-        <Account key={session.user.id} session={session} />
-      ) : (
-        <Login />
-      )}
+      {session && session.user ? <Account key={session.user.id} /> : <Login />}
     </View>
   );
 }

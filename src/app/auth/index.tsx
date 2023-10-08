@@ -9,6 +9,7 @@ function LoginScreen() {
       <Text style={globalStyles.h1}>Auth</Text>
       <Button title="Login" onPress={() => router.push('/auth/onboarding')} />
       <Button title="Sign Up" onPress={() => router.push('/auth/signup')} />
+      <Button title="[temp] Home" onPress={() => router.push('/home')} />
     </SafeAreaView>
   );
 }

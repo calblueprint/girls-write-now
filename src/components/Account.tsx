@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { Session } from '@supabase/supabase-js';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import supabase from '../utils/supabase';
 import UserStringInput from './UserStringInput';
+import { useSession } from '../utils/AuthContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +21,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Account({ session }: { session: Session }) {
+export default function Account() {
+  const { session, signOut } = useSession();
+
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -160,7 +162,7 @@ export default function Account({ session }: { session: Session }) {
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+        <Button title="Sign Out" onPress={signOut} />
       </View>
     </ScrollView>
   );

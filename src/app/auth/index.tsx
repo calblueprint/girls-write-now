@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { Button, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import globalStyles from '../../../globalStyles';
+import globalStyles from '../../styles/globalStyles';
 
 function LoginScreen() {
   return (

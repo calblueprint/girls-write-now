@@ -1,8 +1,8 @@
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import globalStyles from '../../../../globalStyles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import globalStyles from '../../../styles/globalStyles';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);

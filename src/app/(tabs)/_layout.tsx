@@ -1,5 +1,5 @@
-import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 
 function HomeIcon({ color }: { color: string }) {
   return <Ionicons name="home-outline" color={color} size={26} />;
@@ -17,7 +17,6 @@ function TabNav() {
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { height: 60 },
         tabBarLabelStyle: { fontSize: 14 },
       }}
     >

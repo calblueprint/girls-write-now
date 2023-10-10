@@ -24,11 +24,10 @@ function StoryScreen() {
   };
 
   const htmlParser = (html: string) => {
-    const regex = /<h2(.*?)h2>(\n+<p(.*?)p>)+/; // <p>.*?<\/p>/;
+    const regex = /<h2(.*?)h2>(\n+<p(.*?)p>)+/; // regex grabs heading and paragraph tags for story
     const corresp = regex.exec(html);
-    const firstParagraph = corresp ? corresp[0] : ''; // <p>text1</p>
-    const firstParagraphWithoutHtml = corresp ? corresp[1] : ''; // text1
-    return corresp[0];
+    const story = corresp ? corresp[0] : ''; // <h2>heading<h2> <p>paragraph1</p> ...
+    return story;
   };
 
   useEffect(() => {
@@ -43,7 +42,6 @@ function StoryScreen() {
         <ScrollView>
           <HTMLView value={title} />
           <HTMLView value={htmlParser(content)} />
-          {/* <HTMLView value={htmlParser(content)} /> */}
         </ScrollView>
       )}
     </SafeAreaView>

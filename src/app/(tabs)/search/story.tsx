@@ -30,13 +30,6 @@ function StoryScreen() {
     }
   };
 
-  const htmlParser = (html: string) => {
-    const regex = /<h2(.*?)h2>(\n+<p(.*?)p>)+/; // regex grabs heading and paragraph tags for story
-    const corresp = regex.exec(html);
-    const story = corresp ? corresp[0] : ''; // <h2>heading<h2> <p>paragraph1</p> ...
-    return story;
-  };
-
   useEffect(() => {
     getStory('170947');
   }, []);

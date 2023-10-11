@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import globalStyles from '../../globalStyles';
+import globalStyles from '../styles/globalStyles';
 
 function SettingsScreen() {
   return (

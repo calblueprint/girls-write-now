@@ -43,7 +43,12 @@
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
     "react-native-url-polyfill": "^2.0.0",
+<<<<<<< HEAD
     "react-native-vector-icons": "^10.0.0"
+=======
+    "react-native-vector-icons": "^10.0.0",
+    "react-scroll-to-top": "^3.0.0"
+>>>>>>> 82dee44 (organized some of the information, still need to format genres and retrieve author information)
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

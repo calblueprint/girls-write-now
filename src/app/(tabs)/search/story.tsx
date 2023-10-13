@@ -4,6 +4,13 @@ import HTMLView from 'react-native-htmlview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import globalStyles from '../../../styles/globalStyles';
 
+function htmlParser(html: string) {
+  const regex = /<h2(.*?)h2>(\n+<p(.*?)p>)+/; // regex grabs heading and paragraph tags for story
+  const corresp = regex.exec(html);
+  const story = corresp ? corresp[0] : ''; // <h2>heading<h2> <p>paragraph1</p> ...
+  return story;
+}
+
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
   const [title, setTitle] = useState(String);
@@ -34,7 +41,7 @@ function StoryScreen() {
       ) : (
         <ScrollView>
           <HTMLView value={title} />
-          <HTMLView value={content} />
+          <HTMLView value={htmlParser(content)} />
         </ScrollView>
       )}
     </SafeAreaView>

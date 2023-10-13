@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView, Image } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import globalStyles from '../../../styles/globalStyles';
@@ -40,6 +40,8 @@ function StoryScreen() {
         <ActivityIndicator />
       ) : (
         <ScrollView>
+          {/* <Image source={{
+          uri: "https://girlswritenow.org/wp-content/uploads/2023/08/Its-Carnvial-Allison-Elliott.png"}}/> */}
           <HTMLView value={title} />
           <HTMLView value={htmlParser(content)} />
         </ScrollView>

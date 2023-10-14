@@ -1,7 +1,11 @@
 import { Redirect } from 'expo-router';
+import { useSession } from '../utils/AuthContext';
 
 function StartPage() {
-  return <Redirect href="/auth" />;
+  const { session } = useSession();
+
+  if (!session) return <Redirect href="/auth/login" />;
+  else return <Redirect href={'/home'} />;
 }
 
 export default StartPage;

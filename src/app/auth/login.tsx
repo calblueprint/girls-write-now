@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Redirect } from 'expo-router';
 import { Alert, StyleSheet, View } from 'react-native';
+import { useSession } from '../../utils/AuthContext';
 import { Button, Input } from 'react-native-elements';
-import { useSession } from '../utils/AuthContext';
+import { Link } from 'expo-router';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,8 +20,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Login() {
+function LoginScreen() {
   const sessionHandler = useSession();
+
+  if (sessionHandler.session) {
+    return <Redirect href={'/home'} />;
+  }
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,21 +36,6 @@ export default function Login() {
     const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
-    setLoading(false);
-  };
-
-  const signUpWithEmail = async () => {
-    setLoading(true);
-    const { error } = await sessionHandler.signUp(email, password);
-
-    if (error) {
-      Alert.alert(error.message);
-      console.error(error);
-    } else {
-      Alert.alert(
-        'Please follow the directions in the confirmation email to activate your account.',
-      );
-    }
     setLoading(false);
   };
 
@@ -70,12 +62,14 @@ export default function Login() {
           autoCapitalize="none"
         />
       </View>
+
+      <Link href={'/auth/signup'}>Don't have an account? Sign up</Link>
+
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button title="Sign in" disabled={loading} onPress={signInWithEmail} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign up" disabled={loading} onPress={signUpWithEmail} />
       </View>
     </View>
   );
 }
+
+export default LoginScreen;

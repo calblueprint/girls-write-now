@@ -5,7 +5,7 @@ function StartPage() {
   const { session } = useSession();
 
   if (!session) return <Redirect href="/auth/login" />;
-  else return <Redirect href={'/home'} />;
+  return <Redirect href="/home" />;
 }
 
 export default StartPage;

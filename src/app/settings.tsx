@@ -8,7 +8,7 @@ import { useSession } from '../utils/AuthContext';
 function SettingsScreen() {
   const { session, signOut } = useSession();
 
-  if (!session) return <Redirect href={'/auth/login'} />;
+  if (!session) return <Redirect href="/auth/login" />;
   return (
     <SafeAreaView style={globalStyles.container}>
       <Text style={globalStyles.h1}>Settings</Text>

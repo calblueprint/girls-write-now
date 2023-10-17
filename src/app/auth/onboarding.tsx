@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Redirect, router } from 'expo-router';
 import supabase from '../../utils/supabase';
 import UserStringInput from '../../components/UserStringInput';
 import { useSession } from '../../utils/AuthContext';
-import { Redirect, router } from 'expo-router';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,11 +24,6 @@ const styles = StyleSheet.create({
 
 function OnboardingScreen() {
   const { session, signOut } = useSession();
-
-  if (!session) {
-    return <Redirect href={'/auth/login'} />;
-  }
-
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -117,6 +112,10 @@ function OnboardingScreen() {
       setLoading(false);
     }
   };
+
+  if (!session) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <ScrollView style={styles.container}>

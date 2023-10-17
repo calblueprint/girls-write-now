@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Link, router } from 'expo-router';
 import { Alert, StyleSheet, View, Text } from 'react-native';
-import { useSession } from '../../utils/AuthContext';
 import { Button, Input } from 'react-native-elements';
+import { useSession } from '../../utils/AuthContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,14 +22,14 @@ const styles = StyleSheet.create({
 function SignUpScreen() {
   const { session, signUp, signInWithEmail } = useSession();
 
-  if (session) {
-    return <Redirect href={'/home'} />;
-  }
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [signedUp, setSignedUp] = useState(false);
+
+  if (session) {
+    return <Redirect href="/home" />;
+  }
 
   const signIn = async () => {
     setLoading(true);
@@ -84,7 +84,7 @@ function SignUpScreen() {
         </View>
       ) : (
         <>
-          <Link href={'/auth/login'}>Already have an account? Log In</Link>
+          <Link href="/auth/login">Already have an account? Log In</Link>
           <View style={[styles.verticallySpaced, styles.mt20]}>
             <Button
               title="Sign Up"

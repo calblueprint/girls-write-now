@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSession } from '../utils/AuthContext';
 import globalStyles from '../styles/globalStyles';
 
-
 function SettingsScreen() {
   const { session, signOut } = useSession();
 

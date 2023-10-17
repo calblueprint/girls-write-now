@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import globalStyles from '../../../styles/globalStyles';
 
 function htmlParser(html: string) {

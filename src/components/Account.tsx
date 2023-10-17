@@ -1,10 +1,11 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import supabase from '../utils/supabase';
+
 import UserStringInput from './UserStringInput';
 import { useSession } from '../utils/AuthContext';
+import supabase from '../utils/supabase';
 
 const styles = StyleSheet.create({
   container: {
@@ -44,7 +45,8 @@ export default function Account() {
         .single();
 
       if (error && status !== 406) {
-        throw error;
+        console.warn(error);
+        throw new Error(error.message);
       }
 
       if (data) {
@@ -95,12 +97,18 @@ export default function Account() {
           .eq('user_id', session?.user.id)
           .select('*');
 
-        if (error) throw error;
+        if (error) {
+          console.warn(error);
+          throw new Error(error.message);
+        }
       } else {
         // Create user if they don't exist
         const { error } = await supabase.from('profiles').insert(updates);
 
-        if (error) throw error;
+        if (error) {
+          console.warn(error);
+          throw new Error(error.message);
+        }
       }
 
       Alert.alert('Succesfully updated user!');

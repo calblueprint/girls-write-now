@@ -5,8 +5,9 @@ import {
   Text,
   View,
 } from 'react-native';
-import globalStyles from '../../styles/globalStyles';
+
 import styles from './styles';
+import globalStyles from '../../styles/globalStyles';
 
 type ContentCardProps = {
   title: string;

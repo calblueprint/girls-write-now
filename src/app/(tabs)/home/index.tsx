@@ -1,10 +1,11 @@
 import { Link } from 'expo-router';
 import { Button, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import styles from './styles';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import SearchCard from '../../../components/SearchCard/SearchCard';
 import globalStyles from '../../../styles/globalStyles';
-import styles from './styles';
 
 const dummyStories = [
   {

@@ -33,7 +33,12 @@ function LoginScreen() {
 
   const signInWithEmail = async () => {
     setLoading(true);
-    const { error } = await sessionHandler.signInWithEmail(email, password);
+    const { error, data } = await sessionHandler.signInWithEmail(
+      email,
+      password,
+    );
+
+    console.log(data);
 
     if (error) Alert.alert(error.message);
     setLoading(false);
@@ -63,10 +68,10 @@ function LoginScreen() {
         />
       </View>
 
-      <Link href={'/auth/signup'}>Don't have an account? Sign up</Link>
+      <Link href={'/auth/signup'}>Don't have an account? Sign Up</Link>
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={signInWithEmail} />
+        <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
       </View>
     </View>
   );

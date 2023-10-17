@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Redirect, Link } from 'expo-router';
-import { Alert, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Redirect, Link, router } from 'expo-router';
+import { Alert, StyleSheet, View, Text } from 'react-native';
 import { useSession } from '../../utils/AuthContext';
 import { Button, Input } from 'react-native-elements';
 
@@ -20,25 +20,40 @@ const styles = StyleSheet.create({
 });
 
 function SignUpScreen() {
-  const sessionHandler = useSession();
+  const { session, emailVerified, signUp, signInWithEmail } = useSession();
 
-  if (sessionHandler.session) {
+  if (session) {
     return <Redirect href={'/home'} />;
   }
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [verifyingEmail, setVerifyingEmail] = useState(false);
+
+  useEffect(() => {
+    console.log(`update to session: ${session}`);
+    if (session) router.push('/home');
+  }, [session]);
+
+  useEffect(() => {
+    console.log(`update to emailVerified: ${emailVerified}`);
+    if (emailVerified) {
+      signInWithEmail(email, password).catch(console.error);
+    }
+  }, [emailVerified]);
 
   const signUpWithEmail = async () => {
     setLoading(true);
-    const { error } = await sessionHandler.signUp(email, password);
+    const { error } = await signUp(email, password);
 
     if (error) Alert.alert(error.message);
-    else
+    else {
+      setVerifyingEmail(true);
       Alert.alert(
         'Please follow the instructions in your email to verify your account',
       );
+    }
     setLoading(false);
   };
 
@@ -67,8 +82,9 @@ function SignUpScreen() {
       </View>
       <Link href={'/auth/login'}>Already have an account? Log In</Link>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign up" disabled={loading} onPress={signUpWithEmail} />
+        <Button title="Sign Up" disabled={loading} onPress={signUpWithEmail} />
       </View>
+      {verifyingEmail && <Text>Waiting for email to be verified...</Text>}
     </View>
   );
 }

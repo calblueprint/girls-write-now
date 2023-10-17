@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 });
 
 function SignUpScreen() {
-  const { session, emailVerified, signUp, signInWithEmail } = useSession();
+  const { session, signUp, signInWithEmail } = useSession();
 
   if (session) {
     return <Redirect href={'/home'} />;
@@ -29,19 +29,17 @@ function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [verifyingEmail, setVerifyingEmail] = useState(false);
+  const [signedUp, setSignedUp] = useState(false);
 
-  useEffect(() => {
-    console.log(`update to session: ${session}`);
-    if (session) router.push('/home');
-  }, [session]);
+  const signIn = async () => {
+    setLoading(true);
+    const { error } = await signInWithEmail(email, password);
 
-  useEffect(() => {
-    console.log(`update to emailVerified: ${emailVerified}`);
-    if (emailVerified) {
-      signInWithEmail(email, password).catch(console.error);
-    }
-  }, [emailVerified]);
+    if (error) Alert.alert(error.message);
+    else router.push('/auth/onboarding');
+
+    setLoading(false);
+  };
 
   const signUpWithEmail = async () => {
     setLoading(true);
@@ -49,10 +47,10 @@ function SignUpScreen() {
 
     if (error) Alert.alert(error.message);
     else {
-      setVerifyingEmail(true);
       Alert.alert(
-        'Please follow the instructions in your email to verify your account',
+        'Please follow the instructions in your email to verify your account, then login',
       );
+      setSignedUp(true);
     }
     setLoading(false);
   };
@@ -80,11 +78,22 @@ function SignUpScreen() {
           autoCapitalize="none"
         />
       </View>
-      <Link href={'/auth/login'}>Already have an account? Log In</Link>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign Up" disabled={loading} onPress={signUpWithEmail} />
-      </View>
-      {verifyingEmail && <Text>Waiting for email to be verified...</Text>}
+      {signedUp ? (
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Button title="Log In" disabled={loading} onPress={signIn} />
+        </View>
+      ) : (
+        <>
+          <Link href={'/auth/login'}>Already have an account? Log In</Link>
+          <View style={[styles.verticallySpaced, styles.mt20]}>
+            <Button
+              title="Sign Up"
+              disabled={loading}
+              onPress={signUpWithEmail}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 }

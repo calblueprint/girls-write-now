@@ -10,7 +10,6 @@ import supabase from './supabase';
 
 export interface AuthState {
   session: Session | null;
-  emailVerified: boolean;
   signIn: (newSession: Session | null) => void;
   signUp: (email: string, password: string) => Promise<AuthResponse>;
   signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
@@ -38,7 +37,6 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [emailVerified, setEmailVerified] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: newSession } }) => {
@@ -46,12 +44,6 @@ export function AuthContextProvider({
     });
 
     supabase.auth.onAuthStateChange((event, newSession) => {
-      console.log(
-        `Auth state change:  ${JSON.stringify({ event, newSession })}`,
-      );
-      if (event == 'INITIAL_SESSION') {
-        setEmailVerified(true);
-      }
       setSession(newSession);
     });
   }, []);
@@ -80,7 +72,6 @@ export function AuthContextProvider({
   const authContextValue = useMemo(
     () => ({
       session,
-      emailVerified,
       signUp,
       signIn,
       signInWithEmail,

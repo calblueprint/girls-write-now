@@ -5,7 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import supabase from '../../utils/supabase';
 import UserStringInput from '../../components/UserStringInput';
 import { useSession } from '../../utils/AuthContext';
-import { Redirect } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 
 const styles = StyleSheet.create({
   container: {
@@ -167,7 +167,7 @@ function OnboardingScreen() {
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={signOut} />
+        <Button title="Skip for now" onPress={() => router.push('/home')} />
       </View>
     </ScrollView>
   );

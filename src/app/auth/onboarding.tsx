@@ -1,15 +1,14 @@
 import { View } from 'react-native';
-import Login from '../../components/Login';
+
 import Account from '../../components/Account';
+import Login from '../../components/Login';
 import { useSession } from '../../utils/AuthContext';
 
 function OnboardingScreen() {
   const { session } = useSession();
 
   return (
-    <View>
-      {session && session.user ? <Account key={session.user.id} /> : <Login />}
-    </View>
+    <View>{session?.user ? <Account key={session.user.id} /> : <Login />}</View>
   );
 }
 

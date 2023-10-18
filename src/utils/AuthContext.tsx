@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+
 import supabase from './supabase';
 
 export interface AuthState {

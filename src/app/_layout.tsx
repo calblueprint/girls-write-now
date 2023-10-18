@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+
 import { AuthContextProvider } from '../utils/AuthContext';
 
 function StackLayout() {

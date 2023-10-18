@@ -1,7 +1,12 @@
 module.exports = {
-  extends: ['@calblueprint/eslint-config-react'],
-  rules: {
-    'react/react-in-jsx-scope': 'off',
-    'react/jsx-uses-react': 'off',
-  },
+  root: true,
+  extends: ['universe/native', 'universe/shared/typescript-analysis'],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', '*.d.ts'],
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+  ],
 };

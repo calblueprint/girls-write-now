@@ -1,4 +1,9 @@
 module.exports = {
-  ...require('@calblueprint/prettier-config'),
-  // Add any overrides here
+  arrowParens: 'avoid',
+  bracketSameLine: false,
+  bracketSpacing: true,
+  printWidth: 80,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'all',
 };

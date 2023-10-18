@@ -5,32 +5,34 @@ import {
   ScrollView,
   Share,
   Text,
+  View,
 } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import jsonStory from '../../../database/story.json';
 import globalStyles from '../../../styles/globalStyles';
-
-const storyStyles = {
-  image: {
-    width: '100%',
-    height: '5%',
-  },
-};
+import temp from '../../../styles/temp';
 
 function htmlParser(htmlString: string) {
   const regexHeading = /(<h2(.*?)h2>)/;
   const regexStory = /(\n+<p(.*?)p>)+/; // regex grabs heading and paragraph tags for story
-  const regexTitle = /<p>&nbsp(.*?)p>/;
+  const regexProcess = /<p>&nbsp(.*?)p>/;
 
   const heading = regexHeading.exec(htmlString);
   const story = regexStory.exec(htmlString);
-  const title = regexTitle.exec(htmlString);
+  const process = regexProcess.exec(htmlString);
 
-  const storyContent = story ? story[0] : ''; // <h2>heading<h2> <p>paragraph1</p> ...
-  const storyTitle = title ? title[0] : '';
-  return [storyContent, storyTitle];
+  const contentHeading = heading
+    ? heading[0].replace('<h2', '<h3').replace('</h2>', '</h3>')
+    : ''; // <h2>heading<h2>
+  const contentStory = story ? story[0].replace(/(\n)+/gi, '') : ''; // <p>paragraph1</p> ...
+  const contentProcess = process ? process[0].replace('&nbsp;', '') : '';
+  return {
+    heading: contentHeading,
+    story: contentStory,
+    process: contentProcess,
+  };
 }
 
 function StoryScreen() {
@@ -52,12 +54,10 @@ function StoryScreen() {
       setContent(json.content.rendered);
       setAuthor(jsonStory.author);
       setGenres(
-        `${
-          jsonStory['genre-medium']
-            .map(txt => `<font color="#D9D9D9">${txt}</font>`)
-            .toString()
-            .replace(',', '') // <Text>${txt}</Text>
-        }`,
+        `<body><ul>${jsonStory['genre-medium']
+          .map(txt => `<li>${txt}</li>`)
+          .toString()
+          .replace(',', '')}</ul></body>`,
       );
       setImage(jsonStory.featured_media);
     } catch (error) {
@@ -72,7 +72,12 @@ function StoryScreen() {
     try {
       const result = await Share.share({
         message:
-          'React Native | A framework for building native apps using React',
+          `${title}\n` +
+          `By ${author}\n\n\n` +
+          `${htmlParser(content).heading.replace(/<[^>]+>/g, '\n')}` +
+          `${htmlParser(content).story.replace(/<[^>]+>/g, '\n')}\n\n\n` +
+          `Author's Process:\n` +
+          `${htmlParser(content).process.replace(/<[^>]+>/g, '')}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -98,26 +103,86 @@ function StoryScreen() {
         <ActivityIndicator />
       ) : (
         <ScrollView>
-          <Image style={storyStyles.image} source={{ uri: image }} />
+          {/* STYLING & URI WARNING */}
+          <Image
+            style={temp.image}
+            source={{ uri: image ? image : undefined }}
+          />
 
-          <Text style={{ fontSize: 24 }}>By {author}</Text>
-          {/* style={{backgroundColor: '#D9D9D9', display: 'flex', flexDirection: 'row-reverse'}} */}
+          <View>
+            <HTMLView
+              value={title.replace(title, `<body><br><h2>${title}</h2></body>`)}
+            />
+          </View>
 
-          <HTMLView value={genres} />
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Button textColor="black" icon="circle">
+              {''}
+            </Button>
+            <Text style={temp.body}>By {author}</Text>
+            <Text>{'\n'}</Text>
+          </View>
 
-          <Button buttonColor="#D9D9D9" icon="inbox-arrow-up" onPress={onShare}>
-            Share Story
-          </Button>
-          <HTMLView value={title} />
-          <HTMLView value={htmlParser(content)[0]} />
-          <Button buttonColor="#D9D9D9" icon="inbox-arrow-up" onPress={onShare}>
-            Share Story
-          </Button>
-          <Text>Author's Process</Text>
-          <HTMLView value={htmlParser(content)[1]} />
-          <Text>By {author}</Text>
+          <View style={{ backgroundColor: '#D9D9D9', borderRadius: 10 }}>
+            <HTMLView value={genres} />
+          </View>
+          <Text>{'\n'}</Text>
+
+          <View style={{ alignItems: 'flex-start' }}>
+            <Button
+              textColor="black"
+              buttonColor="#D9D9D9"
+              icon="share"
+              onPress={onShare}
+            >
+              Share Story
+            </Button>
+          </View>
+          <Text>{'\n'}</Text>
+
+          <HTMLView value={htmlParser(content).heading} />
+
+          <HTMLView value={htmlParser(content).story} />
+          <Text>{'\n'}</Text>
+
+          <View style={{ alignItems: 'flex-start' }}>
+            <Button
+              textColor="black"
+              buttonColor="#D9D9D9"
+              icon="share"
+              onPress={onShare}
+            >
+              Share Story
+            </Button>
+          </View>
+          <Text>{'\n'}</Text>
+
+          <Text style={globalStyles.h4}>Author's Process</Text>
+          <Text>{'\n'}</Text>
+
+          <HTMLView value={htmlParser(content).process} />
+          <Text>{'\n'}</Text>
+
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Button textColor="black" icon="circle">
+              {''}
+            </Button>
+            <Text style={temp.body}>By {author}</Text>
+          </View>
+          <Text>{'\n\n'}</Text>
+
           {/* <Button onPress={backToTop} title="Back to Top" /> */}
-          <Text>{'\n\n\n\n\n\n\n\n\n\n\n\n\n\n'}</Text>
+          <View style={{ alignItems: 'flex-start' }}>
+            <Button
+              textColor="black"
+              buttonColor="#D9D9D9"
+              icon="arrow-up"
+              onPress={onShare}
+            >
+              Back To Top
+            </Button>
+          </View>
+          <Text>{'\n\n\n\n\n\n\n\n\n\n'}</Text>
         </ScrollView>
       )}
     </SafeAreaView>

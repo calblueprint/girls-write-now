@@ -1,26 +1,12 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Alert, ScrollView, Platform } from 'react-native';
+import { View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import supabase from '../../utils/supabase';
 import UserStringInput from '../../components/UserStringInput';
 import { useSession } from '../../utils/AuthContext';
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});
+import styles from '../../styles/globalStyles';
 
 function OnboardingScreen() {
   const { session, signOut } = useSession();
@@ -67,7 +53,7 @@ function OnboardingScreen() {
     if (session) getProfile();
   }, [session]);
 
-  const updateProfile = async () => {
+  const updateProfileAndGoHome = async () => {
     try {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
@@ -104,6 +90,7 @@ function OnboardingScreen() {
       }
 
       Alert.alert('Succesfully updated user!');
+      router.replace('/home');
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -160,8 +147,8 @@ function OnboardingScreen() {
       )}
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
-          title={loading ? 'Loading ...' : 'Update'}
-          onPress={updateProfile}
+          title={loading ? 'Loading ...' : 'Update profile'}
+          onPress={updateProfileAndGoHome}
           disabled={loading}
         />
       </View>

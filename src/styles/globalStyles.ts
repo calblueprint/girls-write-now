@@ -59,4 +59,12 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  mt20: {
+    marginTop: 20,
+  },
 });

@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Link, router } from 'expo-router';
-import { Alert, StyleSheet, View, Text } from 'react-native';
+import { Alert, View, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { useSession } from '../../utils/AuthContext';
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});
+import styles from '../../styles/globalStyles';
 
 function SignUpScreen() {
   const { session, signUp, signInWithEmail } = useSession();
@@ -36,7 +22,7 @@ function SignUpScreen() {
     const { error } = await signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
-    else router.push('/auth/onboarding');
+    else router.replace('/auth/onboarding');
 
     setLoading(false);
   };

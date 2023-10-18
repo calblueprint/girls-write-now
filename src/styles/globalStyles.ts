@@ -9,6 +9,10 @@ export default StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
   },
+  auth_container: {
+    marginTop: 40,
+    padding: 12,
+  },
   h1: {
     // fontFamily: 'DMSans-Bold',
     fontSize: 50,

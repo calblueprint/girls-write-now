@@ -6,7 +6,7 @@ import { Redirect, router } from 'expo-router';
 import supabase from '../../utils/supabase';
 import UserStringInput from '../../components/UserStringInput';
 import { useSession } from '../../utils/AuthContext';
-import styles from '../../styles/globalStyles';
+import globalStyles from '../../styles/globalStyles';
 
 function OnboardingScreen() {
   const { session, signOut } = useSession();
@@ -105,8 +105,8 @@ function OnboardingScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+    <ScrollView style={globalStyles.auth_container}>
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Input label="Email" value={session?.user?.email} disabled />
       </View>
       <UserStringInput
@@ -145,15 +145,15 @@ function OnboardingScreen() {
           }}
         />
       )}
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button
           title={loading ? 'Loading ...' : 'Update profile'}
           onPress={updateProfileAndGoHome}
           disabled={loading}
         />
       </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Skip for now" onPress={() => router.push('/home')} />
+      <View style={globalStyles.verticallySpaced}>
+        <Button title="Skip" onPress={() => router.push('/home')} />
       </View>
     </ScrollView>
   );

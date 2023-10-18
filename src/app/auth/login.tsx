@@ -3,7 +3,7 @@ import { Redirect, Link } from 'expo-router';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { useSession } from '../../utils/AuthContext';
-import styles from '../../styles/globalStyles';
+import globalStyles from '../../styles/globalStyles';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -27,8 +27,8 @@ function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+    <View style={globalStyles.auth_container}>
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Input
           label="Email"
           leftIcon={{ type: 'font-awesome', name: 'envelope' }}
@@ -38,7 +38,7 @@ function LoginScreen() {
           autoCapitalize="none"
         />
       </View>
-      <View style={styles.verticallySpaced}>
+      <View style={globalStyles.verticallySpaced}>
         <Input
           label="Password"
           leftIcon={{ type: 'font-awesome', name: 'lock' }}
@@ -52,7 +52,7 @@ function LoginScreen() {
 
       <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
 
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
       </View>
     </View>

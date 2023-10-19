@@ -44,7 +44,7 @@ export function AuthContextProvider({
       setSession(newSession);
     });
 
-    supabase.auth.onAuthStateChange((_event, newSession) => {
+    supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
     });
   }, []);
@@ -58,11 +58,13 @@ export function AuthContextProvider({
       email,
       password,
     }); // will trigger the use effect to update the session
+
   const signUp = async (email: string, password: string) =>
     supabase.auth.signUp({
       email,
       password,
     }); // will trigger the use effect to update the session
+
   const signOut = () => {
     supabase.auth.signOut();
     setSession(null);

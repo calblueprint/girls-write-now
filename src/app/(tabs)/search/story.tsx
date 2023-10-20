@@ -16,7 +16,7 @@ import globalStyles from '../../../styles/globalStyles';
 
 function htmlParser(htmlString: string) {
   const regexHeading = /(<h2(.*?)h2>)/;
-  const regexStory = /(\n+<p(.*?)p>)+/; // regex grabs heading and paragraph tags for story
+  const regexStory = /(\n+<p(.*?)p>)+/;
   const regexProcess = /<p>&nbsp(.*?)p>/;
 
   const heading = regexHeading.exec(htmlString);

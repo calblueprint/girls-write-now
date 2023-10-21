@@ -30,7 +30,7 @@ function OnboardingScreen() {
         .eq('user_id', session?.user.id)
         .single();
 
-      if (error && status !== 406) {
+      if (error && status !== 406 && error instanceof Error) {
         throw error;
       }
 
@@ -82,12 +82,12 @@ function OnboardingScreen() {
           .eq('user_id', session?.user.id)
           .select('*');
 
-        if (error) throw error;
+        if (error && error instanceof Error) throw error;
       } else {
         // Create user if they don't exist
         const { error } = await supabase.from('profiles').insert(updates);
 
-        if (error) throw error;
+        if (error && error instanceof Error) throw error;
       }
 
       Alert.alert('Succesfully updated user!');

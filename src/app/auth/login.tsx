@@ -1,4 +1,4 @@
-import { Redirect, Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
@@ -12,20 +12,24 @@ function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (sessionHandler.session) {
-    return <Redirect href="/home" />;
-  }
+  const resetAndPushToRouter = (path: string) => {
+    while (router.canGoBack()) {
+      router.back();
+    }
+    router.replace(path);
+  };
 
   const signInWithEmail = async () => {
     setLoading(true);
-    const { error, data } = await sessionHandler.signInWithEmail(
-      email,
-      password,
-    );
+    const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
     setLoading(false);
   };
+
+  if (sessionHandler.session) {
+    resetAndPushToRouter('/home');
+  }
 
   return (
     <View style={globalStyles.auth_container}>

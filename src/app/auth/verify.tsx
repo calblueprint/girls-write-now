@@ -30,11 +30,11 @@ function VerificationScreen() {
 
       console.log(data);
       if (error) Alert.alert(error.message);
-      else router.replace('/home');
-    } else if (!user?.email) {
-      Alert.alert(`Please sign up again.`);
-    } else {
+      else router.replace('/auth/onboarding');
+    } else if (!verificationCode) {
       Alert.alert(`Please enter a verification code`);
+    } else {
+      Alert.alert(`Please sign up again.`);
     }
 
     setLoading(false);

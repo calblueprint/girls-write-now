@@ -10,7 +10,7 @@ import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
 
 function OnboardingScreen() {
-  const { session, signOut } = useSession();
+  const { session } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -154,7 +154,7 @@ function OnboardingScreen() {
         />
       </View>
       <View style={globalStyles.verticallySpaced}>
-        <Button title="Skip" onPress={() => router.push('/home')} />
+        <Button title="Skip" onPress={() => router.replace('/home')} />
       </View>
     </ScrollView>
   );

@@ -137,7 +137,6 @@ function StoryScreen() {
                 </View>
               )}
             />
-            {/* </View> */}
 
             <Button
               textColor="black"
@@ -209,18 +208,6 @@ const tempStyles = StyleSheet.create({
     width: 21,
     height: 21,
     borderRadius: 100 / 2,
-  },
-  top: {
-    justifyContent: 'space-between',
-    gap: 14,
-    paddingTop: 20,
-    paddingBottom: 32,
-  },
-  bottom: {
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 14,
-    paddingBottom: 32,
   },
   title: {
     fontFamily: 'Avenir',

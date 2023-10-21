@@ -153,7 +153,7 @@ function OnboardingScreen() {
         />
       </View>
       <View style={globalStyles.verticallySpaced}>
-        <Button title="Skip" onPress={() => router.push('/home')} />
+        <Button title="Skip" onPress={() => router.replace('/home')} />
       </View>
     </ScrollView>
   );

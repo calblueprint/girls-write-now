@@ -1,15 +1,16 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Redirect, router } from 'expo-router';
-import supabase from '../../utils/supabase';
+
 import UserStringInput from '../../components/UserStringInput';
-import { useSession } from '../../utils/AuthContext';
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
+import supabase from '../../utils/supabase';
 
 function OnboardingScreen() {
-  const { session, signOut } = useSession();
+  const { session } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -29,7 +30,7 @@ function OnboardingScreen() {
         .eq('user_id', session?.user.id)
         .single();
 
-      if (error && status !== 406) {
+      if (error && status !== 406 && error instanceof Error) {
         throw error;
       }
 
@@ -81,12 +82,12 @@ function OnboardingScreen() {
           .eq('user_id', session?.user.id)
           .select('*');
 
-        if (error) throw error;
+        if (error && error instanceof Error) throw error;
       } else {
         // Create user if they don't exist
         const { error } = await supabase.from('profiles').insert(updates);
 
-        if (error) throw error;
+        if (error && error instanceof Error) throw error;
       }
 
       Alert.alert('Succesfully updated user!');
@@ -153,7 +154,7 @@ function OnboardingScreen() {
         />
       </View>
       <View style={globalStyles.verticallySpaced}>
-        <Button title="Skip" onPress={() => router.push('/home')} />
+        <Button title="Skip" onPress={() => router.replace('/home')} />
       </View>
     </ScrollView>
   );

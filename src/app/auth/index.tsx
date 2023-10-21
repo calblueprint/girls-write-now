@@ -8,8 +8,11 @@ function LoginScreen() {
   return (
     <SafeAreaView style={globalStyles.container}>
       <Text style={globalStyles.h1}>Auth</Text>
-      <Button title="Login" onPress={() => router.push('/auth/onboarding')} />
-      <Button title="Sign Up" onPress={() => router.push('/auth/signup')} />
+      <Button
+        title="Login"
+        onPress={() => router.replace('/auth/onboarding')}
+      />
+      <Button title="Sign Up" onPress={() => router.replace('/auth/signup')} />
       <Button title="[temp] Home" onPress={() => router.push('/home')} />
     </SafeAreaView>
   );

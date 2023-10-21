@@ -44,7 +44,7 @@ export function AuthContextProvider({
       setSession(newSession);
     });
 
-    supabase.auth.onAuthStateChange((event, newSession) => {
+    supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
     });
   }, []);

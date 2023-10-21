@@ -1,3 +1,4 @@
+import { decode } from 'html-entities';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -7,6 +8,7 @@ import {
   Share,
   Text,
   View,
+  StyleSheet,
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,25 +26,20 @@ function htmlParser(htmlString: string) {
   const process = regexProcess.exec(htmlString);
 
   const contentHeading = heading
-    ? heading[0]
+    ? decode(heading[0], { level: 'html5' })
         .replace('</h2>', '')
         .replace(/<h2.+>/, '')
-        .replace(/&#8217;/gi, "'")
     : '';
   const contentStory = story
-    ? story[0]
+    ? decode(story[0], { level: 'html5' })
         .replace(/(\n)+/gi, '')
         .replace(/<p>/gi, '')
         .replace(/<\/p>/gi, '\n\n')
-        .replace(/&nbsp;/gi, '')
-        .replace(/&#8217;/gi, "'")
     : '';
   const contentProcess = process
-    ? process[0]
+    ? decode(process[0], { level: 'html5' })
         .replace(/<p>/gi, '')
         .replace(/<\/p>/gi, '')
-        .replace(/&nbsp;/gi, '')
-        .replace(/&#8217;/gi, "'")
     : '';
   return {
     heading: contentHeading,
@@ -69,7 +66,7 @@ function StoryScreen() {
       const response = await fetch(url);
       const json = await response.json();
 
-      setTitle(json.title.rendered.replace(/&#8217;/gi, "'"));
+      setTitle(decode(json.title.rendered));
       setStory(htmlParser(json.content.rendered).story);
       setHeading(htmlParser(json.content.rendered).heading);
       setProcess(htmlParser(json.content.rendered).process);
@@ -87,13 +84,7 @@ function StoryScreen() {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message:
-          `${title}\n` +
-          `By ${author}\n\n\n` +
-          `${heading}` +
-          `${story}\n` +
-          `Author's Process:\n` +
-          `${process}`,
+        message: `Check out this story from Girls Write Now!!!\nhttps://girlswritenow.org/story/${jsonStory.slug}/`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -118,7 +109,7 @@ function StoryScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={globalStyles.container}>
+    <SafeAreaView style={tempStyles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -129,24 +120,19 @@ function StoryScreen() {
             <Text style={tempStyles.title}>{title}</Text>
 
             <View style={tempStyles.author}>
-              <View
-                style={{
-                  width: 21,
-                  height: 21,
-                  borderRadius: 100 / 2,
-                  backgroundColor: '#D9D9D9',
-                }}
-              />
+              <Image style={tempStyles.authorImage} source={{ uri: '' }} />
               <Text style={tempStyles.authorText}>By {author}</Text>
             </View>
 
-            <View style={{ alignItems: 'flex-start' }}>
+            <View>
               <FlatList
                 style={tempStyles.genres}
                 horizontal
                 data={genres}
                 renderItem={({ item }) => (
-                  <Text style={tempStyles.genresText}>{item}</Text>
+                  <View style={tempStyles.genresBorder}>
+                    <Text style={tempStyles.genresText}>{item}</Text>
+                  </View>
                 )}
               />
             </View>
@@ -184,14 +170,7 @@ function StoryScreen() {
             <Text style={tempStyles.process}>{process}</Text>
 
             <View style={tempStyles.author}>
-              <View
-                style={{
-                  width: 21,
-                  height: 21,
-                  borderRadius: 100 / 2,
-                  backgroundColor: '#D9D9D9',
-                }}
-              />
+              <Image style={tempStyles.authorImage} source={{ uri: '' }} />
               <Text style={tempStyles.authorText}>By {author}</Text>
             </View>
 
@@ -209,10 +188,25 @@ function StoryScreen() {
 
 export default StoryScreen;
 
-const tempStyles = {
+const tempStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 48,
+  },
   image: {
     width: '100%',
-    height: '5%',
+    height: 153,
+  },
+  authorImage: {
+    backgroundColor: '#D9D9D9',
+    width: 21,
+    height: 21,
+    borderRadius: 100 / 2,
   },
   top: {
     justifyContent: 'space-between',
@@ -223,7 +217,7 @@ const tempStyles = {
   bottom: {
     justifyContent: 'space-between',
     gap: 16,
-    paddingBottom: 160,
+    paddingBottom: 32,
   },
   title: {
     fontFamily: 'Avenir',
@@ -250,16 +244,21 @@ const tempStyles = {
     flexWrap: 'wrap',
     borderRadius: 10,
   },
+  genresBorder: {
+    backgroundColor: '#D9D9D9',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 10,
+    marginRight: 8,
+  },
   genresText: {
     fontFamily: 'Avenir',
     fontSize: 12,
     fontWeight: '400',
     color: 'black',
     backgroundColor: '#D9D9D9',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
   },
   shareButtonText: {
     fontFamily: 'Avenir',
@@ -298,4 +297,4 @@ const tempStyles = {
     textAlign: 'left',
     color: 'black',
   },
-};
+});

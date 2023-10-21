@@ -14,7 +14,6 @@ import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import jsonStory from '../../../database/story.json';
-import globalStyles from '../../../styles/globalStyles';
 
 function htmlParser(htmlString: string) {
   const regexHeading = /(<h2(.*?)h2>)/;
@@ -57,7 +56,7 @@ function StoryScreen() {
   const [author, setAuthor] = useState(String);
   const [genres, setGenres] = useState(['']);
   const [image, setImage] = useState(String);
-  const ref = React.useRef<any>(null);
+  const scrollRef = React.useRef<any>(null);
 
   // Load Wordpress API and its contents
   const getStory = async (id: string) => {
@@ -101,7 +100,7 @@ function StoryScreen() {
   };
 
   const scrollUp = () => {
-    ref.current?.scrollTo({ x: 0, y: 0 });
+    scrollRef.current?.scrollTo({ x: 0, y: 0 });
   };
 
   useEffect(() => {
@@ -113,73 +112,75 @@ function StoryScreen() {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <ScrollView bounces ref={ref}>
+        <ScrollView
+          bounces
+          ref={scrollRef}
+          showsVerticalScrollIndicator={false}
+        >
           <Image style={tempStyles.image} source={{ uri: image }} />
 
-          <View style={tempStyles.top}>
-            <Text style={tempStyles.title}>{title}</Text>
+          <Text style={tempStyles.title}>{title}</Text>
 
-            <View style={tempStyles.author}>
-              <Image style={tempStyles.authorImage} source={{ uri: '' }} />
-              <Text style={tempStyles.authorText}>By {author}</Text>
-            </View>
+          <View style={tempStyles.author}>
+            <Image style={tempStyles.authorImage} source={{ uri: '' }} />
+            <Text style={tempStyles.authorText}>By {author}</Text>
+          </View>
 
-            <View>
-              <FlatList
-                style={tempStyles.genres}
-                horizontal
-                data={genres}
-                renderItem={({ item }) => (
-                  <View style={tempStyles.genresBorder}>
-                    <Text style={tempStyles.genresText}>{item}</Text>
-                  </View>
-                )}
-              />
-            </View>
+          <View>
+            <FlatList
+              style={tempStyles.genres}
+              horizontal
+              data={genres}
+              renderItem={({ item }) => (
+                <View style={tempStyles.genresBorder}>
+                  <Text style={tempStyles.genresText}>{item}</Text>
+                </View>
+              )}
+            />
+            {/* </View> */}
 
-            <View style={{ alignItems: 'flex-start' }}>
-              <Button
-                textColor="black"
-                buttonColor="#D9D9D9"
-                icon="share"
-                onPress={onShare}
-              >
-                <Text style={tempStyles.shareButtonText}>Share Story</Text>
-              </Button>
-            </View>
+            <Button
+              textColor="black"
+              buttonColor="#D9D9D9"
+              icon="share"
+              onPress={onShare}
+              style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
+            >
+              <Text style={tempStyles.shareButtonText}>Share Story</Text>
+            </Button>
           </View>
 
           <Text style={tempStyles.heading}>{heading}</Text>
 
           <Text style={tempStyles.story}>{story}</Text>
 
-          <View style={tempStyles.bottom}>
-            <View style={{ alignItems: 'flex-start' }}>
-              <Button
-                textColor="black"
-                buttonColor="#D9D9D9"
-                icon="share"
-                onPress={onShare}
-              >
-                <Text style={tempStyles.shareButtonText}>Share Story</Text>
-              </Button>
-            </View>
+          <Button
+            textColor="black"
+            buttonColor="#D9D9D9"
+            icon="share"
+            onPress={onShare}
+            style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
+          >
+            <Text style={tempStyles.shareButtonText}>Share Story</Text>
+          </Button>
 
-            <Text style={globalStyles.h4}>Author's Process</Text>
+          <Text style={tempStyles.authorProcess}>Author's Process</Text>
 
-            <Text style={tempStyles.process}>{process}</Text>
+          <Text style={tempStyles.process}>{process}</Text>
 
-            <View style={tempStyles.author}>
-              <Image style={tempStyles.authorImage} source={{ uri: '' }} />
-              <Text style={tempStyles.authorText}>By {author}</Text>
-            </View>
-
-            <View style={{ alignItems: 'flex-start' }}>
-              <Button textColor="black" icon="arrow-up" onPress={scrollUp}>
-                <Text style={tempStyles.backToTopButtonText}>Back To Top</Text>
-              </Button>
-            </View>
+          <View style={tempStyles.author}>
+            <Image style={tempStyles.authorImage} source={{ uri: '' }} />
+            <Text style={tempStyles.authorText}>By {author}</Text>
           </View>
+
+          <Button
+            textColor="black"
+            icon="arrow-up"
+            onPress={scrollUp}
+            style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
+          >
+            <Text style={tempStyles.backToTopButtonText}>Back To Top</Text>
+          </Button>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -201,6 +202,7 @@ const tempStyles = StyleSheet.create({
   image: {
     width: '100%',
     height: 153,
+    marginBottom: 16,
   },
   authorImage: {
     backgroundColor: '#D9D9D9',
@@ -210,13 +212,14 @@ const tempStyles = StyleSheet.create({
   },
   top: {
     justifyContent: 'space-between',
-    gap: 16,
+    gap: 14,
     paddingTop: 20,
-    paddingBottom: 34,
+    paddingBottom: 32,
   },
   bottom: {
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    gap: 16,
+    gap: 14,
     paddingBottom: 32,
   },
   title: {
@@ -225,11 +228,13 @@ const tempStyles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
+    marginBottom: 16,
   },
   author: {
     display: 'flex',
     flexDirection: 'row',
     gap: 10,
+    marginBottom: 16,
   },
   authorText: {
     fontFamily: 'Avenir',
@@ -243,6 +248,7 @@ const tempStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     borderRadius: 10,
+    marginBottom: 16,
   },
   genresBorder: {
     backgroundColor: '#D9D9D9',
@@ -267,6 +273,7 @@ const tempStyles = StyleSheet.create({
     textAlign: 'left',
     color: 'black',
     textDecorationLine: 'underline',
+    backgroundColor: '#D9D9D9',
   },
   heading: {
     fontFamily: 'Avenir',
@@ -282,6 +289,15 @@ const tempStyles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
+    marginBottom: 16,
+  },
+  authorProcess: {
+    fontFamily: 'Avenir',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'left',
+    color: 'black',
+    marginBottom: 16,
   },
   process: {
     fontFamily: 'Avenir',
@@ -289,11 +305,12 @@ const tempStyles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
+    marginBottom: 16,
   },
   backToTopButtonText: {
     fontFamily: 'Avenir',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '800',
     textAlign: 'left',
     color: 'black',
   },

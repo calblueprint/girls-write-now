@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { Button, Text } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import globalStyles from '../../../styles/globalStyles';
@@ -7,7 +7,9 @@ import globalStyles from '../../../styles/globalStyles';
 function SearchScreen() {
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Text style={globalStyles.h1}>Search</Text>
+      <View>
+        <Text style={globalStyles.h1}>Welcome, name</Text>
+      </View>
       <Link href="/search/story" asChild>
         <Button title="Story" />
       </Link>

@@ -1,4 +1,5 @@
-import { Redirect, router } from 'expo-router';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +10,17 @@ import { useSession } from '../utils/AuthContext';
 function SettingsScreen() {
   const { session, signOut } = useSession();
 
-  if (!session) return <Redirect href="/auth/login" />;
+  const resetAndPushToRouter = (path: string) => {
+    while (router.canGoBack()) {
+      router.back();
+    }
+    router.replace(path);
+  };
+
+  useEffect(() => {
+    if (!session) resetAndPushToRouter('/auth/login');
+  }, [session]);
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <Text style={globalStyles.h1}>Settings</Text>

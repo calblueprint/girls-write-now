@@ -16,6 +16,7 @@ export interface AuthState {
   signUp: (email: string, password: string) => Promise<AuthResponse>;
   signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
   verifyEmail: (email: string, token: string) => Promise<AuthResponse>;
+  resendVerification: (email: string) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
 }
 
@@ -94,9 +95,15 @@ export function AuthContextProvider({
       type: 'email',
     });
 
-    setUser(value.data.user);
+    if (value.data.user) setUser(value.data.user);
     return value;
   };
+
+  const resendVerification = async (email: string) =>
+    await supabase.auth.resend({
+      type: 'signup',
+      email,
+    });
 
   const authContextValue = useMemo(
     () => ({
@@ -107,6 +114,7 @@ export function AuthContextProvider({
       signInWithEmail,
       signOut,
       verifyEmail,
+      resendVerification,
     }),
     [session, user],
   );

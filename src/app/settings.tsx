@@ -2,8 +2,9 @@ import { Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSession } from '../utils/AuthContext';
+
 import globalStyles from '../styles/globalStyles';
+import { useSession } from '../utils/AuthContext';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
 import { Redirect, Link, router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Alert, View, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { useSession } from '../../utils/AuthContext';
+
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
 
 function SignUpScreen() {
   const { session, signUp } = useSession();

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
 import { Redirect, Link } from 'expo-router';
+import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { useSession } from '../../utils/AuthContext';
+
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
 
 function LoginScreen() {
   const sessionHandler = useSession();

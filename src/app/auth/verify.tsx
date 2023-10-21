@@ -1,20 +1,23 @@
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, TextInput, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
-import { useSession } from '../../utils/AuthContext';
+
 import globalStyles from '../../styles/globalStyles';
-import { router } from 'expo-router';
+import { useSession } from '../../utils/AuthContext';
 
 const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
+    marginTop: 10,
+    padding: 5,
   },
 });
 
 function VerificationScreen() {
-  const { user, verifyEmail } = useSession();
+  const { user, verifyEmail, resendVerification } = useSession();
   const [loading, setLoading] = useState(false);
   const [verificationCode, setCode] = useState<string>('');
 
@@ -28,6 +31,10 @@ function VerificationScreen() {
       console.log(data);
       if (error) Alert.alert(error.message);
       else router.replace('/home');
+    } else if (!user?.email) {
+      Alert.alert(`Please sign up again.`);
+    } else {
+      Alert.alert(`Please enter a verification code`);
     }
 
     setLoading(false);
@@ -35,7 +42,17 @@ function VerificationScreen() {
 
   const resendCode = async () => {
     setLoading(true);
-    // Alert.alert(error.message);
+
+    if (user?.email) {
+      const { error, data } = await resendVerification(user.email);
+
+      console.log(data);
+      if (error) Alert.alert(error.message);
+      else Alert.alert(`Verification email sent to ${user.email}.`);
+    } else {
+      Alert.alert(`Please sign up again.`);
+    }
+
     setLoading(false);
   };
 
@@ -45,11 +62,12 @@ function VerificationScreen() {
         style={styles.input}
         keyboardType="numeric"
         onChangeText={setCode}
+        placeholder="Verification Code"
         value={verificationCode}
         maxLength={6}
       />
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}></View>
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]} />
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Resend code" disabled={loading} onPress={resendCode} />
       </View>

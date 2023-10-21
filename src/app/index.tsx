@@ -1,4 +1,5 @@
 import { Redirect } from 'expo-router';
+
 import { useSession } from '../utils/AuthContext';
 
 function StartPage() {

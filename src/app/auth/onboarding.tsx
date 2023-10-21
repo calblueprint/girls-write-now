@@ -1,12 +1,13 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { View, Alert, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Redirect, router } from 'expo-router';
-import supabase from '../../utils/supabase';
+
 import UserStringInput from '../../components/UserStringInput';
-import { useSession } from '../../utils/AuthContext';
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
+import supabase from '../../utils/supabase';
 
 function OnboardingScreen() {
   const { session, signOut } = useSession();

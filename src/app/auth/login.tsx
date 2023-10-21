@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
 import { Redirect, Link } from 'expo-router';
+import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { useSession } from '../../utils/AuthContext';
+
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -17,10 +18,7 @@ function LoginScreen() {
 
   const signInWithEmail = async () => {
     setLoading(true);
-    const { error, data } = await sessionHandler.signInWithEmail(
-      email,
-      password,
-    );
+    const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
     setLoading(false);

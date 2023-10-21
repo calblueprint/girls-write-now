@@ -20,6 +20,7 @@
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
     "@react-navigation/stack": "^6.3.18",
+    "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.36.0",
     "axios": "^1.5.0",
     "deprecated-react-native-prop-types": "^4.2.1",

@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { Input } from 'react-native-elements';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
 type UserStringInputProps = {
   label: string;
-  value: string;
+  value: string | undefined;
   onChange: React.Dispatch<React.SetStateAction<string>>;
 };
 

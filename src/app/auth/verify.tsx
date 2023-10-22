@@ -6,16 +6,6 @@ import { Button } from 'react-native-elements';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
-  },
-});
-
 function VerificationScreen() {
   const { user, verifyEmail, resendVerification } = useSession();
   const [loading, setLoading] = useState(false);
@@ -23,7 +13,6 @@ function VerificationScreen() {
 
   const verifyAccount = async () => {
     setLoading(true);
-    console.log(user);
 
     if (user?.email && verificationCode) {
       const { error, data } = await verifyEmail(user.email, verificationCode);
@@ -83,3 +72,13 @@ function VerificationScreen() {
 }
 
 export default VerificationScreen;
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 10,
+    padding: 5,
+  },
+});

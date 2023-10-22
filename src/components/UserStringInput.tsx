@@ -24,7 +24,7 @@ export default function UserStringInput({
     <View style={styles.verticallySpaced}>
       <Input
         label={label}
-        value={value || ''}
+        value={value ?? ''}
         onChangeText={text => onChange(text)}
       />
     </View>

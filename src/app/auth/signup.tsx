@@ -1,6 +1,6 @@
 import { Redirect, Link, router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { Alert, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';

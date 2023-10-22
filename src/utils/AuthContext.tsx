@@ -53,10 +53,6 @@ export function AuthContextProvider({
     });
   }, []);
 
-  useEffect(() => {
-    console.log(`User updated: ${JSON.stringify(user)}`);
-  }, [user]);
-
   const signIn = (newSession: Session | null) => {
     setSession(newSession);
   };

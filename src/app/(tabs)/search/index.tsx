@@ -1,16 +1,15 @@
 import { SearchBar } from '@rneui/themed';
 import { Link } from 'expo-router';
-import React, { SetStateAction, useState } from 'react';
-import { Button, ScrollView, Text, View } from 'react-native';
+import React, { SetStateAction, useEffect, useState } from 'react';
+import { Button, ScrollView, Text, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import globalStyles from '../../../styles/globalStyles';
-
 function SearchScreen() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(''); // From website
   const [allStories, setAllStories] = useState<any>([]);
   const [searchResults, setSearchResults] = useState<any>([]);
 
+  // From website
   const updateSearch = (search: string) => {
     setSearch(search);
   };
@@ -35,27 +34,41 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
+  useEffect(() => {
+    // fetch all stories from Supabase, and set allStories to
+    // the returned list of stories.
+  });
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={tempStyles.container}>
       <SearchBar
         platform="default"
         searchIcon={false}
         clearIcon
-        round
-        containerStyle={{ backgroundColor: 'red', margin: 20 }}
-        inputContainerStyle={{ backgroundColor: '#D9D9D9' }}
-        inputStyle={{}}
+        containerStyle={{
+          backgroundColor: 'transparent',
+          borderRadius: 10,
+          borderColor: 'transparent',
+          padding: 0,
+          marginBottom: 16,
+        }}
+        inputContainerStyle={{
+          backgroundColor: '#D9D9D9',
+          margin: 0,
+          borderRadius: 10,
+        }}
+        inputStyle={{ color: 'black' }}
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
         lightTheme
         loadingProps={{}}
         placeholder="Search"
         placeholderTextColor="black"
-        onChangeText={newVal => setSearch(newVal)}
-        value={search}
+        onChangeText={text => searchFunction(text)} // do u have to updateSearch(search)
+        value={search} // value from the search bar
       />
       <ScrollView>
-        <Text>placeholder</Text>
+        <Text>Stories go here ...</Text>
         {/* <SearchCard />
         <SearchCard />
         ... */}
@@ -68,3 +81,14 @@ function SearchScreen() {
 }
 
 export default SearchScreen;
+
+const tempStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'flex-start',
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 48,
+  },
+});

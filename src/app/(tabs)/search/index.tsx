@@ -39,18 +39,19 @@ function SearchScreen() {
     <SafeAreaView>
       <SearchBar
         platform="default"
-        searchIcon
+        searchIcon={false}
         clearIcon
-        containerStyle={{}}
-        inputContainerStyle={{}}
+        round
+        containerStyle={{ backgroundColor: 'red', margin: 20 }}
+        inputContainerStyle={{ backgroundColor: '#D9D9D9' }}
         inputStyle={{}}
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
         lightTheme
         loadingProps={{}}
+        placeholder="Search"
+        placeholderTextColor="black"
         onChangeText={newVal => setSearch(newVal)}
-        placeholder="Type query here..."
-        placeholderTextColor="#888"
         value={search}
       />
       <ScrollView>

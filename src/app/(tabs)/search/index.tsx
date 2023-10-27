@@ -4,15 +4,12 @@ import React, { SetStateAction, useEffect, useState } from 'react';
 import { Button, ScrollView, Text, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import SearchCard from '../../../components/SearchCard/SearchCard';
+import jsonStory from '../../../database/story.json';
+
 function SearchScreen() {
-  const [search, setSearch] = useState(''); // From website
   const [allStories, setAllStories] = useState<any>([]);
   const [searchResults, setSearchResults] = useState<any>([]);
-
-  // From website
-  const updateSearch = (search: string) => {
-    setSearch(search);
-  };
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -35,6 +32,7 @@ function SearchScreen() {
   };
 
   useEffect(() => {
+    // setAllStories(jsonStory);
     // fetch all stories from Supabase, and set allStories to
     // the returned list of stories.
   });
@@ -65,13 +63,21 @@ function SearchScreen() {
         placeholder="Search"
         placeholderTextColor="black"
         onChangeText={text => searchFunction(text)} // do u have to updateSearch(search)
-        value={search} // value from the search bar
+        value={searchResults} // value from the search bar
       />
       <ScrollView>
         <Text>Stories go here ...</Text>
-        {/* <SearchCard />
-        <SearchCard />
-        ... */}
+        {/* {jsonStory.map(story => (
+          <SearchCard
+            key={story.title}
+            title={story.title}
+            author={story.author}
+            image={story.featured_media}
+            authorImage={story.author}
+            tags={story.genre_medium}
+            pressFunction={() => null}
+          />
+        ))} */}
       </ScrollView>
       <Link href="/search/story" asChild>
         <Button title="Story" />

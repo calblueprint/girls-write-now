@@ -77,7 +77,7 @@ function SearchScreen() {
             tags={story.genre_medium}
             pressFunction={() => null}
           />
-        ))} */}
+        ))} // makes a searchcard for every item in the list. as it iterates through it, story is the name of each item. */}
       </ScrollView>
       <Link href="/search/story" asChild>
         <Button title="Story" />

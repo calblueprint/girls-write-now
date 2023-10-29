@@ -1,7 +1,7 @@
 import { SearchBar } from '@rneui/themed';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, ScrollView, Text, StyleSheet } from 'react-native';
+import { Button, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SearchCard from '../../../components/SearchCard/SearchCard';
@@ -70,18 +70,8 @@ function SearchScreen() {
         platform="default"
         searchIcon={false}
         clearIcon
-        containerStyle={{
-          backgroundColor: 'transparent',
-          borderRadius: 10,
-          borderColor: 'transparent',
-          padding: 0,
-          marginBottom: 16,
-        }}
-        inputContainerStyle={{
-          backgroundColor: '#D9D9D9',
-          margin: 0,
-          borderRadius: 10,
-        }}
+        containerStyle={tempStyles.searchContainer}
+        inputContainerStyle={tempStyles.inputContainer}
         inputStyle={{ color: 'black' }}
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
@@ -93,7 +83,6 @@ function SearchScreen() {
         value={search} // value for the search bar
       />
       <ScrollView>
-        <Text>Stories go here ...</Text>
         {searchResults.map(story => (
           <SearchCard
             key={story.title}
@@ -123,5 +112,18 @@ const tempStyles = StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
     paddingTop: 48,
+    gap: 14,
+  },
+  searchContainer: {
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    borderColor: 'transparent',
+    padding: 0,
+    marginBottom: 16,
+  },
+  inputContainer: {
+    backgroundColor: '#D9D9D9',
+    margin: 0,
+    borderRadius: 10,
   },
 });

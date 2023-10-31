@@ -13,7 +13,7 @@ import {
 import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import jsonStory from '../../../database/story.json';
+import jsonStory from '../../../utils/story.json';
 
 function htmlParser(htmlString: string) {
   const regexHeading = /(<h2(.*?)h2>)/;

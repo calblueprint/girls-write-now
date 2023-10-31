@@ -109,7 +109,7 @@ export function AuthContextProvider({
       type: 'email',
     });
 
-    if (value.data.user) setUser(value.data.user);
+    // if (value.data.user) setUser(value.data.user);
     return value;
   };
 

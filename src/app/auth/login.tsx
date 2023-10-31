@@ -24,12 +24,9 @@ function LoginScreen() {
     const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
+    else resetAndPushToRouter('/home');
     setLoading(false);
   };
-
-  if (sessionHandler.session) {
-    resetAndPushToRouter('/home');
-  }
 
   return (
     <View style={globalStyles.auth_container}>

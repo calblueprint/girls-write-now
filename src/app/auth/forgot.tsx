@@ -27,7 +27,7 @@ function VerificationScreen() {
     setLoading(true);
 
     if (email && verificationCode) {
-      const { data, error } = await verifyOtp(email, verificationCode);
+      const { error } = await verifyOtp(email, verificationCode);
 
       if (error) {
         Alert.alert(error.message);
@@ -51,10 +51,11 @@ function VerificationScreen() {
     if (error) {
       console.error(error);
       Alert.alert('Updating password failed');
+    } else {
+      router.replace('/home');
     }
 
     setLoading(false);
-    router.replace('/home');
   };
 
   return (

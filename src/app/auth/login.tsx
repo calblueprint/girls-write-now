@@ -54,12 +54,11 @@ function LoginScreen() {
           autoCapitalize="none"
         />
       </View>
-
-      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
-
+      <Link href="/auth/forgot">Forgot password?</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
       </View>
+      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>
   );
 }

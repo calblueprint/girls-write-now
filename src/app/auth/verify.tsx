@@ -7,7 +7,7 @@ import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 
 function VerificationScreen() {
-  const { user, verifyEmail, resendVerification } = useSession();
+  const { user, verifyOtp: verifyEmail, resendVerification } = useSession();
   const [loading, setLoading] = useState(false);
   const [verificationCode, setCode] = useState<string>('');
 
@@ -17,7 +17,6 @@ function VerificationScreen() {
     if (user?.email && verificationCode) {
       const { error, data } = await verifyEmail(user.email, verificationCode);
 
-      console.log(data);
       if (error) Alert.alert(error.message);
       else router.replace('/auth/onboarding');
     } else if (!verificationCode) {

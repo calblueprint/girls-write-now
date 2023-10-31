@@ -111,7 +111,7 @@ const tempStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 24,
     paddingRight: 24,
-    paddingTop: 48,
+    paddingTop: 20,
     gap: 14,
   },
   searchContainer: {

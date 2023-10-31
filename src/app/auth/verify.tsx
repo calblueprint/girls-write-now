@@ -15,7 +15,7 @@ function VerificationScreen() {
     setLoading(true);
 
     if (user?.email && verificationCode) {
-      const { error, data } = await verifyOtp(user.email, verificationCode);
+      const { error } = await verifyOtp(user.email, verificationCode);
 
       if (error) Alert.alert(error.message);
       else router.replace('/auth/onboarding');

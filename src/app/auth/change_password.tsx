@@ -1,6 +1,6 @@
 import { Redirect, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, View, StyleSheet } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
@@ -25,9 +25,7 @@ function VerificationScreen() {
     setLoading(false);
   };
 
-  if (!user) {
-    <Redirect href="/auth/login" />;
-  }
+  if (!user) return <Redirect href="/auth/login" />;
 
   return (
     <View style={globalStyles.auth_container}>

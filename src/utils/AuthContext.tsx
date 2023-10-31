@@ -26,7 +26,7 @@ export interface AuthState {
   resendVerification: (email: string) => Promise<AuthResponse>;
   resetPassword: (email: string) => Promise<
     | {
-        data: {};
+        data: object;
         error: null;
       }
     | {

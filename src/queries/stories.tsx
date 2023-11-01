@@ -10,7 +10,6 @@ export async function fetchAllStoryPreviews(): Promise<StoryPreview[]> {
       `An error occured when trying to fetch all story previews: ${error}`,
     );
   } else {
-    console.log('Story Preview Data:', data);
     return data;
   }
 }

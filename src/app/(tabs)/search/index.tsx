@@ -18,6 +18,7 @@ function SearchScreen() {
 
   const searchFunction = (text: string) => {
     if (text === '') {
+      setSearch(text);
       setSearchResults(allStories);
       return;
     }
@@ -27,8 +28,8 @@ function SearchScreen() {
       const text_data = text.toUpperCase();
       return title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1;
     });
-    setSearchResults(updatedData);
     setSearch(text);
+    setSearchResults(updatedData);
   };
 
   useEffect(() => {
@@ -39,7 +40,7 @@ function SearchScreen() {
   });
 
   return (
-    <SafeAreaView style={globalStyles.container}>
+    <SafeAreaView style={styles.container}>
       {filterVisible && <SafeAreaView style={[styles.greyOverlay]} />}
       <SearchBar
         platform="default"
@@ -57,6 +58,13 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
       />
+      <Link href="/search/story" asChild>
+        <Button title="Story" />
+      </Link>
+      <Button
+        title="Show Filter Modal"
+        onPress={() => setFilterVisible(true)}
+      />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}
@@ -72,19 +80,10 @@ function SearchScreen() {
           />
         )}
       />
-      <Link href="/search/story" asChild>
-        <Button title="Story" />
-      </Link>
-
-      <Button
-        title="Show Filter Modal"
-        onPress={() => setFilterVisible(true)}
-      />
       <FilterModal
         isVisible={filterVisible}
         setIsVisible={setFilterVisible}
         title="Genre"
-        subfilterTitle=""
       />
     </SafeAreaView>
   );

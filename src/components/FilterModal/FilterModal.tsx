@@ -11,7 +11,6 @@ type FilterModalProps = {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
-  subfilterTitle: string;
 };
 
 function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
@@ -63,6 +62,7 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
               {genres.map(item => {
                 return (
                   <CheckBox
+                    key={item.title}
                     title={item.title}
                     checked={item.state}
                     onPress={() => item.setState(!item.state)}

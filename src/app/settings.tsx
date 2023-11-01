@@ -1,14 +1,14 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Alert, ScrollView, Platform } from 'react-native';
+import { Text, View, Alert, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import UserStringInput from '../components/UserStringInput';
 import globalStyles from '../styles/globalStyles';
 import { useSession } from '../utils/AuthContext';
 import supabase from '../utils/supabase';
-import UserStringInput from '../components/UserStringInput';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();

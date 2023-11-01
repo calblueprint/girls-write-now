@@ -1,17 +1,20 @@
 import { SearchBar } from '@rneui/themed';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet } from 'react-native';
+import { Button, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import FilterModal from '../../../components/FilterModal/FilterModal';
 import SearchCard from '../../../components/SearchCard/SearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview } from '../../../queries/types';
+import globalStyles from '../../../styles/globalStyles';
 
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
+  const [filterVisible, setFilterVisible] = useState(false);
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -36,13 +39,14 @@ function SearchScreen() {
   });
 
   return (
-    <SafeAreaView style={tempStyles.container}>
+    <SafeAreaView style={globalStyles.container}>
+      {filterVisible && <SafeAreaView style={[styles.greyOverlay]} />}
       <SearchBar
         platform="default"
         searchIcon={false}
         clearIcon
-        containerStyle={tempStyles.searchContainer}
-        inputContainerStyle={tempStyles.inputContainer}
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.inputContainer}
         inputStyle={{ color: 'black' }}
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
@@ -71,13 +75,26 @@ function SearchScreen() {
       <Link href="/search/story" asChild>
         <Button title="Story" />
       </Link>
+
+      <Button
+        title="Show Filter Modal"
+        onPress={() => setFilterVisible(true)}
+      />
+      <FilterModal
+        isVisible={filterVisible}
+        setIsVisible={setFilterVisible}
+        title="Genre"
+        subfilterTitle=""
+      />
     </SafeAreaView>
   );
 }
 
 export default SearchScreen;
 
-const tempStyles = StyleSheet.create({
+const { width, height } = Dimensions.get('window');
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -98,5 +115,16 @@ const tempStyles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
     margin: 0,
     borderRadius: 10,
+  },
+  greyOverlay: {
+    flex: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    opacity: 0.2,
+    backgroundColor: 'black',
+    width,
+    height,
+    zIndex: 1,
   },
 });

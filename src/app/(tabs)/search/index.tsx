@@ -1,7 +1,7 @@
 import { SearchBar } from '@rneui/themed';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet, Dimensions } from 'react-native';
+import { Button, FlatList, StyleSheet, Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import FilterModal from '../../../components/FilterModal/FilterModal';
@@ -41,7 +41,8 @@ function SearchScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {filterVisible && <SafeAreaView style={[styles.greyOverlay]} />}
+      <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
+      {/* {filterVisible && <SafeAreaView style={[styles.greyOverlay]} />} */}
       <SearchBar
         platform="default"
         searchIcon={false}
@@ -125,5 +126,13 @@ const styles = StyleSheet.create({
     width,
     height,
     zIndex: 1,
+  },
+  noOverlay: {
+    flex: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width,
+    height,
   },
 });

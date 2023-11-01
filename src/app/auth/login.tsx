@@ -1,10 +1,11 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Text, Alert, View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import { TextInput } from 'react-native-paper';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -33,25 +34,29 @@ function LoginScreen() {
 
   return (
     <View style={globalStyles.auth_container}>
+      <Text style={[globalStyles.h3, globalStyles.mt20]}>
+        Read stories from young creators
+      </Text>
+
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Input
-          label="Email"
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+        <TextInput
           onChangeText={text => setEmail(text)}
           value={email}
-          placeholder="email@address.com"
+          style={styles.inputField}
+          placeholder="Enter Email"
           autoCapitalize="none"
+          textContentType="emailAddress"
         />
       </View>
-      <View style={globalStyles.verticallySpaced}>
-        <Input
-          label="Password"
-          leftIcon={{ type: 'font-awesome', name: 'lock' }}
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+        <TextInput
           onChangeText={text => setPassword(text)}
           value={password}
-          secureTextEntry
-          placeholder="Password"
+          style={styles.inputField}
+          placeholder="Enter Password"
           autoCapitalize="none"
+          secureTextEntry={true}
+          textContentType={'password'}
         />
       </View>
 
@@ -65,3 +70,14 @@ function LoginScreen() {
 }
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  inputField: {
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+  },
+  button: {
+    backgroundColor: 'gray',
+  },
+});

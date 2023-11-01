@@ -18,6 +18,7 @@ function TabNav() {
     <Tabs
       screenOptions={{
         tabBarLabelStyle: { fontSize: 14 },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen

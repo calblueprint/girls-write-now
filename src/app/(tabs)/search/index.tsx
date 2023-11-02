@@ -42,7 +42,6 @@ function SearchScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
-      {/* {filterVisible && <SafeAreaView style={[styles.greyOverlay]} />} */}
       <SearchBar
         platform="default"
         searchIcon={false}
@@ -59,7 +58,7 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
       />
-      <Link href="/search/story" asChild>
+      <Link href="/story" asChild>
         <Button title="Story" />
       </Link>
       <Button

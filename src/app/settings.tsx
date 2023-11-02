@@ -166,7 +166,7 @@ function SettingsScreen() {
         />
         <Button
           title="Change Password"
-          onPress={() => router.push('/auth/change_password')}
+          onPress={() => router.push('/auth/changePassword')}
         />
         <Button title="Sign Out" onPress={signOut} />
       </View>

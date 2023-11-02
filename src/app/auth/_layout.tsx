@@ -8,8 +8,8 @@ function StackLayout() {
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="onboarding" options={{ headerShown: false }} />
       <Stack.Screen name="verify" options={{ headerShown: false }} />
-      <Stack.Screen name="forgot" options={{ headerShown: false }} />
-      <Stack.Screen name="change_password" options={{ headerShown: false }} />
+      <Stack.Screen name="forgotPassword" options={{ headerShown: false }} />
+      <Stack.Screen name="changePassword" options={{ headerShown: false }} />
     </Stack>
   );
 }

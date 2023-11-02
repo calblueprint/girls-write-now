@@ -6,7 +6,7 @@ import { Button, Input } from 'react-native-elements';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 
-function VerificationScreen() {
+function ForgotPasswordScreen() {
   const { updateUser, resetPassword, verifyOtp } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -114,7 +114,7 @@ function VerificationScreen() {
   );
 }
 
-export default VerificationScreen;
+export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
   input: {

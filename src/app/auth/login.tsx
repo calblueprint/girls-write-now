@@ -51,7 +51,7 @@ function LoginScreen() {
           autoCapitalize="none"
         />
       </View>
-      <Link href="/auth/forgot">Forgot password?</Link>
+      <Link href="/auth/forgotPassword">Forgot password?</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
       </View>

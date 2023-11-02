@@ -10,6 +10,7 @@ import { TextInput } from 'react-native-paper';
 function SignUpScreen() {
   const { session, signUp } = useSession();
 
+  const [usernameCheckPassed, setUsernameCheckPassed] = useState(false);
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -23,7 +24,11 @@ function SignUpScreen() {
 
   const signUpWithEmail = async () => {
     setLoading(true);
-    const { error } = await signUp(email, password);
+    const { error } = await signUp(email, password, {
+      username,
+      firstName,
+      lastName,
+    });
 
     if (error) Alert.alert(error.message);
     else router.replace('/auth/verify');
@@ -36,6 +41,7 @@ function SignUpScreen() {
       <Text style={[globalStyles.h3, globalStyles.mt20]}>
         Read stories from young creators
       </Text>
+
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <TextInput
           onChangeText={text => setUsername(text)}
@@ -44,7 +50,13 @@ function SignUpScreen() {
           placeholder="Enter New Username"
           autoCapitalize="none"
         />
+        <Text style={styles.usernameError}>
+          That username is not avaliable. Please try again.{' '}
+        </Text>
       </View>
+      {!usernameCheckPassed && (
+        <Text>That username is not avaliable. Please try again. </Text>
+      )}
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <TextInput
           onChangeText={text => setFirstName(text)}
@@ -104,5 +116,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'gray',
+  },
+  usernameError: {
+    color: 'red',
   },
 });

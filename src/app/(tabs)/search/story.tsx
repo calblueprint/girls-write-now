@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -11,79 +10,20 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Button } from 'react-native-paper';
+import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import jsonStory from '../../../utils/story.json';
-
-function htmlParser(htmlString: string) {
-  const regexHeading = /(<h2(.*?)h2>)/;
-  const regexStory = /(\n+<p(.*?)p>)+/;
-  const regexProcess = /<p>&nbsp(.*?)p>/;
-
-  const heading = regexHeading.exec(htmlString);
-  const story = regexStory.exec(htmlString);
-  const process = regexProcess.exec(htmlString);
-
-  const contentHeading = heading
-    ? decode(heading[0], { level: 'html5' })
-        .replace('</h2>', '')
-        .replace(/<h2.+>/, '')
-    : '';
-  const contentStory = story
-    ? decode(story[0], { level: 'html5' })
-        .replace(/(\n)+/gi, '')
-        .replace(/<p>/gi, '')
-        .replace(/<\/p>/gi, '\n\n')
-    : '';
-  const contentProcess = process
-    ? decode(process[0], { level: 'html5' })
-        .replace(/<p>/gi, '')
-        .replace(/<\/p>/gi, '')
-    : '';
-  return {
-    heading: contentHeading,
-    story: contentStory,
-    process: contentProcess,
-  };
-}
+import { storyObject } from '../../../utils/story';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
-  const [title, setTitle] = useState(String);
-  const [story, setStory] = useState(String);
-  const [heading, setHeading] = useState(String);
-  const [process, setProcess] = useState(String);
-  const [author, setAuthor] = useState(String);
-  const [genres, setGenres] = useState(['']);
-  const [image, setImage] = useState(String);
   const scrollRef = React.useRef<any>(null);
+  const [story, setStory] = useState<any>();
 
-  // Load Wordpress API and its contents
-  const getStory = async (id: string) => {
-    try {
-      const url = `https://girlswritenow.org/wp-json/wp/v2/story/${id}`;
-      const response = await fetch(url);
-      const json = await response.json();
-
-      setTitle(decode(json.title.rendered));
-      setStory(htmlParser(json.content.rendered).story);
-      setHeading(htmlParser(json.content.rendered).heading);
-      setProcess(htmlParser(json.content.rendered).process);
-      setAuthor(jsonStory.author);
-      setGenres(jsonStory['genre-medium']);
-      setImage(jsonStory.featured_media);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Share Story Button action
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `Check out this story from Girls Write Now!!!\nhttps://girlswritenow.org/story/${jsonStory.slug}/`,
+        message: `Check out this story from Girls Write Now!!!\n${story.link}/`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -95,7 +35,7 @@ function StoryScreen() {
         // dismissed
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -104,11 +44,12 @@ function StoryScreen() {
   };
 
   useEffect(() => {
-    getStory('170947');
+    setStory(storyObject);
+    setLoading(false);
   }, []);
 
   return (
-    <SafeAreaView style={tempStyles.container}>
+    <SafeAreaView style={styles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -117,23 +58,23 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          <Image style={tempStyles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: story.featured_media }} />
 
-          <Text style={tempStyles.title}>{title}</Text>
+          <Text style={styles.title}>{story.title}</Text>
 
-          <View style={tempStyles.author}>
-            <Image style={tempStyles.authorImage} source={{ uri: '' }} />
-            <Text style={tempStyles.authorText}>By {author}</Text>
+          <View style={styles.author}>
+            <Image style={styles.authorImage} source={{ uri: '' }} />
+            <Text style={styles.authorText}>By {story.author}</Text>
           </View>
 
           <View>
             <FlatList
-              style={tempStyles.genres}
+              style={styles.genres}
               horizontal
-              data={genres}
+              data={story.genreMedium}
               renderItem={({ item }) => (
-                <View style={tempStyles.genresBorder}>
-                  <Text style={tempStyles.genresText}>{item}</Text>
+                <View style={styles.genresBorder}>
+                  <Text style={styles.genresText}>{item}</Text>
                 </View>
               )}
             />
@@ -145,13 +86,13 @@ function StoryScreen() {
               onPress={onShare}
               style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
             >
-              <Text style={tempStyles.shareButtonText}>Share Story</Text>
+              <Text style={styles.shareButtonText}>Share Story</Text>
             </Button>
           </View>
 
-          <Text style={tempStyles.heading}>{heading}</Text>
+          <RenderHTML source={storyObject.excerpt} baseStyle={styles.excerpt} />
 
-          <Text style={tempStyles.story}>{story}</Text>
+          <RenderHTML source={storyObject.content} baseStyle={styles.story} />
 
           <Button
             textColor="black"
@@ -160,16 +101,16 @@ function StoryScreen() {
             onPress={onShare}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={tempStyles.shareButtonText}>Share Story</Text>
+            <Text style={styles.shareButtonText}>Share Story</Text>
           </Button>
 
-          <Text style={tempStyles.authorProcess}>Author's Process</Text>
+          <Text style={styles.authorProcess}>Author's Process</Text>
 
-          <Text style={tempStyles.process}>{process}</Text>
+          <RenderHTML source={storyObject.process} baseStyle={styles.process} />
 
-          <View style={tempStyles.author}>
-            <Image style={tempStyles.authorImage} source={{ uri: '' }} />
-            <Text style={tempStyles.authorText}>By {author}</Text>
+          <View style={styles.author}>
+            <Image style={styles.authorImage} source={{ uri: '' }} />
+            <Text style={styles.authorText}>By {story.author}</Text>
           </View>
 
           <Button
@@ -178,7 +119,7 @@ function StoryScreen() {
             onPress={scrollUp}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={tempStyles.backToTopButtonText}>Back To Top</Text>
+            <Text style={styles.backToTopButtonText}>Back To Top</Text>
           </Button>
         </ScrollView>
       )}
@@ -188,7 +129,7 @@ function StoryScreen() {
 
 export default StoryScreen;
 
-const tempStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -262,13 +203,13 @@ const tempStyles = StyleSheet.create({
     textDecorationLine: 'underline',
     backgroundColor: '#D9D9D9',
   },
-  heading: {
+  excerpt: {
     fontFamily: 'Avenir',
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
-    paddingBottom: 34,
+    paddingBottom: 12,
   },
   story: {
     fontFamily: 'Avenir',

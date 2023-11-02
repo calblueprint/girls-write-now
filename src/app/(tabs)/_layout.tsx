@@ -38,10 +38,17 @@ function TabNav() {
         }}
       />
       <Tabs.Screen
-        name="mycontent"
+        name="story"
         options={{
           headerShown: false,
-          tabBarLabel: 'My Content',
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="library"
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Library',
           tabBarIcon: DocumentIcon,
         }}
       />

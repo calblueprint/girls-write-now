@@ -1,9 +1,10 @@
 import { SearchBar } from '@rneui/themed';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet, Dimensions, View } from 'react-native';
+import { Button, FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import SearchCard from '../../../components/SearchCard/SearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
@@ -42,7 +43,6 @@ function SearchScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
-      {/* {filterVisible && <SafeAreaView style={[styles.greyOverlay]} />} */}
       <SearchBar
         platform="default"
         searchIcon={false}
@@ -59,7 +59,7 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
       />
-      <Link href="/search/story" asChild>
+      <Link href="/story" asChild>
         <Button title="Story" />
       </Link>
       <Button
@@ -91,48 +91,3 @@ function SearchScreen() {
 }
 
 export default SearchScreen;
-
-const { width, height } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'flex-start',
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 20,
-    gap: 14,
-  },
-  searchContainer: {
-    backgroundColor: 'transparent',
-    borderRadius: 10,
-    borderColor: 'transparent',
-    padding: 0,
-    marginBottom: 16,
-  },
-  inputContainer: {
-    backgroundColor: '#D9D9D9',
-    margin: 0,
-    borderRadius: 10,
-  },
-  greyOverlay: {
-    flex: 1,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    opacity: 0.2,
-    backgroundColor: 'black',
-    width,
-    height,
-    zIndex: 1,
-  },
-  noOverlay: {
-    flex: 1,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width,
-    height,
-  },
-});

@@ -7,7 +7,7 @@ import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 
 function ForgotPasswordScreen() {
-  const { updateUser, resetPassword, verifyOtp } = useSession();
+  const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,7 +52,8 @@ function ForgotPasswordScreen() {
       console.error(error);
       Alert.alert('Updating password failed');
     } else {
-      router.replace('/home');
+      await signOut();
+      router.replace('/auth/login');
     }
 
     setLoading(false);

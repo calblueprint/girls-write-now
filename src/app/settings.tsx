@@ -164,10 +164,6 @@ function SettingsScreen() {
           onPress={updateProfile}
           disabled={loading}
         />
-        <Button
-          title="Change Password"
-          onPress={() => router.push('/auth/changePassword')}
-        />
         <Button title="Sign Out" onPress={signOut} />
       </View>
     </SafeAreaView>

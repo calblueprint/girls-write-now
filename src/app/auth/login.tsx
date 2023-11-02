@@ -24,12 +24,9 @@ function LoginScreen() {
     const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
+    else resetAndPushToRouter('/home');
     setLoading(false);
   };
-
-  if (sessionHandler.session) {
-    resetAndPushToRouter('/home');
-  }
 
   return (
     <View style={globalStyles.auth_container}>
@@ -54,12 +51,11 @@ function LoginScreen() {
           autoCapitalize="none"
         />
       </View>
-
-      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
-
+      <Link href="/auth/forgotPassword">Forgot password?</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
       </View>
+      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>
   );
 }

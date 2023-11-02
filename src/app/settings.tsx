@@ -164,8 +164,6 @@ function SettingsScreen() {
           onPress={updateProfile}
           disabled={loading}
         />
-      </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Sign Out" onPress={signOut} />
       </View>
     </SafeAreaView>

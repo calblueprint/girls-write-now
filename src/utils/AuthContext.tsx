@@ -1,4 +1,11 @@
-import { AuthResponse, Session, User } from '@supabase/supabase-js';
+import {
+  AuthError,
+  AuthResponse,
+  Session,
+  User,
+  UserAttributes,
+  UserResponse,
+} from '@supabase/supabase-js';
 import React, {
   createContext,
   useContext,
@@ -15,8 +22,19 @@ export interface AuthState {
   signIn: (newSession: Session | null) => void;
   signUp: (email: string, password: string) => Promise<AuthResponse>;
   signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
-  verifyEmail: (email: string, token: string) => Promise<AuthResponse>;
+  verifyOtp: (email: string, token: string) => Promise<AuthResponse>;
   resendVerification: (email: string) => Promise<AuthResponse>;
+  resetPassword: (email: string) => Promise<
+    | {
+        data: object;
+        error: null;
+      }
+    | {
+        data: null;
+        error: AuthError;
+      }
+  >;
+  updateUser: (attributes: UserAttributes) => Promise<UserResponse>;
   signOut: () => Promise<void>;
 }
 
@@ -84,14 +102,14 @@ export function AuthContextProvider({
     setSession(null);
   };
 
-  const verifyEmail = async (email: string, token: string) => {
+  const verifyOtp = async (email: string, token: string) => {
     const value = await supabase.auth.verifyOtp({
       email,
       token,
       type: 'email',
     });
 
-    if (value.data.user) setUser(value.data.user);
+    // if (value.data.user) setUser(value.data.user);
     return value;
   };
 
@@ -101,6 +119,12 @@ export function AuthContextProvider({
       email,
     });
 
+  const resetPassword = async (email: string) =>
+    await supabase.auth.resetPasswordForEmail(email);
+
+  const updateUser = async (attributes: UserAttributes) =>
+    await supabase.auth.updateUser(attributes);
+
   const authContextValue = useMemo(
     () => ({
       user,
@@ -109,7 +133,9 @@ export function AuthContextProvider({
       signIn,
       signInWithEmail,
       signOut,
-      verifyEmail,
+      verifyOtp,
+      updateUser,
+      resetPassword,
       resendVerification,
     }),
     [session, user],

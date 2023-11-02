@@ -1,14 +1,14 @@
 import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import globalStyles from '../../styles/globalStyles';
+import globalStyles from '../../../styles/globalStyles';
 
-function MyContentScreen() {
+function LibraryScreen() {
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Text style={globalStyles.h1}>My Content</Text>
+      <Text style={globalStyles.h1}>Library</Text>
     </SafeAreaView>
   );
 }
 
-export default MyContentScreen;
+export default LibraryScreen;

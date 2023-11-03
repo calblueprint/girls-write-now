@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
-import SearchCard from '../../../components/SearchCard/SearchCard';
+import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
@@ -66,13 +66,15 @@ function SearchScreen() {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}
+        contentContainerStyle={{}}
         renderItem={({ item }) => (
           <SearchCard
             key={item.title}
             title={item.title}
-            author={item.author_name}
             image={item.featured_media}
+            author={item.author_name}
             authorImage={item.author_image}
+            excerpt={item.excerpt}
             tags={item.genre_medium}
             pressFunction={() =>
               router.push({

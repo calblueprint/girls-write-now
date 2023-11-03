@@ -39,7 +39,6 @@ export async function fetchFeaturedStoryPreviews(): Promise<StoryPreview[]> {
       `An error occured when trying to fetch featured story previews: ${error}`,
     );
   } else {
-    console.log(data);
     return data;
   }
 }

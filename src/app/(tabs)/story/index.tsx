@@ -15,8 +15,10 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import { fetchStory } from '../../../queries/stories';
-import { Story } from '../../../queries/types';
+import { storyObject } from '../../../utils/story';
+
+const navigation = useNavigation();
+const router = useRouter();
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);

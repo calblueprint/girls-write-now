@@ -2,6 +2,7 @@ import { Redirect, Link, router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
+import validator from 'validator';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
@@ -12,6 +13,7 @@ function SignUpScreen() {
   const { session, signUp } = useSession();
 
   const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -51,6 +53,20 @@ function SignUpScreen() {
     setUsernameError('');
   };
 
+  const checkEmail = () => {
+    if (!validator.isEmail(email)) setEmailError('Please enter a valid email');
+    else setEmailError('');
+  };
+
+  useEffect(() => {
+    // don't show error when the user first gets on the page
+    if (!initialLoad.current) {
+      checkEmail();
+    } else {
+      initialLoad.current = false;
+    }
+  }, [email]);
+
   useEffect(() => {
     // don't show error when the user first gets on the page
     if (!initialLoad.current) {
@@ -62,6 +78,10 @@ function SignUpScreen() {
 
   const signUpWithEmail = async () => {
     setLoading(true);
+    if (usernameError) {
+      Alert.alert('Invalid username');
+    }
+
     const value = await signUp(email, password, {
       username,
       first_name: firstName,
@@ -90,9 +110,7 @@ function SignUpScreen() {
           placeholder="Enter New Username"
           autoCapitalize="none"
         />
-        {usernameError && (
-          <Text style={styles.usernameError}>{usernameError}</Text>
-        )}
+        {usernameError && <Text style={styles.error}>{usernameError}</Text>}
       </View>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <TextInput
@@ -123,6 +141,8 @@ function SignUpScreen() {
           textContentType="emailAddress"
         />
       </View>
+      {emailError && <Text style={styles.error}>{emailError}</Text>}
+
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <TextInput
           onChangeText={text => setPassword(text)}
@@ -154,7 +174,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'gray',
   },
-  usernameError: {
+  error: {
     color: 'red',
   },
 });

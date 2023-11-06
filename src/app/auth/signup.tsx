@@ -1,35 +1,75 @@
 import { Redirect, Link, router } from 'expo-router';
-import React, { useId, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import { TextInput } from 'react-native-paper';
+import supabase from '../../utils/supabase';
 
 function SignUpScreen() {
   const { session, signUp } = useSession();
 
-  const [usernameCheckPassed, setUsernameCheckPassed] = useState(false);
+  const [usernameError, setUsernameError] = useState('');
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const initialLoad = useRef(true);
+  const validUsernameCharacters = /^\w+$/g;
 
   if (session) {
     return <Redirect href="/home" />;
   }
 
+  const checkUsername = async () => {
+    const usernameCharactersValid =
+      username.length <= 12 && username.match(validUsernameCharacters) !== null;
+
+    if (!usernameCharactersValid) {
+      setUsernameError(
+        'Usernames must be 12 characters or less and may contain letters, numbers, or underscores.',
+      );
+      return;
+    }
+
+    const { count } = await supabase
+      .from('profiles')
+      .select(`*`, { count: 'exact' })
+      .limit(1)
+      .eq('username', username);
+    const usernameIsTaken = (count ?? 0) >= 1;
+
+    if (usernameIsTaken) {
+      setUsernameError('That username is not available. Please try again.');
+      return;
+    }
+
+    setUsernameError('');
+  };
+
+  useEffect(() => {
+    // don't show error when the user first gets on the page
+    if (!initialLoad.current) {
+      checkUsername();
+    } else {
+      initialLoad.current = false;
+    }
+  }, [username]);
+
   const signUpWithEmail = async () => {
     setLoading(true);
-    const { error } = await signUp(email, password, {
+    const value = await signUp(email, password, {
       username,
-      firstName,
-      lastName,
+      first_name: firstName,
+      last_name: lastName,
     });
+    const { error } = value;
 
+    console.error(value);
     if (error) Alert.alert(error.message);
     else router.replace('/auth/verify');
 
@@ -50,13 +90,10 @@ function SignUpScreen() {
           placeholder="Enter New Username"
           autoCapitalize="none"
         />
-        <Text style={styles.usernameError}>
-          That username is not avaliable. Please try again.{' '}
-        </Text>
+        {usernameError && (
+          <Text style={styles.usernameError}>{usernameError}</Text>
+        )}
       </View>
-      {!usernameCheckPassed && (
-        <Text>That username is not avaliable. Please try again. </Text>
-      )}
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <TextInput
           onChangeText={text => setFirstName(text)}

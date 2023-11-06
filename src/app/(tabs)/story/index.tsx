@@ -1,3 +1,4 @@
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -19,6 +20,10 @@ function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
   const scrollRef = React.useRef<any>(null);
   const [story, setStory] = useState<any>();
+
+  const params = useLocalSearchParams();
+  const { author } = params;
+  const router = useRouter();
 
   const onShare = async () => {
     try {
@@ -61,6 +66,7 @@ function StoryScreen() {
           <Image style={styles.image} source={{ uri: story.featured_media }} />
 
           <Text style={styles.title}>{story.title}</Text>
+          <Text>{author}</Text>
 
           <View style={styles.author}>
             <Image style={styles.authorImage} source={{ uri: '' }} />

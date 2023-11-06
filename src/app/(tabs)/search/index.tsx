@@ -1,5 +1,5 @@
 import { SearchBar } from '@rneui/themed';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -60,6 +60,15 @@ function SearchScreen() {
         value={search}
       />
       <Link href="/story" asChild>
+        <Button title="Story" />
+      </Link>
+      {/* <Button
+        title="Params Test"
+        onPress={() =>
+          router.push({ pathname: '/story', params: { authorID: 1778 } })
+        }
+      /> */}
+      <Link href={`/story?author=${1178}`} asChild>
         <Button title="Story" />
       </Link>
       <Button

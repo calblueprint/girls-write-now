@@ -8,7 +8,9 @@ export async function fetchUsername(user_id: string | undefined) {
 
   if (error) {
     console.log(error);
-    throw new Error(`An error occured when trying to fetch username: ${error}`);
+    throw new Error(
+      `An error occured when trying to fetch username: ${error.details}`,
+    );
   } else {
     return data[0].username as string;
   }

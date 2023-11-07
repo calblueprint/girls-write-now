@@ -14,7 +14,7 @@ type PreviewCardProps = {
   image: string;
   author: string;
   authorImage: string;
-  excerpt: string;
+  excerpt: { html: string };
   tags: string[];
   pressFunction: (event: GestureResponderEvent) => void;
 };
@@ -47,7 +47,7 @@ function PreviewCard({
               </Text>
             </View>
             <Text numberOfLines={2} style={[globalStyles.body3]}>
-              {excerpt}
+              {excerpt.html.slice(3, -3)}
             </Text>
           </View>
         </View>

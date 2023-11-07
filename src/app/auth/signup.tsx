@@ -2,11 +2,11 @@ import { Redirect, Link, router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
+import { TextInput } from 'react-native-paper';
 import validator from 'validator';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
-import { TextInput } from 'react-native-paper';
 import supabase from '../../utils/supabase';
 
 function SignUpScreen() {
@@ -23,10 +23,6 @@ function SignUpScreen() {
   const initialLoadEmail = useRef(true);
   const initialLoadUsername = useRef(true);
   const validUsernameCharacters = /^\w+$/g;
-
-  if (session) {
-    return <Redirect href="/home" />;
-  }
 
   const checkUsername = async () => {
     const usernameCharactersValid =
@@ -95,6 +91,10 @@ function SignUpScreen() {
     setLoading(false);
   };
 
+  if (session) {
+    return <Redirect href="/home" />;
+  }
+
   return (
     <View style={globalStyles.auth_container}>
       <Text style={[globalStyles.h3, globalStyles.mt20]}>
@@ -149,8 +149,8 @@ function SignUpScreen() {
           style={styles.inputField}
           placeholder="Enter Password"
           autoCapitalize="none"
-          secureTextEntry={true}
-          textContentType={'password'}
+          secureTextEntry
+          textContentType="password"
         />
       </View>
 

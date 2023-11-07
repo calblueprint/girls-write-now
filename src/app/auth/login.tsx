@@ -2,11 +2,11 @@ import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, Alert, View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
+import { TextInput } from 'react-native-paper';
 import validator from 'validator';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
-import { TextInput } from 'react-native-paper';
 import supabase from '../../utils/supabase';
 
 function LoginScreen() {
@@ -72,8 +72,8 @@ function LoginScreen() {
           style={styles.inputField}
           placeholder="Password"
           autoCapitalize="none"
-          secureTextEntry={true}
-          textContentType={'password'}
+          secureTextEntry
+          textContentType="password"
         />
       </View>
       <Link href="/auth/forgotPassword">Forgot password?</Link>

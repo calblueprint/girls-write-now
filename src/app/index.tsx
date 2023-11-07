@@ -9,22 +9,22 @@ function StartPage() {
   const [delay, setDelay] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setDelay(false);
-    }, 750);
-  }, []);
-
-  if (delay) {
-    return <SplashScreen />;
-  } else {
-    if (isLoading) {
-      return <SplashScreen />;
-    } else if (session) {
-      router.replace('/home');
-    } else {
-      router.replace('/auth/login');
+    if (!delay && !isLoading) {
+      if (session) {
+        router.replace('/home');
+      } else {
+        router.replace('/auth/login');
+      }
     }
-  }
+    const timer = setTimeout(() => {
+      setDelay(false);
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [delay]);
+
+  return <SplashScreen />;
 }
 
 export default StartPage;

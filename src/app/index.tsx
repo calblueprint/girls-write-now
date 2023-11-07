@@ -1,16 +1,18 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import SplashScreen from '../components/SplashScreen';
+import SplashScreen from '../components/SplashScreen/SplashScreen';
 import { useSession } from '../utils/AuthContext';
 
 function StartPage() {
   const { session, isLoading } = useSession();
   const [delay, setDelay] = useState(true);
 
-  setTimeout(() => {
-    setDelay(false);
-  }, 750);
+  useEffect(() => {
+    setTimeout(() => {
+      setDelay(false);
+    }, 750);
+  }, []);
 
   if (delay) {
     return <SplashScreen />;

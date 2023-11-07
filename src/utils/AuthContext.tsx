@@ -70,17 +70,13 @@ export function AuthContextProvider({
         setSession(newSession);
       })
       .finally(() => {
-        // setIsLoading(false);
+        setIsLoading(false);
       });
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
     });
   }, []);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, [session]);
 
   const signIn = (newSession: Session | null) => {
     setSession(newSession);

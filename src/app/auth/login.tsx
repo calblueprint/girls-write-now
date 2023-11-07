@@ -2,14 +2,16 @@ import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, Alert, View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
+import validator from 'validator';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import { TextInput } from 'react-native-paper';
+import supabase from '../../utils/supabase';
 
 function LoginScreen() {
   const sessionHandler = useSession();
-  const [email, setEmail] = useState('');
+  const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,10 +22,28 @@ function LoginScreen() {
     router.replace(path);
   };
 
-  const signInWithEmail = async () => {
+  const signIn = async () => {
     setLoading(true);
-    const { error } = await sessionHandler.signInWithEmail(email, password);
+    let email;
+    if (validator.isEmail(emailOrUsername)) {
+      email = emailOrUsername;
+    } else {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select(`email`)
+        .limit(1)
+        .eq('username', emailOrUsername);
 
+      if (data && data?.length > 0 && !error) {
+        email = data[0].email;
+      } else {
+        Alert.alert(`Username "${emailOrUsername}" does not exist`);
+        setLoading(false);
+        return;
+      }
+    }
+
+    const { error } = await sessionHandler.signInWithEmail(email, password);
     if (error) Alert.alert(error.message);
     else resetAndPushToRouter('/home');
     setLoading(false);
@@ -37,10 +57,10 @@ function LoginScreen() {
 
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <TextInput
-          onChangeText={text => setEmail(text)}
-          value={email}
+          onChangeText={text => setEmailOrUsername(text)}
+          value={emailOrUsername}
           style={styles.inputField}
-          placeholder="Enter Email"
+          placeholder="Email or Username"
           autoCapitalize="none"
           textContentType="emailAddress"
         />
@@ -50,7 +70,7 @@ function LoginScreen() {
           onChangeText={text => setPassword(text)}
           value={password}
           style={styles.inputField}
-          placeholder="Enter Password"
+          placeholder="Password"
           autoCapitalize="none"
           secureTextEntry={true}
           textContentType={'password'}
@@ -58,7 +78,7 @@ function LoginScreen() {
       </View>
       <Link href="/auth/forgotPassword">Forgot password?</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
+        <Button title="Log In" disabled={loading} onPress={signIn} />
       </View>
       <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>

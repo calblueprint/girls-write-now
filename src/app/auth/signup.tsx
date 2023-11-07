@@ -20,7 +20,8 @@ function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const initialLoad = useRef(true);
+  const initialLoadEmail = useRef(true);
+  const initialLoadUsername = useRef(true);
   const validUsernameCharacters = /^\w+$/g;
 
   if (session) {
@@ -60,19 +61,19 @@ function SignUpScreen() {
 
   useEffect(() => {
     // don't show error when the user first gets on the page
-    if (!initialLoad.current) {
+    if (!initialLoadEmail.current) {
       checkEmail();
     } else {
-      initialLoad.current = false;
+      initialLoadEmail.current = false;
     }
   }, [email]);
 
   useEffect(() => {
     // don't show error when the user first gets on the page
-    if (!initialLoad.current) {
+    if (!initialLoadUsername.current) {
       checkUsername();
     } else {
-      initialLoad.current = false;
+      initialLoadUsername.current = false;
     }
   }, [username]);
 
@@ -82,14 +83,12 @@ function SignUpScreen() {
       Alert.alert('Invalid username');
     }
 
-    const value = await signUp(email, password, {
+    const { error } = await signUp(email, password, {
       username,
       first_name: firstName,
       last_name: lastName,
     });
-    const { error } = value;
 
-    console.error(value);
     if (error) Alert.alert(error.message);
     else router.replace('/auth/verify');
 

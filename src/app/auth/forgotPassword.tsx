@@ -49,7 +49,6 @@ function ForgotPasswordScreen() {
     const { error } = await updateUser({ password });
 
     if (error) {
-      console.error(error);
       Alert.alert('Updating password failed');
     } else {
       await signOut();

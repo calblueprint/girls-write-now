@@ -6,6 +6,7 @@ export async function fetchAuthor(authorID: number): Promise<Author> {
     .from('authors')
     .select('*')
     .eq('id', authorID);
+
   if (error) {
     console.log(error);
     throw new Error(

@@ -59,18 +59,6 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
       />
-      <Link href="/story" asChild>
-        <Button title="Story" />
-      </Link>
-      {/* <Button
-        title="Params Test"
-        onPress={() =>
-          router.push({ pathname: '/story', params: { authorID: 1778 } })
-        }
-      /> */}
-      <Link href={`/story?author=${1178}`} asChild>
-        <Button title="Story" />
-      </Link>
       <Button
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
@@ -86,7 +74,12 @@ function SearchScreen() {
             image={item.featured_media}
             authorImage={item.author_image}
             tags={item.genre_medium}
-            pressFunction={() => null}
+            pressFunction={() =>
+              router.push({
+                pathname: '/story',
+                params: { storyId: item.id.toString() },
+              })
+            }
           />
         )}
       />

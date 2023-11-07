@@ -1,4 +1,4 @@
-import { StoryPreview } from './types';
+import { Story, StoryPreview } from './types';
 import supabase from '../utils/supabase';
 
 export async function fetchAllStoryPreviews(): Promise<StoryPreview[]> {
@@ -10,6 +10,22 @@ export async function fetchAllStoryPreviews(): Promise<StoryPreview[]> {
       `An error occured when trying to fetch all story previews: ${error}`,
     );
   } else {
+    return data;
+  }
+}
+
+export async function fetchStory(storyId: number): Promise<Story[]> {
+  const { data, error } = await supabase.rpc('fetch_story', {
+    input_id: storyId,
+  });
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch story ${storyId}: ${error.code}`,
+    );
+  } else {
+    console.log(data);
     return data;
   }
 }

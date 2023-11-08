@@ -91,10 +91,6 @@ function SignUpScreen() {
     setLoading(false);
   };
 
-  if (session) {
-    return <Redirect href="/home" />;
-  }
-
   return (
     <View style={globalStyles.auth_container}>
       <Text style={[globalStyles.h3, globalStyles.mt20]}>
@@ -149,14 +145,18 @@ function SignUpScreen() {
           style={styles.inputField}
           placeholder="Enter Password"
           autoCapitalize="none"
-          secureTextEntry
+          secureTextEntry={true}
           textContentType="password"
         />
       </View>
 
       <Link href="/auth/login">Already have an account? Log In</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Sign Up" disabled={loading} onPress={signUpWithEmail} />
+        <Button
+          title="Sign Up"
+          disabled={loading || emailError == '' || usernameError == ''}
+          onPress={signUpWithEmail}
+        />
       </View>
     </View>
   );

@@ -20,7 +20,7 @@ import { Story } from '../../../queries/types';
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
   const scrollRef = React.useRef<any>(null);
-  const [story, setStory] = useState<Story>();
+  const [story, setStory] = useState<Story>({} as Story);
 
   const params = useLocalSearchParams<{ storyId: string }>();
   const { storyId } = params;
@@ -42,7 +42,7 @@ function StoryScreen() {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `Check out this story from Girls Write Now!!!\n${story?.link}/`,
+        message: `Check out this story from Girls Write Now!!!\n${story.link}/`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -68,23 +68,23 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          <Image style={styles.image} source={{ uri: story?.featured_media }} />
+          <Image style={styles.image} source={{ uri: story.featured_media }} />
 
           <Text style={styles.title}>{story?.title}</Text>
 
           <View style={styles.author}>
             <Image
               style={styles.authorImage}
-              source={{ uri: story?.author_image }}
+              source={{ uri: story.author_image }}
             />
-            <Text style={styles.authorText}>By {story?.author_name}</Text>
+            <Text style={styles.authorText}>By {story.author_name}</Text>
           </View>
 
           <View>
             <FlatList
               style={styles.genres}
               horizontal
-              data={story?.genre_medium}
+              data={story.genre_medium}
               renderItem={({ item }) => (
                 <View style={styles.genresBorder}>
                   <Text style={styles.genresText}>{item}</Text>
@@ -103,9 +103,9 @@ function StoryScreen() {
             </Button>
           </View>
 
-          <RenderHTML source={story!.excerpt} baseStyle={styles.excerpt} />
+          <RenderHTML source={story.excerpt} baseStyle={styles.excerpt} />
 
-          <RenderHTML source={story!.content} baseStyle={styles.story} />
+          <RenderHTML source={story.content} baseStyle={styles.story} />
 
           <Button
             textColor="black"
@@ -119,14 +119,14 @@ function StoryScreen() {
 
           <Text style={styles.authorProcess}>Author's Process</Text>
 
-          <RenderHTML source={story!.process} baseStyle={styles.process} />
+          <RenderHTML source={story.process} baseStyle={styles.process} />
 
           <View style={styles.author}>
             <Image
               style={styles.authorImage}
-              source={{ uri: story?.author_image }}
+              source={{ uri: story.author_image }}
             />
-            <Text style={styles.authorText}>By {story?.author_name}</Text>
+            <Text style={styles.authorText}>By {story.author_name}</Text>
           </View>
 
           <Button

@@ -38,7 +38,7 @@ function SearchScreen() {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
     })();
-  });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

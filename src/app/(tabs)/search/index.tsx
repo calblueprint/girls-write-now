@@ -1,5 +1,5 @@
 import { SearchBar } from '@rneui/themed';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -38,7 +38,7 @@ function SearchScreen() {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
     })();
-  });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,9 +59,6 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
       />
-      <Link href="/story" asChild>
-        <Button title="Story" />
-      </Link>
       <Button
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
@@ -77,7 +74,12 @@ function SearchScreen() {
             image={item.featured_media}
             authorImage={item.author_image}
             tags={item.genre_medium}
-            pressFunction={() => null}
+            pressFunction={() =>
+              router.push({
+                pathname: '/story',
+                params: { storyId: item.id.toString() },
+              })
+            }
           />
         )}
       />

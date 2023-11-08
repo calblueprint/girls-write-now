@@ -50,9 +50,25 @@ function SignUpScreen() {
     setUsernameError('');
   };
 
-  const checkEmail = () => {
-    if (!validator.isEmail(email)) setEmailError('Please enter a valid email');
-    else setEmailError('');
+  const checkEmail = async () => {
+    if (!validator.isEmail(email)) {
+      setEmailError('Please enter a valid email');
+      return;
+    }
+
+    const { count } = await supabase
+      .from('profiles')
+      .select(`*`, { count: 'exact' })
+      .limit(1)
+      .eq('email', email);
+    const emailIsTaken = (count ?? 0) >= 1;
+
+    if (emailIsTaken) {
+      setEmailError('That email is not available. Please try again.');
+      return;
+    }
+
+    setEmailError('');
   };
 
   useEffect(() => {
@@ -154,7 +170,7 @@ function SignUpScreen() {
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button
           title="Sign Up"
-          disabled={loading || emailError == '' || usernameError == ''}
+          disabled={loading || emailError != '' || usernameError != ''}
           onPress={signUpWithEmail}
         />
       </View>

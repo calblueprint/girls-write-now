@@ -34,7 +34,6 @@ function VerificationScreen() {
     if (user?.email) {
       const { error, data } = await resendVerification(user.email);
 
-      console.log(data);
       if (error) Alert.alert(error.message);
       else Alert.alert(`Verification email sent to ${user.email}.`);
     } else {

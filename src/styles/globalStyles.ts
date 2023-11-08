@@ -71,4 +71,8 @@ export default StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
+  passwordComplexity: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 });

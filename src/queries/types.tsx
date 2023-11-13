@@ -27,3 +27,8 @@ export interface Story {
   process: { html: string };
   link: string;
 }
+
+export interface RecentSearch {
+  value: number;
+  numResults: number;
+}

@@ -10,6 +10,7 @@ import SearchCard from '../../../components/SearchCard/SearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
@@ -32,6 +33,24 @@ function SearchScreen() {
     });
     setSearch(text);
     setSearchResults(updatedData);
+  };
+
+  const getRecentSearch = async (searchResult: RecentSearch) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('my-key'); // change the key
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const setRecentSearch = async (searchResult: RecentSearch) => {
+    try {
+      const jsonValue = JSON.stringify(searchResult);
+      await AsyncStorage.setItem('my-key', jsonValue);
+    } catch (e) {
+      // saving error
+    }
   };
 
   useEffect(() => {

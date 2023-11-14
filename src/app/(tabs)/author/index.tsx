@@ -55,7 +55,7 @@ function AuthorScreen() {
       }
       setLoading(false);
     })();
-  }, []);
+  }, [author]);
 
   return (
     <SafeAreaView style={globalStyles.container}>

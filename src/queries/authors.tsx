@@ -23,7 +23,6 @@ export async function fetchAuthorStoryPreviews(
   const { data, error } = await supabase.rpc('fetch_author_story_previews', {
     input_author_id: author_id,
   });
-  console.log('TESTING QUERY OUTPUT:', data);
   if (error) {
     throw new Error(
       `An error occured when trying to fetch all author story previews: ${error}`,

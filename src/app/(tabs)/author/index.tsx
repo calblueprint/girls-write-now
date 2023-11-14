@@ -12,8 +12,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import Icon from '../../../../assets/icons';
+import ContentCard from '../../../components/ContentCard/ContentCard';
 import HorizontalLine from '../../../components/HorizontalLine/HorizontalLine';
-import SearchCard from '../../../components/SearchCard/SearchCard';
 import {
   fetchAuthor,
   fetchAuthorStoryPreviews,
@@ -116,12 +116,10 @@ function AuthorScreen() {
 
           {authorStoryPreview
             ? authorStoryPreview.map(story => (
-                <SearchCard
+                <ContentCard
                   title={story.title}
                   author={story.author_name}
                   image={story.featured_media}
-                  authorImage={story.author_image}
-                  tags={story.tone}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',

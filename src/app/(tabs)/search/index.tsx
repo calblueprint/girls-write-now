@@ -64,17 +64,6 @@ function SearchScreen() {
         onPress={() => setFilterVisible(true)}
       />
 
-      {/* <TouchableOpacity
-        onPress={() => {
-          router.push({
-            pathname: '/author',
-            params: { author: '2778' },
-          });
-        }}
-      >
-        <Text>testing </Text>
-      </TouchableOpacity> */}
-
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}

@@ -12,7 +12,6 @@ export interface StoryPreview {
 }
 
 export interface Author {
-export interface Author {
   id: number;
   name: string;
   pronouns: string;

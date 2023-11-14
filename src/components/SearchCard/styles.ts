@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
     maxHeight: 100,
     paddingLeft: 12,
     paddingRight: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   image: {
     height: 76,

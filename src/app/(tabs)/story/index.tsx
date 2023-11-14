@@ -1,4 +1,4 @@
-import { useNavigation, useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Share,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -14,10 +15,11 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import { storyObject } from '../../../utils/story';
+import { fetchStory } from '../../../queries/stories';
+import { Story } from '../../../queries/types';
 
-const navigation = useNavigation();
-const router = useRouter();
+// eslint-disable-next-line react-hooks/rules-of-hooks
+// const router = useRouter();
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -70,17 +72,25 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          <Image style={styles.image} source={{ uri: story.featured_media }} />
+          {/* <Image style={styles.image} source={{ uri: story.featured_media }} /> */}
 
           <Text style={styles.title}>{story?.title}</Text>
-
-          <View style={styles.author}>
-            <Image
-              style={styles.authorImage}
-              source={{ uri: story.author_image }}
-            />
-            <Text style={styles.authorText}>By {story.author_name}</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              router.push({
+                pathname: '/author',
+                params: { author: story.author_id.toString() },
+              });
+            }}
+          >
+            <View style={styles.author}>
+              <Image
+                style={styles.authorImage}
+                source={{ uri: story.author_image ? story.author_image : '' }}
+              />
+              <Text style={styles.authorText}>By {story.author_name}</Text>
+            </View>
+          </TouchableOpacity>
 
           <View>
             <FlatList

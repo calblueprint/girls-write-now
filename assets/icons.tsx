@@ -4,12 +4,14 @@ import { SvgXml } from 'react-native-svg';
 
 export type IconType =
   | 'home_outline'
+  | 'back_icon'
   | 'document_outline'
   | 'search_outline'
   | 'close_modal_button';
 
 const IconSvgs: Record<IconType, React.ReactElement> = {
   home_outline: <Ionicons name="home-outline" size={23} />,
+  back_icon: <Ionicons name="chevron-back-outline" size={15} />,
   search_outline: <Ionicons name="search-outline" size={23} />,
   document_outline: <Ionicons name="document-outline" size={23} />,
   close_modal_button: (

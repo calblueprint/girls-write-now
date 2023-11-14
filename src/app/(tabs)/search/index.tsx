@@ -1,7 +1,7 @@
 import { SearchBar } from '@rneui/themed';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, View } from 'react-native';
+import { Button, FlatList, View, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -63,6 +63,18 @@ function SearchScreen() {
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
       />
+
+      {/* <TouchableOpacity
+        onPress={() => {
+          router.push({
+            pathname: '/author',
+            params: { author: '2778' },
+          });
+        }}
+      >
+        <Text>testing </Text>
+      </TouchableOpacity> */}
+
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}

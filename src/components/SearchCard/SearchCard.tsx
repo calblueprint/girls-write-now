@@ -4,6 +4,7 @@ import {
   Pressable,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 import styles from './styles';
@@ -26,7 +27,7 @@ function SearchCard({
   pressFunction,
 }: SearchCardProps) {
   return (
-    <Pressable onPress={pressFunction}>
+    <TouchableOpacity onPress={pressFunction}>
       <View style={styles.card}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.cardTextContainer}>
@@ -44,7 +45,7 @@ function SearchCard({
           </View>
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 

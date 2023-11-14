@@ -56,7 +56,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "validator": "^13.11.0",
     "react-native-vector-icons": "^10.0.2",
-    "react-scroll-to-top": "^3.0.0"
+    "react-scroll-to-top": "^3.0.0",
+    "expo-font": "~11.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

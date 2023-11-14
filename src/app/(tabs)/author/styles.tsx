@@ -12,12 +12,12 @@ const styles = StyleSheet.create({
   name: {
     paddingTop: 15,
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 25,
     fontFamily: 'Avenir',
   },
   image: {
-    height: 76,
-    width: 84,
+    height: 68,
+    width: 68,
     backgroundColor: colors.darkGrey,
     borderRadius: 4,
     marginBottom: 12,
@@ -62,6 +62,9 @@ const styles = StyleSheet.create({
   storyCountText: {
     paddingTop: 10,
     fontWeight: 'bold',
+  },
+  pronouns: {
+    color: '#797979',
   },
 });
 

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 25,
     fontFamily: 'Avenir',
   },
   image: {

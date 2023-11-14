@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -10,14 +11,13 @@ import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
-  const [recentSearches, setRecentSearches] = useState(Set<RecentSearch>);
+  const [recentSearches, setRecentSearches] = useState(new Set<RecentSearch>());
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -35,12 +35,12 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
-  const getRecentSearch = async (searchResult: RecentSearch) => {
+  const getRecentSearch = async (key: string) => {
     try {
-      const jsonValue = await AsyncStorage.getItem('my-key'); // change the key
+      const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
+    } catch (error) {
+      console.log(error); // error reading value
     }
   };
 
@@ -48,8 +48,8 @@ function SearchScreen() {
     try {
       const jsonValue = JSON.stringify(searchResult);
       await AsyncStorage.setItem('my-key', jsonValue);
-    } catch (e) {
-      // saving error
+    } catch (error) {
+      console.log(error); // saving error
     }
   };
 

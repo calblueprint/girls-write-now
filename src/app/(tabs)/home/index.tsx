@@ -93,7 +93,12 @@ function HomeScreen() {
                   tags={story.genre_medium
                     .concat(story.tone)
                     .concat(story.topic)}
-                  pressFunction={() => null}
+                  pressFunction={() =>
+                    router.push({
+                      pathname: '/story',
+                      params: { storyId: story.id.toString() },
+                    })
+                  }
                 />
               ))}
             </View>
@@ -115,7 +120,12 @@ function HomeScreen() {
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
-                  pressFunction={() => null}
+                  pressFunction={() =>
+                    router.push({
+                      pathname: '/story',
+                      params: { storyId: story.id.toString() },
+                    })
+                  }
                   image={story.featured_media}
                 />
               ))}
@@ -138,7 +148,12 @@ function HomeScreen() {
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
-                  pressFunction={() => null}
+                  pressFunction={() =>
+                    router.push({
+                      pathname: '/story',
+                      params: { storyId: story.id.toString() },
+                    })
+                  }
                   image={story.featured_media}
                 />
               ))}

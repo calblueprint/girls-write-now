@@ -27,3 +27,10 @@ export interface Story {
   process: { html: string };
   link: string;
 }
+
+export interface StoryCard {
+  id: number;
+  title: string;
+  author_name: string;
+  featured_media: string;
+}

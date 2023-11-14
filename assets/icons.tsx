@@ -7,6 +7,7 @@ export type IconType =
   | 'back_icon'
   | 'document_outline'
   | 'search_outline'
+  | 'settings_gear'
   | 'close_modal_button';
 
 const IconSvgs: Record<IconType, React.ReactElement> = {
@@ -14,6 +15,7 @@ const IconSvgs: Record<IconType, React.ReactElement> = {
   back_icon: <Ionicons name="chevron-back-outline" size={15} />,
   search_outline: <Ionicons name="search-outline" size={23} />,
   document_outline: <Ionicons name="document-outline" size={23} />,
+  settings_gear: <Ionicons name="settings-outline" size={32} />,
   close_modal_button: (
     <SvgXml
       xml={`<svg

@@ -9,10 +9,6 @@ export default StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
   },
-  auth_container: {
-    marginTop: 40,
-    padding: 12,
-  },
   h1: {
     // fontFamily: 'DMSans-Bold',
     fontSize: 50,
@@ -37,7 +33,7 @@ export default StyleSheet.create({
   h4: {
     // fontFamily: 'DMSans-Regular',
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: '700',
     textAlign: 'left',
     color: 'black',
   },
@@ -62,11 +58,6 @@ export default StyleSheet.create({
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
   },
   mt20: {
     marginTop: 20,

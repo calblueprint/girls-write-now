@@ -1,18 +1,20 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, Alert, View, StyleSheet } from 'react-native';
-import { Button, Input } from 'react-native-elements';
-import { TextInput } from 'react-native-paper';
+import { Button } from 'react-native-elements';
 import validator from 'validator';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
+import UserStringInput from '../../components/UserStringInput';
+import StyledButton from '../../components/StyledButton';
 
 function LoginScreen() {
   const sessionHandler = useSession();
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const resetAndPushToRouter = (path: string) => {
@@ -50,37 +52,35 @@ function LoginScreen() {
   };
 
   return (
-    <View style={globalStyles.auth_container}>
-      <Text style={[globalStyles.h3, globalStyles.mt20]}>
+    <View style={styles.container}>
+      <Text style={[globalStyles.h4, globalStyles.mt20]}>
         Read stories from young creators
       </Text>
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setEmailOrUsername(text)}
-          value={emailOrUsername}
-          style={styles.inputField}
-          placeholder="Email or Username"
-          autoCapitalize="none"
-          textContentType="emailAddress"
-        />
+      <UserStringInput
+        placeholder="Email or Username"
+        onChange={setEmailOrUsername}
+        value={emailOrUsername}
+        attributes={{
+          textContentType: 'emailAddress',
+        }}
+      />
+      <UserStringInput
+        placeholder="Password"
+        onChange={setPassword}
+        value={password}
+        attributes={{
+          textContentType: 'password',
+          secureTextEntry: passwordTextHidden,
+        }}
+      />
+      <Link style={styles.forgotPassword} href="/auth/forgotPassword">
+        Forgot password?
+      </Link>
+      <View style={styles.justifyBottom}>
+        <StyledButton text="Log In" disabled={loading} onPress={signIn} />
+        <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
       </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setPassword(text)}
-          value={password}
-          style={styles.inputField}
-          placeholder="Password"
-          autoCapitalize="none"
-          secureTextEntry
-          textContentType="password"
-        />
-      </View>
-      <Link href="/auth/forgotPassword">Forgot password?</Link>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Log In" disabled={loading} onPress={signIn} />
-      </View>
-      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>
   );
 }
@@ -88,12 +88,27 @@ function LoginScreen() {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  inputField: {
-    borderWidth: 1,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
+  container: {
+    paddingVertical: 63,
+    paddingLeft: 43,
+    paddingRight: 44,
+    flex: 1,
+    flexDirection: 'column',
   },
-  button: {
-    backgroundColor: 'gray',
+  forgotPassword: {
+    fontSize: 12,
+    textDecorationLine: 'underline',
+    paddingTop: 18,
+    paddingBottom: 16,
+    fontWeight: '400',
   },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  justifyBottom: {
+    justifyContent: 'flex-end',
+  },
+  logIn: {},
 });

@@ -44,7 +44,7 @@ function VerificationScreen() {
   };
 
   return (
-    <View style={globalStyles.auth_container}>
+    <View style={styles.container}>
       <TextInput
         style={styles.input}
         keyboardType="numeric"
@@ -54,11 +54,11 @@ function VerificationScreen() {
         maxLength={6}
       />
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]} />
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]} />
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Resend code" disabled={loading} onPress={resendCode} />
       </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button
           title="Verify Account"
           disabled={loading}
@@ -72,11 +72,21 @@ function VerificationScreen() {
 export default VerificationScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 63,
+    paddingLeft: 43,
+    paddingRight: 44,
+  },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 10,
     padding: 5,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
   },
 });

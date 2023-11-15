@@ -8,6 +8,8 @@ import validator from 'validator';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
+import UserStringInput from '../../components/UserStringInput';
+import StyledButton from '../../components/StyledButton';
 
 function SignUpScreen() {
   const { session, signUp } = useSession();
@@ -24,9 +26,11 @@ function SignUpScreen() {
   const initialLoadUsername = useRef(true);
   const validUsernameCharacters = /^\w+$/g;
 
-  const checkUsername = async () => {
+  const setAndCheckUsername = async (newUsername: string) => {
+    setUsername(newUsername);
     const usernameCharactersValid =
-      username.length <= 12 && username.match(validUsernameCharacters) !== null;
+      newUsername.length <= 12 &&
+      newUsername.match(validUsernameCharacters) !== null;
 
     if (!usernameCharactersValid) {
       setUsernameError(
@@ -39,7 +43,7 @@ function SignUpScreen() {
       .from('profiles')
       .select(`*`, { count: 'exact' })
       .limit(1)
-      .eq('username', username);
+      .eq('username', newUsername);
     const usernameIsTaken = (count ?? 0) >= 1;
 
     if (usernameIsTaken) {
@@ -50,7 +54,8 @@ function SignUpScreen() {
     setUsernameError('');
   };
 
-  const checkEmail = async () => {
+  const setAndCheckEmail = async (newEmail: string) => {
+    setEmail(newEmail);
     if (!validator.isEmail(email)) {
       setEmailError('Please enter a valid email');
       return;
@@ -71,28 +76,11 @@ function SignUpScreen() {
     setEmailError('');
   };
 
-  useEffect(() => {
-    // don't show error when the user first gets on the page
-    if (!initialLoadEmail.current) {
-      checkEmail();
-    } else {
-      initialLoadEmail.current = false;
-    }
-  }, [email]);
-
-  useEffect(() => {
-    // don't show error when the user first gets on the page
-    if (!initialLoadUsername.current) {
-      checkUsername();
-    } else {
-      initialLoadUsername.current = false;
-    }
-  }, [username]);
-
   const signUpWithEmail = async () => {
     setLoading(true);
     if (usernameError) {
       Alert.alert('Invalid username');
+      return;
     }
 
     const { error } = await signUp(email, password, {
@@ -108,72 +96,59 @@ function SignUpScreen() {
   };
 
   return (
-    <View style={globalStyles.auth_container}>
-      <Text style={[globalStyles.h3, globalStyles.mt20]}>
+    <View style={styles.container}>
+      <Text style={[globalStyles.h4, globalStyles.mt20]}>
         Read stories from young creators
       </Text>
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setUsername(text)}
-          value={username}
-          style={styles.inputField}
-          placeholder="Enter New Username"
-          autoCapitalize="none"
-        />
+      <UserStringInput
+        placeholder="Username"
+        onChange={setAndCheckUsername}
+        value={username}
+        attributes={{}}
+      >
         {usernameError && <Text style={styles.error}>{usernameError}</Text>}
-      </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setFirstName(text)}
-          value={firstName}
-          style={styles.inputField}
-          placeholder="First Name"
-          autoCapitalize="none"
-        />
-      </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setLastName(text)}
-          value={lastName}
-          style={styles.inputField}
-          placeholder="Last Name"
-          autoCapitalize="none"
-        />
-      </View>
+      </UserStringInput>
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setEmail(text)}
-          value={email}
-          style={styles.inputField}
-          placeholder="Enter Email"
-          autoCapitalize="none"
-          textContentType="emailAddress"
-        />
-      </View>
-      {emailError && <Text style={styles.error}>{emailError}</Text>}
+      <UserStringInput
+        placeholder="First Name"
+        onChange={setFirstName}
+        value={firstName}
+        attributes={{}}
+      />
+      <UserStringInput
+        placeholder="Last Name"
+        onChange={setLastName}
+        value={lastName}
+        attributes={{}}
+      />
+      <UserStringInput
+        placeholder="Email"
+        onChange={setAndCheckEmail}
+        value={email}
+        attributes={{
+          textContentType: 'emailAddress',
+        }}
+      >
+        {emailError && <Text style={styles.error}>{emailError}</Text>}
+      </UserStringInput>
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <TextInput
-          onChangeText={text => setPassword(text)}
-          value={password}
-          style={styles.inputField}
-          placeholder="Enter Password"
-          autoCapitalize="none"
-          secureTextEntry={true}
-          textContentType="password"
-        />
-      </View>
+      <UserStringInput
+        placeholder="Password"
+        onChange={setPassword}
+        value={password}
+        attributes={{
+          textContentType: 'password',
+          // secureTextEntry: passwordTextHidden,
+        }}
+      />
 
       <Link href="/auth/login">Already have an account? Log In</Link>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button
-          title="Sign Up"
-          disabled={loading || emailError != '' || usernameError != ''}
-          onPress={signUpWithEmail}
-        />
-      </View>
+      <StyledButton
+        text="Sign Up"
+        disabled={loading || emailError != '' || usernameError != ''}
+        onPress={signUpWithEmail}
+      />
     </View>
   );
 }
@@ -185,6 +160,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: 'transparent',
+  },
+  container: {
+    paddingVertical: 63,
+    paddingLeft: 43,
+    paddingRight: 44,
   },
   button: {
     backgroundColor: 'gray',

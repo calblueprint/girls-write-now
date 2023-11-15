@@ -1,13 +1,14 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { View, Alert, ScrollView, Platform } from 'react-native';
+import { View, Alert, StyleSheet, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import UserStringInput from '../../components/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
+import StyledButton from '../../components/StyledButton';
 
 function OnboardingScreen() {
   const { session } = useSession();
@@ -106,23 +107,31 @@ function OnboardingScreen() {
   }
 
   return (
-    <ScrollView style={globalStyles.auth_container}>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Input label="Email" value={session?.user?.email} disabled />
-      </View>
+    <ScrollView style={styles.container}>
       <UserStringInput
-        label="First Name"
+        placeholder="Email"
+        value={session?.user?.email ?? ''}
+        attributes={{
+          editable: false,
+        }}
+      />
+      <UserStringInput
+        placeholder="First Name"
         value={firstName}
         onChange={setFirstName}
       />
       <UserStringInput
-        label="Last Name"
+        placeholder="Last Name"
         value={lastName}
         onChange={setLastName}
       />
-      <UserStringInput label="Gender" value={gender} onChange={setGender} />
       <UserStringInput
-        label="Race/Ethnicity"
+        placeholder="Gender"
+        value={gender}
+        onChange={setGender}
+      />
+      <UserStringInput
+        placeholder="Race/Ethnicity"
         value={raceEthnicity}
         onChange={setRaceEthnicity}
       />
@@ -146,18 +155,38 @@ function OnboardingScreen() {
           }}
         />
       )}
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button
-          title={loading ? 'Loading ...' : 'Update profile'}
-          onPress={updateProfileAndGoHome}
-          disabled={loading}
-        />
-      </View>
-      <View style={globalStyles.verticallySpaced}>
-        <Button title="Skip" onPress={() => router.replace('/home')} />
-      </View>
+      <StyledButton
+        text={loading ? 'Loading ...' : 'Update profile'}
+        onPress={updateProfileAndGoHome}
+        disabled={loading}
+      />
+      <StyledButton
+        text="Skip"
+        onPress={() => router.replace('/home')}
+        disabled={false}
+      />
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 10,
+    padding: 5,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  container: {
+    paddingVertical: 63,
+    paddingLeft: 43,
+    paddingRight: 44,
+  },
+});
 
 export default OnboardingScreen;

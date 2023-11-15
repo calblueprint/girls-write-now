@@ -59,8 +59,8 @@ function ForgotPasswordScreen() {
   };
 
   return (
-    <View style={globalStyles.auth_container}>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+    <View style={styles.container}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Input
           label="Email"
           leftIcon={{ type: 'font-awesome', name: 'envelope' }}
@@ -70,7 +70,7 @@ function ForgotPasswordScreen() {
           autoCapitalize="none"
         />
       </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Send" disabled={loading} onPress={sendResetEmail} />
       </View>
 
@@ -83,13 +83,13 @@ function ForgotPasswordScreen() {
         maxLength={6}
       />
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Verify" disabled={loading} onPress={verifyCode} />
       </View>
 
       {changingPassword && (
         <>
-          <View style={globalStyles.verticallySpaced}>
+          <View style={styles.verticallySpaced}>
             <Input
               label="Password"
               leftIcon={{ type: 'font-awesome', name: 'lock' }}
@@ -101,7 +101,7 @@ function ForgotPasswordScreen() {
             />
           </View>
 
-          <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+          <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <Button
               title="Change Password"
               disabled={loading}
@@ -123,5 +123,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 10,
     padding: 5,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  container: {
+    paddingVertical: 63,
+    paddingLeft: 43,
+    paddingRight: 44,
   },
 });

@@ -68,17 +68,17 @@ function SearchScreen() {
   // Gets the recentSearches (Set) from Async Storage
   const getRecentSearch = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(key);
+      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       console.log(error); // error reading value
     }
   };
 
-  const setRecentSearch = async (searchResult: RecentSearch) => {
+  const setRecentSearch = async (searchResult: RecentSearch[]) => {
     try {
       const jsonValue = JSON.stringify(searchResult);
-      await AsyncStorage.setItem('my-key', jsonValue);
+      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
     } catch (error) {
       console.log(error); // saving error
     }

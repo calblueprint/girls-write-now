@@ -78,7 +78,11 @@ function LoginScreen() {
         Forgot password?
       </Link>
       <View style={styles.justifyBottom}>
-        <StyledButton text="Log In" disabled={loading} onPress={signIn} />
+        <StyledButton
+          text="Log In"
+          disabled={loading || emailOrUsername == '' || password == ''}
+          onPress={signIn}
+        />
         <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
       </View>
     </View>

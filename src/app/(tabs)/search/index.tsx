@@ -1,12 +1,12 @@
 import { SearchBar } from '@rneui/themed';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
-import SearchCard from '../../../components/SearchCard/SearchCard';
+import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
@@ -38,7 +38,7 @@ function SearchScreen() {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
     })();
-  });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,9 +59,6 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
       />
-      <Link href="/story" asChild>
-        <Button title="Story" />
-      </Link>
       <Button
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
@@ -69,15 +66,22 @@ function SearchScreen() {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}
+        contentContainerStyle={{}}
         renderItem={({ item }) => (
           <SearchCard
             key={item.title}
             title={item.title}
-            author={item.author_name}
             image={item.featured_media}
+            author={item.author_name}
             authorImage={item.author_image}
+            excerpt={item.excerpt}
             tags={item.genre_medium}
-            pressFunction={() => null}
+            pressFunction={() =>
+              router.push({
+                pathname: '/story',
+                params: { storyId: item.id.toString() },
+              })
+            }
           />
         )}
       />

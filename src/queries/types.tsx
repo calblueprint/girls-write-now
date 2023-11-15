@@ -35,6 +35,6 @@ export interface StoryCard {
   featured_media: string;
 }
 export interface RecentSearch {
-  value: number;
+  value: string;
   numResults: number;
 }

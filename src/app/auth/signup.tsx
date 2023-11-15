@@ -93,15 +93,16 @@ function SignUpScreen() {
           autoCapitalize="none"
         />
       </View>
+      {/* <View> */}
       {password !== '' && (
         <View style={styles.passwordComplexity}>
-          <Icon type={hasUppercase ? 'green_check' : 'red_x'} />
+          <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
           <Text
             style={[
               styles.errorText,
               hasUppercase
                 ? { color: colors.textGreen }
-                : { color: colors.textRed },
+                : { color: colors.textGrey },
             ]}
           >
             At least 1 uppercase letter
@@ -110,13 +111,13 @@ function SignUpScreen() {
       )}
       {password !== '' && (
         <View style={styles.passwordComplexity}>
-          <Icon type={hasLowercase ? 'green_check' : 'red_x'} />
+          <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
           <Text
             style={[
               styles.errorText,
               hasLowercase
                 ? { color: colors.textGreen }
-                : { color: colors.textRed },
+                : { color: colors.textGrey },
             ]}
           >
             At least 1 lowercase letter
@@ -125,13 +126,13 @@ function SignUpScreen() {
       )}
       {password !== '' && (
         <View style={styles.passwordComplexity}>
-          <Icon type={hasNumber ? 'green_check' : 'red_x'} />
+          <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
           <Text
             style={[
               styles.errorText,
               hasNumber
                 ? { color: colors.textGreen }
-                : { color: colors.textRed },
+                : { color: colors.textGrey },
             ]}
           >
             At least 1 number
@@ -140,20 +141,20 @@ function SignUpScreen() {
       )}
       {password !== '' && (
         <View style={styles.passwordComplexity}>
-          <Icon type={hasLength ? 'green_check' : 'red_x'} />
+          <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
           <Text
             style={[
               styles.errorText,
               hasLength
                 ? { color: colors.textGreen }
-                : { color: colors.textRed },
+                : { color: colors.textGrey },
             ]}
           >
             At least 8 characters
           </Text>
         </View>
       )}
-
+      {/* </View> */}
       <View>
         <Link href="/auth/login">Already have an account? Log In</Link>
         <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>

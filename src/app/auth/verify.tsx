@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, TextInput, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
@@ -10,6 +10,16 @@ function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();
   const [loading, setLoading] = useState(false);
   const [verificationCode, setCode] = useState<string>('');
+
+  // let otpInput = useRef(null);
+
+  // const clearText = () => {
+  //   otpInput.current.clear();
+  // }
+
+  // const setText = () => {
+  //   otpInput.current.setValue("1234");
+  // }
 
   const verifyAccount = async () => {
     setLoading(true);

@@ -68,18 +68,17 @@ function SearchScreen() {
   // Gets the recentSearches (Set) from Async Storage
   const getRecentSearch = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       console.log(error); // error reading value
     }
   };
 
-  // Sets the Async Storage to recentSearches (Set)
-  const setRecentSearch = async (recentSearchesArray: RecentSearch[]) => {
+  const setRecentSearch = async (searchResult: RecentSearch) => {
     try {
-      const jsonValue = JSON.stringify(recentSearchesArray);
-      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
+      const jsonValue = JSON.stringify(searchResult);
+      await AsyncStorage.setItem('my-key', jsonValue);
     } catch (error) {
       console.log(error); // saving error
     }
@@ -91,6 +90,10 @@ function SearchScreen() {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
 
+      setRecentSearches(await getRecentSearch());
+    })();
+
+    (async () => {
       setRecentSearches(await getRecentSearch());
     })();
   }, []);
@@ -116,9 +119,6 @@ function SearchScreen() {
         placeholderTextColor="black"
         onChangeText={text => searchFunction(text)}
         value={search}
-        onSubmitEditing={searchString => {
-          searchResultStacking(searchString.nativeEvent.text);
-        }}
       />
       <Button
         title="Show Filter Modal"

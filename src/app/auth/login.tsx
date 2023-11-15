@@ -1,7 +1,6 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, Alert, View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
 import validator from 'validator';
 
 import StyledButton from '../../components/StyledButton';
@@ -13,6 +12,7 @@ import supabase from '../../utils/supabase';
 function LoginScreen() {
   const sessionHandler = useSession();
   const [emailOrUsername, setEmailOrUsername] = useState('');
+  const [error, setError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -29,6 +29,18 @@ function LoginScreen() {
     let email;
     if (validator.isEmail(emailOrUsername)) {
       email = emailOrUsername;
+
+      const { count } = await supabase
+        .from('profiles')
+        .select(`*`, { count: 'exact' })
+        .eq('email', email);
+
+      if (count == 0) {
+        setError(
+          'An account with that email does not exist. Please try again.',
+        );
+        return;
+      }
     } else {
       const { data, error } = await supabase
         .from('profiles')
@@ -39,21 +51,24 @@ function LoginScreen() {
       if (data && data?.length > 0 && !error) {
         email = data[0].email;
       } else {
-        Alert.alert(`Username "${emailOrUsername}" does not exist`);
+        setError(
+          'An account with that username does not exist. Please try again.',
+        );
         setLoading(false);
         return;
       }
     }
 
     const { error } = await sessionHandler.signInWithEmail(email, password);
-    if (error) Alert.alert(error.message);
+    if (error)
+      setError('The username and/or password is incorrect. Please try again.');
     else resetAndPushToRouter('/home');
     setLoading(false);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={[globalStyles.h4, globalStyles.mt20]}>
+      <Text style={[globalStyles.h4, styles.title]}>
         Read stories from young creators
       </Text>
 
@@ -77,6 +92,8 @@ function LoginScreen() {
       <Link style={styles.forgotPassword} href="/auth/forgotPassword">
         Forgot password?
       </Link>
+      {error && <Text style={styles.error}>{error}</Text>}
+
       <View style={styles.justifyBottom}>
         <StyledButton
           text="Log In"
@@ -126,5 +143,12 @@ const styles = StyleSheet.create({
   redirectText: {
     textAlign: 'center',
     marginTop: 16,
+  },
+  title: {
+    marginTop: 20,
+    marginBottom: 41,
+  },
+  error: {
+    color: 'red',
   },
 });

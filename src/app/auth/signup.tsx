@@ -93,7 +93,7 @@ function SignUpScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={[globalStyles.h4, globalStyles.mt20]}>
+      <Text style={[globalStyles.h4, styles.title]}>
         Read stories from young creators
       </Text>
       <UserStringInput
@@ -181,5 +181,9 @@ const styles = StyleSheet.create({
   redirectText: {
     textAlign: 'center',
     marginTop: 16,
+  },
+  title: {
+    marginTop: 20,
+    marginBottom: 41,
   },
 });

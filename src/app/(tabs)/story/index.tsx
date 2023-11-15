@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -13,12 +14,30 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import { storyObject } from '../../../utils/story';
+import { fetchStory } from '../../../queries/stories';
+import { Story } from '../../../queries/types';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
   const scrollRef = React.useRef<any>(null);
-  const [story, setStory] = useState<any>();
+  const [story, setStory] = useState<Story>({} as Story);
+
+  const params = useLocalSearchParams<{ storyId: string }>();
+  const { storyId } = params;
+
+  const scrollUp = () => {
+    scrollRef.current?.scrollTo({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      const storyResponse = await fetchStory(parseInt(storyId as string, 10));
+      setStory(storyResponse[0]);
+    })().then(() => {
+      setLoading(false);
+    });
+  }, [storyId]);
 
   const onShare = async () => {
     try {
@@ -39,15 +58,6 @@ function StoryScreen() {
     }
   };
 
-  const scrollUp = () => {
-    scrollRef.current?.scrollTo({ x: 0, y: 0 });
-  };
-
-  useEffect(() => {
-    setStory(storyObject);
-    setLoading(false);
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
@@ -60,18 +70,21 @@ function StoryScreen() {
         >
           <Image style={styles.image} source={{ uri: story.featured_media }} />
 
-          <Text style={styles.title}>{story.title}</Text>
+          <Text style={styles.title}>{story?.title}</Text>
 
           <View style={styles.author}>
-            <Image style={styles.authorImage} source={{ uri: '' }} />
-            <Text style={styles.authorText}>By {story.author}</Text>
+            <Image
+              style={styles.authorImage}
+              source={{ uri: story.author_image }}
+            />
+            <Text style={styles.authorText}>By {story.author_name}</Text>
           </View>
 
           <View>
             <FlatList
               style={styles.genres}
               horizontal
-              data={story.genreMedium}
+              data={story.genre_medium}
               renderItem={({ item }) => (
                 <View style={styles.genresBorder}>
                   <Text style={styles.genresText}>{item}</Text>
@@ -90,9 +103,9 @@ function StoryScreen() {
             </Button>
           </View>
 
-          <RenderHTML source={storyObject.excerpt} baseStyle={styles.excerpt} />
+          <RenderHTML source={story.excerpt} baseStyle={styles.excerpt} />
 
-          <RenderHTML source={storyObject.content} baseStyle={styles.story} />
+          <RenderHTML source={story.content} baseStyle={styles.story} />
 
           <Button
             textColor="black"
@@ -106,11 +119,14 @@ function StoryScreen() {
 
           <Text style={styles.authorProcess}>Author's Process</Text>
 
-          <RenderHTML source={storyObject.process} baseStyle={styles.process} />
+          <RenderHTML source={story.process} baseStyle={styles.process} />
 
           <View style={styles.author}>
-            <Image style={styles.authorImage} source={{ uri: '' }} />
-            <Text style={styles.authorText}>By {story.author}</Text>
+            <Image
+              style={styles.authorImage}
+              source={{ uri: story.author_image }}
+            />
+            <Text style={styles.authorText}>By {story.author_name}</Text>
           </View>
 
           <Button

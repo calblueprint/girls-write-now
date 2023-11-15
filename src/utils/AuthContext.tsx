@@ -19,6 +19,7 @@ import supabase from './supabase';
 export interface AuthState {
   session: Session | null;
   user: User | null;
+  isLoading: boolean;
   signIn: (newSession: Session | null) => void;
   signUp: (
     email: string,
@@ -64,11 +65,18 @@ export function AuthContextProvider({
 }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: newSession } }) => {
-      setSession(newSession);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data: { session: newSession } }) => {
+        setSession(newSession);
+        setUser(newSession ? newSession.user : null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
@@ -137,6 +145,7 @@ export function AuthContextProvider({
     () => ({
       user,
       session,
+      isLoading,
       signUp,
       signIn,
       signInWithEmail,
@@ -146,7 +155,7 @@ export function AuthContextProvider({
       resetPassword,
       resendVerification,
     }),
-    [session, user],
+    [session, user, isLoading],
   );
 
   return (

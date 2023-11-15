@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import { View, Alert, StyleSheet, ScrollView, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
+import StyledButton from '../../components/StyledButton';
 import UserStringInput from '../../components/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
-import StyledButton from '../../components/StyledButton';
 
 function OnboardingScreen() {
   const { session } = useSession();

@@ -5,11 +5,11 @@ import { Button } from 'react-native-elements';
 import { TextInput } from 'react-native-paper';
 import validator from 'validator';
 
+import StyledButton from '../../components/StyledButton';
+import UserStringInput from '../../components/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
-import UserStringInput from '../../components/UserStringInput';
-import StyledButton from '../../components/StyledButton';
 
 function SignUpScreen() {
   const { session, signUp } = useSession();

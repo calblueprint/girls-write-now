@@ -5,11 +5,11 @@ import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import StyledButton from '../components/StyledButton';
 import UserStringInput from '../components/UserStringInput';
 import globalStyles from '../styles/globalStyles';
 import { useSession } from '../utils/AuthContext';
 import supabase from '../utils/supabase';
-import StyledButton from '../components/StyledButton';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -172,7 +172,7 @@ function SettingsScreen() {
         onPress={updateProfile}
         disabled={loading}
       />
-      <StyledButton text={'Sign Out'} onPress={signOut} disabled={false} />
+      <StyledButton text="Sign Out" onPress={signOut} disabled={false} />
     </SafeAreaView>
   );
 }

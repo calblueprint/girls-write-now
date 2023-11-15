@@ -1,12 +1,13 @@
 import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
+
 import globalStyles from '../styles/globalStyles';
 
 type StyledButtonProps = {
   disabled: boolean;
   text: string;
   onPress: () => void;
-  extraStyles?: Object;
+  extraStyles?: object;
 };
 
 function StyledButton({

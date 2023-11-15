@@ -35,19 +35,19 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
-  const getRecentSearch = async (key: string) => {
+  const getRecentSearch = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(key);
+      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES');
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       console.log(error); // error reading value
     }
   };
 
-  const setRecentSearch = async (searchResult: RecentSearch) => {
+  const setRecentSearch = async (recentSearchesSet: Set<RecentSearch>) => {
     try {
-      const jsonValue = JSON.stringify(searchResult);
-      await AsyncStorage.setItem('my-key', jsonValue);
+      const jsonValue = JSON.stringify(recentSearchesSet);
+      await AsyncStorage.setItem('GWN_RECENT_SEARCHES', jsonValue);
     } catch (error) {
       console.log(error); // saving error
     }
@@ -57,6 +57,10 @@ function SearchScreen() {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
+    })();
+
+    (async () => {
+      setRecentSearches(await getRecentSearch());
     })();
   }, []);
 
@@ -73,11 +77,19 @@ function SearchScreen() {
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
         lightTheme
-        loadingProps={{}}
         placeholder="Search"
         placeholderTextColor="black"
         onChangeText={text => searchFunction(text)}
         value={search}
+        onSubmitEditing={searchString => {
+          const result: RecentSearch = {
+            value: searchString.toString(),
+            numResults: searchResults.length,
+          };
+          setRecentSearches(
+            previousState => new Set([...previousState, result]),
+          );
+        }}
       />
       <Button
         title="Show Filter Modal"

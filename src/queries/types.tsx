@@ -29,6 +29,6 @@ export interface Story {
 }
 
 export interface RecentSearch {
-  value: number;
+  value: string;
   numResults: number;
 }

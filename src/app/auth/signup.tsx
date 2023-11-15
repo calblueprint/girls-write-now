@@ -1,8 +1,6 @@
-import { Redirect, Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { Link, router } from 'expo-router';
+import React, { useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
-import { TextInput } from 'react-native-paper';
 import validator from 'validator';
 
 import StyledButton from '../../components/StyledButton';
@@ -12,7 +10,7 @@ import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
 
 function SignUpScreen() {
-  const { session, signUp } = useSession();
+  const { signUp } = useSession();
 
   const [usernameError, setUsernameError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -22,8 +20,6 @@ function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const initialLoadEmail = useRef(true);
-  const initialLoadUsername = useRef(true);
   const validUsernameCharacters = /^\w+$/g;
 
   const setAndCheckUsername = async (newUsername: string) => {
@@ -100,27 +96,22 @@ function SignUpScreen() {
       <Text style={[globalStyles.h4, globalStyles.mt20]}>
         Read stories from young creators
       </Text>
-
       <UserStringInput
         placeholder="Username"
         onChange={setAndCheckUsername}
         value={username}
-        attributes={{}}
       >
         {usernameError && <Text style={styles.error}>{usernameError}</Text>}
       </UserStringInput>
-
       <UserStringInput
         placeholder="First Name"
         onChange={setFirstName}
         value={firstName}
-        attributes={{}}
       />
       <UserStringInput
         placeholder="Last Name"
         onChange={setLastName}
         value={lastName}
-        attributes={{}}
       />
       <UserStringInput
         placeholder="Email"
@@ -132,7 +123,6 @@ function SignUpScreen() {
       >
         {emailError && <Text style={styles.error}>{emailError}</Text>}
       </UserStringInput>
-
       <UserStringInput
         placeholder="Password"
         onChange={setPassword}
@@ -143,7 +133,6 @@ function SignUpScreen() {
         }}
       />
 
-      <Link href="/auth/login">Already have an account? Log In</Link>
       <StyledButton
         text="Sign Up"
         disabled={
@@ -155,6 +144,13 @@ function SignUpScreen() {
         }
         onPress={signUpWithEmail}
       />
+
+      <Text style={styles.redirectText}>
+        Already have an account?{' '}
+        <Link style={styles.link} href="/auth/login">
+          Log In
+        </Link>
+      </Text>
     </View>
   );
 }
@@ -177,5 +173,13 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+  },
+  link: {
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
+  redirectText: {
+    textAlign: 'center',
+    marginTop: 16,
   },
 });

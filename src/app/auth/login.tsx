@@ -83,8 +83,13 @@ function LoginScreen() {
           disabled={loading || emailOrUsername == '' || password == ''}
           onPress={signIn}
         />
-        <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
       </View>
+      <Text style={styles.redirectText}>
+        Don&apos;t have an account?{' '}
+        <Link style={styles.link} href="/auth/signup">
+          Sign Up
+        </Link>
+      </Text>
     </View>
   );
 }
@@ -114,5 +119,12 @@ const styles = StyleSheet.create({
   justifyBottom: {
     justifyContent: 'flex-end',
   },
-  logIn: {},
+  link: {
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
+  redirectText: {
+    textAlign: 'center',
+    marginTop: 16,
+  },
 });

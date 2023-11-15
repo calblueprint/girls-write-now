@@ -18,9 +18,6 @@ import styles from './styles';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-// const router = useRouter();
-
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
   const scrollRef = React.useRef<any>(null);

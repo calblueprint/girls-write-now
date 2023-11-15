@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
+import LandingCard from '../../../components/LandingCard/LandingCard';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';

@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: '400',
     fontFamily: 'Avenir',
+    width: 324,
   },
   authorTextContainer: {
     paddingLeft: 20,
@@ -42,8 +43,15 @@ const styles = StyleSheet.create({
   authorStatementTitle: {
     fontWeight: 'bold',
     fontFamily: 'Avenir',
-    fontSize: 16,
-    marginBottom: 8,
+    fontSize: 17,
+    paddingBottom: 2,
+  },
+  backButton: {
+    paddingTop: 20,
+    paddingBottom: 15,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    color: colors.lightGrey,
   },
   storyCountText: {
     fontSize: 12,

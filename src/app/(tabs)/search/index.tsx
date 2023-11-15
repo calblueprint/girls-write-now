@@ -64,6 +64,10 @@ function SearchScreen() {
     })();
   }, []);
 
+  useEffect(() => {
+    setRecentSearch(recentSearches);
+  }, [recentSearches]); // fix this useEffect
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
@@ -83,12 +87,17 @@ function SearchScreen() {
         value={search}
         onSubmitEditing={searchString => {
           const result: RecentSearch = {
-            value: searchString.toString(),
-            numResults: searchResults.length,
+            value: searchString.nativeEvent.text, // works
+            numResults: searchResults.length, // works
           };
+
           setRecentSearches(
-            previousState => new Set([...previousState, result]),
+            // new Set<RecentSearch>([...recentSearches, result]),
+            previousSet => new Set<RecentSearch>(previousSet).add(result),
+            // previousSet => new Set<RecentSearch>([...previousSet, result]),
+            // previousSet => new Set<RecentSearch>(previousSet ? [...previousSet, result] : [result]), // getting that previousSet is null
           );
+          // console.log(recentSearches);
         }}
       />
       <Button

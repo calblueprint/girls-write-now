@@ -146,7 +146,13 @@ function SignUpScreen() {
       <Link href="/auth/login">Already have an account? Log In</Link>
       <StyledButton
         text="Sign Up"
-        disabled={loading || emailError != '' || usernameError != ''}
+        disabled={
+          loading ||
+          emailError != '' ||
+          usernameError != '' ||
+          !email ||
+          !username
+        }
         onPress={signUpWithEmail}
       />
     </View>

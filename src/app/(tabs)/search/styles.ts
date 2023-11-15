@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     width,
     height,
   },
+  scrollView: {
+    marginBottom: 20,
+    flexGrow: 0,
+  },
 });
 
 export default styles;

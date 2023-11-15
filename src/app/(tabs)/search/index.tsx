@@ -2,11 +2,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, View, TouchableOpacity, Pressable, Text } from 'react-native';
+import {
+  Button,
+  FlatList,
+  View,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
+import LandingCard from '../../../components/LandingCard/LandingCard';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';

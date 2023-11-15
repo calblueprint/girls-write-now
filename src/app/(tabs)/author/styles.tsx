@@ -28,18 +28,22 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     color: 'black',
     fontFamily: 'Avenir',
+    fontSize: 14,
+    width: 324,
   },
   authorStatementContainer: {
     paddingTop: 15,
     paddingBottom: 5,
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 20,
   },
   authorStatement: {
     paddingBottom: 15,
+    fontSize: 14,
     color: 'black',
     fontWeight: '400',
     fontFamily: 'Avenir',
+    width: 324,
   },
   authorTextContainer: {
     paddingLeft: 20,
@@ -51,6 +55,8 @@ const styles = StyleSheet.create({
   authorStatementTitle: {
     fontWeight: 'bold',
     fontFamily: 'Avenir',
+    fontSize: 17,
+    paddingBottom: 2,
   },
   backButton: {
     paddingTop: 20,

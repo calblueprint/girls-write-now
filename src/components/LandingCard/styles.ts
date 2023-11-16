@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-import colors from '../../styles/colors';
-
 const styles = StyleSheet.create({
   contentCardContainer: {
     marginRight: 20,
@@ -11,7 +9,6 @@ const styles = StyleSheet.create({
   card: {
     height: 135,
     width: 120,
-    backgroundColor: colors.lime,
     borderRadius: 4,
     marginBottom: 8,
   },

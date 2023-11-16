@@ -14,13 +14,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import LandingCard from '../../../components/LandingCard/LandingCard';
+import LandingScrollView from '../../../components/LandingScrollView/LandingScrollView';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
+import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview } from '../../../queries/types';
-import globalStyles from '../../../styles/globalStyles';
+import { StoryPreview, Genre } from '../../../queries/types';
 
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
+  const [allGenres, setAllGenres] = useState<Genre>();
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
@@ -45,6 +47,8 @@ function SearchScreen() {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
+      const genreData: Genre = await fetchGenres();
+      setAllGenres(genreData);
     })();
   }, []);
 
@@ -71,6 +75,29 @@ function SearchScreen() {
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
       />
+
+      {/* <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        style={styles.scrollView}
+      >
+        <LandingCard genre_medium="Childrens Fiction" cardColor="lime" />
+        <LandingCard genre_medium="Childrens Fiction" />
+        <LandingCard genre_medium="Childrens Fiction" />
+        <LandingCard genre_medium="Childrens Fiction" />
+      </ScrollView>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        style={styles.scrollView}
+      >
+        <LandingCard genre_medium="Childrens Fiction" />
+        <LandingCard genre_medium="Childrens Fiction" />
+        <LandingCard />
+      </ScrollView> */}
 
       <FlatList
         showsVerticalScrollIndicator={false}

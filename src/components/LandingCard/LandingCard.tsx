@@ -14,14 +14,20 @@ type LandingCardProps = {
   genre_medium: string;
   image: string;
   id: number; //story ID to send for routing
+  cardColor: string;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
-function LandingCard({ genre_medium, id, pressFunction }: LandingCardProps) {
+function LandingCard({
+  genre_medium,
+  id,
+  pressFunction,
+  cardColor,
+}: LandingCardProps) {
   return (
     <TouchableOpacity onPress={pressFunction}>
       <View style={styles.contentCardContainer}>
-        <View style={styles.card} />
+        <View style={[styles.card, { backgroundColor: cardColor }]} />
         <View style={styles.overlayContainer}>
           <Text style={styles.overlayText}>{genre_medium}</Text>
         </View>

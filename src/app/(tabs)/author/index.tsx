@@ -80,7 +80,7 @@ function AuthorScreen() {
               source={{ uri: authorInfo ? authorInfo.image : '' }}
             />
             <View style={styles.authorTextContainer}>
-              <Text style={styles.name}>
+              <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit>
                 {authorInfo ? authorInfo.name : ''}
               </Text>
               <Text style={styles.pronouns}>

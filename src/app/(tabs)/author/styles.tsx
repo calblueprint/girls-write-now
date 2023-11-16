@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
     fontFamily: 'Avenir',
+    marginLeft: -10,
   },
   image: {
     height: 68,
@@ -67,10 +68,12 @@ const styles = StyleSheet.create({
   },
   storyCountText: {
     paddingTop: 10,
+    paddingBottom: 10,
     fontWeight: 'bold',
   },
   pronouns: {
     color: '#797979',
+    marginLeft: -10,
   },
 });
 

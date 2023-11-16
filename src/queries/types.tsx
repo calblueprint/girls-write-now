@@ -101,3 +101,9 @@ export interface Story {
   process: { html: string };
   link: string;
 }
+
+export interface Genre {
+  parent_id: number;
+  parent_name: string;
+  subgenre: string;
+}

@@ -4,39 +4,32 @@ import {
   Pressable,
   Text,
   View,
+  ScrollView,
 } from 'react-native';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
+import LandingCard from '../LandingCard/LandingCard';
 
 type ContentCardProps = {
-  title: string;
-  author: string;
-  image: string;
-  pressFunction: (event: GestureResponderEvent) => void;
+  genre: string;
 };
 
 //landing scroll should have a see all button and title for genre
-function ContentCard({
-  title,
-  author,
-  image,
-  pressFunction,
-}: ContentCardProps) {
+function ContentCard({ genre }: ContentCardProps) {
   return (
-    <Pressable onPress={pressFunction}>
-      <View style={styles.contentCard}>
-        <Image style={styles.image} source={{ uri: image }} />
-        <View style={styles.textContainer}>
-          <Text style={[globalStyles.h4, styles.title]} numberOfLines={1}>
-            {title}
-          </Text>
-          <Text style={globalStyles.body1} numberOfLines={1}>
-            {author}
-          </Text>
-        </View>
+    <View style={styles.parentContainer}>
+      <View style={styles.textContainer}>
+        <Text style={styles.genreText}> {genre}</Text>
+        <Text style={styles.seeAll}>See All</Text>
       </View>
-    </Pressable>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        style={styles.scrollView}
+      />
+    </View>
   );
 }
 

@@ -16,11 +16,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import LandingCard from '../../../components/LandingCard/LandingCard';
+import LandingScrollView from '../../../components/LandingScrollView/LandingScrollView';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
+import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview, RecentSearch } from '../../../queries/types';
-import globalStyles from '../../../styles/globalStyles';
+import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 
 const getRecentSearch = async () => {
   try {
@@ -42,6 +43,7 @@ const setRecentSearch = async (searchResult: RecentSearch[]) => {
 
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
+  const [allGenres, setAllGenres] = useState<Genre>();
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);

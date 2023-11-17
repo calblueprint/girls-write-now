@@ -11,35 +11,60 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useReducer,
   useState,
 } from 'react';
 
 import supabase from './supabase';
 
+type AuthContextAction =
+  | { type: 'LOADING' }
+  | { type: 'SIGN_UP'; email: string; password: string }
+  | { type: 'SIGN_IN_WITH_EMAIL'; email: string; password: string }
+  | { type: 'VERIFY_OTP'; email: string; token: string }
+  | { type: 'RESEND_VERIFICATION'; email: string }
+  | { type: 'RESET_PASSWORD'; email: string }
+  | { type: 'UPDATE_USER'; attributes: UserAttributes }
+  | { type: 'SIGN_OUT' };
+
+export type AuthDispatch = React.Dispatch<AuthContextAction>;
+
 export interface AuthState {
   session: Session | null;
   user: User | null;
   isLoading: boolean;
-  signIn: (newSession: Session | null) => void;
-  signUp: (email: string, password: string) => Promise<AuthResponse>;
-  signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
-  verifyOtp: (email: string, token: string) => Promise<AuthResponse>;
-  resendVerification: (email: string) => Promise<AuthResponse>;
-  resetPassword: (email: string) => Promise<
-    | {
-        data: object;
-        error: null;
-      }
-    | {
-        data: null;
-        error: AuthError;
-      }
-  >;
-  updateUser: (attributes: UserAttributes) => Promise<UserResponse>;
-  signOut: () => Promise<void>;
+  dispatch: AuthDispatch;
 }
 
 const AuthContext = createContext({} as AuthState);
+
+export const useAuthReducer = () =>
+  useReducer(
+    (prevState: AuthState, action: AuthContextAction) => {
+      switch (action.type) {
+        case 'SIGN_UP':
+        case 'SIGN_IN_WITH_EMAIL':
+        case 'VERIFY_OTP':
+        case 'RESEND_VERIFICATION':
+        case 'RESET_PASSWORD':
+          return { ...prevState, isLoading: false };
+        case 'UPDATE_USER':
+          return { ...prevState, isLoading: false };
+        case 'SIGN_OUT':
+          return { ...prevState, user: null, session: null, isLoading: false };
+        case 'LOADING':
+          return { ...prevState, isLoading: true };
+        default:
+          return prevState;
+      }
+    },
+    {
+      session: null,
+      isLoading: false,
+      user: null,
+      dispatch: () => null,
+    },
+  );
 
 export function useSession() {
   const value = useContext(AuthContext);
@@ -59,6 +84,7 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [authState, dispatch] = useAuthReducer();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -79,15 +105,43 @@ export function AuthContextProvider({
     });
   }, []);
 
-  const signIn = (newSession: Session | null) => {
-    setSession(newSession);
-  };
+  function dispatchMiddleware(dispatch: AuthDispatch) {
+    return (action: AuthContextAction) => {
+      switch (action.type) {
+        case 'SIGN_UP':
+          signUp(action.email, action.password).then(() => dispatch(action));
+          break;
+        case 'SIGN_IN_WITH_EMAIL':
+          signInWithEmail(action.email, action.password).then(() =>
+            dispatch(action),
+          );
+          break;
+        case 'VERIFY_OTP':
+          verifyOtp(action.email, action.token).then(() => dispatch(action));
+          break;
+        case 'RESEND_VERIFICATION':
+          resendVerification(action.email).then(() => dispatch(action));
+          break;
+        case 'RESET_PASSWORD':
+          resetPassword(action.email).then(() => dispatch(action));
+          break;
+        case 'UPDATE_USER':
+          updateUser(action.attributes).then(() => dispatch(action));
+          break;
+        case 'SIGN_OUT':
+          signOut().then(() => dispatch(action));
+          break;
+        default:
+          return dispatch(action);
+      }
+    };
+  }
 
   const signInWithEmail = async (email: string, password: string) => {
     const value = await supabase.auth.signInWithPassword({
       email,
       password,
-    }); // will trigger the use effect to update the session
+    });
 
     setUser(value.data.user);
     return value;
@@ -106,8 +160,6 @@ export function AuthContextProvider({
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
   };
 
   const verifyOtp = async (email: string, token: string) => {
@@ -130,22 +182,20 @@ export function AuthContextProvider({
   const resetPassword = async (email: string) =>
     await supabase.auth.resetPasswordForEmail(email);
 
-  const updateUser = async (attributes: UserAttributes) =>
-    await supabase.auth.updateUser(attributes);
+  const updateUser = async (attributes: UserAttributes) => {
+    const {
+      data: { user },
+    } = await supabase.auth.updateUser(attributes);
+
+    setUser(user);
+  };
 
   const authContextValue = useMemo(
     () => ({
       user,
       session,
       isLoading,
-      signUp,
-      signIn,
-      signInWithEmail,
-      signOut,
-      verifyOtp,
-      updateUser,
-      resetPassword,
-      resendVerification,
+      dispatch: dispatchMiddleware(dispatch),
     }),
     [session, user, isLoading],
   );

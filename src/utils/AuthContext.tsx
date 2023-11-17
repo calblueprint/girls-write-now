@@ -107,6 +107,7 @@ export function AuthContextProvider({
 
   function dispatchMiddleware(dispatch: AuthDispatch) {
     return (action: AuthContextAction) => {
+      dispatch({ type: 'LOADING' });
       switch (action.type) {
         case 'SIGN_UP':
           signUp(action.email, action.password).then(() => dispatch(action));

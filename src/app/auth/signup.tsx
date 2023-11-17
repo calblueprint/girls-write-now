@@ -92,65 +92,69 @@ function SignUpScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={[globalStyles.h4, styles.title]}>
-        Read stories from young creators
-      </Text>
-      <UserStringInput
-        placeholder="Username"
-        onChange={setAndCheckUsername}
-        value={username}
-      >
-        {usernameError && <Text style={styles.error}>{usernameError}</Text>}
-      </UserStringInput>
-      <UserStringInput
-        placeholder="First Name"
-        onChange={setFirstName}
-        value={firstName}
-      />
-      <UserStringInput
-        placeholder="Last Name"
-        onChange={setLastName}
-        value={lastName}
-      />
-      <UserStringInput
-        placeholder="Email"
-        onChange={setAndCheckEmail}
-        value={email}
-        attributes={{
-          textContentType: 'emailAddress',
-        }}
-      >
-        {emailError && <Text style={styles.error}>{emailError}</Text>}
-      </UserStringInput>
-      <UserStringInput
-        placeholder="Password"
-        onChange={setPassword}
-        value={password}
-        attributes={{
-          textContentType: 'password',
-          // secureTextEntry: passwordTextHidden,
-        }}
-      />
+    <View style={[globalStyles.authContainer, styles.flex]}>
+      <View>
+        <Text style={[globalStyles.h4, styles.title]}>
+          Read stories from young creators
+        </Text>
+        <UserStringInput
+          placeholder="Username"
+          onChange={setAndCheckUsername}
+          value={username}
+        >
+          {usernameError && <Text style={styles.error}>{usernameError}</Text>}
+        </UserStringInput>
+        <UserStringInput
+          placeholder="First Name"
+          onChange={setFirstName}
+          value={firstName}
+        />
+        <UserStringInput
+          placeholder="Last Name"
+          onChange={setLastName}
+          value={lastName}
+        />
+        <UserStringInput
+          placeholder="Email"
+          onChange={setAndCheckEmail}
+          value={email}
+          attributes={{
+            textContentType: 'emailAddress',
+          }}
+        >
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
+        </UserStringInput>
+        <UserStringInput
+          placeholder="Password"
+          onChange={setPassword}
+          value={password}
+          attributes={{
+            textContentType: 'password',
+            // secureTextEntry: passwordTextHidden,
+          }}
+        />
+      </View>
 
-      <StyledButton
-        text="Sign Up"
-        disabled={
-          loading ||
-          emailError != '' ||
-          usernameError != '' ||
-          !email ||
-          !username
-        }
-        onPress={signUpWithEmail}
-      />
+      <View>
+        <StyledButton
+          text="Sign Up"
+          disabled={
+            loading ||
+            emailError != '' ||
+            usernameError != '' ||
+            !email ||
+            !username
+          }
+          onPress={signUpWithEmail}
+        />
 
-      <Text style={styles.redirectText}>
-        Already have an account?{' '}
-        <Link style={styles.link} href="/auth/login">
-          Log In
-        </Link>
-      </Text>
+        <Text style={styles.redirectText}>
+          Already have an account?{' '}
+          <Link style={styles.link} href="/auth/login">
+            Log In
+          </Link>
+        </Text>
+      </View>
     </View>
   );
 }
@@ -158,18 +162,8 @@ function SignUpScreen() {
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
-  inputField: {
-    borderWidth: 1,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-  },
-  container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
-  },
-  button: {
-    backgroundColor: 'gray',
+  flex: {
+    justifyContent: 'space-between',
   },
   error: {
     color: 'red',
@@ -180,10 +174,11 @@ const styles = StyleSheet.create({
   },
   redirectText: {
     textAlign: 'center',
+    marginBottom: 64,
     marginTop: 16,
   },
   title: {
-    marginTop: 20,
-    marginBottom: 41,
+    marginTop: 65,
+    marginBottom: 23,
   },
 });

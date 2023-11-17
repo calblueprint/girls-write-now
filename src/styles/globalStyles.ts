@@ -9,6 +9,13 @@ export default StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
   },
+  authContainer: {
+    paddingLeft: 43,
+    paddingRight: 44,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   h1: {
     // fontFamily: 'DMSans-Bold',
     fontSize: 40,

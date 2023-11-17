@@ -1,6 +1,6 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Text, Alert, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
 import validator from 'validator';
 
 import StyledButton from '../../components/StyledButton';
@@ -67,46 +67,51 @@ function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={[globalStyles.h4, styles.title]}>
-        Read stories from young creators
-      </Text>
+    <View style={[globalStyles.authContainer, styles.flex]}>
+      <View>
+        <Text style={[globalStyles.h4, styles.title]}>
+          Read stories from young creators
+        </Text>
 
-      <UserStringInput
-        placeholder="Email or Username"
-        onChange={setEmailOrUsername}
-        value={emailOrUsername}
-        attributes={{
-          textContentType: 'emailAddress',
-        }}
-      />
-      <UserStringInput
-        placeholder="Password"
-        onChange={setPassword}
-        value={password}
-        attributes={{
-          textContentType: 'password',
-          secureTextEntry: passwordTextHidden,
-        }}
-      />
-      <Link style={styles.forgotPassword} href="/auth/forgotPassword">
-        Forgot password?
-      </Link>
-      {error && <Text style={styles.error}>{error}</Text>}
-
-      <View style={styles.justifyBottom}>
-        <StyledButton
-          text="Log In"
-          disabled={loading || emailOrUsername == '' || password == ''}
-          onPress={signIn}
+        <UserStringInput
+          placeholder="Email or Username"
+          onChange={setEmailOrUsername}
+          value={emailOrUsername}
+          attributes={{
+            textContentType: 'emailAddress',
+          }}
         />
-      </View>
-      <Text style={styles.redirectText}>
-        Don&apos;t have an account?{' '}
-        <Link style={styles.link} href="/auth/signup">
-          Sign Up
+        <UserStringInput
+          placeholder="Password"
+          onChange={setPassword}
+          value={password}
+          attributes={{
+            textContentType: 'password',
+            secureTextEntry: passwordTextHidden,
+          }}
+        />
+        <Link style={styles.forgotPassword} href="/auth/forgotPassword">
+          Forgot password?
         </Link>
-      </Text>
+        {error && <Text style={styles.error}>{error}</Text>}
+      </View>
+
+      <View>
+        <View>
+          <StyledButton
+            text="Log In"
+            disabled={loading || emailOrUsername == '' || password == ''}
+            onPress={signIn}
+          />
+        </View>
+
+        <Text style={styles.redirectText}>
+          Don&apos;t have an account?{' '}
+          <Link style={styles.link} href="/auth/signup">
+            Sign Up
+          </Link>
+        </Text>
+      </View>
     </View>
   );
 }
@@ -114,12 +119,8 @@ function LoginScreen() {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
-    flex: 1,
-    flexDirection: 'column',
+  flex: {
+    justifyContent: 'space-between',
   },
   forgotPassword: {
     fontSize: 12,
@@ -128,14 +129,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     fontWeight: '400',
   },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  justifyBottom: {
-    justifyContent: 'flex-end',
-  },
   link: {
     fontWeight: '700',
     textDecorationLine: 'underline',
@@ -143,9 +136,10 @@ const styles = StyleSheet.create({
   redirectText: {
     textAlign: 'center',
     marginTop: 16,
+    marginBottom: 64,
   },
   title: {
-    marginTop: 20,
+    marginTop: 63,
     marginBottom: 41,
   },
   error: {

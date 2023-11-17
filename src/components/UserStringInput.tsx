@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 import globalStyles from '../styles/globalStyles';
 
@@ -28,7 +27,7 @@ export default function UserStringInput({
         placeholder={placeholder}
         placeholderTextColor="#000"
         {...attributes}
-      />
+      ></TextInput>
       {children}
     </View>
   );
@@ -49,8 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
   },
   verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
     alignSelf: 'stretch',
   },
 });

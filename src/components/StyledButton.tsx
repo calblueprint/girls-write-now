@@ -19,7 +19,16 @@ function StyledButton({
   return (
     <View style={[styles.verticallySpaced, globalStyles.mt20, extraStyles]}>
       <Button
-        buttonStyle={{ backgroundColor: '#EB563B' }}
+        disabledStyle={{
+          opacity: 0.4,
+          backgroundColor: '#EB563B',
+        }}
+        buttonStyle={{
+          backgroundColor: '#EB563B',
+        }}
+        titleStyle={{
+          color: 'white',
+        }}
         title={text}
         disabled={disabled}
         onPress={onPress}

@@ -32,7 +32,7 @@ function VerificationScreen() {
     setLoading(true);
 
     if (user?.email) {
-      const { error, data } = await resendVerification(user.email);
+      const { error } = await resendVerification(user.email);
 
       if (error) Alert.alert(error.message);
       else Alert.alert(`Verification email sent to ${user.email}.`);
@@ -44,7 +44,7 @@ function VerificationScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.authContainer}>
       <TextInput
         style={styles.input}
         keyboardType="numeric"
@@ -72,12 +72,8 @@ function VerificationScreen() {
 export default VerificationScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
-  },
   input: {
+    paddingVertical: 63,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,

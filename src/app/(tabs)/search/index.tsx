@@ -35,15 +35,19 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
+  // Gets the recentSearches (Set) from Async Storage
   const getRecentSearch = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
+      return jsonValue != null
+        ? JSON.parse(jsonValue)
+        : new Set<RecentSearch>();
     } catch (error) {
       console.log(error); // error reading value
     }
   };
 
+  // Sets the Async Storage to recentSearches (Set)
   const setRecentSearch = async (recentSearchesSet: Set<RecentSearch>) => {
     try {
       const jsonValue = JSON.stringify(recentSearchesSet);
@@ -53,19 +57,31 @@ function SearchScreen() {
     }
   };
 
+  // UseEffect upon first rendering
   useEffect(() => {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
     })();
 
+    // Testing to see if we can getRecentSearches() from Async Storage
     (async () => {
-      setRecentSearches(await getRecentSearch());
+      // setRecentSearches(await getRecentSearch());
+      console.log(getRecentSearch());
     })();
   }, []);
 
+  // UseEffect upon change of recentSearches (Set)
+  // EVENTUALLY FIX TO WHERE IT DOES IT BEFORE EXITING PAGE RATHER THAN EVERY ALTERATION OF SET (LIKE THIS FOR TESTING RN)
   useEffect(() => {
     setRecentSearch(recentSearches);
+
+    // testing funcion getRecentSearch
+    // (maybe check for null when first getting asyncStorage cuz it might be empty)
+    // DELETE AFTER BUG FIXED
+    (async () => {
+      setRecentSearches(await getRecentSearch());
+    })();
   }, [recentSearches]); // fix this useEffect
 
   return (
@@ -92,12 +108,8 @@ function SearchScreen() {
           };
 
           setRecentSearches(
-            // new Set<RecentSearch>([...recentSearches, result]),
-            previousSet => new Set<RecentSearch>(previousSet).add(result),
-            // previousSet => new Set<RecentSearch>([...previousSet, result]),
-            // previousSet => new Set<RecentSearch>(previousSet ? [...previousSet, result] : [result]), // getting that previousSet is null
+            previousSet => new Set<RecentSearch>([...previousSet, result]),
           );
-          // console.log(recentSearches);
         }}
       />
       <Button

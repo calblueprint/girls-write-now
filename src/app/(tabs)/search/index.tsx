@@ -82,7 +82,7 @@ function SearchScreen() {
     (async () => {
       setRecentSearches(await getRecentSearch());
     })();
-  }, [recentSearches]); // fix this useEffect
+  }, [recentSearches]); // fix this useEffect to be when it switches page
 
   return (
     <SafeAreaView style={styles.container}>

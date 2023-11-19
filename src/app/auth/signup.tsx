@@ -1,5 +1,5 @@
 import { Redirect, Link, router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
@@ -7,25 +7,27 @@ import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 
 function SignUpScreen() {
-  const { session, signUp } = useSession();
+  const { session, dispatch, isLoading, error } = useSession();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const attemptedSignUp = useRef(false);
 
   if (session) {
     return <Redirect href="/home" />;
   }
 
   const signUpWithEmail = async () => {
-    setLoading(true);
-    const { error } = await signUp(email, password);
+    dispatch({ type: 'SIGN_UP', email, password });
+    attemptedSignUp.current = true;
+  };
+
+  useEffect(() => {
+    if (!attemptedSignUp.current) return;
 
     if (error) Alert.alert(error.message);
     else router.replace('/auth/verify');
-
-    setLoading(false);
-  };
+  }, [error]);
 
   return (
     <View style={globalStyles.auth_container}>
@@ -55,7 +57,7 @@ function SignUpScreen() {
         <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
           <Button
             title="Sign Up"
-            disabled={loading}
+            disabled={isLoading}
             onPress={signUpWithEmail}
           />
         </View>

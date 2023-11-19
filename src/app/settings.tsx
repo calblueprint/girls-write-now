@@ -11,7 +11,7 @@ import { useSession } from '../utils/AuthContext';
 import supabase from '../utils/supabase';
 
 function SettingsScreen() {
-  const { session, signOut } = useSession();
+  const { dispatch, user, session } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -23,12 +23,12 @@ function SettingsScreen() {
   const getProfile = async () => {
     try {
       setLoading(true);
-      if (!session?.user) throw new Error('No user on the session!');
+      if (!user) throw new Error('No user on the session!');
 
       const { data, error, status } = await supabase
         .from('profiles')
         .select(`first_name, last_name, birthday, gender, race_ethnicity`)
-        .eq('user_id', session?.user.id)
+        .eq('user_id', user?.id)
         .single();
 
       if (error && status !== 406 && error instanceof Error) {
@@ -164,7 +164,10 @@ function SettingsScreen() {
           onPress={updateProfile}
           disabled={loading}
         />
-        <Button title="Sign Out" onPress={signOut} />
+        <Button
+          title="Sign Out"
+          onPress={() => dispatch({ type: 'SIGN_OUT' })}
+        />
       </View>
     </SafeAreaView>
   );

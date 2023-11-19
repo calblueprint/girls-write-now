@@ -1,10 +1,8 @@
 import {
   AuthError,
-  AuthResponse,
   Session,
   User,
   UserAttributes,
-  UserResponse,
 } from '@supabase/supabase-js';
 import React, {
   createContext,
@@ -12,20 +10,44 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-  useState,
 } from 'react';
 
 import supabase from './supabase';
 
 type AuthContextAction =
   | { type: 'LOADING' }
-  | { type: 'SIGN_UP'; email: string; password: string }
-  | { type: 'SIGN_IN_WITH_EMAIL'; email: string; password: string }
-  | { type: 'VERIFY_OTP'; email: string; token: string }
-  | { type: 'RESEND_VERIFICATION'; email: string }
-  | { type: 'RESET_PASSWORD'; email: string }
-  | { type: 'UPDATE_USER'; attributes: UserAttributes }
-  | { type: 'SIGN_OUT' };
+  | { type: 'CLEAR_ERROR' }
+  | {
+      type: 'SIGN_UP';
+      email: string;
+      password: string;
+      error?: AuthError | null;
+    }
+  | {
+      type: 'SIGN_IN_WITH_EMAIL';
+      email: string;
+      password: string;
+      error?: AuthError | null;
+    }
+  | {
+      type: 'VERIFY_OTP';
+      email: string;
+      token: string;
+      error?: AuthError | null;
+    }
+  | { type: 'RESEND_VERIFICATION'; email: string; error?: AuthError | null }
+  | { type: 'RESET_PASSWORD'; email: string; error?: AuthError | null }
+  | {
+      type: 'REFRESH_SESSION';
+      session: Session | null;
+      error?: AuthError | null;
+    }
+  | {
+      type: 'UPDATE_USER';
+      attributes: UserAttributes;
+      error?: AuthError | null;
+    }
+  | { type: 'SIGN_OUT'; error?: AuthError | null };
 
 export type AuthDispatch = React.Dispatch<AuthContextAction>;
 
@@ -33,6 +55,7 @@ export interface AuthState {
   session: Session | null;
   user: User | null;
   isLoading: boolean;
+  error: Error | null;
   dispatch: AuthDispatch;
 }
 
@@ -47,13 +70,33 @@ export const useAuthReducer = () =>
         case 'VERIFY_OTP':
         case 'RESEND_VERIFICATION':
         case 'RESET_PASSWORD':
-          return { ...prevState, isLoading: false };
         case 'UPDATE_USER':
-          return { ...prevState, isLoading: false };
+          return {
+            ...prevState,
+            isLoading: false,
+            error: action.error ?? null,
+          };
         case 'SIGN_OUT':
-          return { ...prevState, user: null, session: null, isLoading: false };
+          return {
+            ...prevState,
+            user: null,
+            session: null,
+            isLoading: false,
+            error: action.error ?? null,
+          };
+        case 'REFRESH_SESSION':
+          return {
+            ...prevState,
+            session: action.session,
+            user: action.session ? action.session?.user : null,
+            isLoading: false,
+            error: action.error ?? null,
+          };
         case 'LOADING':
+          console.log('loading');
           return { ...prevState, isLoading: true };
+        case 'CLEAR_ERROR':
+          return { ...prevState, error: null };
         default:
           return prevState;
       }
@@ -62,6 +105,7 @@ export const useAuthReducer = () =>
       session: null,
       isLoading: false,
       user: null,
+      error: null,
       dispatch: () => null,
     },
   );
@@ -85,23 +129,18 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [authState, dispatch] = useAuthReducer();
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then(({ data: { session: newSession } }) => {
-        setSession(newSession);
-        setUser(newSession ? newSession.user : null);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    console.log(`New auth session: ${JSON.stringify(authState)}`);
+  }, [authState]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session: newSession } }) => {
+      dispatch({ type: 'REFRESH_SESSION', session: newSession });
+    });
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
+      dispatch({ type: 'REFRESH_SESSION', session: newSession });
     });
   }, []);
 
@@ -110,69 +149,70 @@ export function AuthContextProvider({
       dispatch({ type: 'LOADING' });
       switch (action.type) {
         case 'SIGN_UP':
-          signUp(action.email, action.password).then(() => dispatch(action));
+          signUp(action.email, action.password).then(({ error }) =>
+            dispatch({ ...action, error }),
+          );
           break;
         case 'SIGN_IN_WITH_EMAIL':
-          signInWithEmail(action.email, action.password).then(() =>
-            dispatch(action),
+          signInWithEmail(action.email, action.password).then(({ error }) =>
+            dispatch({ ...action, error }),
           );
           break;
         case 'VERIFY_OTP':
-          verifyOtp(action.email, action.token).then(() => dispatch(action));
+          verifyOtp(action.email, action.token).then(({ error }) =>
+            dispatch({ ...action, error }),
+          );
           break;
         case 'RESEND_VERIFICATION':
-          resendVerification(action.email).then(() => dispatch(action));
+          resendVerification(action.email).then(({ error }) =>
+            dispatch({ ...action, error }),
+          );
           break;
         case 'RESET_PASSWORD':
-          resetPassword(action.email).then(() => dispatch(action));
+          resetPassword(action.email).then(({ error }) =>
+            dispatch({ ...action, error }),
+          );
           break;
         case 'UPDATE_USER':
-          updateUser(action.attributes).then(() => dispatch(action));
+          updateUser(action.attributes).then(({ error }) =>
+            dispatch({ ...action, error }),
+          );
           break;
         case 'SIGN_OUT':
-          signOut().then(() => dispatch(action));
+          signOut().then(({ error }) => dispatch({ ...action, error }));
           break;
+        case 'REFRESH_SESSION':
+        case 'CLEAR_ERROR':
         default:
           return dispatch(action);
       }
     };
   }
 
-  const signInWithEmail = async (email: string, password: string) => {
-    const value = await supabase.auth.signInWithPassword({
+  const signInWithEmail = async (email: string, password: string) =>
+    await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
-    setUser(value.data.user);
-    return value;
-  };
 
   const signUp = async (email: string, password: string) => {
     const value = await supabase.auth.signUp({
       email,
       password,
-    }); // will trigger the use effect to update the session
-
+    });
     console.log(value);
-    setUser(value.data.user);
+
     return value;
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  };
+  const signOut = async () => await supabase.auth.signOut();
 
-  const verifyOtp = async (email: string, token: string) => {
-    const value = await supabase.auth.verifyOtp({
+  const verifyOtp = async (email: string, token: string) =>
+    await supabase.auth.verifyOtp({
       email,
       token,
       type: 'email',
     });
-
-    // if (value.data.user) setUser(value.data.user);
-    return value;
-  };
 
   const resendVerification = async (email: string) =>
     await supabase.auth.resend({
@@ -183,22 +223,15 @@ export function AuthContextProvider({
   const resetPassword = async (email: string) =>
     await supabase.auth.resetPasswordForEmail(email);
 
-  const updateUser = async (attributes: UserAttributes) => {
-    const {
-      data: { user },
-    } = await supabase.auth.updateUser(attributes);
-
-    setUser(user);
-  };
+  const updateUser = async (attributes: UserAttributes) =>
+    await supabase.auth.updateUser(attributes);
 
   const authContextValue = useMemo(
     () => ({
-      user,
-      session,
-      isLoading,
+      ...authState,
       dispatch: dispatchMiddleware(dispatch),
     }),
-    [session, user, isLoading],
+    [authState],
   );
 
   return (

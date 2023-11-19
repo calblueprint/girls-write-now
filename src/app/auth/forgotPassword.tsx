@@ -7,7 +7,7 @@ import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 
 function ForgotPasswordScreen() {
-  const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
+  const { dispatch, isLoading } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

@@ -12,15 +12,26 @@ import globalStyles from '../../styles/globalStyles';
 import LandingCard from '../LandingCard/LandingCard';
 
 type ContentCardProps = {
-  genre: string;
+  main_genre: string;
+  subgenres: string;
+  cardColor: string;
+  pressFunction: (event: GestureResponderEvent) => void;
+
+  landing_card: typeof LandingCard;
 };
 
 //landing scroll should have a see all button and title for genre
-function ContentCard({ genre }: ContentCardProps) {
+function ContentCard({
+  main_genre,
+  landing_card,
+  subgenres,
+  cardColor,
+  pressFunction,
+}: ContentCardProps) {
   return (
     <View style={styles.parentContainer}>
       <View style={styles.textContainer}>
-        <Text style={styles.genreText}> {genre}</Text>
+        <Text style={styles.genreText}> {main_genre}</Text>
         <Text style={styles.seeAll}>See All</Text>
       </View>
       <ScrollView
@@ -34,3 +45,9 @@ function ContentCard({ genre }: ContentCardProps) {
 }
 
 export default ContentCard;
+
+// type LandingCardProps = {
+//   subgenres: string;
+//   cardColor: string;
+//   pressFunction: (event: GestureResponderEvent) => void;
+// };

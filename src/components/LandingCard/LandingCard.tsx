@@ -11,16 +11,13 @@ import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
 
 type LandingCardProps = {
-  genre_medium: string;
-  image: string;
-  id: number; //story ID to send for routing
+  subgenres: string;
   cardColor: string;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
 function LandingCard({
-  genre_medium,
-  id,
+  subgenres,
   pressFunction,
   cardColor,
 }: LandingCardProps) {
@@ -29,7 +26,7 @@ function LandingCard({
       <View style={styles.contentCardContainer}>
         <View style={[styles.card, { backgroundColor: cardColor }]} />
         <View style={styles.overlayContainer}>
-          <Text style={styles.overlayText}>{genre_medium}</Text>
+          <Text style={styles.overlayText}>{subgenres}</Text>
         </View>
       </View>
     </TouchableOpacity>

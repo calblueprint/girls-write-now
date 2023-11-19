@@ -76,6 +76,11 @@ function SearchScreen() {
         onPress={() => setFilterVisible(true)}
       />
 
+      <LandingScrollView main_genre="Fiction">
+        <LandingCard cardColor="lime" />
+        <LandingCard cardColor="lime" />
+        <LandingCard cardColor="lime" />
+      </LandingScrollView>
       {/* <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

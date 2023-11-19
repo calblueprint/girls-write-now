@@ -1,13 +1,14 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import { signInWithEmail } from '../../queries/auth';
 
 function LoginScreen() {
-  const { dispatch, isLoading, session, error } = useSession();
+  const { dispatch, isLoading } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,22 +19,12 @@ function LoginScreen() {
     router.replace(path);
   };
 
-  const signInWithEmail = async () => {
-    dispatch({ type: 'SIGN_IN_WITH_EMAIL', email, password });
+  const signIn = async () => {
+    const { error } = await signInWithEmail(dispatch, email, password);
+
+    if (error) Alert.alert(error.message);
+    else resetAndPushToRouter('/home');
   };
-
-  useEffect(() => {
-    if (error) {
-      Alert.alert(error.message);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    console.log(session);
-    if (session) {
-      resetAndPushToRouter('/home');
-    }
-  }, [session]);
 
   return (
     <View style={globalStyles.auth_container}>
@@ -60,7 +51,7 @@ function LoginScreen() {
       </View>
       <Link href="/auth/forgotPassword">Forgot password?</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Log In" disabled={isLoading} onPress={signInWithEmail} />
+        <Button title="Log In" disabled={isLoading} onPress={signIn} />
       </View>
       <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>

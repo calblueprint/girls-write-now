@@ -1,33 +1,28 @@
 import { Redirect, Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import { signUp } from '../../queries/auth';
 
 function SignUpScreen() {
-  const { session, dispatch, isLoading, error } = useSession();
+  const { session, isLoading, dispatch } = useSession();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const attemptedSignUp = useRef(false);
 
   if (session) {
     return <Redirect href="/home" />;
   }
 
   const signUpWithEmail = async () => {
-    dispatch({ type: 'SIGN_UP', email, password });
-    attemptedSignUp.current = true;
-  };
-
-  useEffect(() => {
-    if (!attemptedSignUp.current) return;
+    const { error } = await signUp(dispatch, email, password);
 
     if (error) Alert.alert(error.message);
     else router.replace('/auth/verify');
-  }, [error]);
+  };
 
   return (
     <View style={globalStyles.auth_container}>

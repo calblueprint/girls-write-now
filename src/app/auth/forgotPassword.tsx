@@ -5,17 +5,22 @@ import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import {
+  resetPassword,
+  signOut,
+  updateUser,
+  verifyOtp,
+} from '../../queries/auth';
 
 function ForgotPasswordScreen() {
   const { dispatch, isLoading } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [verificationCode, setCode] = useState<string>('');
   const [changingPassword, setChangingPassword] = useState(false);
 
   const sendResetEmail = async () => {
-    const { error } = await resetPassword(email);
+    const { error } = await resetPassword(dispatch, email);
     if (error)
       Alert.alert('Could not send a reset password email. Please try again.');
     else
@@ -24,10 +29,8 @@ function ForgotPasswordScreen() {
       );
   };
   const verifyCode = async () => {
-    setLoading(true);
-
     if (email && verificationCode) {
-      const { error } = await verifyOtp(email, verificationCode);
+      const { error } = await verifyOtp(dispatch, email, verificationCode);
 
       if (error) {
         Alert.alert(error.message);
@@ -40,23 +43,18 @@ function ForgotPasswordScreen() {
     } else {
       Alert.alert(`Please sign up again.`);
     }
-
-    setLoading(false);
   };
 
   const changePassword = async () => {
-    setLoading(true);
-    const { error } = await updateUser({ password });
+    const { error } = await updateUser(dispatch, { password });
 
     if (error) {
       console.error(error);
       Alert.alert('Updating password failed');
     } else {
-      await signOut();
+      await signOut(dispatch);
       router.replace('/auth/login');
     }
-
-    setLoading(false);
   };
 
   return (
@@ -72,7 +70,7 @@ function ForgotPasswordScreen() {
         />
       </View>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Send" disabled={loading} onPress={sendResetEmail} />
+        <Button title="Send" disabled={isLoading} onPress={sendResetEmail} />
       </View>
 
       <TextInput
@@ -85,7 +83,7 @@ function ForgotPasswordScreen() {
       />
 
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Verify" disabled={loading} onPress={verifyCode} />
+        <Button title="Verify" disabled={isLoading} onPress={verifyCode} />
       </View>
 
       {changingPassword && (
@@ -105,7 +103,7 @@ function ForgotPasswordScreen() {
           <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
             <Button
               title="Change Password"
-              disabled={loading}
+              disabled={isLoading}
               onPress={changePassword}
             />
           </View>

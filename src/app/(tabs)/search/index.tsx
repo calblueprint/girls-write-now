@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -8,7 +9,7 @@ import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview } from '../../../queries/types';
+import { StoryPreview, RecentSearch } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 
 function SearchScreen() {
@@ -16,6 +17,7 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
+  const [recentSearches, setRecentSearches] = useState(new Set<RecentSearch>());
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -33,12 +35,54 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
+  // Gets the recentSearches (Set) from Async Storage
+  const getRecentSearch = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES');
+      return jsonValue != null
+        ? JSON.parse(jsonValue)
+        : new Set<RecentSearch>();
+    } catch (error) {
+      console.log(error); // error reading value
+    }
+  };
+
+  // Sets the Async Storage to recentSearches (Set)
+  const setRecentSearch = async (recentSearchesSet: Set<RecentSearch>) => {
+    try {
+      const jsonValue = JSON.stringify(recentSearchesSet);
+      await AsyncStorage.setItem('GWN_RECENT_SEARCHES', jsonValue);
+    } catch (error) {
+      console.log(error); // saving error
+    }
+  };
+
+  // UseEffect upon first rendering
   useEffect(() => {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
     })();
+
+    // Testing to see if we can getRecentSearches() from Async Storage
+    (async () => {
+      // setRecentSearches(await getRecentSearch());
+      console.log(getRecentSearch());
+    })();
   }, []);
+
+  // UseEffect upon change of recentSearches (Set)
+  // EVENTUALLY FIX TO WHERE IT DOES IT BEFORE EXITING PAGE RATHER THAN EVERY ALTERATION OF SET (LIKE THIS FOR TESTING RN)
+  useEffect(() => {
+    setRecentSearch(recentSearches);
+
+    // testing funcion getRecentSearch
+    // (maybe check for null when first getting asyncStorage cuz it might be empty)
+    // DELETE AFTER BUG FIXED
+    (async () => {
+      setRecentSearches(await getRecentSearch());
+    })();
+  }, [recentSearches]); // fix this useEffect to be when it switches page
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,11 +97,20 @@ function SearchScreen() {
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
         lightTheme
-        loadingProps={{}}
         placeholder="Search"
         placeholderTextColor="black"
         onChangeText={text => searchFunction(text)}
         value={search}
+        onSubmitEditing={searchString => {
+          const result: RecentSearch = {
+            value: searchString.nativeEvent.text, // works
+            numResults: searchResults.length, // works
+          };
+
+          setRecentSearches(
+            previousSet => new Set<RecentSearch>([...previousSet, result]),
+          );
+        }}
       />
       <Button
         title="Show Filter Modal"

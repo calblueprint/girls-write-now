@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, TextInput, View, StyleSheet } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
+import styles from './styles';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
 
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();
@@ -71,13 +72,3 @@ function VerificationScreen() {
 }
 
 export default VerificationScreen;
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
-  },
-});

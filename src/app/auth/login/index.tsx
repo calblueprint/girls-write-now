@@ -1,29 +1,31 @@
-import { Redirect, Link, router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
+import styles from './styles';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
 
-function SignUpScreen() {
-  const { session, signUp } = useSession();
-
+function LoginScreen() {
+  const sessionHandler = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (session) {
-    return <Redirect href="/home" />;
-  }
+  const resetAndPushToRouter = (path: string) => {
+    while (router.canGoBack()) {
+      router.back();
+    }
+    router.replace(path);
+  };
 
-  const signUpWithEmail = async () => {
+  const signInWithEmail = async () => {
     setLoading(true);
-    const { error } = await signUp(email, password);
+    const { error } = await sessionHandler.signInWithEmail(email, password);
 
     if (error) Alert.alert(error.message);
-    else router.replace('/auth/verify');
-
+    else resetAndPushToRouter('/home');
     setLoading(false);
   };
 
@@ -39,7 +41,6 @@ function SignUpScreen() {
           autoCapitalize="none"
         />
       </View>
-
       <View style={globalStyles.verticallySpaced}>
         <Input
           label="Password"
@@ -50,18 +51,14 @@ function SignUpScreen() {
           placeholder="Password"
           autoCapitalize="none"
         />
-
-        <Link href="/auth/login">Already have an account? Log In</Link>
-        <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-          <Button
-            title="Sign Up"
-            disabled={loading}
-            onPress={signUpWithEmail}
-          />
-        </View>
       </View>
+      <Link href="/auth/forgotPassword">Forgot password?</Link>
+      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+        <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
+      </View>
+      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>
   );
 }
 
-export default SignUpScreen;
+export default LoginScreen;

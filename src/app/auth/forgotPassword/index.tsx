@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Alert, TextInput, View, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
+import styles from './styles';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
 
 function ForgotPasswordScreen() {
   const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
@@ -116,13 +117,3 @@ function ForgotPasswordScreen() {
 }
 
 export default ForgotPasswordScreen;
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
-  },
-});

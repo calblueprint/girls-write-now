@@ -92,12 +92,6 @@ function SearchScreen() {
 
       setRecentSearches(await getRecentSearch());
     })();
-
-    // Testing to see if we can getRecentSearches() from Async Storage
-    (async () => {
-      // setRecentSearches(await getRecentSearch());
-      console.log(getRecentSearch());
-    })();
   }, []);
 
   // UseEffect upon change of recentSearches (Set)

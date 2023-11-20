@@ -1,6 +1,6 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Text, View, StyleSheet } from 'react-native';
+import { Alert, Text, View, StyleSheet, SafeAreaView } from 'react-native';
 import validator from 'validator';
 
 import StyledButton from '../../components/StyledButton';
@@ -94,7 +94,7 @@ function SignUpScreen() {
   };
 
   return (
-    <View style={[globalStyles.authContainer, styles.flex]}>
+    <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
       <View>
         <Text style={[globalStyles.h4, styles.title]}>
           Read stories from young creators
@@ -164,7 +164,7 @@ function SignUpScreen() {
           </Link>
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   title: {
-    marginTop: 65,
+    paddingTop: 64,
     marginBottom: 23,
   },
   icon: {

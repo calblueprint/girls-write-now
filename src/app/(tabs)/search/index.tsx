@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 import { SearchBar } from '@rneui/themed';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +18,8 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
-  const [recentSearches, setRecentSearches] = useState(new Set<RecentSearch>());
+  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
+  const focus = useIsFocused();
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -38,20 +40,20 @@ function SearchScreen() {
   // Gets the recentSearches (Set) from Async Storage
   const getRecentSearch = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES');
-      return jsonValue != null
-        ? JSON.parse(jsonValue)
-        : new Set<RecentSearch>();
+      const jsonValue = await AsyncStorage.getItem('1'); //'GWN_RECENT_SEARCHES_ARRAY');
+      console.log('\nGetting AsyncStorage: ' + jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : [];
     } catch (error) {
       console.log(error); // error reading value
     }
   };
 
   // Sets the Async Storage to recentSearches (Set)
-  const setRecentSearch = async (recentSearchesSet: Set<RecentSearch>) => {
+  const setRecentSearch = async (recentSearchesArray: RecentSearch[]) => {
     try {
-      const jsonValue = JSON.stringify(recentSearchesSet);
-      await AsyncStorage.setItem('GWN_RECENT_SEARCHES', jsonValue);
+      const jsonValue = JSON.stringify(recentSearchesArray);
+      console.log('\nSetting AsyncStorage: ' + jsonValue);
+      await AsyncStorage.setItem('1', jsonValue); // 'GWN_RECENT_SEARCHES_ARRAY', jsonValue);
     } catch (error) {
       console.log(error); // saving error
     }
@@ -62,12 +64,8 @@ function SearchScreen() {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
-    })();
 
-    // Testing to see if we can getRecentSearches() from Async Storage
-    (async () => {
-      // setRecentSearches(await getRecentSearch());
-      console.log(getRecentSearch());
+      setRecentSearches(await getRecentSearch());
     })();
   }, []);
 
@@ -75,14 +73,8 @@ function SearchScreen() {
   // EVENTUALLY FIX TO WHERE IT DOES IT BEFORE EXITING PAGE RATHER THAN EVERY ALTERATION OF SET (LIKE THIS FOR TESTING RN)
   useEffect(() => {
     setRecentSearch(recentSearches);
-
-    // testing funcion getRecentSearch
-    // (maybe check for null when first getting asyncStorage cuz it might be empty)
-    // DELETE AFTER BUG FIXED
-    (async () => {
-      setRecentSearches(await getRecentSearch());
-    })();
-  }, [recentSearches]); // fix this useEffect to be when it switches page
+    console.log('');
+  }, [focus]); // fix this useEffect to be when it switches page
 
   return (
     <SafeAreaView style={styles.container}>
@@ -107,9 +99,7 @@ function SearchScreen() {
             numResults: searchResults.length, // works
           };
 
-          setRecentSearches(
-            previousSet => new Set<RecentSearch>([...previousSet, result]),
-          );
+          setRecentSearches(recentSearches.concat(result));
         }}
       />
       <Button

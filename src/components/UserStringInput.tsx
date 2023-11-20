@@ -19,7 +19,9 @@ export default function UserStringInput({
   onChange = text => {},
 }: UserStringInputProps) {
   return (
-    <View style={[styles.verticallySpaced, globalStyles.mt20]}>
+    <View
+      style={[styles.container, styles.verticallySpaced, globalStyles.mt20]}
+    >
       <TextInput
         onChangeText={text => onChange(text)}
         value={value ?? ''}
@@ -27,20 +29,25 @@ export default function UserStringInput({
         placeholder={placeholder}
         placeholderTextColor="#000"
         {...attributes}
-      ></TextInput>
+      />
       {children}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  inputField: {
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'black',
+  },
+  inputField: {
+    flex: 1,
     fontSize: 14,
     fontFamily: 'Manrope',
-    alignItems: 'center',
     padding: 10,
     color: '#000000',
   },

@@ -8,6 +8,7 @@ import UserStringInput from '../../components/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
+import { Icon } from 'react-native-elements';
 
 function SignUpScreen() {
   const { signUp } = useSession();
@@ -19,6 +20,7 @@ function SignUpScreen() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
   const validUsernameCharacters = /^\w+$/g;
 
@@ -130,9 +132,16 @@ function SignUpScreen() {
           value={password}
           attributes={{
             textContentType: 'password',
-            // secureTextEntry: passwordTextHidden,
+            secureTextEntry: passwordTextHidden,
           }}
-        />
+        >
+          <Icon
+            name={passwordTextHidden ? 'visibility-off' : 'visibility'}
+            type="material"
+            style={styles.icon}
+            onPress={() => setPasswordTextHidden(!passwordTextHidden)}
+          />
+        </UserStringInput>
       </View>
 
       <View>
@@ -180,5 +189,8 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 65,
     marginBottom: 23,
+  },
+  icon: {
+    marginRight: 10,
   },
 });

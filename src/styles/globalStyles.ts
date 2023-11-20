@@ -10,8 +10,7 @@ export default StyleSheet.create({
     paddingRight: 24,
   },
   authContainer: {
-    paddingLeft: 43,
-    paddingRight: 44,
+    marginHorizontal: 38,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',

@@ -8,6 +8,7 @@ import UserStringInput from '../../components/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
+import { Icon } from 'react-native-elements';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -67,7 +68,7 @@ function LoginScreen() {
   };
 
   return (
-    <View style={[globalStyles.authContainer, styles.flex]}>
+    <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
       <View>
         <Text style={[globalStyles.h4, styles.title]}>
           Read stories from young creators
@@ -89,7 +90,15 @@ function LoginScreen() {
             textContentType: 'password',
             secureTextEntry: passwordTextHidden,
           }}
-        />
+        >
+          <Icon
+            name={passwordTextHidden ? 'visibility-off' : 'visibility'}
+            type="material"
+            style={styles.icon}
+            onPress={() => setPasswordTextHidden(!passwordTextHidden)}
+          />
+        </UserStringInput>
+
         <Link style={styles.forgotPassword} href="/auth/forgotPassword">
           Forgot password?
         </Link>
@@ -112,7 +121,7 @@ function LoginScreen() {
           </Link>
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -139,10 +148,13 @@ const styles = StyleSheet.create({
     marginBottom: 64,
   },
   title: {
-    marginTop: 63,
+    paddingTop: 64,
     marginBottom: 41,
   },
   error: {
     color: 'red',
+  },
+  icon: {
+    marginRight: 10,
   },
 });

@@ -94,8 +94,6 @@ function SearchScreen() {
     })();
   }, []);
 
-  // UseEffect upon change of recentSearches (Set)
-  // EVENTUALLY FIX TO WHERE IT DOES IT BEFORE EXITING PAGE RATHER THAN EVERY ALTERATION OF SET (LIKE THIS FOR TESTING RN)
   useEffect(() => {
     setRecentSearch(recentSearches);
   }, [focus]);

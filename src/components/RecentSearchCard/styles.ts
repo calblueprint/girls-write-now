@@ -1,24 +1,33 @@
 import { StyleSheet } from 'react-native';
 
-import colors from '../../styles/colors';
-
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: colors.lightGrey,
+    backgroundColor: 'white',
     borderRadius: 4,
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 8,
     maxHeight: 100,
     paddingLeft: 12,
     paddingRight: 12,
-    paddingBottom: 4,
-    paddingTop: 4,
+    paddingBottom: 10,
+    paddingTop: 10,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    elevation: 4,
   },
-  textContainer: {
+  leftItems: {
+    gap: 8,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rightItems: {
+    gap: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   searchValueText: {
     color: 'black',

@@ -43,6 +43,16 @@ const styles = StyleSheet.create({
     width,
     height,
   },
+  recentSpacing: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignContent: 'space-between',
+  },
+  searchText: {
+    fontWeight: '300',
+    fontSize: 20,
+    paddingTop: 5,
+  },
 });
 
 export default styles;

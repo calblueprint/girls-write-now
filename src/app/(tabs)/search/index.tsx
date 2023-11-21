@@ -25,7 +25,7 @@ function SearchScreen() {
   const searchFunction = (text: string) => {
     if (text === '') {
       setSearch(text);
-      setSearchResults(allStories);
+      setSearchResults([]);
       return;
     }
     const updatedData = allStories.filter((item: StoryPreview) => {
@@ -124,13 +124,13 @@ function SearchScreen() {
         onPress={() => setFilterVisible(true)}
       />
       {search ? (
-        <Text>Showing Results {searchResults.length}</Text>
+        <Text style={styles.searchText}>
+          Showing Results {searchResults.length}
+        </Text>
       ) : (
         <>
-          <View
-            style={{ justifyContent: 'space-between', flexDirection: 'row' }}
-          >
-            <Text>Recent Searches</Text>
+          <View style={styles.recentSpacing}>
+            <Text style={styles.searchText}>Recent Searches</Text>
             <Button
               onPress={clearRecentSearches}
               title="Clear All"
@@ -138,7 +138,6 @@ function SearchScreen() {
             />
           </View>
           <FlatList
-            style={{ paddingBottom: 200 }}
             showsVerticalScrollIndicator={false}
             data={recentSearches}
             renderItem={({ item }) => (

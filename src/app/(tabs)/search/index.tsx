@@ -3,11 +3,12 @@ import { useIsFocused } from '@react-navigation/native';
 import { SearchBar } from '@rneui/themed';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, View } from 'react-native';
+import { Button, FlatList, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
+import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import SearchCard from '../../../components/SearchCard/SearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch } from '../../../queries/types';
@@ -37,11 +38,37 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    setRecentSearch([]);
+  };
+
+  const searchResultStacking = (searchString: string) => {
+    if (searchString !== '') {
+      const maxArrayLength = 5;
+      setRecentSearches(recentSearches.reverse());
+      for (let i = 0; i < recentSearches.length; i++) {
+        if (searchString === recentSearches[i].value) {
+          setRecentSearches(recentSearches.splice(i, 1));
+          break;
+        }
+      }
+      if (recentSearches.length >= maxArrayLength) {
+        setRecentSearches(recentSearches.splice(0, 1));
+      }
+
+      const result: RecentSearch = {
+        value: searchString,
+        numResults: searchResults.length,
+      };
+      setRecentSearches(recentSearches.concat(result).reverse());
+    }
+  };
+
   // Gets the recentSearches (Set) from Async Storage
   const getRecentSearch = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('1'); //'GWN_RECENT_SEARCHES_ARRAY');
-      console.log('\nGetting AsyncStorage: ' + jsonValue);
+      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
       return jsonValue != null ? JSON.parse(jsonValue) : [];
     } catch (error) {
       console.log(error); // error reading value
@@ -52,8 +79,7 @@ function SearchScreen() {
   const setRecentSearch = async (recentSearchesArray: RecentSearch[]) => {
     try {
       const jsonValue = JSON.stringify(recentSearchesArray);
-      console.log('\nSetting AsyncStorage: ' + jsonValue);
-      await AsyncStorage.setItem('1', jsonValue); // 'GWN_RECENT_SEARCHES_ARRAY', jsonValue);
+      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
     } catch (error) {
       console.log(error); // saving error
     }
@@ -69,12 +95,9 @@ function SearchScreen() {
     })();
   }, []);
 
-  // UseEffect upon change of recentSearches (Set)
-  // EVENTUALLY FIX TO WHERE IT DOES IT BEFORE EXITING PAGE RATHER THAN EVERY ALTERATION OF SET (LIKE THIS FOR TESTING RN)
   useEffect(() => {
     setRecentSearch(recentSearches);
-    console.log('');
-  }, [focus]); // fix this useEffect to be when it switches page
+  }, [focus]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,18 +117,42 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
         onSubmitEditing={searchString => {
-          const result: RecentSearch = {
-            value: searchString.nativeEvent.text, // works
-            numResults: searchResults.length, // works
-          };
-
-          setRecentSearches(recentSearches.concat(result));
+          searchResultStacking(searchString.nativeEvent.text);
         }}
       />
       <Button
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
       />
+      {search ? (
+        <Text>Showing Results {searchResults.length}</Text>
+      ) : (
+        <>
+          <View
+            style={{ justifyContent: 'space-between', flexDirection: 'row' }}
+          >
+            <Text>Recent Searches</Text>
+            <Button
+              onPress={clearRecentSearches}
+              title="Clear All"
+              color="#EB563B"
+            />
+          </View>
+          <FlatList
+            style={{ paddingBottom: 200 }}
+            showsVerticalScrollIndicator={false}
+            data={recentSearches}
+            renderItem={({ item }) => (
+              <RecentSearchCard
+                key={item.value}
+                value={item.value}
+                numResults={item.numResults}
+                pressFunction={() => null} // add functionality for each recentSearch
+              />
+            )}
+          />
+        </>
+      )}
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}

@@ -115,6 +115,9 @@ function SearchScreen() {
         placeholderTextColor="black"
         onChangeText={text => searchFunction(text)}
         value={search}
+        onSubmitEditing={searchString => {
+          searchResultStacking(searchString.nativeEvent.text);
+        }}
       />
       <Button
         title="Show Filter Modal"

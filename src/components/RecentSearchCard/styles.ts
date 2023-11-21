@@ -13,10 +13,24 @@ const styles = StyleSheet.create({
     maxHeight: 100,
     paddingLeft: 12,
     paddingRight: 12,
+    paddingBottom: 4,
+    paddingTop: 4,
   },
   textContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  searchValueText: {
+    color: 'black',
+    fontWeight: '400',
+    fontSize: 14,
+    justifyContent: 'center',
+  },
+  numResultsText: {
+    color: '#A7A5A5',
+    fontWeight: '400',
+    fontSize: 10,
+    justifyContent: 'center',
   },
 });
 

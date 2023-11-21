@@ -19,10 +19,10 @@ function RecentSearchCard({
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
         <View style={styles.textContainer}>
-          <Icon name="search1" size={18} color="#A7A5A5" />
-          <Text>{value}</Text>
-          <Text>{numResults} Results</Text>
-          <Icon name="caretright" size={18} color="black" />
+          <Icon name="search1" size={16} color="#A7A5A5" />
+          <Text style={styles.searchValueText}>{value}</Text>
+          <Text style={styles.numResultsText}>{numResults} Results</Text>
+          <Icon name="caretright" size={12} color="black" />
         </View>
       </View>
     </Pressable>

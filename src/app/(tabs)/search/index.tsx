@@ -8,7 +8,7 @@ import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview } from '../../../queries/types';
+import { StoryPreview, RecentSearch } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 
 function SearchScreen() {
@@ -16,6 +16,7 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
+  const [recentSearches, setRecentSearches] = useState(Set<RecentSearch>);
 
   const searchFunction = (text: string) => {
     if (text === '') {

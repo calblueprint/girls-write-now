@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, TextInput, View, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
@@ -44,7 +45,7 @@ function VerificationScreen() {
   };
 
   return (
-    <View style={globalStyles.authContainer}>
+    <SafeAreaView style={[globalStyles.authContainer, styles.container]}>
       <TextInput
         style={styles.input}
         keyboardType="numeric"
@@ -65,7 +66,7 @@ function VerificationScreen() {
           onPress={verifyAccount}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -73,7 +74,6 @@ export default VerificationScreen;
 
 const styles = StyleSheet.create({
   input: {
-    paddingVertical: 63,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
@@ -84,5 +84,8 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+  },
+  container: {
+    justifyContent: 'flex-start',
   },
 });

@@ -5,8 +5,8 @@ import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import StyledButton from '../components/StyledButton';
-import UserStringInput from '../components/UserStringInput';
+import StyledButton from '../components/StyledButton/StyledButton';
+import UserStringInput from '../components/UserStringInput/UserStringInput';
 import globalStyles from '../styles/globalStyles';
 import { useSession } from '../utils/AuthContext';
 import supabase from '../utils/supabase';

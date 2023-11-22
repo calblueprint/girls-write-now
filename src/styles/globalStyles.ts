@@ -38,8 +38,8 @@ export default StyleSheet.create({
   },
   h4: {
     // fontFamily: 'DMSans-Regular',
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '500',
     textAlign: 'left',
     color: 'black',
     lineHeight: 22,

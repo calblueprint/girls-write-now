@@ -1,10 +1,11 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import { Alert, Text, View, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
-import StyledButton from '../../components/StyledButton';
-import UserStringInput from '../../components/UserStringInput';
+import StyledButton from '../../components/StyledButton/StyledButton';
+import UserStringInput from '../../components/UserStringInput/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
@@ -96,16 +97,13 @@ function SignUpScreen() {
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
       <View>
-        <Text style={[globalStyles.h4, styles.title]}>
-          Read stories from young creators
-        </Text>
+        <Text style={styles.title}>{'Read stories from \nyoung creators'}</Text>
         <UserStringInput
           placeholder="Username"
           onChange={setAndCheckUsername}
           value={username}
-        >
-          {usernameError && <Text style={styles.error}>{usernameError}</Text>}
-        </UserStringInput>
+        />
+        {usernameError && <Text style={styles.error}>{usernameError}</Text>}
         <UserStringInput
           placeholder="First Name"
           onChange={setFirstName}
@@ -122,10 +120,10 @@ function SignUpScreen() {
           value={email}
           attributes={{
             textContentType: 'emailAddress',
+            secureTextEntry: false,
           }}
-        >
-          {emailError && <Text style={styles.error}>{emailError}</Text>}
-        </UserStringInput>
+        />
+        {emailError && <Text style={styles.error}>{emailError}</Text>}
         <UserStringInput
           placeholder="Password"
           onChange={setPassword}
@@ -187,8 +185,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   title: {
+    fontSize: 24,
     paddingTop: 64,
     marginBottom: 23,
+    fontWeight: '700',
   },
   icon: {
     marginRight: 10,

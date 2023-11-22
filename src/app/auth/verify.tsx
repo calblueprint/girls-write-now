@@ -5,17 +5,15 @@ import { Button } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import { resendVerification, verifyOtp } from '../../queries/auth';
 
 function VerificationScreen() {
-  const { user, verifyOtp, resendVerification } = useSession();
-  const [loading, setLoading] = useState(false);
+  const { user, dispatch, isLoading } = useSession();
   const [verificationCode, setCode] = useState<string>('');
 
   const verifyAccount = async () => {
-    setLoading(true);
-
     if (user?.email && verificationCode) {
-      const { error } = await verifyOtp(user.email, verificationCode);
+      const { error } = await verifyOtp(dispatch, user.email, verificationCode);
 
       if (error) Alert.alert(error.message);
       else router.replace('/auth/onboarding');
@@ -24,15 +22,11 @@ function VerificationScreen() {
     } else {
       Alert.alert(`Please sign up again.`);
     }
-
-    setLoading(false);
   };
 
   const resendCode = async () => {
-    setLoading(true);
-
     if (user?.email) {
-      const { error, data } = await resendVerification(user.email);
+      const { error, data } = await resendVerification(dispatch, user.email);
 
       console.log(data);
       if (error) Alert.alert(error.message);
@@ -40,8 +34,6 @@ function VerificationScreen() {
     } else {
       Alert.alert(`Please sign up again.`);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -57,12 +49,12 @@ function VerificationScreen() {
 
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]} />
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Resend code" disabled={loading} onPress={resendCode} />
+        <Button title="Resend code" disabled={isLoading} onPress={resendCode} />
       </View>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Button
           title="Verify Account"
-          disabled={loading}
+          disabled={isLoading}
           onPress={verifyAccount}
         />
       </View>

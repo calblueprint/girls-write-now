@@ -5,12 +5,12 @@ import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import { signInWithEmail } from '../../queries/auth';
 
 function LoginScreen() {
-  const sessionHandler = useSession();
+  const { dispatch, isLoading } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const resetAndPushToRouter = (path: string) => {
     while (router.canGoBack()) {
@@ -19,13 +19,11 @@ function LoginScreen() {
     router.replace(path);
   };
 
-  const signInWithEmail = async () => {
-    setLoading(true);
-    const { error } = await sessionHandler.signInWithEmail(email, password);
+  const signIn = async () => {
+    const { error } = await signInWithEmail(dispatch, email, password);
 
     if (error) Alert.alert(error.message);
     else resetAndPushToRouter('/home');
-    setLoading(false);
   };
 
   return (
@@ -53,7 +51,7 @@ function LoginScreen() {
       </View>
       <Link href="/auth/forgotPassword">Forgot password?</Link>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
+        <Button title="Log In" disabled={isLoading} onPress={signIn} />
       </View>
       <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
     </View>

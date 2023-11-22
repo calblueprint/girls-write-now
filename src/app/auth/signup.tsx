@@ -5,26 +5,23 @@ import { Button, Input } from 'react-native-elements';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import { signUp } from '../../queries/auth';
 
 function SignUpScreen() {
-  const { session, signUp } = useSession();
+  const { session, isLoading, dispatch } = useSession();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
   if (session) {
     return <Redirect href="/home" />;
   }
 
   const signUpWithEmail = async () => {
-    setLoading(true);
-    const { error } = await signUp(email, password);
+    const { error } = await signUp(dispatch, email, password);
 
     if (error) Alert.alert(error.message);
     else router.replace('/auth/verify');
-
-    setLoading(false);
   };
 
   return (
@@ -55,7 +52,7 @@ function SignUpScreen() {
         <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
           <Button
             title="Sign Up"
-            disabled={loading}
+            disabled={isLoading}
             onPress={signUpWithEmail}
           />
         </View>

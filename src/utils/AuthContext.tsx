@@ -1,45 +1,83 @@
 import {
   AuthError,
-  AuthResponse,
   Session,
   User,
   UserAttributes,
-  UserResponse,
 } from '@supabase/supabase-js';
 import React, {
   createContext,
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useReducer,
 } from 'react';
 
 import supabase from './supabase';
 
+type AuthContextAction =
+  | { type: 'LOADING' }
+  | { type: 'SIGN_UP' }
+  | { type: 'SIGN_IN_WITH_EMAIL' }
+  | { type: 'VERIFY_OTP' }
+  | { type: 'RESEND_VERIFICATION' }
+  | { type: 'RESET_PASSWORD' }
+  | { type: 'REFRESH_SESSION'; session: Session | null }
+  | { type: 'UPDATE_USER'; user: User | null }
+  | { type: 'SIGN_OUT' };
+
+export type AuthDispatch = React.Dispatch<AuthContextAction>;
+
 export interface AuthState {
   session: Session | null;
-  user: User | null;
+  userProfile: User | null;
   isLoading: boolean;
-  signIn: (newSession: Session | null) => void;
-  signUp: (email: string, password: string) => Promise<AuthResponse>;
-  signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
-  verifyOtp: (email: string, token: string) => Promise<AuthResponse>;
-  resendVerification: (email: string) => Promise<AuthResponse>;
-  resetPassword: (email: string) => Promise<
-    | {
-        data: object;
-        error: null;
-      }
-    | {
-        data: null;
-        error: AuthError;
-      }
-  >;
-  updateUser: (attributes: UserAttributes) => Promise<UserResponse>;
-  signOut: () => Promise<void>;
+  dispatch: AuthDispatch;
 }
 
 const AuthContext = createContext({} as AuthState);
+
+export const useAuthReducer = () =>
+  useReducer(
+    (prevState: AuthState, action: AuthContextAction) => {
+      switch (action.type) {
+        case 'SIGN_UP':
+        case 'SIGN_IN_WITH_EMAIL':
+        case 'VERIFY_OTP':
+        case 'RESEND_VERIFICATION':
+        case 'RESET_PASSWORD':
+        case 'UPDATE_USER':
+          return {
+            ...prevState,
+            isLoading: false,
+          };
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            userProfile: null,
+            session: null,
+            isLoading: false,
+          };
+        case 'REFRESH_SESSION':
+          return {
+            ...prevState,
+            session: action.session,
+            userProfile: action.session ? action.session?.user : null,
+            isLoading: false,
+          };
+        case 'LOADING':
+          console.log('loading');
+          return { ...prevState, isLoading: true };
+        default:
+          return prevState;
+      }
+    },
+    {
+      session: null,
+      isLoading: false,
+      userProfile: null,
+      dispatch: () => null,
+    },
+  );
 
 export function useSession() {
   const value = useContext(AuthContext);
@@ -59,95 +97,27 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [authState, dispatch] = useAuthReducer();
 
   useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then(({ data: { session: newSession } }) => {
-        setSession(newSession);
-        setUser(newSession ? newSession.user : null);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    supabase.auth.getSession().then(({ data: { session: newSession } }) => {
+      console.log('callback');
+
+      dispatch({ type: 'REFRESH_SESSION', session: newSession });
+    });
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
+      console.log('callback');
+      dispatch({ type: 'REFRESH_SESSION', session: newSession });
     });
   }, []);
 
-  const signIn = (newSession: Session | null) => {
-    setSession(newSession);
-  };
-
-  const signInWithEmail = async (email: string, password: string) => {
-    const value = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    }); // will trigger the use effect to update the session
-
-    setUser(value.data.user);
-    return value;
-  };
-
-  const signUp = async (email: string, password: string) => {
-    const value = await supabase.auth.signUp({
-      email,
-      password,
-    }); // will trigger the use effect to update the session
-
-    console.log(value);
-    setUser(value.data.user);
-    return value;
-  };
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
-  };
-
-  const verifyOtp = async (email: string, token: string) => {
-    const value = await supabase.auth.verifyOtp({
-      email,
-      token,
-      type: 'email',
-    });
-
-    // if (value.data.user) setUser(value.data.user);
-    return value;
-  };
-
-  const resendVerification = async (email: string) =>
-    await supabase.auth.resend({
-      type: 'signup',
-      email,
-    });
-
-  const resetPassword = async (email: string) =>
-    await supabase.auth.resetPasswordForEmail(email);
-
-  const updateUser = async (attributes: UserAttributes) =>
-    await supabase.auth.updateUser(attributes);
-
   const authContextValue = useMemo(
     () => ({
-      user,
-      session,
-      isLoading,
-      signUp,
-      signIn,
-      signInWithEmail,
-      signOut,
-      verifyOtp,
-      updateUser,
-      resetPassword,
-      resendVerification,
+      ...authState,
+      dispatch,
     }),
-    [session, user, isLoading],
+    [authState],
   );
 
   return (

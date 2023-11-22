@@ -56,7 +56,7 @@ function SignUpScreen() {
   const setAndCheckEmail = async (newEmail: string) => {
     setEmail(newEmail);
     if (!validator.isEmail(email)) {
-      setEmailError('Please enter a valid email');
+      setEmailError('This email is not a valid email. Please try again.');
       return;
     }
 
@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+    marginTop: 8,
   },
   link: {
     fontWeight: '700',

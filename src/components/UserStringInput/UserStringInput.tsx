@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { View, Text, TextInput } from 'react-native';
 
-import globalStyles from '../../styles/globalStyles';
 import styles from './styles';
 
 type UserStringInputProps = {
@@ -19,7 +18,7 @@ export default function UserStringInput({
   attributes = {},
   label,
   children,
-  onChange = text => {},
+  onChange = _ => {},
 }: UserStringInputProps) {
   return (
     <View style={styles.mt16}>

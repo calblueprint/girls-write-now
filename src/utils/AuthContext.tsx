@@ -16,7 +16,6 @@ import supabase from './supabase';
 
 type AuthContextAction =
   | { type: 'LOADING' }
-  | { type: 'CLEAR_ERROR' }
   | { type: 'SIGN_UP' }
   | { type: 'SIGN_IN_WITH_EMAIL' }
   | { type: 'VERIFY_OTP' }
@@ -30,7 +29,7 @@ export type AuthDispatch = React.Dispatch<AuthContextAction>;
 
 export interface AuthState {
   session: Session | null;
-  user: User | null;
+  userProfile: User | null;
   isLoading: boolean;
   dispatch: AuthDispatch;
 }
@@ -54,7 +53,7 @@ export const useAuthReducer = () =>
         case 'SIGN_OUT':
           return {
             ...prevState,
-            user: null,
+            userProfile: null,
             session: null,
             isLoading: false,
           };
@@ -62,14 +61,12 @@ export const useAuthReducer = () =>
           return {
             ...prevState,
             session: action.session,
-            user: action.session ? action.session?.user : null,
+            userProfile: action.session ? action.session?.user : null,
             isLoading: false,
           };
         case 'LOADING':
           console.log('loading');
           return { ...prevState, isLoading: true };
-        case 'CLEAR_ERROR':
-          return { ...prevState, error: null };
         default:
           return prevState;
       }
@@ -77,7 +74,7 @@ export const useAuthReducer = () =>
     {
       session: null,
       isLoading: false,
-      user: null,
+      userProfile: null,
       dispatch: () => null,
     },
   );
@@ -103,15 +100,14 @@ export function AuthContextProvider({
   const [authState, dispatch] = useAuthReducer();
 
   useEffect(() => {
-    console.log(`New auth session: ${JSON.stringify(authState)}`);
-  }, [authState]);
-
-  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: newSession } }) => {
+      console.log('callback');
+
       dispatch({ type: 'REFRESH_SESSION', session: newSession });
     });
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
+      console.log('callback');
       dispatch({ type: 'REFRESH_SESSION', session: newSession });
     });
   }, []);

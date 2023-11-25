@@ -1,13 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 import { SearchBar } from '@rneui/themed';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, View } from 'react-native';
+import { Button, FlatList, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
+import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
@@ -17,12 +19,13 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
-  const [recentSearches, setRecentSearches] = useState(new Set<RecentSearch>());
+  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
+  const focus = useIsFocused();
 
   const searchFunction = (text: string) => {
     if (text === '') {
       setSearch(text);
-      setSearchResults(allStories);
+      setSearchResults([]);
       return;
     }
     const updatedData = allStories.filter((item: StoryPreview) => {
@@ -35,23 +38,47 @@ function SearchScreen() {
     setSearchResults(updatedData);
   };
 
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    setRecentSearch([]);
+  };
+
+  const searchResultStacking = (searchString: string) => {
+    if (searchString !== '') {
+      const maxArrayLength = 5;
+      setRecentSearches(recentSearches.reverse());
+      for (let i = 0; i < recentSearches.length; i++) {
+        if (searchString === recentSearches[i].value) {
+          setRecentSearches(recentSearches.splice(i, 1));
+          break;
+        }
+      }
+      if (recentSearches.length >= maxArrayLength) {
+        setRecentSearches(recentSearches.splice(0, 1));
+      }
+
+      const result: RecentSearch = {
+        value: searchString,
+        numResults: searchResults.length,
+      };
+      setRecentSearches(recentSearches.concat(result).reverse());
+    }
+  };
+
   // Gets the recentSearches (Set) from Async Storage
   const getRecentSearch = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES');
-      return jsonValue != null
-        ? JSON.parse(jsonValue)
-        : new Set<RecentSearch>();
+      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       console.log(error); // error reading value
     }
   };
 
-  // Sets the Async Storage to recentSearches (Set)
-  const setRecentSearch = async (recentSearchesSet: Set<RecentSearch>) => {
+  const setRecentSearch = async (searchResult: RecentSearch[]) => {
     try {
-      const jsonValue = JSON.stringify(recentSearchesSet);
-      await AsyncStorage.setItem('GWN_RECENT_SEARCHES', jsonValue);
+      const jsonValue = JSON.stringify(searchResult);
+      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
     } catch (error) {
       console.log(error); // saving error
     }
@@ -62,27 +89,14 @@ function SearchScreen() {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
-    })();
 
-    // Testing to see if we can getRecentSearches() from Async Storage
-    (async () => {
-      // setRecentSearches(await getRecentSearch());
-      console.log(getRecentSearch());
+      setRecentSearches(await getRecentSearch());
     })();
   }, []);
 
-  // UseEffect upon change of recentSearches (Set)
-  // EVENTUALLY FIX TO WHERE IT DOES IT BEFORE EXITING PAGE RATHER THAN EVERY ALTERATION OF SET (LIKE THIS FOR TESTING RN)
   useEffect(() => {
     setRecentSearch(recentSearches);
-
-    // testing funcion getRecentSearch
-    // (maybe check for null when first getting asyncStorage cuz it might be empty)
-    // DELETE AFTER BUG FIXED
-    (async () => {
-      setRecentSearches(await getRecentSearch());
-    })();
-  }, [recentSearches]); // fix this useEffect to be when it switches page
+  }, [focus]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,20 +116,41 @@ function SearchScreen() {
         onChangeText={text => searchFunction(text)}
         value={search}
         onSubmitEditing={searchString => {
-          const result: RecentSearch = {
-            value: searchString.nativeEvent.text, // works
-            numResults: searchResults.length, // works
-          };
-
-          setRecentSearches(
-            previousSet => new Set<RecentSearch>([...previousSet, result]),
-          );
+          searchResultStacking(searchString.nativeEvent.text);
         }}
       />
       <Button
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
       />
+      {search ? (
+        <Text style={styles.searchText}>
+          Showing Results {searchResults.length}
+        </Text>
+      ) : (
+        <>
+          <View style={styles.recentSpacing}>
+            <Text style={styles.searchText}>Recent Searches</Text>
+            <Button
+              onPress={clearRecentSearches}
+              title="Clear All"
+              color="#EB563B"
+            />
+          </View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={recentSearches}
+            renderItem={({ item }) => (
+              <RecentSearchCard
+                key={item.value}
+                value={item.value}
+                numResults={item.numResults}
+                pressFunction={() => null} // add functionality for each recentSearch
+              />
+            )}
+          />
+        </>
+      )}
       <FlatList
         showsVerticalScrollIndicator={false}
         data={searchResults}

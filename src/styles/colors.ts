@@ -10,6 +10,8 @@ const colors = {
   textPrimary: '#000000', // black
   textSecondary: '#484848', // gray for subtitles
   textWhite: '#FFFFFF', // white
+  textGreen: '#5A7906', //for sign in
+  textGrey: '#797979', // for sign in
 
   // Surface colors -- used for backgrounds
   darkGrey: '#D9D9D9',

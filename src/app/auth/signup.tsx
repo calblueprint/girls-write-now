@@ -93,7 +93,6 @@ function SignUpScreen() {
           autoCapitalize="none"
         />
       </View>
-      {/* <View> */}
       {password !== '' && (
         <View style={styles.passwordComplexity}>
           <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
@@ -154,7 +153,6 @@ function SignUpScreen() {
           </Text>
         </View>
       )}
-      {/* </View> */}
       <View>
         <Link href="/auth/login">Already have an account? Log In</Link>
         <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>

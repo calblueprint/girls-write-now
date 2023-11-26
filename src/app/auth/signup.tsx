@@ -1,10 +1,9 @@
 import { Redirect, Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text } from 'react-native';
+import { Alert, View, Text, StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import Icon from '../../../assets/icons';
-import color from '../../styles/colors';
 import colors from '../../styles/colors';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
@@ -94,65 +93,68 @@ function SignUpScreen() {
           autoCapitalize="none"
         />
       </View>
-      <View>
-        {password !== '' && (
-          <View style={globalStyles.passwordComplexity}>
-            <Icon type={hasUppercase ? 'green_check' : 'red_x'} />
-            <Text
-              style={
-                hasUppercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textRed }
-              }
-            >
-              At least 1 uppercase letter.
-            </Text>
-          </View>
-        )}
-        {password !== '' && (
-          <View style={globalStyles.passwordComplexity}>
-            <Icon type={hasLowercase ? 'green_check' : 'red_x'} />
-            <Text
-              style={
-                hasLowercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textRed }
-              }
-            >
-              At least 1 lowercase letter.
-            </Text>
-          </View>
-        )}
-        {password !== '' && (
-          <View style={globalStyles.passwordComplexity}>
-            <Icon type={hasNumber ? 'green_check' : 'red_x'} />
-            <Text
-              style={
-                hasNumber
-                  ? { color: colors.textGreen }
-                  : { color: colors.textRed }
-              }
-            >
-              At least 1 number.
-            </Text>
-          </View>
-        )}
-        {password !== '' && (
-          <View style={globalStyles.passwordComplexity}>
-            <Icon type={hasLength ? 'green_check' : 'red_x'} />
-            <Text
-              style={
-                hasLength
-                  ? { color: colors.textGreen }
-                  : { color: colors.textRed }
-              }
-            >
-              At least 8 characters.
-            </Text>
-          </View>
-        )}
-      </View>
-
+      {/* <View> */}
+      {password !== '' && (
+        <View style={styles.passwordComplexity}>
+          <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
+          <Text
+            style={[
+              styles.errorText,
+              hasUppercase
+                ? { color: colors.textGreen }
+                : { color: colors.textGrey },
+            ]}
+          >
+            At least 1 uppercase letter
+          </Text>
+        </View>
+      )}
+      {password !== '' && (
+        <View style={styles.passwordComplexity}>
+          <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
+          <Text
+            style={[
+              styles.errorText,
+              hasLowercase
+                ? { color: colors.textGreen }
+                : { color: colors.textGrey },
+            ]}
+          >
+            At least 1 lowercase letter
+          </Text>
+        </View>
+      )}
+      {password !== '' && (
+        <View style={styles.passwordComplexity}>
+          <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
+          <Text
+            style={[
+              styles.errorText,
+              hasNumber
+                ? { color: colors.textGreen }
+                : { color: colors.textGrey },
+            ]}
+          >
+            At least 1 number
+          </Text>
+        </View>
+      )}
+      {password !== '' && (
+        <View style={styles.passwordComplexity}>
+          <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
+          <Text
+            style={[
+              styles.errorText,
+              hasLength
+                ? { color: colors.textGreen }
+                : { color: colors.textGrey },
+            ]}
+          >
+            At least 8 characters
+          </Text>
+        </View>
+      )}
+      {/* </View> */}
       <View>
         <Link href="/auth/login">Already have an account? Log In</Link>
         <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
@@ -168,3 +170,15 @@ function SignUpScreen() {
 }
 
 export default SignUpScreen;
+
+const styles = StyleSheet.create({
+  passwordComplexity: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 8,
+  },
+  errorText: {
+    fontSize: 12,
+    marginLeft: 8,
+  },
+});

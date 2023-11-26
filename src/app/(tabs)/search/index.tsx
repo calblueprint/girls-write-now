@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
 import { SearchBar } from '@rneui/themed';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, View, Text } from 'react-native';
+import { Button, FlatList, View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -14,13 +13,39 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 
+const getRecentSearch = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const setRecentSearch = async (searchResult: RecentSearch[]) => {
+  try {
+    const jsonValue = JSON.stringify(searchResult);
+    await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
-  const focus = useIsFocused();
+
+  useEffect(() => {
+    (async () => {
+      const data: StoryPreview[] = await fetchAllStoryPreviews();
+      setAllStories(data);
+
+      setRecentSearches(await getRecentSearch());
+    })();
+  }, []);
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -46,138 +71,122 @@ function SearchScreen() {
   const searchResultStacking = (searchString: string) => {
     if (searchString !== '') {
       const maxArrayLength = 5;
-      setRecentSearches(recentSearches.reverse());
+
+      const newRecentSearches = recentSearches;
+
       for (let i = 0; i < recentSearches.length; i++) {
         if (searchString === recentSearches[i].value) {
-          setRecentSearches(recentSearches.splice(i, 1));
+          newRecentSearches.splice(i, 1);
           break;
         }
       }
-      if (recentSearches.length >= maxArrayLength) {
-        setRecentSearches(recentSearches.splice(0, 1));
+
+      if (newRecentSearches.length >= maxArrayLength) {
+        newRecentSearches.splice(-1, 1);
       }
 
       const result: RecentSearch = {
         value: searchString,
         numResults: searchResults.length,
       };
-      setRecentSearches(recentSearches.concat(result).reverse());
+
+      newRecentSearches.splice(0, 0, result);
+
+      setRecentSearch(newRecentSearches);
+      setRecentSearches(newRecentSearches);
     }
   };
-
-  // Gets the recentSearches (Set) from Async Storage
-  const getRecentSearch = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      console.log(error); // error reading value
-    }
-  };
-
-  const setRecentSearch = async (searchResult: RecentSearch[]) => {
-    try {
-      const jsonValue = JSON.stringify(searchResult);
-      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
-    } catch (error) {
-      console.log(error); // saving error
-    }
-  };
-
-  // UseEffect upon first rendering
-  useEffect(() => {
-    (async () => {
-      const data: StoryPreview[] = await fetchAllStoryPreviews();
-      setAllStories(data);
-
-      setRecentSearches(await getRecentSearch());
-    })();
-  }, []);
-
-  useEffect(() => {
-    setRecentSearch(recentSearches);
-  }, [focus]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
-      <SearchBar
-        platform="default"
-        searchIcon={false}
-        clearIcon
-        containerStyle={styles.searchContainer}
-        inputContainerStyle={styles.inputContainer}
-        inputStyle={{ color: 'black' }}
-        leftIconContainerStyle={{}}
-        rightIconContainerStyle={{}}
-        lightTheme
-        placeholder="Search"
-        placeholderTextColor="black"
-        onChangeText={text => searchFunction(text)}
-        value={search}
-        onSubmitEditing={searchString => {
-          searchResultStacking(searchString.nativeEvent.text);
-        }}
-      />
-      <Button
-        title="Show Filter Modal"
-        onPress={() => setFilterVisible(true)}
-      />
-      {search ? (
-        <Text style={styles.searchText}>
-          Showing Results {searchResults.length}
-        </Text>
-      ) : (
-        <>
-          <View style={styles.recentSpacing}>
-            <Text style={styles.searchText}>Recent Searches</Text>
+      <View style={styles.container}>
+        <View style={styles.default}>
+          <SearchBar
+            platform="default"
+            searchIcon={false}
+            clearIcon
+            containerStyle={styles.searchContainer}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={{ color: 'black' }}
+            leftIconContainerStyle={{}}
+            rightIconContainerStyle={{}}
+            lightTheme
+            placeholder="Search"
+            placeholderTextColor="black"
+            onChangeText={text => searchFunction(text)}
+            value={search}
+            onSubmitEditing={searchString => {
+              searchResultStacking(searchString.nativeEvent.text);
+            }}
+          />
+        </View>
+        {search && (
+          <View style={styles.default}>
             <Button
-              onPress={clearRecentSearches}
-              title="Clear All"
-              color="#EB563B"
+              title="Show Filter Modal"
+              onPress={() => setFilterVisible(true)}
             />
           </View>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={recentSearches}
-            renderItem={({ item }) => (
-              <RecentSearchCard
-                key={item.value}
-                value={item.value}
-                numResults={item.numResults}
-                pressFunction={() => null} // add functionality for each recentSearch
-              />
-            )}
-          />
-        </>
-      )}
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={searchResults}
-        contentContainerStyle={{}}
-        renderItem={({ item }) => (
-          <SearchCard
-            key={item.title}
-            title={item.title}
-            image={item.featured_media}
-            author={item.author_name}
-            authorImage={item.author_image}
-            excerpt={item.excerpt}
-            tags={item.genre_medium}
-            pressFunction={() =>
-              router.push({
-                pathname: '/story',
-                params: { storyId: item.id.toString() },
-              })
-            }
-          />
         )}
-      />
-      <FilterModal
-        isVisible={filterVisible}
-        setIsVisible={setFilterVisible}
-        title="Genre"
-      />
+        {search ? (
+          <View style={styles.default}>
+            <Text style={[styles.searchText, styles.numDisplay]}>
+              {searchResults.length}{' '}
+              {searchResults.length === 1 ? 'Story' : 'Stories'}
+            </Text>
+          </View>
+        ) : (
+          <>
+            <View style={styles.recentSpacing}>
+              <Text style={styles.searchText}>Recent Searches</Text>
+              <Pressable onPress={clearRecentSearches}>
+                <Text style={styles.clearAll}>Clear All</Text>
+              </Pressable>
+            </View>
+            <FlatList
+              contentContainerStyle={styles.contentContainerRecents}
+              showsVerticalScrollIndicator={false}
+              data={recentSearches}
+              renderItem={({ item }) => (
+                <RecentSearchCard
+                  key={item.value}
+                  value={item.value}
+                  numResults={item.numResults}
+                  pressFunction={() => null} // add functionality for each recentSearch
+                />
+              )}
+            />
+          </>
+        )}
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={searchResults}
+          contentContainerStyle={styles.contentCotainerStories}
+          renderItem={({ item }) => (
+            <SearchCard
+              key={item.title}
+              title={item.title}
+              image={item.featured_media}
+              author={item.author_name}
+              authorImage={item.author_image}
+              excerpt={item.excerpt}
+              tags={item.genre_medium}
+              pressFunction={() =>
+                router.push({
+                  pathname: '/story',
+                  params: { storyId: item.id.toString() },
+                })
+              }
+            />
+          )}
+        />
+        <FilterModal
+          isVisible={filterVisible}
+          setIsVisible={setFilterVisible}
+          title="Genre"
+        />
+      </View>
     </SafeAreaView>
   );
 }

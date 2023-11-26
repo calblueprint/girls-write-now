@@ -1,16 +1,17 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
+import colors from '../../../styles/colors';
+
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
+    marginTop: 24,
     flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'flex-start',
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 20,
-    gap: 14,
+  },
+  default: {
+    marginHorizontal: 8,
   },
   searchContainer: {
     backgroundColor: 'transparent',
@@ -44,14 +45,32 @@ const styles = StyleSheet.create({
     height,
   },
   recentSpacing: {
-    justifyContent: 'space-between',
     flexDirection: 'row',
-    alignContent: 'space-between',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 0,
+    marginBottom: 8,
+    marginHorizontal: 8,
   },
   searchText: {
-    fontWeight: '300',
-    fontSize: 20,
-    paddingTop: 5,
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  numDisplay: {
+    marginTop: 24,
+    marginBottom: 8,
+  },
+  clearAll: {
+    color: colors.gwnOrange,
+    fontSize: 12,
+    fontWeight: '400',
+  },
+  contentContainerRecents: {
+    paddingHorizontal: 8,
+  },
+  contentCotainerStories: {
+    paddingHorizontal: 8,
+    paddingBottom: 24,
   },
 });
 

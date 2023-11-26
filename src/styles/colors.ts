@@ -1,7 +1,10 @@
 const colors = {
   // Primary colors
-  redPrimary: '#CC502F',
-  bluePrimary: '#356095',
+  gwnOrange: '#EB563B',
+  lilac: '#B49BC6',
+  lime: '#ACC073',
+  melanin: '#703929',
+  citrus: '#E66E3F',
 
   // Text colors
   textPrimary: '#000000', // black
@@ -13,6 +16,7 @@ const colors = {
   // Surface colors -- used for backgrounds
   darkGrey: '#D9D9D9',
   lightGrey: '#F9F9F9',
+  white: '#FEFEFA',
 
   // Shadow colors
   shadowDark: '#000000', // black

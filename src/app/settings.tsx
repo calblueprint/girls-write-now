@@ -118,7 +118,7 @@ function SettingsScreen() {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Text style={globalStyles.h1}>Settings</Text>
+      <Text style={globalStyles.h2}>Settings</Text>
       <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
         <Input label="Email" value={session?.user?.email} disabled />
       </View>

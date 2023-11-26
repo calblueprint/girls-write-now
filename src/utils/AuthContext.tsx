@@ -68,6 +68,7 @@ export function AuthContextProvider({
       .getSession()
       .then(({ data: { session: newSession } }) => {
         setSession(newSession);
+        setUser(newSession ? newSession.user : null);
       })
       .finally(() => {
         setIsLoading(false);

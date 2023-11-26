@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import Icon from '../../../../assets/icons';
+import BackButton from '../../../components/BackButton/BackButton';
 import HorizontalLine from '../../../components/HorizontalLine/HorizontalLine';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import {
@@ -30,6 +31,7 @@ function AuthorScreen() {
   const { author } = params;
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const storyData: StoryPreview[] = await fetchAuthorStoryPreviews(
         parseInt(author as string, 10),
@@ -53,8 +55,9 @@ function AuthorScreen() {
           `There was an error while trying to output author story preview info ${error}`,
         );
       }
+    })().then(() => {
       setLoading(false);
-    })();
+    });
   }, [author]);
 
   return (
@@ -62,25 +65,15 @@ function AuthorScreen() {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <ScrollView>
-          <View style={styles.backButton}>
-            <Icon type="back_icon" />
-            <TouchableOpacity
-              onPress={() => {
-                router.back();
-              }}
-            >
-              <Text>BACK</Text>
-            </TouchableOpacity>
-          </View>
-
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <BackButton pressFunction={() => router.back()} />
           <View style={styles.authorCardContainer}>
             <Image
               style={styles.image}
               source={{ uri: authorInfo ? authorInfo.image : '' }}
             />
             <View style={styles.authorTextContainer}>
-              <Text style={styles.name}>
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.name}>
                 {authorInfo ? authorInfo.name : ''}
               </Text>
               <Text style={styles.pronouns}>

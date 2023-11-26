@@ -4,6 +4,7 @@ import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   authorCardContainer: {
+    marginTop: 16,
     marginRight: 20,
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -57,13 +58,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontSize: 17,
     paddingBottom: 2,
-  },
-  backButton: {
-    paddingTop: 20,
-    paddingBottom: 15,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    color: colors.lightGrey,
   },
   storyCountText: {
     paddingTop: 10,

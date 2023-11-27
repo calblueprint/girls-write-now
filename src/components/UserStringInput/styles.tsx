@@ -10,6 +10,7 @@ export default StyleSheet.create({
     fontWeight: '400',
   },
   container: {
+    paddingRight: 10,
     marginTop: 8,
     flexDirection: 'row',
     alignItems: 'center',

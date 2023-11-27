@@ -27,6 +27,12 @@ function SignUpScreen() {
 
   const setAndCheckUsername = async (newUsername: string) => {
     setUsername(newUsername);
+
+    if (newUsername.length == 0) {
+      setUsernameError('');
+      return;
+    }
+
     const usernameCharactersValid =
       newUsername.length <= 12 &&
       newUsername.match(validUsernameCharacters) !== null;
@@ -55,6 +61,11 @@ function SignUpScreen() {
 
   const setAndCheckEmail = async (newEmail: string) => {
     setEmail(newEmail);
+    if (newEmail.length == 0) {
+      setEmailError('');
+      return;
+    }
+
     if (!validator.isEmail(email)) {
       setEmailError('This email is not a valid email. Please try again.');
       return;
@@ -149,8 +160,8 @@ function SignUpScreen() {
             loading ||
             emailError != '' ||
             usernameError != '' ||
-            !email ||
-            !username
+            email.length == 0 ||
+            username.length == 0
           }
           onPress={signUpWithEmail}
         />

@@ -2,7 +2,7 @@ import { Redirect, Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Input } from 'react-native-elements'
+import { Button, Input } from 'react-native-elements';
 import validator from 'validator';
 
 import StyledButton from '../../components/StyledButton/StyledButton';
@@ -10,7 +10,7 @@ import UserStringInput from '../../components/UserStringInput/UserStringInput';
 
 import Icon from '../../../assets/icons';
 import colors from '../../styles/colors';
-      
+
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
@@ -29,7 +29,7 @@ function SignUpScreen() {
   const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
   const validUsernameCharacters = /^\w+$/g;
-  
+
   const [passwordComplexity, setPasswordComplexity] = useState(false);
   const [hasUppercase, setHasUppercase] = useState(false);
   const [hasLowercase, setHasLowercase] = useState(false);
@@ -273,11 +273,14 @@ function SignUpScreen() {
         <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
           <Button
             title="Sign Up"
-            disabled={!passwordComplexity || loading ||
-            emailError != '' ||
-            usernameError != '' ||
-            email.length == 0 ||
-            username.length == 0}
+            disabled={
+              !passwordComplexity ||
+              loading ||
+              emailError != '' ||
+              usernameError != '' ||
+              email.length == 0 ||
+              username.length == 0
+            }
             onPress={signUpWithEmail}
           />
         </View>
@@ -313,7 +316,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
-},
+  },
   passwordComplexity: {
     display: 'flex',
     flexDirection: 'row',

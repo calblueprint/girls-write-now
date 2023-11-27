@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   contentCardContainer: {
     marginRight: 20,
+    paddingBottom: 20,
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
@@ -16,12 +17,14 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject, // This makes the overlay cover the entire parent container
     justifyContent: 'flex-end',
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   overlayText: {
     color: 'white',
-    paddingBottom: 20,
+    paddingTop: 60,
+    paddingRight: 10,
     whiteSpace: 'pre-wrap',
+    fontSize: 12.5,
   },
 });
 

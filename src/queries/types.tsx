@@ -44,8 +44,13 @@ export interface StoryCard {
   featured_media: string;
 }
 
+export interface Subgenre {
+  id: number;
+  name: string;
+}
+
 export interface Genre {
   parent_id: number;
   parent_name: string;
-  subgenre: string;
+  subgenres: Subgenre[];
 }

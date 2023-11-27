@@ -14,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
 import LandingCard from '../../../components/LandingCard/LandingCard';
-import LandingScrollView from '../../../components/LandingScrollView/LandingScrollView';
 import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
@@ -22,10 +21,15 @@ import { StoryPreview, Genre } from '../../../queries/types';
 
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
-  const [allGenres, setAllGenres] = useState<Genre>();
+  const [allGenres, setAllGenres] = useState<Genre[]>([]);
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
+
+  const getColor = (index: number) => {
+    const genreColors = ['#E66E3F', '#ACC073', '#B49BC6'];
+    return genreColors[index % genreColors.length];
+  };
 
   const searchFunction = (text: string) => {
     if (text === '') {
@@ -47,7 +51,8 @@ function SearchScreen() {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
-      const genreData: Genre = await fetchGenres();
+      const genreData: Genre[] = await fetchGenres();
+      console.log('testing use effect fetch of genre data:', genreData);
       setAllGenres(genreData);
     })();
   }, []);
@@ -76,33 +81,32 @@ function SearchScreen() {
         onPress={() => setFilterVisible(true)}
       />
 
-      <LandingScrollView main_genre="Fiction">
-        <LandingCard cardColor="lime" />
-        <LandingCard cardColor="lime" />
-        <LandingCard cardColor="lime" />
-      </LandingScrollView>
-      {/* <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        style={styles.scrollView}
-      >
-        <LandingCard genre_medium="Childrens Fiction" cardColor="lime" />
-        <LandingCard genre_medium="Childrens Fiction" />
-        <LandingCard genre_medium="Childrens Fiction" />
-        <LandingCard genre_medium="Childrens Fiction" />
+      <ScrollView>
+        {allGenres.map((genre, index) => (
+          <View>
+            <View style={styles.genreText}>
+              <Text style={styles.parentName}>{genre.parent_name}</Text>
+              <Text style={styles.seeAll}>See All</Text>
+            </View>
+            <View style={styles.scrollView}>
+              <ScrollView
+                horizontal
+                showsVerticalScrollIndicator
+                bounces={false}
+                contentContainerStyle={{ paddingHorizontal: 8 }}
+              >
+                {genre.subgenres.map(subgenre => (
+                  <LandingCard
+                    subgenres={subgenre.name}
+                    cardColor={getColor(index)}
+                    pressFunction={() => null}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+          </View>
+        ))}
       </ScrollView>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        style={styles.scrollView}
-      >
-        <LandingCard genre_medium="Childrens Fiction" />
-        <LandingCard genre_medium="Childrens Fiction" />
-        <LandingCard />
-      </ScrollView> */}
 
       <FlatList
         showsVerticalScrollIndicator={false}

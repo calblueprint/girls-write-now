@@ -56,6 +56,7 @@ function SearchScreen() {
       setRecentSearches(await getRecentSearch());
     })();
   }, []);
+  const [showGenreCarousals, setShowGenreCarousals] = useState(true);
 
   const getColor = (index: number) => {
     const genreColors = ['#E66E3F', '#ACC073', '#B49BC6'];
@@ -76,6 +77,7 @@ function SearchScreen() {
     });
     setSearch(text);
     setSearchResults(updatedData);
+    setShowGenreCarousals(false);
   };
 
   const clearRecentSearches = () => {
@@ -110,6 +112,11 @@ function SearchScreen() {
       setRecentSearch(newRecentSearches);
       setRecentSearches(newRecentSearches);
     }
+  };
+
+  const handleCancelButtonPress = () => {
+    setSearchResults([]);
+    setShowGenreCarousals(true);
   };
 
   return (

@@ -102,8 +102,20 @@ export interface Story {
   link: string;
 }
 
+export interface StoryCard {
+  id: number;
+  title: string;
+  author_name: string;
+  featured_media: string;
+}
+
+export interface Subgenre {
+  id: number;
+  name: string;
+}
+
 export interface Genre {
   parent_id: number;
   parent_name: string;
-  subgenre: string;
+  subgenres: Subgenre[];
 }

@@ -73,8 +73,22 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   scrollView: {
-    marginBottom: 20,
     flexGrow: 0,
+  },
+
+  genreText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  parentName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingBottom: 10,
+    paddingLeft: 10,
+  },
+  seeAll: {
+    color: '#2D2D2D',
+    textDecorationLine: 'underline',
   },
 });
 

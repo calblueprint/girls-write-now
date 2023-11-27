@@ -25,6 +25,7 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
+  const [showGenreCarousals, setShowGenreCarousals] = useState(true);
 
   const getColor = (index: number) => {
     const genreColors = ['#E66E3F', '#ACC073', '#B49BC6'];
@@ -45,6 +46,7 @@ function SearchScreen() {
     });
     setSearch(text);
     setSearchResults(updatedData);
+    setShowGenreCarousals(false);
   };
 
   useEffect(() => {
@@ -57,11 +59,17 @@ function SearchScreen() {
     })();
   }, []);
 
+  const handleCancelButtonPress = () => {
+    setSearchResults([]);
+    setShowGenreCarousals(true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
       <SearchBar
-        platform="default"
+        platform="ios"
+        onCancel={() => handleCancelButtonPress()}
         searchIcon={false}
         clearIcon
         containerStyle={styles.searchContainer}
@@ -69,72 +77,75 @@ function SearchScreen() {
         inputStyle={{ color: 'black' }}
         leftIconContainerStyle={{}}
         rightIconContainerStyle={{}}
-        lightTheme
+        // lightTheme
         loadingProps={{}}
         placeholder="Search"
         placeholderTextColor="black"
         onChangeText={text => searchFunction(text)}
         value={search}
       />
-      <Button
+      {/* <Button
         title="Show Filter Modal"
         onPress={() => setFilterVisible(true)}
-      />
-
-      <ScrollView>
-        {allGenres.map((genre, index) => (
-          <View>
-            <View style={styles.genreText}>
-              <Text style={styles.parentName}>{genre.parent_name}</Text>
-              <Text style={styles.seeAll}>See All</Text>
+      /> */}
+      {showGenreCarousals ? (
+        <ScrollView>
+          {allGenres.map((genre, index) => (
+            <View>
+              <View style={styles.genreText}>
+                <Text style={styles.parentName}>{genre.parent_name}</Text>
+                <Text style={styles.seeAll}>See All</Text>
+              </View>
+              <View style={styles.scrollView}>
+                <ScrollView
+                  horizontal
+                  showsVerticalScrollIndicator
+                  bounces={false}
+                  contentContainerStyle={{ paddingHorizontal: 8 }}
+                >
+                  {genre.subgenres.map(subgenre => (
+                    <LandingCard
+                      subgenres={subgenre.name}
+                      cardColor={getColor(index)}
+                      pressFunction={() => null}
+                    />
+                  ))}
+                </ScrollView>
+              </View>
             </View>
-            <View style={styles.scrollView}>
-              <ScrollView
-                horizontal
-                showsVerticalScrollIndicator
-                bounces={false}
-                contentContainerStyle={{ paddingHorizontal: 8 }}
-              >
-                {genre.subgenres.map(subgenre => (
-                  <LandingCard
-                    subgenres={subgenre.name}
-                    cardColor={getColor(index)}
-                    pressFunction={() => null}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={searchResults}
-        contentContainerStyle={{}}
-        renderItem={({ item }) => (
-          <SearchCard
-            key={item.title}
-            title={item.title}
-            image={item.featured_media}
-            author={item.author_name}
-            authorImage={item.author_image}
-            excerpt={item.excerpt}
-            tags={item.genre_medium}
-            pressFunction={() =>
-              router.push({
-                pathname: '/story',
-                params: { storyId: item.id.toString() },
-              })
-            }
+          ))}
+        </ScrollView>
+      ) : (
+        <View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={searchResults}
+            contentContainerStyle={{}}
+            renderItem={({ item }) => (
+              <SearchCard
+                key={item.title}
+                title={item.title}
+                image={item.featured_media}
+                author={item.author_name}
+                authorImage={item.author_image}
+                excerpt={item.excerpt}
+                tags={item.genre_medium}
+                pressFunction={() =>
+                  router.push({
+                    pathname: '/story',
+                    params: { storyId: item.id.toString() },
+                  })
+                }
+              />
+            )}
           />
-        )}
-      />
-      <FilterModal
-        isVisible={filterVisible}
-        setIsVisible={setFilterVisible}
-        title="Genre"
-      />
+          <FilterModal
+            isVisible={filterVisible}
+            setIsVisible={setFilterVisible}
+            title="Genre"
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }

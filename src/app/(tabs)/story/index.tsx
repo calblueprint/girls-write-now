@@ -15,10 +15,11 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import { storyObject } from '../../../utils/story';
+import { fetchStory } from '../../../queries/stories';
+import { Story } from '../../../queries/types';
 
-const navigation = useNavigation();
-const router = useRouter();
+// eslint-disable-next-line react-hooks/rules-of-hooks
+// const router = useRouter();
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);

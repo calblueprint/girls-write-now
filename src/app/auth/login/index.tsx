@@ -1,11 +1,12 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
+import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import StyledButton from '../../../components/StyledButton/StyledButton';

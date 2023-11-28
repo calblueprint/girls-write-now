@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     height: 48,
-    backgroundColor: colors.lightGrey,
+    backgroundColor: colors.grey,
     overflow: 'hidden',
     borderRadius: 6,
     paddingHorizontal: 12,

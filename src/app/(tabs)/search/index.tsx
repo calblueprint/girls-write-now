@@ -114,7 +114,7 @@ function SearchScreen() {
             rightIconContainerStyle={{}}
             lightTheme
             placeholder="What do you want to read?"
-            placeholderTextColor={colors.textGrey}
+            placeholderTextColor={colors.grey}
             onChangeText={text => searchFunction(text)}
             value={search}
             onSubmitEditing={searchString => {

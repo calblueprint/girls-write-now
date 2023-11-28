@@ -57,13 +57,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 16,
     marginTop: 12,
-    marginBottom: 8,
+    // marginBottom: 8,
   },
   authorContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 12,
   },
   title: {
     marginBottom: 8,
@@ -78,7 +77,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   tagsContainer: {
-    // backgroundColor: colors.darkGrey,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',

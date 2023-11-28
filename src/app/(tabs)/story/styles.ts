@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import colors from '../../../styles/colors';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -22,11 +24,6 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 2,
   },
   title: {
-    fontFamily: 'Avenir',
-    fontSize: 24,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
     marginBottom: 16,
   },
   author: {
@@ -34,13 +31,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginBottom: 16,
-  },
-  authorText: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
   },
   genres: {
     display: 'flex',
@@ -58,61 +48,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 8,
   },
-  genresText: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '400',
-    color: 'black',
-    backgroundColor: '#D9D9D9',
-  },
-  shareButtonText: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
-    textDecorationLine: 'underline',
-    backgroundColor: '#D9D9D9',
-  },
   excerpt: {
-    fontFamily: 'Avenir',
-    fontSize: 16,
-    fontWeight: '400',
+    fontFamily: 'Manrope-Regular',
+    fontSize: 18,
     textAlign: 'left',
-    color: 'black',
+    color: colors.textPrimary,
     paddingTop: 16,
     paddingBottom: 16,
   },
   story: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '400',
+    fontFamily: 'Manrope-Regular',
+    fontSize: 14,
     textAlign: 'left',
-    color: 'black',
-    marginBottom: 16,
-  },
-  authorProcess: {
-    fontFamily: 'Avenir',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'left',
-    color: 'black',
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   process: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '400',
+    fontFamily: 'Manrope-Regular',
+    fontSize: 14,
     textAlign: 'left',
-    color: 'black',
+    color: colors.textPrimary,
     marginBottom: 16,
-  },
-  backToTopButtonText: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '800',
-    textAlign: 'left',
-    color: 'black',
   },
 });
 

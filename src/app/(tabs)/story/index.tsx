@@ -15,7 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import { fetchStory } from '../../../queries/stories';
-import { Story } from '../../../queries/types';
+import { Story, systemFonts } from '../../../queries/types';
+import globalStyles from '../../../styles/globalStyles';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -70,14 +71,14 @@ function StoryScreen() {
         >
           <Image style={styles.image} source={{ uri: story.featured_media }} />
 
-          <Text style={styles.title}>{story?.title}</Text>
+          <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
 
           <View style={styles.author}>
             <Image
               style={styles.authorImage}
               source={{ uri: story.author_image }}
             />
-            <Text style={styles.authorText}>By {story.author_name}</Text>
+            <Text style={globalStyles.body1}>{story.author_name}</Text>
           </View>
 
           <View>
@@ -87,7 +88,7 @@ function StoryScreen() {
               data={story.genre_medium}
               renderItem={({ item }) => (
                 <View style={styles.genresBorder}>
-                  <Text style={styles.genresText}>{item}</Text>
+                  <Text style={globalStyles.button1}>{item}</Text>
                 </View>
               )}
             />
@@ -99,13 +100,21 @@ function StoryScreen() {
               onPress={onShare}
               style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
             >
-              <Text style={styles.shareButtonText}>Share Story</Text>
+              <Text style={globalStyles.bodyUnderline}>Share Story</Text>
             </Button>
           </View>
 
-          <RenderHTML source={story.excerpt} baseStyle={styles.excerpt} />
+          <RenderHTML
+            source={story.excerpt}
+            baseStyle={styles.excerpt}
+            systemFonts={systemFonts}
+          />
 
-          <RenderHTML source={story.content} baseStyle={styles.story} />
+          <RenderHTML
+            source={story.content}
+            baseStyle={styles.story}
+            systemFonts={systemFonts}
+          />
 
           <Button
             textColor="black"
@@ -114,19 +123,23 @@ function StoryScreen() {
             onPress={onShare}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={styles.shareButtonText}>Share Story</Text>
+            <Text style={globalStyles.bodyUnderline}>Share Story</Text>
           </Button>
 
-          <Text style={styles.authorProcess}>Author's Process</Text>
+          <Text style={globalStyles.h3}>Author's Process</Text>
 
-          <RenderHTML source={story.process} baseStyle={styles.process} />
+          <RenderHTML
+            source={story.process}
+            baseStyle={styles.process}
+            systemFonts={systemFonts}
+          />
 
           <View style={styles.author}>
             <Image
               style={styles.authorImage}
               source={{ uri: story.author_image }}
             />
-            <Text style={styles.authorText}>By {story.author_name}</Text>
+            <Text style={globalStyles.body1}>{story.author_name}</Text>
           </View>
 
           <Button
@@ -135,7 +148,7 @@ function StoryScreen() {
             onPress={scrollUp}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={styles.backToTopButtonText}>Back To Top</Text>
+            <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
           </Button>
         </ScrollView>
       )}

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   numResultsText: {
     fontFamily: 'Manrope-Regular',
     fontSize: 10,
-    color: colors.textGrey,
+    color: colors.grey,
   },
 });
 

@@ -100,8 +100,8 @@ function SignUpScreen() {
             style={[
               styles.errorText,
               hasUppercase
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
+                ? { color: colors.moss }
+                : { color: colors.darkGrey },
             ]}
           >
             At least 1 uppercase letter
@@ -115,8 +115,8 @@ function SignUpScreen() {
             style={[
               styles.errorText,
               hasLowercase
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
+                ? { color: colors.moss }
+                : { color: colors.darkGrey },
             ]}
           >
             At least 1 lowercase letter
@@ -129,9 +129,7 @@ function SignUpScreen() {
           <Text
             style={[
               styles.errorText,
-              hasNumber
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
+              hasNumber ? { color: colors.moss } : { color: colors.darkGrey },
             ]}
           >
             At least 1 number
@@ -144,9 +142,7 @@ function SignUpScreen() {
           <Text
             style={[
               styles.errorText,
-              hasLength
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
+              hasLength ? { color: colors.moss } : { color: colors.darkGrey },
             ]}
           >
             At least 8 characters

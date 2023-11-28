@@ -1,3 +1,9 @@
+export const systemFonts = [
+  'Manrope-Regular',
+  'Manrope-SemiBold',
+  'Manrope-Bold',
+];
+
 export interface StoryPreview {
   id: number;
   date: string;

@@ -23,24 +23,6 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 
-const getRecentSearch = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const setRecentSearch = async (searchResult: RecentSearch[]) => {
-  try {
-    const jsonValue = JSON.stringify(searchResult);
-    await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
@@ -48,16 +30,35 @@ function SearchScreen() {
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
+  const [showGenreCarousals, setShowGenreCarousals] = useState(true);
+
+  const getRecentSearch = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const setRecentSearch = async (searchResult: RecentSearch[]) => {
+    try {
+      const jsonValue = JSON.stringify(searchResult);
+      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     (async () => {
       const data: StoryPreview[] = await fetchAllStoryPreviews();
       setAllStories(data);
-
+      const genreData: Genre[] = await fetchGenres();
+      setAllGenres(genreData);
       setRecentSearches(await getRecentSearch());
     })();
   }, []);
-  const [showGenreCarousals, setShowGenreCarousals] = useState(true);
 
   const getColor = (index: number) => {
     const genreColors = ['#E66E3F', '#ACC073', '#B49BC6'];
@@ -84,6 +85,7 @@ function SearchScreen() {
   const clearRecentSearches = () => {
     setRecentSearches([]);
     setRecentSearch([]);
+    setShowGenreCarousals(true);
   };
 
   const searchResultStacking = (searchString: string) => {
@@ -126,7 +128,8 @@ function SearchScreen() {
       <View style={styles.container}>
         <View style={styles.default}>
           <SearchBar
-            platform="default"
+            platform="ios"
+            onCancel={() => handleCancelButtonPress()}
             searchIcon={false}
             clearIcon
             containerStyle={styles.searchContainer}
@@ -134,7 +137,6 @@ function SearchScreen() {
             inputStyle={{ color: 'black' }}
             leftIconContainerStyle={{}}
             rightIconContainerStyle={{}}
-            lightTheme
             placeholder="Search"
             placeholderTextColor="black"
             onChangeText={text => searchFunction(text)}
@@ -182,28 +184,59 @@ function SearchScreen() {
             />
           </>
         )}
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={searchResults}
-          contentContainerStyle={styles.contentCotainerStories}
-          renderItem={({ item }) => (
-            <SearchCard
-              key={item.title}
-              title={item.title}
-              image={item.featured_media}
-              author={item.author_name}
-              authorImage={item.author_image}
-              excerpt={item.excerpt}
-              tags={item.genre_medium}
-              pressFunction={() =>
-                router.push({
-                  pathname: '/story',
-                  params: { storyId: item.id.toString() },
-                })
-              }
-            />
-          )}
-        />
+
+        {showGenreCarousals ? (
+          <ScrollView>
+            {allGenres.map((genre, index) => (
+              <View>
+                <View style={styles.genreText}>
+                  <Text style={styles.parentName}>{genre.parent_name}</Text>
+                  <Text style={styles.seeAll}>See All</Text>
+                </View>
+                <View style={styles.scrollView}>
+                  <ScrollView
+                    horizontal
+                    showsVerticalScrollIndicator
+                    bounces={false}
+                    contentContainerStyle={{ paddingHorizontal: 8 }}
+                  >
+                    {genre.subgenres.map(subgenre => (
+                      <LandingCard
+                        subgenres={subgenre.name}
+                        cardColor={getColor(index)}
+                        pressFunction={() => null}
+                      />
+                    ))}
+                  </ScrollView>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={searchResults}
+            contentContainerStyle={styles.contentCotainerStories}
+            renderItem={({ item }) => (
+              <SearchCard
+                key={item.title}
+                title={item.title}
+                image={item.featured_media}
+                author={item.author_name}
+                authorImage={item.author_image}
+                excerpt={item.excerpt}
+                tags={item.genre_medium}
+                pressFunction={() =>
+                  router.push({
+                    pathname: '/story',
+                    params: { storyId: item.id.toString() },
+                  })
+                }
+              />
+            )}
+          />
+        )}
+
         <FilterModal
           isVisible={filterVisible}
           setIsVisible={setFilterVisible}

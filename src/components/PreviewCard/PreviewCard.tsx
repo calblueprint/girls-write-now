@@ -5,8 +5,10 @@ import {
   Text,
   View,
 } from 'react-native';
+import RenderHTML from 'react-native-render-html';
 
 import styles from './styles';
+import { systemFonts } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
 
 type PreviewCardProps = {
@@ -34,7 +36,7 @@ function PreviewCard({
         <View style={styles.top}>
           <Image style={styles.image} source={{ uri: image }} />
           <View style={styles.cardTextContainer}>
-            <Text numberOfLines={1} style={[globalStyles.h4, styles.title]}>
+            <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
               {title}
             </Text>
             <View style={styles.authorContainer}>
@@ -46,9 +48,12 @@ function PreviewCard({
                 {author}
               </Text>
             </View>
-            <Text numberOfLines={2} style={[globalStyles.body3]}>
-              {excerpt.html.slice(3, -3)}
-            </Text>
+            <RenderHTML
+              source={excerpt}
+              baseStyle={globalStyles.body1}
+              systemFonts={systemFonts}
+              defaultTextProps={{ numberOfLines: 2 }}
+            />
           </View>
         </View>
         {/* <View style={styles.bottom}>

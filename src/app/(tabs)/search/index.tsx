@@ -11,6 +11,7 @@ import SearchCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch } from '../../../queries/types';
+import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 
 const getRecentSearch = async () => {
@@ -108,12 +109,12 @@ function SearchScreen() {
             clearIcon
             containerStyle={styles.searchContainer}
             inputContainerStyle={styles.inputContainer}
-            inputStyle={{ color: 'black' }}
+            inputStyle={globalStyles.sh3}
             leftIconContainerStyle={{}}
             rightIconContainerStyle={{}}
             lightTheme
-            placeholder="Search"
-            placeholderTextColor="black"
+            placeholder="What do you want to read?"
+            placeholderTextColor={colors.textGrey}
             onChangeText={text => searchFunction(text)}
             value={search}
             onSubmitEditing={searchString => {
@@ -131,7 +132,7 @@ function SearchScreen() {
         )}
         {search ? (
           <View style={styles.default}>
-            <Text style={[styles.searchText, styles.numDisplay]}>
+            <Text style={[globalStyles.sh2, styles.numDisplay]}>
               {searchResults.length}{' '}
               {searchResults.length === 1 ? 'Story' : 'Stories'}
             </Text>
@@ -139,9 +140,11 @@ function SearchScreen() {
         ) : (
           <>
             <View style={styles.recentSpacing}>
-              <Text style={styles.searchText}>Recent Searches</Text>
+              <Text style={globalStyles.sh2}>Recent Searches</Text>
               <Pressable onPress={clearRecentSearches}>
-                <Text style={styles.clearAll}>Clear All</Text>
+                <Text style={[globalStyles.sh3, { color: colors.gwnOrange }]}>
+                  Clear All
+                </Text>
               </Pressable>
             </View>
             <FlatList

@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import colors from '../../styles/colors';
+
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
@@ -28,17 +30,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  searchValueText: {
-    color: 'black',
-    fontWeight: '400',
-    fontSize: 14,
-    justifyContent: 'center',
-  },
   numResultsText: {
-    color: '#A7A5A5',
-    fontWeight: '400',
+    fontFamily: 'Manrope-Regular',
     fontSize: 10,
-    justifyContent: 'center',
+    color: colors.textGrey,
   },
 });
 

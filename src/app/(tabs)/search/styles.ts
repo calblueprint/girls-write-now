@@ -52,10 +52,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginHorizontal: 8,
   },
-  searchText: {
-    fontWeight: '500',
-    fontSize: 14,
-  },
   numDisplay: {
     marginTop: 24,
     marginBottom: 8,

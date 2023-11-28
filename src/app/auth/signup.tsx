@@ -149,8 +149,15 @@ function SignUpScreen() {
   };
 
   return (
-    <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
-      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+    <SafeAreaView
+      style={[globalStyles.authContainer]}
+      edges={['right', 'left', 'top']}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        // bounces={false}
+        contentContainerStyle={styles.flex}
+      >
         <View style={styles.inputs}>
           <Text style={styles.title}>
             {'Read stories from \nyoung creators'}
@@ -268,7 +275,7 @@ function SignUpScreen() {
           </View>
         )}
 
-        <View>
+        <View style={styles.navigation}>
           <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <StyledButton
               text="Sign Up"
@@ -299,6 +306,8 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
   flex: {
+    flexGrow: 1,
+    flexDirection: 'column',
     justifyContent: 'space-between',
   },
   inputError: {
@@ -339,5 +348,8 @@ const styles = StyleSheet.create({
   },
   inputs: {
     paddingBottom: 8,
+  },
+  navigation: {
+    // marginTop: 'auto',
   },
 });

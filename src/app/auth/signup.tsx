@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -26,6 +26,7 @@ function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
+  let lastUsernameCheck = useRef(Date.now());
   const validUsernameCharacters = /^\w+$/g;
 
   const [passwordComplexity, setPasswordComplexity] = useState(false);
@@ -43,6 +44,8 @@ function SignUpScreen() {
   }, [hasUppercase, hasLowercase, hasNumber, hasLength]);
 
   const setAndCheckUsername = async (newUsername: string) => {
+    const start = Date.now();
+    lastUsernameCheck.current = start;
     setUsername(newUsername);
 
     if (newUsername.length === 0) {
@@ -67,6 +70,10 @@ function SignUpScreen() {
       .limit(1)
       .eq('username', newUsername);
     const usernameIsTaken = (count ?? 0) >= 1;
+
+    if (lastUsernameCheck.current !== start) {
+      return;
+    }
 
     if (usernameIsTaken) {
       setUsernameError('That username is not available. Please try again.');
@@ -165,6 +172,7 @@ function SignUpScreen() {
 
           <UserStringInput
             placeholder="Username"
+            label="Username"
             onChange={setAndCheckUsername}
             value={username}
           />
@@ -174,16 +182,19 @@ function SignUpScreen() {
 
           <UserStringInput
             placeholder="First Name"
+            label="First Name"
             onChange={setFirstName}
             value={firstName}
           />
           <UserStringInput
             placeholder="Last Name"
+            label="Last Name"
             onChange={setLastName}
             value={lastName}
           />
           <UserStringInput
             placeholder="Email"
+            label="Email"
             onChange={setAndCheckEmail}
             value={email}
             attributes={{
@@ -195,6 +206,7 @@ function SignUpScreen() {
 
           <UserStringInput
             placeholder="Password"
+            label="Password"
             onChange={text => {
               setPassword(text);
               checkPassword(text);

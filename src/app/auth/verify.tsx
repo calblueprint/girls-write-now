@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, TextInput, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
@@ -42,9 +43,8 @@ function VerificationScreen() {
     setLoading(true);
 
     if (user?.email) {
-      const { error, data } = await resendVerification(user.email);
+      const { error } = await resendVerification(user.email);
 
-      console.log(data);
       if (error) Alert.alert(error.message);
       else Alert.alert(`Verification email sent to ${user.email}.`);
     } else {
@@ -55,7 +55,7 @@ function VerificationScreen() {
   };
 
   return (
-    <View style={globalStyles.auth_container}>
+    <SafeAreaView style={[globalStyles.authContainer, styles.container]}>
       <TextInput
         style={styles.input}
         keyboardType="numeric"
@@ -65,18 +65,18 @@ function VerificationScreen() {
         maxLength={6}
       />
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]} />
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]} />
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Resend code" disabled={loading} onPress={resendCode} />
       </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button
           title="Verify Account"
           disabled={loading}
           onPress={verifyAccount}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -89,5 +89,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 10,
     padding: 5,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  container: {
+    justifyContent: 'flex-start',
   },
 });

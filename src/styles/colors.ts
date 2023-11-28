@@ -1,6 +1,7 @@
 const colors = {
   // Primary colors
   gwnOrange: '#EB563B',
+  gwnOrangeDisabled: 'rgba(235, 86, 59, 0.4)',
   lilac: '#B49BC6',
   lime: '#ACC073',
   melanin: '#703929',

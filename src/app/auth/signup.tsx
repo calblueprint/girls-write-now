@@ -1,7 +1,8 @@
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
-import { Button, Input, Icon as RNEIcon } from 'react-native-elements';
+import { Icon as RNEIcon } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
@@ -12,7 +13,6 @@ import colors from '../../styles/colors';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
-import { ScrollView } from 'react-native-gesture-handler';
 
 function SignUpScreen() {
   const { signUp } = useSession();

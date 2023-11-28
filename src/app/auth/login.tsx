@@ -106,7 +106,7 @@ function LoginScreen() {
         <View>
           <StyledButton
             text="Log In"
-            disabled={loading || emailOrUsername == '' || password == ''}
+            disabled={loading || emailOrUsername === '' || password === ''}
             onPress={signIn}
           />
         </View>

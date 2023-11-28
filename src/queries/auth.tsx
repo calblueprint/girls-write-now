@@ -9,7 +9,7 @@ export const isEmailUsed = async (email: string) => {
   console.log(count);
   console.log(email);
 
-  return count != 0;
+  return count !== 0;
 };
 
 export const queryEmailByUsername = async (username: string) => {

@@ -8,4 +8,12 @@ export default StyleSheet.create({
     marginTop: 10,
     padding: 5,
   },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  container: {
+    justifyContent: 'flex-start',
+  },
 });

@@ -1,16 +1,22 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, View } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Text, View, StyleSheet } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import validator from 'validator';
 
 import styles from './styles';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 
 function LoginScreen() {
   const sessionHandler = useSession();
-  const [email, setEmail] = useState('');
+  const [emailOrUsername, setEmailOrUsername] = useState('');
+  const [error, setError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const resetAndPushToRouter = (path: string) => {
@@ -20,44 +26,99 @@ function LoginScreen() {
     router.replace(path);
   };
 
-  const signInWithEmail = async () => {
+  const signIn = async () => {
     setLoading(true);
+
+    let email;
+    if (validator.isEmail(emailOrUsername)) {
+      email = emailOrUsername;
+
+      const used = await isEmailUsed(email);
+
+      if (!used) {
+        setError(
+          'An account with that email does not exist. Please try again.',
+        );
+        setLoading(false);
+        return;
+      }
+    } else {
+      const { data, error } = await queryEmailByUsername(emailOrUsername);
+
+      if (data && data?.length > 0 && !error) {
+        email = data[0].email;
+      } else {
+        setError(
+          'An account with that username does not exist. Please try again.',
+        );
+        setLoading(false);
+        return;
+      }
+    }
     const { error } = await sessionHandler.signInWithEmail(email, password);
 
-    if (error) Alert.alert(error.message);
+    if (error)
+      setError('The username and/or password is incorrect. Please try again.');
     else resetAndPushToRouter('/home');
+
     setLoading(false);
   };
 
   return (
-    <View style={globalStyles.auth_container}>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Input
-          label="Email"
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={text => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize="none"
+    <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
+      <View>
+        <Text style={styles.title}>{'Read stories from \nyoung creators'}</Text>
+
+        <UserStringInput
+          placeholder="Email or Username"
+          label="Email or Username"
+          onChange={setEmailOrUsername}
+          value={emailOrUsername}
+          attributes={{
+            textContentType: 'emailAddress',
+          }}
         />
-      </View>
-      <View style={globalStyles.verticallySpaced}>
-        <Input
+        <UserStringInput
           label="Password"
-          leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={text => setPassword(text)}
-          value={password}
-          secureTextEntry
           placeholder="Password"
-          autoCapitalize="none"
-        />
+          onChange={setPassword}
+          value={password}
+          attributes={{
+            textContentType: 'password',
+            secureTextEntry: passwordTextHidden,
+          }}
+        >
+          <Icon
+            name={passwordTextHidden ? 'visibility-off' : 'visibility'}
+            type="material"
+            style={styles.icon}
+            onPress={() => setPasswordTextHidden(!passwordTextHidden)}
+          />
+        </UserStringInput>
+
+        <Link style={styles.forgotPassword} href="/auth/forgotPassword">
+          Forgot password?
+        </Link>
+        {error && <Text style={styles.error}>{error}</Text>}
       </View>
-      <Link href="/auth/forgotPassword">Forgot password?</Link>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Log In" disabled={loading} onPress={signInWithEmail} />
+
+      <View>
+        <View>
+          <StyledButton
+            text="Log In"
+            disabled={loading || emailOrUsername === '' || password === ''}
+            onPress={signIn}
+          />
+        </View>
+
+        <Text style={styles.redirectText}>
+          Don&apos;t have an account?{' '}
+          <Link style={styles.link} href="/auth/signup">
+            Sign Up
+          </Link>
+        </Text>
       </View>
-      <Link href="/auth/signup">Don&apos;t have an account? Sign Up</Link>
-    </View>
+    </SafeAreaView>
   );
 }
 

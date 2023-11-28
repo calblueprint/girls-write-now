@@ -1,11 +1,12 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Alert, Platform } from 'react-native';
+import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import UserStringInput from '../components/UserStringInput';
+import StyledButton from '../components/StyledButton/StyledButton';
+import UserStringInput from '../components/UserStringInput/UserStringInput';
 import globalStyles from '../styles/globalStyles';
 import { useSession } from '../utils/AuthContext';
 import supabase from '../utils/supabase';
@@ -118,23 +119,31 @@ function SettingsScreen() {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Text style={globalStyles.h2}>Settings</Text>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Input label="Email" value={session?.user?.email} disabled />
-      </View>
+      <Text style={globalStyles.h1}>Settings</Text>
       <UserStringInput
-        label="First Name"
+        placeholder="Email"
+        value={session?.user?.email ?? ''}
+        attributes={{
+          editable: false,
+        }}
+      />
+      <UserStringInput
+        placeholder="First Name"
         value={firstName}
         onChange={setFirstName}
       />
       <UserStringInput
-        label="Last Name"
+        placeholder="Last Name"
         value={lastName}
         onChange={setLastName}
       />
-      <UserStringInput label="Gender" value={gender} onChange={setGender} />
       <UserStringInput
-        label="Race/Ethnicity"
+        placeholder="Gender"
+        value={gender}
+        onChange={setGender}
+      />
+      <UserStringInput
+        placeholder="Race/Ethnicity"
         value={raceEthnicity}
         onChange={setRaceEthnicity}
       />
@@ -158,16 +167,22 @@ function SettingsScreen() {
           }}
         />
       )}
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-        <Button
-          title={loading ? 'Loading ...' : 'Update profile'}
-          onPress={updateProfile}
-          disabled={loading}
-        />
-        <Button title="Sign Out" onPress={signOut} />
-      </View>
+      <StyledButton
+        text={loading ? 'Loading ...' : 'Update profile'}
+        onPress={updateProfile}
+        disabled={loading}
+      />
+      <StyledButton text="Sign Out" onPress={signOut} disabled={false} />
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+});
 
 export default SettingsScreen;

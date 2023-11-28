@@ -9,9 +9,11 @@ export default StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
   },
-  auth_container: {
-    marginTop: 40,
-    padding: 12,
+  authContainer: {
+    marginHorizontal: 38,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   h1: {
     // fontFamily: 'DMSans-Bold',
@@ -63,11 +65,6 @@ export default StyleSheet.create({
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
   },
   mt20: {
     marginTop: 20,

@@ -6,17 +6,15 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    // alignItems: 'stretch',
     backgroundColor: colors.white,
     borderRadius: 6,
-    // height: 166,
-    // paddingLeft: 12,
-    // paddingRight: 12,
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 8,
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
     elevation: 4,
+    paddingRight: 8,
   },
   top: {
     flex: 1,
@@ -36,7 +34,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 6,
     paddingHorizontal: 12,
-    // paddingVertical: 12,
     paddingTop: 8,
   },
   image: {

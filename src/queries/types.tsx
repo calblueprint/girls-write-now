@@ -34,3 +34,7 @@ export interface StoryCard {
   author_name: string;
   featured_media: string;
 }
+export interface RecentSearch {
+  value: string;
+  numResults: number;
+}

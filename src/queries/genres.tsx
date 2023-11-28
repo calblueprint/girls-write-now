@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/namespace
 import { Genre } from './types';
 import supabase from '../utils/supabase';
 

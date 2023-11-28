@@ -21,6 +21,7 @@ import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchC
 import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
+import globalStyles from '../../../styles/globalStyles';
 
 const getRecentSearch = async () => {
   try {

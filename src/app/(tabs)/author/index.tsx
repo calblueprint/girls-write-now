@@ -54,87 +54,83 @@ function AuthorScreen() {
   }, [author]);
 
   return (
-    <SafeAreaView style={globalStyles.container}>
+    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-          <View style={{ flex: 1 }}>
-            <BackButton pressFunction={() => router.back()} />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={{ paddingHorizontal: 8 }}
+        >
+          <BackButton pressFunction={() => router.back()} />
 
-            <View style={styles.authorCardContainer}>
-              {authorInfo?.image && (
-                <Image
-                  style={styles.image}
-                  source={{ uri: authorInfo.image }}
-                />
-              )}
+          <View style={styles.authorCardContainer}>
+            {authorInfo?.image && (
+              <Image style={styles.image} source={{ uri: authorInfo.image }} />
+            )}
+
+            {authorInfo?.name && (
               <View style={styles.authorTextContainer}>
                 <Text
                   adjustsFontSizeToFit
-                  numberOfLines={1}
+                  numberOfLines={2}
                   style={styles.name}
                 >
-                  {authorInfo ? authorInfo.name : ''}
+                  {authorInfo.name}
                 </Text>
-                <Text style={styles.pronouns}>
-                  {authorInfo ? authorInfo.pronouns : ' '}
-                </Text>
+                {authorInfo?.pronouns && (
+                  <Text style={styles.pronouns}>{authorInfo.pronouns}</Text>
+                )}
               </View>
-            </View>
-
-            <HorizontalLine />
-
-            {authorInfo?.bio && (
-              <>
-                <Text style={styles.bioText}>{decode(authorInfo.bio)}</Text>
-                <HorizontalLine />
-              </>
             )}
-
-            {authorInfo?.artist_statement && (
-              <>
-                <Text style={styles.authorStatementTitle}>
-                  Artist's Statement
-                </Text>
-                <Text style={styles.authorStatement}>
-                  {decode(authorInfo.artist_statement)}
-                </Text>
-                <HorizontalLine />
-              </>
-            )}
-
-            <Text style={styles.storyCountText}>
-              {authorStoryPreview?.length + ' '}
-              {authorStoryPreview
-                ? authorStoryPreview?.length > 1
-                  ? 'Stories'
-                  : 'Story'
-                : ''}
-            </Text>
-
-            {authorStoryPreview
-              ? authorStoryPreview.map(story => (
-                  <PreviewCard
-                    key={story.title}
-                    title={story.title}
-                    image={story.featured_media}
-                    author={story.author_name}
-                    authorImage={story.author_image}
-                    excerpt={story.excerpt}
-                    tags={story.genre_medium
-                      .concat(story.tone)
-                      .concat(story.topic)}
-                    pressFunction={() =>
-                      router.push({
-                        pathname: '/story',
-                        params: { storyId: story.id.toString() },
-                      })
-                    }
-                  />
-                ))
-              : ''}
           </View>
+
+          <HorizontalLine />
+
+          {authorInfo?.bio && (
+            <>
+              <Text style={styles.bioText}>{decode(authorInfo.bio)}</Text>
+              <HorizontalLine />
+            </>
+          )}
+
+          {authorInfo?.artist_statement && (
+            <>
+              <Text style={styles.authorStatementTitle}>
+                Artist's Statement
+              </Text>
+              <Text style={styles.authorStatement}>
+                {decode(authorInfo.artist_statement)}
+              </Text>
+              <HorizontalLine />
+            </>
+          )}
+
+          {authorStoryPreview && (
+            <Text style={styles.storyCountText}>
+              {authorStoryPreview.length + ' '}
+              {authorStoryPreview?.length > 1 ? 'Stories' : 'Story'}
+            </Text>
+          )}
+
+          {authorStoryPreview?.map(story => (
+            <PreviewCard
+              key={story.title}
+              title={story.title}
+              image={story.featured_media}
+              author={story.author_name}
+              authorImage={story.author_image}
+              excerpt={story.excerpt}
+              tags={story.genre_medium.concat(story.tone).concat(story.topic)}
+              pressFunction={() =>
+                router.push({
+                  pathname: '/story',
+                  params: { storyId: story.id.toString() },
+                })
+              }
+            />
+          ))}
         </ScrollView>
       )}
     </SafeAreaView>

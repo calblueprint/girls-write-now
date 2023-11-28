@@ -1,15 +1,15 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import StyledButton from '../../components/StyledButton/StyledButton';
 import UserStringInput from '../../components/UserStringInput/UserStringInput';
+import { isEmailUsed, queryEmailByUsername } from '../../queries/auth';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
-import { isEmailUsed, queryEmailByUsername } from '../../queries/auth';
-import { Icon } from 'react-native-elements';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   title: {
     lineHeight: 33,
     paddingTop: 64,
-    marginBottom: 41,
+    marginBottom: 28,
     fontSize: 24,
     fontWeight: '700',
   },

@@ -1,20 +1,18 @@
-import { Redirect, Link, router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
+import { Button, Input, Icon as RNEIcon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Input } from 'react-native-elements';
 import validator from 'validator';
 
+import Icon from '../../../assets/icons';
 import StyledButton from '../../components/StyledButton/StyledButton';
 import UserStringInput from '../../components/UserStringInput/UserStringInput';
-
-import Icon from '../../../assets/icons';
 import colors from '../../styles/colors';
-
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
-import { Icon } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function SignUpScreen() {
   const { signUp } = useSession();
@@ -47,7 +45,7 @@ function SignUpScreen() {
   const setAndCheckUsername = async (newUsername: string) => {
     setUsername(newUsername);
 
-    if (newUsername.length == 0) {
+    if (newUsername.length === 0) {
       setUsernameError('');
       return;
     }
@@ -80,12 +78,12 @@ function SignUpScreen() {
 
   const setAndCheckEmail = async (newEmail: string) => {
     setEmail(newEmail);
-    if (newEmail.length == 0) {
+    if (newEmail.length === 0) {
       setEmailError('');
       return;
     }
 
-    if (!validator.isEmail(email)) {
+    if (!validator.isEmail(newEmail)) {
       setEmailError('This email is not a valid email. Please try again.');
       return;
     }
@@ -94,7 +92,7 @@ function SignUpScreen() {
       .from('profiles')
       .select(`*`, { count: 'exact' })
       .limit(1)
-      .eq('email', email);
+      .eq('email', newEmail);
     const emailIsTaken = (count ?? 0) >= 1;
 
     if (emailIsTaken) {
@@ -152,139 +150,147 @@ function SignUpScreen() {
 
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
-      <View>
-        <Text style={styles.title}>{'Read stories from \nyoung creators'}</Text>
-        <UserStringInput
-          placeholder="Username"
-          onChange={setAndCheckUsername}
-          value={username}
-        />
-        {usernameError && <Text style={styles.error}>{usernameError}</Text>}
-        <UserStringInput
-          placeholder="First Name"
-          onChange={setFirstName}
-          value={firstName}
-        />
-        <UserStringInput
-          placeholder="Last Name"
-          onChange={setLastName}
-          value={lastName}
-        />
-        <UserStringInput
-          placeholder="Email"
-          onChange={setAndCheckEmail}
-          value={email}
-          attributes={{
-            textContentType: 'emailAddress',
-            secureTextEntry: false,
-          }}
-        />
-        {emailError && <Text style={styles.error}>{emailError}</Text>}
-        <UserStringInput
-          placeholder="Password"
-          onChange={setPassword}
-          value={password}
-          attributes={{
-            textContentType: 'password',
-            secureTextEntry: passwordTextHidden,
-          }}
-        >
-          <Icon
-            name={passwordTextHidden ? 'visibility-off' : 'visibility'}
-            type="material"
-            style={styles.icon}
-            onPress={() => setPasswordTextHidden(!passwordTextHidden)}
+      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+        <View style={styles.inputs}>
+          <Text style={styles.title}>
+            {'Read stories from \nyoung creators'}
+          </Text>
+
+          <UserStringInput
+            placeholder="Username"
+            onChange={setAndCheckUsername}
+            value={username}
           />
-        </UserStringInput>
-      </View>
-      <View style={globalStyles.verticallySpaced}>
-        <Input
-          label="Password"
-          leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={text => checkPassword(text)}
-          value={password}
-          secureTextEntry
-          placeholder="Password"
-          autoCapitalize="none"
-        />
-      </View>
-      {password !== '' && (
-        <View style={styles.passwordComplexity}>
-          <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
-          <Text
-            style={[
-              styles.errorText,
-              hasUppercase
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
-            ]}
-          >
-            At least 1 uppercase letter
-          </Text>
-        </View>
-      )}
-      {password !== '' && (
-        <View style={styles.passwordComplexity}>
-          <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
-          <Text
-            style={[
-              styles.errorText,
-              hasLowercase
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
-            ]}
-          >
-            At least 1 lowercase letter
-          </Text>
-        </View>
-      )}
-      {password !== '' && (
-        <View style={styles.passwordComplexity}>
-          <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
-          <Text
-            style={[
-              styles.errorText,
-              hasNumber
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
-            ]}
-          >
-            At least 1 number
-          </Text>
-        </View>
-      )}
-      {password !== '' && (
-        <View style={styles.passwordComplexity}>
-          <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
-          <Text
-            style={[
-              styles.errorText,
-              hasLength
-                ? { color: colors.textGreen }
-                : { color: colors.textGrey },
-            ]}
-          >
-            At least 8 characters
-          </Text>
-        </View>
-      )}
-      <View>
-        <Link href="/auth/login">Already have an account? Log In</Link>
-        <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
-          <Button
-            title="Sign Up"
-            disabled={
-              !passwordComplexity ||
-              loading ||
-              emailError != '' ||
-              usernameError != '' ||
-              email.length == 0 ||
-              username.length == 0
-            }
-            onPress={signUpWithEmail}
+          {usernameError && (
+            <Text style={styles.inputError}>{usernameError}</Text>
+          )}
+
+          <UserStringInput
+            placeholder="First Name"
+            onChange={setFirstName}
+            value={firstName}
           />
+          <UserStringInput
+            placeholder="Last Name"
+            onChange={setLastName}
+            value={lastName}
+          />
+          <UserStringInput
+            placeholder="Email"
+            onChange={setAndCheckEmail}
+            value={email}
+            attributes={{
+              textContentType: 'emailAddress',
+              secureTextEntry: false,
+            }}
+          />
+          {emailError && <Text style={styles.inputError}>{emailError}</Text>}
+
+          <UserStringInput
+            placeholder="Password"
+            onChange={text => {
+              setPassword(text);
+              checkPassword(text);
+            }}
+            value={password}
+            attributes={{
+              textContentType: 'password',
+              secureTextEntry: passwordTextHidden,
+            }}
+          >
+            <RNEIcon
+              name={passwordTextHidden ? 'visibility-off' : 'visibility'}
+              type="material"
+              style={styles.icon}
+              onPress={() => setPasswordTextHidden(!passwordTextHidden)}
+            />
+          </UserStringInput>
         </View>
-      </View>
+
+        {password !== '' && (
+          <View style={styles.passwordComplexity}>
+            <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
+            <Text
+              style={[
+                styles.passwordErrorText,
+                hasUppercase
+                  ? { color: colors.textGreen }
+                  : { color: colors.textGrey },
+              ]}
+            >
+              At least 1 uppercase letter
+            </Text>
+          </View>
+        )}
+        {password !== '' && (
+          <View style={styles.passwordComplexity}>
+            <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
+            <Text
+              style={[
+                styles.passwordErrorText,
+                hasLowercase
+                  ? { color: colors.textGreen }
+                  : { color: colors.textGrey },
+              ]}
+            >
+              At least 1 lowercase letter
+            </Text>
+          </View>
+        )}
+        {password !== '' && (
+          <View style={styles.passwordComplexity}>
+            <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
+            <Text
+              style={[
+                styles.passwordErrorText,
+                hasNumber
+                  ? { color: colors.textGreen }
+                  : { color: colors.textGrey },
+              ]}
+            >
+              At least 1 number
+            </Text>
+          </View>
+        )}
+        {password !== '' && (
+          <View style={styles.passwordComplexity}>
+            <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
+            <Text
+              style={[
+                styles.passwordErrorText,
+                hasLength
+                  ? { color: colors.textGreen }
+                  : { color: colors.textGrey },
+              ]}
+            >
+              At least 8 characters
+            </Text>
+          </View>
+        )}
+
+        <View>
+          <View style={[styles.verticallySpaced, globalStyles.mt20]}>
+            <StyledButton
+              text="Sign Up"
+              disabled={
+                !passwordComplexity ||
+                loading ||
+                emailError != '' ||
+                usernameError != '' ||
+                email.length === 0 ||
+                username.length === 0
+              }
+              onPress={signUpWithEmail}
+            />
+          </View>
+          <Text style={styles.redirectText}>
+            Already have an account?{' '}
+            <Link style={styles.link} href="/auth/login">
+              Log In
+            </Link>
+          </Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -295,7 +301,7 @@ const styles = StyleSheet.create({
   flex: {
     justifyContent: 'space-between',
   },
-  error: {
+  inputError: {
     color: 'red',
     marginTop: 8,
   },
@@ -322,8 +328,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingBottom: 8,
   },
-  errorText: {
+  passwordErrorText: {
     fontSize: 12,
     marginLeft: 8,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+  },
+  inputs: {
+    paddingBottom: 8,
   },
 });

@@ -5,13 +5,12 @@ import colors from '../../../styles/colors';
 const styles = StyleSheet.create({
   authorCardContainer: {
     marginTop: 16,
-    marginRight: 20,
+    marginBottom: 8,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    flexWrap: 'wrap',
+    alignItems: 'flex-end',
   },
   name: {
-    paddingTop: 15,
     fontWeight: 'bold',
     fontSize: 25,
     fontFamily: 'Avenir',
@@ -21,30 +20,17 @@ const styles = StyleSheet.create({
     width: 68,
     backgroundColor: colors.darkGrey,
     borderRadius: 4,
-    marginBottom: 12,
-    marginTop: 12,
   },
   bioText: {
-    paddingTop: 15,
-    paddingBottom: 15,
     color: 'black',
     fontFamily: 'Avenir',
     fontSize: 14,
-    width: 324,
-  },
-  authorStatementContainer: {
-    paddingTop: 15,
-    paddingBottom: 5,
-    fontWeight: 'bold',
-    fontSize: 20,
   },
   authorStatement: {
-    paddingBottom: 15,
     fontSize: 14,
     color: 'black',
     fontWeight: '400',
     fontFamily: 'Avenir',
-    width: 324,
   },
   authorTextContainer: {
     paddingLeft: 20,
@@ -56,12 +42,12 @@ const styles = StyleSheet.create({
   authorStatementTitle: {
     fontWeight: 'bold',
     fontFamily: 'Avenir',
-    fontSize: 17,
-    paddingBottom: 2,
+    fontSize: 16,
+    marginBottom: 8,
   },
   storyCountText: {
-    paddingTop: 10,
-    fontWeight: 'bold',
+    fontSize: 12,
+    marginBottom: 8,
   },
   pronouns: {
     color: '#797979',

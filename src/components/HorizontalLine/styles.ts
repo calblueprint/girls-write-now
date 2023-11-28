@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
   line: {
     borderBottomColor: colors.darkGrey,
     borderBottomWidth: 1,
-    width: 500,
+    marginTop: 16,
+    marginBottom: 16,
   },
 });
 

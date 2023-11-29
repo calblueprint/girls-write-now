@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   mt16: {
     marginTop: 16,
+    width: '100%',
   },
   label: {
     fontSize: 12,

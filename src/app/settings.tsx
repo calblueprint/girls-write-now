@@ -2,20 +2,24 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import StyledButton from '../components/StyledButton/StyledButton';
 import UserStringInput from '../components/UserStringInput/UserStringInput';
 import globalStyles from '../styles/globalStyles';
+import color from '../styles/colors';
 import { useSession } from '../utils/AuthContext';
 import supabase from '../utils/supabase';
+import AccountDataDisplay from '../components/AccountDataDisplay/AccountDataDisplay';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
+  const [username, setUsername] = useState('');
   const [lastName, setLastName] = useState('');
+  const [pronouns, setPronouns] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
@@ -28,7 +32,9 @@ function SettingsScreen() {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`first_name, last_name, birthday, gender, race_ethnicity`)
+        .select(
+          `first_name, last_name, username, birthday, gender, race_ethnicity`,
+        )
         .eq('user_id', session?.user.id)
         .single();
 
@@ -39,7 +45,15 @@ function SettingsScreen() {
       if (data) {
         setFirstName(data.first_name || firstName);
         setLastName(data.last_name || lastName);
-        setBirthday(new Date(data.birthday) || birthday);
+        setUsername(data.username || username);
+
+        if (data.birthday) {
+          setBirthday(new Date(data.birthday));
+          setShowDatePicker(false);
+        } else {
+          setShowDatePicker(true);
+        }
+
         setGender(data.gender || gender);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
@@ -119,69 +133,123 @@ function SettingsScreen() {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Text style={globalStyles.h1}>Settings</Text>
-      <UserStringInput
-        placeholder="Email"
-        value={session?.user?.email ?? ''}
-        attributes={{
-          editable: false,
-        }}
-      />
-      <UserStringInput
-        placeholder="First Name"
-        value={firstName}
-        onChange={setFirstName}
-      />
-      <UserStringInput
-        placeholder="Last Name"
-        value={lastName}
-        onChange={setLastName}
-      />
-      <UserStringInput
-        placeholder="Gender"
-        value={gender}
-        onChange={setGender}
-      />
-      <UserStringInput
-        placeholder="Race/Ethnicity"
-        value={raceEthnicity}
-        onChange={setRaceEthnicity}
-      />
+      <Text style={styles.back}>{'<Back'}</Text>
+      <View style={styles.main}>
+        <View>
+          <Text style={styles.heading}>Settings</Text>
+          <Text style={styles.subheading}>Account</Text>
 
-      {Platform.OS !== 'ios' && (
-        <Button
-          title="Change Birthday"
-          onPress={() => setShowDatePicker(true)}
-        />
-      )}
-      {showDatePicker && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={birthday}
-          mode="date"
-          onChange={date => {
-            setShowDatePicker(Platform.OS === 'ios');
-            if (date.nativeEvent.timestamp) {
-              setBirthday(new Date(date.nativeEvent.timestamp));
-            }
-          }}
-        />
-      )}
-      <StyledButton
-        text={loading ? 'Loading ...' : 'Update profile'}
-        onPress={updateProfile}
-        disabled={loading}
-      />
-      <StyledButton text="Sign Out" onPress={signOut} disabled={false} />
+          <View style={styles.data}>
+            <AccountDataDisplay label="First Name" value={firstName} />
+            <AccountDataDisplay label="Last Name" value={lastName} />
+            <AccountDataDisplay label="Username" value={username} />
+            <AccountDataDisplay
+              label="Birthday"
+              value={
+                showDatePicker ? (
+                  <View>
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={birthday}
+                      mode="date"
+                      onChange={date => {
+                        setShowDatePicker(Platform.OS === 'ios');
+                        if (date.nativeEvent.timestamp) {
+                          setBirthday(new Date(date.nativeEvent.timestamp));
+                        }
+                      }}
+                    />
+                    {Platform.OS !== 'ios' && (
+                      <Button
+                        title="Change Birthday"
+                        onPress={() => setShowDatePicker(true)}
+                      />
+                    )}
+                  </View>
+                ) : (
+                  birthday.toLocaleDateString().toString()
+                )
+              }
+            ></AccountDataDisplay>
+          </View>
+
+          <UserStringInput
+            labelColor={color.textGrey}
+            placeholder="Gender"
+            label="Gender"
+            value={gender}
+            onChange={setGender}
+          />
+          <UserStringInput
+            labelColor={color.textGrey}
+            placeholder="Pronouns"
+            label="Pronouns"
+            value={pronouns}
+            onChange={setPronouns}
+          />
+          <UserStringInput
+            labelColor={color.textGrey}
+            placeholder="Race/Ethnicity"
+            label="Race/Ethnicity"
+            value={raceEthnicity}
+            onChange={setRaceEthnicity}
+          />
+        </View>
+        <View style={styles.button}>
+          <StyledButton text="Sign Out" onPress={signOut} disabled={false} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: 32,
+  },
+  main: {
+    flex: 1,
+    width: '100%',
+    paddingLeft: 12,
+    justifyContent: 'space-between',
+  },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+  },
+  subheading: {
+    fontFamily: 'Manrope',
+    fontSize: 18,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    paddingBottom: 16,
+  },
+  heading: {
+    paddingBottom: 24,
+    fontFamily: 'Manrope',
+    fontSize: 24,
+    fontStyle: 'normal',
+    fontWeight: '700',
+  },
+  back: {
+    paddingTop: 30,
+    paddingBottom: 16,
+    color: '#797979',
+    fontSize: 12,
+    fontWeight: '400',
+  },
+  data: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    marginBottom: -10,
+  },
+  label: {
+    fontSize: 12,
+    fontFamily: 'Manrope',
+    fontStyle: 'normal',
+    fontWeight: '400',
   },
 });
 

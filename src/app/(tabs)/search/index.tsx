@@ -43,7 +43,7 @@ const setRecentSearch = async (searchResult: RecentSearch[]) => {
 
 const getRecentStory = async () => {
   try {
-    const jsonValue = await AsyncStorage.getItem('GWN_RECENTLY_VIEWED_ARRAY');
+    const jsonValue = await AsyncStorage.getItem('GWN_RECENT_STORIES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (error) {
     console.log(error);
@@ -53,7 +53,7 @@ const getRecentStory = async () => {
 const setRecentStory = async (recentStories: StoryPreview[]) => {
   try {
     const jsonValue = JSON.stringify(recentStories);
-    await AsyncStorage.setItem('GWN_RECENTLY_VIEWED_ARRAY', jsonValue);
+    await AsyncStorage.setItem('GWN_RECENT_STORIES_ARRAY', jsonValue);
   } catch (error) {
     console.log(error);
   }

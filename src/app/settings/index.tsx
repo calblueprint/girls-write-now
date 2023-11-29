@@ -1,17 +1,18 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
+import { Text, View, Alert, Platform } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import StyledButton from '../components/StyledButton/StyledButton';
-import UserStringInput from '../components/UserStringInput/UserStringInput';
-import globalStyles from '../styles/globalStyles';
-import color from '../styles/colors';
-import { useSession } from '../utils/AuthContext';
-import supabase from '../utils/supabase';
-import AccountDataDisplay from '../components/AccountDataDisplay/AccountDataDisplay';
+import StyledButton from '../../components/StyledButton/StyledButton';
+import UserStringInput from '../../components/UserStringInput/UserStringInput';
+import globalStyles from '../../styles/globalStyles';
+import color from '../../styles/colors';
+import { useSession } from '../../utils/AuthContext';
+import supabase from '../../utils/supabase';
+import styles from './styles';
+import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -205,55 +206,5 @@ function SettingsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    marginBottom: 32,
-  },
-  main: {
-    flex: 1,
-    width: '100%',
-    paddingLeft: 12,
-    justifyContent: 'space-between',
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  subheading: {
-    fontFamily: 'Manrope',
-    fontSize: 18,
-    fontStyle: 'normal',
-    fontWeight: '700',
-    paddingBottom: 16,
-  },
-  heading: {
-    paddingBottom: 24,
-    fontFamily: 'Manrope',
-    fontSize: 24,
-    fontStyle: 'normal',
-    fontWeight: '700',
-  },
-  back: {
-    paddingTop: 30,
-    paddingBottom: 16,
-    color: '#797979',
-    fontSize: 12,
-    fontWeight: '400',
-  },
-  data: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-    marginBottom: -10,
-  },
-  label: {
-    fontSize: 12,
-    fontFamily: 'Manrope',
-    fontStyle: 'normal',
-    fontWeight: '400',
-  },
-});
 
 export default SettingsScreen;

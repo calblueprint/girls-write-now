@@ -3,16 +3,16 @@ import { Redirect, router, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View, Alert, Platform } from 'react-native';
 import { Button } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import styles from './styles';
+import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
 import StyledButton from '../../components/StyledButton/StyledButton';
+import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorInput';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
-import styles from './styles';
-import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
-import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorInput';
-import { ScrollView } from 'react-native-gesture-handler';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -184,7 +184,7 @@ function SettingsScreen() {
                   birthday.toLocaleDateString().toString()
                 )
               }
-            ></AccountDataDisplay>
+            />
           </View>
 
           <UserSelectorInput

@@ -27,7 +27,7 @@ function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [loading, setLoading] = useState(false);
-  let lastUsernameCheck = useRef(Date.now());
+  const lastUsernameCheck = useRef(Date.now());
   const validUsernameCharacters = /^\w+$/g;
 
   const [passwordComplexity, setPasswordComplexity] = useState(false);
@@ -295,8 +295,8 @@ function SignUpScreen() {
               disabled={
                 !passwordComplexity ||
                 loading ||
-                emailError != '' ||
-                usernameError != '' ||
+                emailError !== '' ||
+                usernameError !== '' ||
                 email.length === 0 ||
                 username.length === 0
               }

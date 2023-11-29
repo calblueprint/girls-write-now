@@ -5,10 +5,10 @@ import { Alert, ScrollView, Platform } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import styles from './styles';
+import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import StyledButton from '../../../components/StyledButton/StyledButton';
 
 function OnboardingScreen() {
   const { session } = useSession();

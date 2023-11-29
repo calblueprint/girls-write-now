@@ -1,7 +1,8 @@
 import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import styles from './styles';
 import { Icon } from 'react-native-elements';
+
+import styles from './styles';
 
 type UserSelectorInputProps = {
   options: string[];

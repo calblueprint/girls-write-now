@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Redirect, router } from 'expo-router';
+import { Redirect, router, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
 import { Button } from 'react-native-elements';
@@ -133,7 +133,10 @@ function SettingsScreen() {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Text style={styles.back}>{'<Back'}</Text>
+      <Link href="/home" style={styles.back}>
+        <Text>{'<Back'}</Text>
+      </Link>
+
       <View style={styles.main}>
         <View>
           <Text style={styles.heading}>Settings</Text>

@@ -36,11 +36,11 @@ export default StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
   },
-  data: {
+  staticData: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
-    marginBottom: -10,
+    marginBottom: 6,
   },
   label: {
     fontSize: 12,

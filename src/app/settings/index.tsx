@@ -6,13 +6,12 @@ import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import StyledButton from '../../components/StyledButton/StyledButton';
-import UserStringInput from '../../components/UserStringInput/UserStringInput';
 import globalStyles from '../../styles/globalStyles';
-import color from '../../styles/colors';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
 import styles from './styles';
 import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
+import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorInput';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -24,7 +23,16 @@ function SettingsScreen() {
   const [birthday, setBirthday] = useState(new Date());
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
+
+  const [showSaveEdits, setShowSaveEdits] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+
+  const wrapInDetectChange = (onChange: (_: any) => any) => {
+    return (value: any) => {
+      setShowSaveEdits(true);
+      return onChange(value);
+    };
+  };
 
   const getProfile = async () => {
     try {
@@ -56,6 +64,7 @@ function SettingsScreen() {
         }
 
         setGender(data.gender || gender);
+        setPronouns(data.pronouns || pronouns);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
     } catch (error) {
@@ -92,6 +101,7 @@ function SettingsScreen() {
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),
         ...(gender && { gender }),
+        ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
         ...(birthday && { birthday }),
       };
@@ -117,14 +127,14 @@ function SettingsScreen() {
 
         if (error && error instanceof Error) throw error;
       }
-
-      Alert.alert('Succesfully updated account!');
+      Alert.alert('bruh');
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
       }
     } finally {
       setLoading(false);
+      setShowSaveEdits(false);
     }
   };
 
@@ -143,7 +153,7 @@ function SettingsScreen() {
           <Text style={styles.heading}>Settings</Text>
           <Text style={styles.subheading}>Account</Text>
 
-          <View style={styles.data}>
+          <View style={styles.staticData}>
             <AccountDataDisplay label="First Name" value={firstName} />
             <AccountDataDisplay label="Last Name" value={lastName} />
             <AccountDataDisplay label="Username" value={username} />
@@ -177,30 +187,49 @@ function SettingsScreen() {
             ></AccountDataDisplay>
           </View>
 
-          <UserStringInput
-            labelColor={color.textGrey}
+          <UserSelectorInput
+            options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
             placeholder="Gender"
             label="Gender"
             value={gender}
-            onChange={setGender}
+            setValue={wrapInDetectChange(setGender)}
           />
-          <UserStringInput
-            labelColor={color.textGrey}
+          <UserSelectorInput
+            options={['she/her', 'he/him', 'they/them', 'Other']}
             placeholder="Pronouns"
             label="Pronouns"
             value={pronouns}
-            onChange={setPronouns}
+            setValue={wrapInDetectChange(setPronouns)}
           />
-          <UserStringInput
-            labelColor={color.textGrey}
+          <UserSelectorInput
+            options={[
+              'American Indian/Alaska Native',
+              'Asian',
+              'Black or African American',
+              'Native Hawaiian or other Pacific Islander',
+              'White',
+              'Prefer Not to Disclose',
+            ]}
             placeholder="Race/Ethnicity"
             label="Race/Ethnicity"
             value={raceEthnicity}
-            onChange={setRaceEthnicity}
+            setValue={wrapInDetectChange(setRaceEthnicity)}
           />
         </View>
         <View style={styles.button}>
-          <StyledButton text="Sign Out" onPress={signOut} disabled={false} />
+          {showSaveEdits ? (
+            <StyledButton
+              text="Save Edits"
+              onPress={updateProfile}
+              disabled={loading}
+            />
+          ) : (
+            <StyledButton
+              text="Sign Out"
+              onPress={signOut}
+              disabled={loading}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>

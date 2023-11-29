@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { Alert, TextInput, View } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Alert, TextInput, View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
+import OTPTextInput from 'react-native-otp-textinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -13,15 +14,20 @@ function VerificationScreen() {
   const [loading, setLoading] = useState(false);
   const [verificationCode, setCode] = useState<string>('');
 
-  // let otpInput = useRef(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [otpInput, setOtpInput] = useState<string>('');
 
-  // const clearText = () => {
-  //   otpInput.current.clear();
-  // }
+  const input = useRef<OTPTextInput>(null);
 
-  // const setText = () => {
-  //   otpInput.current.setValue("1234");
-  // }
+  const clearText = () => {
+    input.current?.clear();
+  };
+
+  const setText = () => {
+    setShowErrorMessage(false);
+    input.current?.setValue(otpInput);
+  };
 
   const verifyAccount = async () => {
     setLoading(true);
@@ -29,8 +35,13 @@ function VerificationScreen() {
     if (user?.email && verificationCode) {
       const { error } = await verifyOtp(user.email, verificationCode);
 
-      if (error) Alert.alert(error.message);
-      else router.replace('/auth/onboarding');
+      if (error) {
+        // Alert.alert(error.message)
+        setErrorMessage(
+          'Please wait 1 minute for us to resend the verification code.',
+        );
+        setShowErrorMessage(true);
+      } else router.replace('/auth/onboarding');
     } else if (!verificationCode) {
       Alert.alert(`Please enter a verification code`);
     } else {
@@ -64,6 +75,20 @@ function VerificationScreen() {
         placeholder="Verification Code"
         value={verificationCode}
         maxLength={6}
+      />
+
+      <OTPTextInput
+        ref={otpInput}
+        inputCount={6}
+        defaultValue={verificationCode}
+        inputCellLength={1}
+        handleTextChange={verifyAccount}
+        containerStyle={styles.input}
+        textInputStyle={styles.input}
+        // isValid={!showErrorMessage}
+        keyboardType="number-pad"
+        // returnKeyType="done"
+        autoFocus={false}
       />
 
       <View style={[styles.verticallySpaced, globalStyles.mt20]} />

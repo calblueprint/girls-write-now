@@ -6,11 +6,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-import StyledButton from '../../../components/StyledButton/StyledButton';
-import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 
 function LoginScreen() {
   const sessionHandler = useSession();

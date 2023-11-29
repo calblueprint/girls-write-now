@@ -38,6 +38,13 @@ function TabNav() {
         }}
       />
       <Tabs.Screen
+        name="author"
+        options={{
+          headerShown: false,
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="story"
         options={{
           headerShown: false,

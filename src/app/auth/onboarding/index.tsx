@@ -1,13 +1,14 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { Alert, StyleSheet, ScrollView, Platform } from 'react-native';
+import { Alert, ScrollView, Platform } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import StyledButton from '../../components/StyledButton/StyledButton';
-import UserStringInput from '../../components/UserStringInput/UserStringInput';
-import { useSession } from '../../utils/AuthContext';
-import supabase from '../../utils/supabase';
+import styles from './styles';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import { useSession } from '../../../utils/AuthContext';
+import supabase from '../../../utils/supabase';
+import StyledButton from '../../../components/StyledButton/StyledButton';
 
 function OnboardingScreen() {
   const { session } = useSession();
@@ -167,25 +168,5 @@ function OnboardingScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
-  },
-});
 
 export default OnboardingScreen;

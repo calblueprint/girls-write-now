@@ -1,15 +1,16 @@
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
-import StyledButton from '../../components/StyledButton/StyledButton';
-import UserStringInput from '../../components/UserStringInput/UserStringInput';
-import { isEmailUsed, queryEmailByUsername } from '../../queries/auth';
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
+import styles from './styles';
+import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -123,38 +124,3 @@ function LoginScreen() {
 }
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  flex: {
-    justifyContent: 'space-between',
-  },
-  forgotPassword: {
-    fontSize: 12,
-    textDecorationLine: 'underline',
-    paddingTop: 18,
-    paddingBottom: 16,
-    fontWeight: '400',
-  },
-  link: {
-    fontWeight: '700',
-    textDecorationLine: 'underline',
-  },
-  redirectText: {
-    textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 64,
-  },
-  title: {
-    lineHeight: 33,
-    paddingTop: 64,
-    marginBottom: 28,
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  error: {
-    color: 'red',
-  },
-  icon: {
-    paddingRight: 10,
-  },
-});

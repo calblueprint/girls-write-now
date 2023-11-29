@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, TextInput, View, StyleSheet } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
+import styles from './styles';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
 
 function ForgotPasswordScreen() {
   const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
@@ -115,23 +116,3 @@ function ForgotPasswordScreen() {
 }
 
 export default ForgotPasswordScreen;
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
-  },
-});

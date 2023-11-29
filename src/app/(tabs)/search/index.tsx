@@ -23,6 +23,42 @@ import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 
+const getRecentSearch = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const setRecentSearch = async (searchResult: RecentSearch[]) => {
+  try {
+    const jsonValue = JSON.stringify(searchResult);
+    await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getRecentStory = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('GWN_RECENT_STORIES_ARRAY');
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const setRecentStory = async (recentStories: StoryPreview[]) => {
+  try {
+    const jsonValue = JSON.stringify(recentStories);
+    await AsyncStorage.setItem('GWN_RECENT_STORIES_ARRAY', jsonValue);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 function SearchScreen() {
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
@@ -32,24 +68,7 @@ function SearchScreen() {
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [showGenreCarousals, setShowGenreCarousals] = useState(true);
   const [showRecents, setShowRecents] = useState(false);
-
-  const getRecentSearch = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const setRecentSearch = async (searchResult: RecentSearch[]) => {
-    try {
-      const jsonValue = JSON.stringify(searchResult);
-      await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
 
   useEffect(() => {
     (async () => {

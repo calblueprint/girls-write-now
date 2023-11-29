@@ -1,4 +1,5 @@
-import * as Font from 'expo-font';
+// import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 
@@ -23,23 +24,31 @@ function StartPage() {
   const [delay, setDelay] = useState(true);
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await loadResourcesAsync();
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.warn(e);
-      } finally {
-        // Tell the application to render
-        setResourcesLoaded(true);
-      }
-    }
-    prepare();
-  }, []);
+  // useEffect(() => {
+  //   async function prepare() {
+  //     try {
+  //       await loadResourcesAsync();
+  //     } catch (e) {
+  //       // eslint-disable-next-line no-console
+  //       console.warn(e);
+  //     } finally {
+  //       // Tell the application to render
+  //       setResourcesLoaded(true);
+  //     }
+  //   }
+  //   prepare();
+  // }, []);
+
+  const [fontsLoaded, fontError] = useFonts({
+    'Manrope-Bold': require('../../assets/fonts/Manrope-Bold.ttf'),
+    'Manrope-Regular': require('../../assets/fonts/Manrope-Regular.ttf'),
+    'Manrope-SemiBold': require('../../assets/fonts/Manrope-SemiBold.ttf'),
+  });
 
   useEffect(() => {
-    if (!delay && !isLoading && resourcesLoaded) {
+    console.log(fontError);
+    console.log(fontsLoaded);
+    if (!delay && !isLoading && fontsLoaded) {
       if (session) {
         router.replace('/home');
       } else {

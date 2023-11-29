@@ -21,7 +21,11 @@ export interface AuthState {
   user: User | null;
   isLoading: boolean;
   signIn: (newSession: Session | null) => void;
-  signUp: (email: string, password: string) => Promise<AuthResponse>;
+  signUp: (
+    email: string,
+    password: string,
+    options: object,
+  ) => Promise<AuthResponse>;
   signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
   verifyOtp: (email: string, token: string) => Promise<AuthResponse>;
   resendVerification: (email: string) => Promise<AuthResponse>;
@@ -68,6 +72,7 @@ export function AuthContextProvider({
       .getSession()
       .then(({ data: { session: newSession } }) => {
         setSession(newSession);
+        setUser(newSession ? newSession.user : null);
       })
       .finally(() => {
         setIsLoading(false);
@@ -92,13 +97,17 @@ export function AuthContextProvider({
     return value;
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, metaData: object) => {
     const value = await supabase.auth.signUp({
       email,
       password,
-    }); // will trigger the use effect to update the session
+      options: {
+        data: {
+          ...metaData,
+        },
+      },
+    });
 
-    console.log(value);
     setUser(value.data.user);
     return value;
   };

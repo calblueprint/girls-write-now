@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, TextInput, View, StyleSheet } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
+import styles from './styles';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
 
 function ForgotPasswordScreen() {
   const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
@@ -49,7 +50,6 @@ function ForgotPasswordScreen() {
     const { error } = await updateUser({ password });
 
     if (error) {
-      console.error(error);
       Alert.alert('Updating password failed');
     } else {
       await signOut();
@@ -60,8 +60,8 @@ function ForgotPasswordScreen() {
   };
 
   return (
-    <View style={globalStyles.auth_container}>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+    <View style={styles.container}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Input
           label="Email"
           leftIcon={{ type: 'font-awesome', name: 'envelope' }}
@@ -71,7 +71,7 @@ function ForgotPasswordScreen() {
           autoCapitalize="none"
         />
       </View>
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Send" disabled={loading} onPress={sendResetEmail} />
       </View>
 
@@ -84,13 +84,13 @@ function ForgotPasswordScreen() {
         maxLength={6}
       />
 
-      <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
         <Button title="Verify" disabled={loading} onPress={verifyCode} />
       </View>
 
       {changingPassword && (
         <>
-          <View style={globalStyles.verticallySpaced}>
+          <View style={styles.verticallySpaced}>
             <Input
               label="Password"
               leftIcon={{ type: 'font-awesome', name: 'lock' }}
@@ -102,7 +102,7 @@ function ForgotPasswordScreen() {
             />
           </View>
 
-          <View style={[globalStyles.verticallySpaced, globalStyles.mt20]}>
+          <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <Button
               title="Change Password"
               disabled={loading}
@@ -116,13 +116,3 @@ function ForgotPasswordScreen() {
 }
 
 export default ForgotPasswordScreen;
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
-  },
-});

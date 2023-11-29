@@ -26,7 +26,7 @@ import globalStyles from '../../../styles/globalStyles';
 const getRecentSearch = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
     console.log(error);
   }
@@ -44,7 +44,7 @@ const setRecentSearch = async (searchResult: RecentSearch[]) => {
 const getRecentStory = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_STORIES_ARRAY');
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
     console.log(error);
   }
@@ -103,9 +103,20 @@ function SearchScreen() {
     setShowGenreCarousals(false);
   };
 
+  const handleCancelButtonPress = () => {
+    setSearchResults([]);
+    setShowGenreCarousals(true);
+    setShowRecents(false);
+  };
+
   const clearRecentSearches = () => {
     setRecentSearches([]);
     setRecentSearch([]);
+  };
+
+  const clearRecentlyViewed = () => {
+    setRecentlyViewed([]);
+    setRecentStory([]);
   };
 
   const searchResultStacking = (searchString: string) => {
@@ -137,10 +148,25 @@ function SearchScreen() {
     }
   };
 
-  const handleCancelButtonPress = () => {
-    setSearchResults([]);
-    setShowGenreCarousals(true);
-    setShowRecents(false);
+  const recentlyViewedStacking = (story: StoryPreview) => {
+    const maxArrayLength = 5;
+    const newRecentlyViewed = recentlyViewed;
+
+    for (let i = 0; i < recentlyViewed.length; i++) {
+      if (story.id === recentlyViewed[i].id) {
+        newRecentlyViewed.splice(i, 1);
+        break;
+      }
+    }
+
+    if (newRecentlyViewed.length >= maxArrayLength) {
+      newRecentlyViewed.splice(-1, 1);
+    }
+
+    newRecentlyViewed.splice(0, 0, story);
+
+    setRecentStory(newRecentlyViewed);
+    setRecentlyViewed(newRecentlyViewed);
   };
 
   return (
@@ -201,7 +227,7 @@ function SearchScreen() {
                 </Text>
               </View>
             ) : (
-              <>
+              <ScrollView>
                 <View style={styles.recentSpacing}>
                   <Text style={styles.searchText}>Recent Searches</Text>
                   <Pressable onPress={clearRecentSearches}>
@@ -221,7 +247,37 @@ function SearchScreen() {
                     />
                   )}
                 />
-              </>
+
+                <View style={styles.recentSpacing}>
+                  <Text style={styles.searchText}>Recently Viewed</Text>
+                  <Pressable onPress={clearRecentlyViewed}>
+                    <Text style={styles.clearAll}>Clear All</Text>
+                  </Pressable>
+                </View>
+                <FlatList
+                  contentContainerStyle={styles.contentContainerRecents}
+                  showsVerticalScrollIndicator={false}
+                  data={recentlyViewed}
+                  renderItem={({ item }) => (
+                    <PreviewCard
+                      key={item.title}
+                      title={item.title}
+                      image={item.featured_media}
+                      author={item.author_name}
+                      authorImage={item.author_image}
+                      excerpt={item.excerpt}
+                      tags={item.genre_medium}
+                      pressFunction={() => {
+                        recentlyViewedStacking(item);
+                        router.push({
+                          pathname: '/story',
+                          params: { storyId: item.id.toString() },
+                        });
+                      }}
+                    />
+                  )}
+                />
+              </ScrollView>
             )}
           </>
         )}

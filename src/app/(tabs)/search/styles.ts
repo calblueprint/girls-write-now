@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   },
   contentContainerRecents: {
     paddingHorizontal: 8,
+    marginBottom: 8,
   },
   contentCotainerStories: {
     paddingHorizontal: 8,

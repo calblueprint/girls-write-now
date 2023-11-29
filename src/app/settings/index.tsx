@@ -12,6 +12,7 @@ import supabase from '../../utils/supabase';
 import styles from './styles';
 import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
 import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorInput';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -64,7 +65,7 @@ function SettingsScreen() {
         }
 
         setGender(data.gender || gender);
-        setPronouns(data.pronouns || pronouns);
+        // setPronouns(data.pronouns || pronouns);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
     } catch (error) {
@@ -127,7 +128,6 @@ function SettingsScreen() {
 
         if (error && error instanceof Error) throw error;
       }
-      Alert.alert('bruh');
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -148,7 +148,7 @@ function SettingsScreen() {
         <Text>{'<Back'}</Text>
       </Link>
 
-      <View style={styles.main}>
+      <ScrollView bounces={false} contentContainerStyle={styles.main}>
         <View>
           <Text style={styles.heading}>Settings</Text>
           <Text style={styles.subheading}>Account</Text>
@@ -231,7 +231,7 @@ function SettingsScreen() {
             />
           )}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

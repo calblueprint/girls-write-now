@@ -26,28 +26,32 @@ function UserSelectorInput({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.textStyle}
-        selectedTextStyle={styles.textStyle}
-        inputSearchStyle={styles.textStyle}
-        itemTextStyle={styles.textStyle}
-        containerStyle={styles.dropdownContainer}
-        itemContainerStyle={styles.itemContainer}
-        iconStyle={styles.iconStyle}
-        data={options.map(option => {
-          return { label: option, value: option };
-        })}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
-        value={value}
-        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
-        onChange={(item: Option) => {
-          setValue(item.value);
-        }}
-      />
+      <View style={styles.outer}>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.textStyle}
+          selectedTextStyle={styles.textStyle}
+          inputSearchStyle={styles.textStyle}
+          itemTextStyle={styles.textStyle}
+          containerStyle={styles.dropdownContainer}
+          itemContainerStyle={styles.itemContainer}
+          iconStyle={styles.iconStyle}
+          data={options.map(option => {
+            return { label: option, value: option };
+          })}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={placeholder}
+          value={value}
+          renderRightIcon={() => (
+            <Icon name="arrow-drop-down" type="material" />
+          )}
+          onChange={(item: Option) => {
+            setValue(item.value);
+          }}
+        />
+      </View>
     </View>
   );
 }

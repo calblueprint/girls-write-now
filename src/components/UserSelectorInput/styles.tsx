@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 
 export default StyleSheet.create({
+  outer: {
+    position: 'relative',
+    zIndex: 1,
+  },
   container: {
     marginBottom: 16,
   },
@@ -13,6 +17,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   dropdown: {
+    zIndex: 1,
     height: 50,
     borderWidth: 1,
     borderRadius: 5,
@@ -25,6 +30,9 @@ export default StyleSheet.create({
     borderTopWidth: 0,
     borderTopEndRadius: 0,
     borderTopStartRadius: 0,
+    position: 'relative',
+    top: -6,
+    zIndex: -1000,
   },
   itemContainer: {
     padding: -7,

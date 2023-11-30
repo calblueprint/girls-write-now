@@ -31,6 +31,7 @@ function SearchScreen() {
   const [filterVisible, setFilterVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [showGenreCarousals, setShowGenreCarousals] = useState(true);
+  const [showRecents, setShowRecents] = useState(false);
 
   const getRecentSearch = async () => {
     try {
@@ -120,6 +121,7 @@ function SearchScreen() {
   const handleCancelButtonPress = () => {
     setSearchResults([]);
     setShowGenreCarousals(true);
+    setShowRecents(false);
   };
 
   return (
@@ -130,6 +132,10 @@ function SearchScreen() {
           <SearchBar
             platform="ios"
             onCancel={() => handleCancelButtonPress()}
+            onFocus={() => {
+              setShowRecents(true);
+              setShowGenreCarousals(false);
+            }}
             searchIcon={false}
             clearIcon
             containerStyle={styles.searchContainer}
@@ -146,6 +152,7 @@ function SearchScreen() {
             }}
           />
         </View>
+
         {search && (
           <View style={styles.default}>
             <Button
@@ -154,39 +161,44 @@ function SearchScreen() {
             />
           </View>
         )}
-        {search ? (
-          <View style={styles.default}>
-            <Text style={[styles.searchText, styles.numDisplay]}>
-              {searchResults.length}{' '}
-              {searchResults.length === 1 ? 'Story' : 'Stories'}
-            </Text>
-          </View>
-        ) : (
+
+        {showRecents && (
           <>
-            <View style={styles.recentSpacing}>
-              <Text style={styles.searchText}>Recent Searches</Text>
-              <Pressable onPress={clearRecentSearches}>
-                <Text style={styles.clearAll}>Clear All</Text>
-              </Pressable>
-            </View>
-            <FlatList
-              contentContainerStyle={styles.contentContainerRecents}
-              showsVerticalScrollIndicator={false}
-              data={recentSearches}
-              renderItem={({ item }) => (
-                <RecentSearchCard
-                  key={item.value}
-                  value={item.value}
-                  numResults={item.numResults}
-                  pressFunction={() => null} // add functionality for each recentSearch
+            {search ? (
+              <View style={styles.default}>
+                <Text style={[styles.searchText, styles.numDisplay]}>
+                  {searchResults.length}{' '}
+                  {searchResults.length === 1 ? 'Story' : 'Stories'}
+                </Text>
+              </View>
+            ) : (
+              <>
+                <View style={styles.recentSpacing}>
+                  <Text style={styles.searchText}>Recent Searches</Text>
+                  <Pressable onPress={clearRecentSearches}>
+                    <Text style={styles.clearAll}>Clear All</Text>
+                  </Pressable>
+                </View>
+                <FlatList
+                  contentContainerStyle={styles.contentContainerRecents}
+                  showsVerticalScrollIndicator={false}
+                  data={recentSearches}
+                  renderItem={({ item }) => (
+                    <RecentSearchCard
+                      key={item.value}
+                      value={item.value}
+                      numResults={item.numResults}
+                      pressFunction={() => null}
+                    />
+                  )}
                 />
-              )}
-            />
+              </>
+            )}
           </>
         )}
 
         {showGenreCarousals ? (
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {allGenres.map((genre, index) => (
               <View>
                 <View style={styles.genreText}>
@@ -196,7 +208,7 @@ function SearchScreen() {
                 <View style={styles.scrollView}>
                   <ScrollView
                     horizontal
-                    showsVerticalScrollIndicator
+                    showsHorizontalScrollIndicator={false}
                     bounces={false}
                     contentContainerStyle={{ paddingHorizontal: 8 }}
                   >

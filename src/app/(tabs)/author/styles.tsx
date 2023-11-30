@@ -12,9 +12,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 24,
     fontFamily: 'Avenir',
-    marginLeft: -10,
   },
   image: {
     height: 68,
@@ -32,7 +31,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: '400',
     fontFamily: 'Avenir',
-    width: 324,
   },
   authorTextContainer: {
     paddingLeft: 20,
@@ -44,24 +42,15 @@ const styles = StyleSheet.create({
   authorStatementTitle: {
     fontWeight: 'bold',
     fontFamily: 'Avenir',
-    fontSize: 17,
-    paddingBottom: 2,
-  },
-  backButton: {
-    paddingTop: 20,
-    paddingBottom: 15,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    color: colors.lightGrey,
+    fontSize: 16,
+    marginBottom: 8,
   },
   storyCountText: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    fontWeight: 'bold',
+    fontSize: 12,
+    marginBottom: 8,
   },
   pronouns: {
     color: '#797979',
-    marginLeft: -10,
   },
 });
 

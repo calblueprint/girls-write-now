@@ -123,7 +123,7 @@ function SearchScreen() {
     if (searchString !== '') {
       const maxArrayLength = 5;
 
-      const newRecentSearches = recentSearches;
+      const newRecentSearches = [...recentSearches];
 
       for (let i = 0; i < recentSearches.length; i++) {
         if (searchString === recentSearches[i].value) {
@@ -150,7 +150,7 @@ function SearchScreen() {
 
   const recentlyViewedStacking = (story: StoryPreview) => {
     const maxArrayLength = 5;
-    const newRecentlyViewed = recentlyViewed;
+    const newRecentlyViewed = [...recentlyViewed];
 
     for (let i = 0; i < recentlyViewed.length; i++) {
       if (story.id === recentlyViewed[i].id) {
@@ -216,70 +216,61 @@ function SearchScreen() {
             />
           </View>
         )}
-
-        {showRecents && (
-          <>
-            {search ? (
-              <View style={styles.default}>
-                <Text style={[styles.searchText, styles.numDisplay]}>
-                  {searchResults.length}{' '}
-                  {searchResults.length === 1 ? 'Story' : 'Stories'}
-                </Text>
-              </View>
-            ) : (
-              <ScrollView>
-                <View style={styles.recentSpacing}>
-                  <Text style={styles.searchText}>Recent Searches</Text>
-                  <Pressable onPress={clearRecentSearches}>
-                    <Text style={styles.clearAll}>Clear All</Text>
-                  </Pressable>
-                </View>
-                <FlatList
-                  contentContainerStyle={styles.contentContainerRecents}
-                  showsVerticalScrollIndicator={false}
-                  data={recentSearches}
-                  renderItem={({ item }) => (
-                    <RecentSearchCard
-                      key={item.value}
-                      value={item.value}
-                      numResults={item.numResults}
-                      pressFunction={() => null}
-                    />
-                  )}
+        {search ? (
+          <View style={styles.default}>
+            <Text style={[styles.searchText, styles.numDisplay]}>
+              {searchResults.length}{' '}
+              {searchResults.length === 1 ? 'Story' : 'Stories'}
+            </Text>
+          </View>
+        ) : (
+          <ScrollView showsHorizontalScrollIndicator={false} bounces={false}>
+            <View style={styles.recentSpacing}>
+              <Text style={styles.searchText}>Recent Searches</Text>
+              <Pressable onPress={clearRecentSearches}>
+                <Text style={styles.clearAll}>Clear All</Text>
+              </Pressable>
+            </View>
+            <View style={styles.contentContainerRecents}>
+              {recentSearches.map(item => (
+                <RecentSearchCard
+                  key={item.value}
+                  value={item.value}
+                  numResults={item.numResults}
+                  pressFunction={() => {
+                    null;
+                  }} // add functionality
                 />
+              ))}
+            </View>
 
-                <View style={styles.recentSpacing}>
-                  <Text style={styles.searchText}>Recently Viewed</Text>
-                  <Pressable onPress={clearRecentlyViewed}>
-                    <Text style={styles.clearAll}>Clear All</Text>
-                  </Pressable>
-                </View>
-                <FlatList
-                  contentContainerStyle={styles.contentContainerRecents}
-                  showsVerticalScrollIndicator={false}
-                  data={recentlyViewed}
-                  renderItem={({ item }) => (
-                    <PreviewCard
-                      key={item.title}
-                      title={item.title}
-                      image={item.featured_media}
-                      author={item.author_name}
-                      authorImage={item.author_image}
-                      excerpt={item.excerpt}
-                      tags={item.genre_medium}
-                      pressFunction={() => {
-                        recentlyViewedStacking(item);
-                        router.push({
-                          pathname: '/story',
-                          params: { storyId: item.id.toString() },
-                        });
-                      }}
-                    />
-                  )}
+            <View style={styles.recentSpacing}>
+              <Text style={styles.searchText}>Recently Viewed</Text>
+              <Pressable onPress={clearRecentlyViewed}>
+                <Text style={styles.clearAll}>Clear All</Text>
+              </Pressable>
+            </View>
+            <View style={styles.contentContainerRecents}>
+              {recentlyViewed.map(item => (
+                <PreviewCard
+                  key={item.title}
+                  title={item.title}
+                  image={item.featured_media}
+                  author={item.author_name}
+                  authorImage={item.author_image}
+                  excerpt={item.excerpt}
+                  tags={item.genre_medium}
+                  pressFunction={() => {
+                    recentlyViewedStacking(item);
+                    router.push({
+                      pathname: '/story',
+                      params: { storyId: item.id.toString() },
+                    });
+                  }}
                 />
-              </ScrollView>
-            )}
-          </>
+              ))}
+            </View>
+          </ScrollView>
         )}
 
         {showGenreCarousals ? (

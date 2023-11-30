@@ -205,7 +205,7 @@ function SettingsScreen() {
             options={[
               'American Indian/Alaska Native',
               'Asian',
-              'Black or African American',
+              // 'Black or African American',
               'Native Hawaiian or other Pacific Islander',
               'White',
               'Prefer Not to Disclose',

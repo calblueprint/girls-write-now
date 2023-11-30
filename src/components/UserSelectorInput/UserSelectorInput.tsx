@@ -29,22 +29,27 @@ function UserSelectorInput({
       <Text style={styles.label}>{label}</Text>
       <View style={styles.outer}>
         <Dropdown
+          mode="default"
           style={styles.dropdown}
           placeholderStyle={styles.textStyle}
           selectedTextStyle={styles.textStyle}
           inputSearchStyle={styles.textStyle}
           itemTextStyle={styles.textStyle}
           containerStyle={styles.dropdownContainer}
+          dropdownPosition="bottom"
           itemContainerStyle={styles.itemContainer}
           iconStyle={styles.iconStyle}
           data={options.map(option => {
             return { label: option, value: option };
           })}
-          maxHeight={300}
+          maxHeight={400}
           labelField="label"
           valueField="value"
           placeholder={placeholder}
           value={value}
+          renderItem={(item: Option, selected: boolean | undefined) => (
+            <Text style={styles.itemContainer}>{item.value}</Text>
+          )}
           renderRightIcon={() => (
             <Icon name="arrow-drop-down" type="material" />
           )}

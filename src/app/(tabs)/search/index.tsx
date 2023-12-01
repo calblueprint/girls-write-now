@@ -119,7 +119,10 @@ function SearchScreen() {
     setRecentStory([]);
   };
 
-  const searchResultStacking = (searchString: string) => {
+  const searchResultStacking = (
+    searchString: string,
+    searchResults: number,
+  ) => {
     if (searchString !== '') {
       const maxArrayLength = 5;
 
@@ -138,7 +141,7 @@ function SearchScreen() {
 
       const result: RecentSearch = {
         value: searchString,
-        numResults: searchResults.length,
+        numResults: searchResults,
       };
 
       newRecentSearches.splice(0, 0, result);
@@ -203,7 +206,10 @@ function SearchScreen() {
             onChangeText={text => searchFunction(text)}
             value={search}
             onSubmitEditing={searchString => {
-              searchResultStacking(searchString.nativeEvent.text);
+              searchResultStacking(
+                searchString.nativeEvent.text,
+                searchResults.length,
+              );
             }}
           />
         </View>
@@ -238,8 +244,9 @@ function SearchScreen() {
                   value={item.value}
                   numResults={item.numResults}
                   pressFunction={() => {
-                    null;
-                  }} // add functionality
+                    searchFunction(item.value);
+                    searchResultStacking(item.value, item.numResults);
+                  }}
                 />
               ))}
             </View>

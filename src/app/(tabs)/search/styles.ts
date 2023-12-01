@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    marginRight: 24,
   },
   parentName: {
     fontSize: 18,

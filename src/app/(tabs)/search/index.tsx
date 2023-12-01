@@ -124,7 +124,14 @@ function SearchScreen() {
   };
 
   return (
-    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
+    <SafeAreaView
+      style={[
+        globalStyles.container,
+        showGenreCarousals
+          ? { marginLeft: -8, marginRight: -32 }
+          : { marginHorizontal: -8 },
+      ]}
+    >
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
       <View style={styles.container}>
         <View style={styles.default}>
@@ -137,7 +144,10 @@ function SearchScreen() {
             }}
             searchIcon={false}
             clearIcon
-            containerStyle={styles.searchContainer}
+            containerStyle={[
+              styles.searchContainer,
+              showGenreCarousals && { marginRight: 16 },
+            ]}
             inputContainerStyle={styles.inputContainer}
             inputStyle={{ color: 'black' }}
             leftIconContainerStyle={{}}

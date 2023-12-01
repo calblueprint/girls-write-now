@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
   },
   contentCotainerStories: {
     paddingHorizontal: 8,
-    paddingBottom: 24,
   },
   genreText: {
     flexDirection: 'row',

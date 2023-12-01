@@ -230,7 +230,7 @@ function SearchScreen() {
             </Text>
           </View>
         ) : (
-          <ScrollView showsHorizontalScrollIndicator={false} bounces={false}>
+          <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
             <View style={styles.recentSpacing}>
               <Text style={styles.searchText}>Recent Searches</Text>
               <Pressable onPress={clearRecentSearches}>

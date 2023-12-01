@@ -17,8 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 10,
     borderColor: 'transparent',
-    marginHorizontal: -8,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   inputContainer: {
     backgroundColor: '#D9D9D9',
@@ -31,9 +30,10 @@ const styles = StyleSheet.create({
     top: 0,
     opacity: 0.2,
     backgroundColor: 'black',
-    width,
+    width: '200%',
     height,
     zIndex: 1,
+    marginRight: -16,
   },
   noOverlay: {
     flex: 1,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 0,
+    marginTop: 8,
     marginBottom: 8,
     marginHorizontal: 8,
   },
@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
   },
   contentContainerRecents: {
     paddingHorizontal: 8,
+    marginBottom: 8,
   },
   contentCotainerStories: {
     paddingHorizontal: 8,
-    paddingBottom: 24,
   },
   genreText: {
     flexDirection: 'row',

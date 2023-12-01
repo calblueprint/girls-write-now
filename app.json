@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "girls-write-now",
+    "name": "Girls Write Now",
     "slug": "girls-write-now",
-    "version": "1.0.0",
+    "owner": "girlswritenowdev",
+    "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app_logo.png",
     "userInterfaceStyle": "light",
     "scheme": "your-app-scheme",
     "splash": {
@@ -12,16 +13,25 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 3000
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "org.calblueprint.girlswritenow",
+      "icon": "./assets/app_logo.png",
+      "buildNumber": "1"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "org.calblueprint.girlswritenow",
+      "versionCode": 1,
+      "icon": "./assets/app_logo.png"
     },
     "web": {
       "favicon": "./assets/favicon.png"

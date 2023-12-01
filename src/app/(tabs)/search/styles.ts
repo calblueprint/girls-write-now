@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     marginTop: 24,
     flex: 1,
   },
+  default: {
+    paddingHorizontal: 8,
+  },
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,

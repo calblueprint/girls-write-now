@@ -11,18 +11,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   default: {
-    marginHorizontal: 8,
+    paddingHorizontal: 8,
   },
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
     borderColor: 'transparent',
-    padding: 0,
+    marginHorizontal: -8,
     marginBottom: 16,
   },
   inputContainer: {
     backgroundColor: '#D9D9D9',
-    margin: 0,
     borderRadius: 10,
   },
   greyOverlay: {
@@ -71,6 +70,21 @@ const styles = StyleSheet.create({
   contentCotainerStories: {
     paddingHorizontal: 8,
     paddingBottom: 24,
+  },
+  genreText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    marginRight: 24,
+  },
+  parentName: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  seeAll: {
+    fontSize: 12,
+    textDecorationLine: 'underline',
   },
 });
 

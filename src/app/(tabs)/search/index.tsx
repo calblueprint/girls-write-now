@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   FlatList,
   View,
-  TouchableOpacity,
   Text,
   ScrollView,
   Pressable,
@@ -15,12 +14,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
-import LandingCard from '../../../components/LandingCard/LandingCard';
-import SearchCard from '../../../components/PreviewCard/PreviewCard';
+import GenreCard from '../../../components/GenreCard/GenreCard';
+import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
+import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 
 function SearchScreen() {
@@ -62,7 +62,7 @@ function SearchScreen() {
   }, []);
 
   const getColor = (index: number) => {
-    const genreColors = ['#E66E3F', '#ACC073', '#B49BC6'];
+    const genreColors = [colors.citrus, colors.lime, colors.lilac];
     return genreColors[index % genreColors.length];
   };
 
@@ -86,7 +86,6 @@ function SearchScreen() {
   const clearRecentSearches = () => {
     setRecentSearches([]);
     setRecentSearch([]);
-    setShowGenreCarousals(true);
   };
 
   const searchResultStacking = (searchString: string) => {
@@ -198,30 +197,31 @@ function SearchScreen() {
         )}
 
         {showGenreCarousals ? (
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 8 }}
+          >
             {allGenres.map((genre, index) => (
-              <View>
+              <>
                 <View style={styles.genreText}>
                   <Text style={styles.parentName}>{genre.parent_name}</Text>
                   <Text style={styles.seeAll}>See All</Text>
                 </View>
-                <View style={styles.scrollView}>
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    bounces={false}
-                    contentContainerStyle={{ paddingHorizontal: 8 }}
-                  >
-                    {genre.subgenres.map(subgenre => (
-                      <LandingCard
-                        subgenres={subgenre.name}
-                        cardColor={getColor(index)}
-                        pressFunction={() => null}
-                      />
-                    ))}
-                  </ScrollView>
-                </View>
-              </View>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  bounces={false}
+                  contentContainerStyle={{ marginBottom: 32 }}
+                >
+                  {genre.subgenres.map(subgenre => (
+                    <GenreCard
+                      subgenres={subgenre.name}
+                      cardColor={getColor(index)}
+                      pressFunction={() => null}
+                    />
+                  ))}
+                </ScrollView>
+              </>
             ))}
           </ScrollView>
         ) : (
@@ -230,7 +230,7 @@ function SearchScreen() {
             data={searchResults}
             contentContainerStyle={styles.contentCotainerStories}
             renderItem={({ item }) => (
-              <SearchCard
+              <PreviewCard
                 key={item.title}
                 title={item.title}
                 image={item.featured_media}

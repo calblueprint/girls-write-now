@@ -11,18 +11,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   default: {
-    marginHorizontal: 8,
+    paddingHorizontal: 8,
   },
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
     borderColor: 'transparent',
-    padding: 0,
+    marginHorizontal: -8,
     marginBottom: 16,
   },
   inputContainer: {
     backgroundColor: '#D9D9D9',
-    margin: 0,
     borderRadius: 10,
   },
   greyOverlay: {
@@ -72,22 +71,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingBottom: 24,
   },
-  scrollView: {
-    flexGrow: 0,
-  },
-
   genreText: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   parentName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    paddingBottom: 10,
-    paddingLeft: 10,
+    fontSize: 18,
+    fontWeight: '600',
   },
   seeAll: {
-    color: '#2D2D2D',
+    fontSize: 12,
     textDecorationLine: 'underline',
   },
 });

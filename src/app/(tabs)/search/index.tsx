@@ -183,36 +183,34 @@ function SearchScreen() {
     >
       <View style={[filterVisible ? styles.greyOverlay : styles.noOverlay]} />
       <View style={styles.container}>
-        <View style={styles.default}>
-          <SearchBar
-            platform="ios"
-            onCancel={() => handleCancelButtonPress()}
-            onFocus={() => {
-              setShowRecents(true);
-              setShowGenreCarousals(false);
-            }}
-            searchIcon={false}
-            clearIcon
-            containerStyle={[
-              styles.searchContainer,
-              showGenreCarousals && { marginRight: 16 },
-            ]}
-            inputContainerStyle={styles.inputContainer}
-            inputStyle={{ color: 'black' }}
-            leftIconContainerStyle={{}}
-            rightIconContainerStyle={{}}
-            placeholder="Search"
-            placeholderTextColor="black"
-            onChangeText={text => searchFunction(text)}
-            value={search}
-            onSubmitEditing={searchString => {
-              searchResultStacking(
-                searchString.nativeEvent.text,
-                searchResults.length,
-              );
-            }}
-          />
-        </View>
+        <SearchBar
+          platform="ios"
+          onCancel={() => handleCancelButtonPress()}
+          onFocus={() => {
+            setShowRecents(true);
+            setShowGenreCarousals(false);
+          }}
+          searchIcon={false}
+          clearIcon
+          containerStyle={[
+            styles.searchContainer,
+            showGenreCarousals && { marginRight: 24 },
+          ]}
+          inputContainerStyle={styles.inputContainer}
+          inputStyle={{ color: 'black' }}
+          leftIconContainerStyle={{}}
+          rightIconContainerStyle={{}}
+          placeholder="Search"
+          placeholderTextColor="black"
+          onChangeText={text => searchFunction(text)}
+          value={search}
+          onSubmitEditing={searchString => {
+            searchResultStacking(
+              searchString.nativeEvent.text,
+              searchResults.length,
+            );
+          }}
+        />
 
         {search && (
           <View style={styles.default}>
@@ -222,63 +220,65 @@ function SearchScreen() {
             />
           </View>
         )}
-        {search ? (
-          <View style={styles.default}>
-            <Text style={[styles.searchText, styles.numDisplay]}>
-              {searchResults.length}{' '}
-              {searchResults.length === 1 ? 'Story' : 'Stories'}
-            </Text>
-          </View>
-        ) : (
-          <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-            <View style={styles.recentSpacing}>
-              <Text style={styles.searchText}>Recent Searches</Text>
-              <Pressable onPress={clearRecentSearches}>
-                <Text style={styles.clearAll}>Clear All</Text>
-              </Pressable>
-            </View>
-            <View style={styles.contentContainerRecents}>
-              {recentSearches.map(item => (
-                <RecentSearchCard
-                  key={item.value}
-                  value={item.value}
-                  numResults={item.numResults}
-                  pressFunction={() => {
-                    searchFunction(item.value);
-                    searchResultStacking(item.value, item.numResults);
-                  }}
-                />
-              ))}
-            </View>
 
-            <View style={styles.recentSpacing}>
-              <Text style={styles.searchText}>Recently Viewed</Text>
-              <Pressable onPress={clearRecentlyViewed}>
-                <Text style={styles.clearAll}>Clear All</Text>
-              </Pressable>
+        {showRecents &&
+          (search ? (
+            <View style={styles.default}>
+              <Text style={[styles.searchText, styles.numDisplay]}>
+                {searchResults.length}{' '}
+                {searchResults.length === 1 ? 'Story' : 'Stories'}
+              </Text>
             </View>
-            <View style={styles.contentContainerRecents}>
-              {recentlyViewed.map(item => (
-                <PreviewCard
-                  key={item.title}
-                  title={item.title}
-                  image={item.featured_media}
-                  author={item.author_name}
-                  authorImage={item.author_image}
-                  excerpt={item.excerpt}
-                  tags={item.genre_medium}
-                  pressFunction={() => {
-                    recentlyViewedStacking(item);
-                    router.push({
-                      pathname: '/story',
-                      params: { storyId: item.id.toString() },
-                    });
-                  }}
-                />
-              ))}
-            </View>
-          </ScrollView>
-        )}
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+              <View style={styles.recentSpacing}>
+                <Text style={styles.searchText}>Recent Searches</Text>
+                <Pressable onPress={clearRecentSearches}>
+                  <Text style={styles.clearAll}>Clear All</Text>
+                </Pressable>
+              </View>
+              <View style={styles.contentContainerRecents}>
+                {recentSearches.map(item => (
+                  <RecentSearchCard
+                    key={item.value}
+                    value={item.value}
+                    numResults={item.numResults}
+                    pressFunction={() => {
+                      searchFunction(item.value);
+                      searchResultStacking(item.value, item.numResults);
+                    }}
+                  />
+                ))}
+              </View>
+
+              <View style={styles.recentSpacing}>
+                <Text style={styles.searchText}>Recently Viewed</Text>
+                <Pressable onPress={clearRecentlyViewed}>
+                  <Text style={styles.clearAll}>Clear All</Text>
+                </Pressable>
+              </View>
+              <View style={styles.contentContainerRecents}>
+                {recentlyViewed.map(item => (
+                  <PreviewCard
+                    key={item.title}
+                    title={item.title}
+                    image={item.featured_media}
+                    author={item.author_name}
+                    authorImage={item.author_image}
+                    excerpt={item.excerpt}
+                    tags={item.genre_medium}
+                    pressFunction={() => {
+                      recentlyViewedStacking(item);
+                      router.push({
+                        pathname: '/story',
+                        params: { storyId: item.id.toString() },
+                      });
+                    }}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+          ))}
 
         {showGenreCarousals ? (
           <ScrollView
@@ -322,12 +322,13 @@ function SearchScreen() {
                 authorImage={item.author_image}
                 excerpt={item.excerpt}
                 tags={item.genre_medium}
-                pressFunction={() =>
+                pressFunction={() => {
+                  recentlyViewedStacking(item);
                   router.push({
                     pathname: '/story',
                     params: { storyId: item.id.toString() },
-                  })
-                }
+                  });
+                }}
               />
             )}
           />

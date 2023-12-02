@@ -20,12 +20,6 @@ export interface Author {
   image: string;
 }
 
-export interface StoryCard {
-  id: number;
-  title: string;
-  author_name: string;
-  featured_media: string;
-}
 export interface RecentSearch {
   value: string;
   numResults: number;
@@ -45,4 +39,22 @@ export interface Story {
   content: { html: string };
   process: { html: string };
   link: string;
+}
+
+export interface StoryCard {
+  id: number;
+  title: string;
+  author_name: string;
+  featured_media: string;
+}
+
+export interface Subgenre {
+  id: number;
+  name: string;
+}
+
+export interface Genre {
+  parent_id: number;
+  parent_name: string;
+  subgenres: Subgenre[];
 }

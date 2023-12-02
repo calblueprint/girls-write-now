@@ -11,18 +11,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   default: {
-    marginHorizontal: 8,
+    paddingHorizontal: 8,
   },
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
     borderColor: 'transparent',
-    padding: 0,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   inputContainer: {
     backgroundColor: '#D9D9D9',
-    margin: 0,
     borderRadius: 10,
   },
   greyOverlay: {
@@ -32,9 +30,10 @@ const styles = StyleSheet.create({
     top: 0,
     opacity: 0.2,
     backgroundColor: 'black',
-    width,
+    width: '200%',
     height,
     zIndex: 1,
+    marginRight: -16,
   },
   noOverlay: {
     flex: 1,
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 0,
+    marginTop: 8,
     marginBottom: 8,
     marginHorizontal: 8,
   },
@@ -67,10 +66,25 @@ const styles = StyleSheet.create({
   },
   contentContainerRecents: {
     paddingHorizontal: 8,
+    marginBottom: 8,
   },
   contentCotainerStories: {
     paddingHorizontal: 8,
-    paddingBottom: 24,
+  },
+  genreText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    marginRight: 24,
+  },
+  parentName: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  seeAll: {
+    fontSize: 12,
+    textDecorationLine: 'underline',
   },
 });
 

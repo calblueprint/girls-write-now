@@ -2,7 +2,6 @@ import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { Button } from 'react-native-elements/dist/buttons/Button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
@@ -103,11 +102,6 @@ function LoginScreen() {
         </Link>
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
-
-      <Button
-        title="test nav bar"
-        onPress={() => resetAndPushToRouter('home')}
-      />
 
       <View>
         <View>

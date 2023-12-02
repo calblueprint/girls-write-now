@@ -1,8 +1,6 @@
 import { Tabs } from 'expo-router';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Icon from '../../../assets/icons';
 import colors from '../../styles/colors';
@@ -10,7 +8,7 @@ import colors from '../../styles/colors';
 function HomeIcon({ color }: { color: string }) {
   return (
     <Icon
-      type={color === colors.fadedBlack ? 'home_nav_bar' : 'home_nav_active'}
+      type={color === colors.fadedBlack ? 'home_inactive' : 'home_active'}
     />
   );
 }
@@ -18,9 +16,7 @@ function HomeIcon({ color }: { color: string }) {
 function SearchIcon({ color }: { color: string }) {
   return (
     <Icon
-      type={
-        color === colors.fadedBlack ? 'search_nav_bar' : 'search_nav_active'
-      }
+      type={color === colors.fadedBlack ? 'search_inactive' : 'search_active'}
     />
   );
 }
@@ -28,9 +24,7 @@ function SearchIcon({ color }: { color: string }) {
 function LibraryIcon({ color }: { color: string }) {
   return (
     <Icon
-      type={
-        color === colors.fadedBlack ? 'library_nav_bar' : 'library_nav_active'
-      }
+      type={color === colors.fadedBlack ? 'library_inactive' : 'library_active'}
     />
   );
 }
@@ -47,7 +41,8 @@ function TabNav() {
         tabBarInactiveTintColor: colors.fadedBlack,
         tabBarStyle: {
           paddingTop: 16,
-          paddingBottom: insets.bottom,
+          paddingBottom:
+            Platform.OS === 'ios' ? insets.bottom : insets.bottom + 8,
           height: 68 + insets.bottom,
           backgroundColor: colors.white,
         },

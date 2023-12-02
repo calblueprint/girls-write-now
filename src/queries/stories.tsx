@@ -83,3 +83,20 @@ export async function fetchNewStories(): Promise<StoryCard[]> {
     return data;
   }
 }
+
+export async function fetchStoryPreviewById(
+  storyId: number,
+): Promise<StoryPreview> {
+  const { data, error } = await supabase.rpc('fetch_story_preview_by_id', {
+    input_story_id: storyId,
+  });
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch story preview by ID: ${error}`,
+    );
+  } else {
+    return data;
+  }
+}

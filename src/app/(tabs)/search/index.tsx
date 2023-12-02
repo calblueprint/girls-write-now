@@ -301,7 +301,12 @@ function SearchScreen() {
                     <GenreCard
                       subgenres={subgenre.name}
                       cardColor={getColor(index)}
-                      pressFunction={() => null}
+                      pressFunction={() => {
+                        router.push({
+                          pathname: '/genre',
+                          params: { genreId: genre.parent_id.toString() },
+                        });
+                      }}
                     />
                   ))}
                 </ScrollView>

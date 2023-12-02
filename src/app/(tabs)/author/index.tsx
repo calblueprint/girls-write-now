@@ -35,7 +35,6 @@ function AuthorScreen() {
       );
       try {
         setAuthorInfo(authorData);
-        console.log('TESTING AUTHOR INFO QUERY OUTPUT:', authorInfo);
       } catch (error) {
         console.log(
           `There was an error while trying to output authorinfo ${error}`,
@@ -43,7 +42,6 @@ function AuthorScreen() {
       }
       try {
         setAuthorStoryPreview(storyData);
-        console.log('TESTING STORY PREVIEW INFO QUERY OUTPUT:', storyData);
       } catch (error) {
         console.log(
           `There was an error while trying to output author story preview info ${error}`,

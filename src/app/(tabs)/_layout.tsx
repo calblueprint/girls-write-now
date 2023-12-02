@@ -87,6 +87,13 @@ function TabNav() {
           tabBarIcon: ({ color }) => LibraryIcon({ color }),
         }}
       />
+      <Tabs.Screen
+        name="genre"
+        options={{
+          headerShown: false,
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

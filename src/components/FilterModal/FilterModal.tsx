@@ -1,11 +1,12 @@
 import { BottomSheet, CheckBox } from '@rneui/themed';
-import { useState } from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import 'react-native-gesture-handler';
 import styles from './styles';
 import Icon from '../../../assets/icons';
+import { TagFilter, useFilter } from '../../utils/FilterContext';
+import { useEffect, useRef } from 'react';
 
 type FilterModalProps = {
   isVisible: boolean;
@@ -13,28 +14,33 @@ type FilterModalProps = {
   title: string;
 };
 
-function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
-  const [checked1, toggleChecked1] = useState(false);
-  const [checked2, toggleChecked2] = useState(false);
-  const [checked3, toggleChecked3] = useState(false);
+type ParentTagFilter = { children: TagFilter[] } & TagFilter;
 
-  const genres = [
-    {
-      title: 'Fiction',
-      state: checked1,
-      setState: toggleChecked1,
-    },
-    {
-      title: 'Erasure & Found Poetry',
-      state: checked2,
-      setState: toggleChecked2,
-    },
-    {
-      title: 'Non-Fiction',
-      state: checked3,
-      setState: toggleChecked3,
-    },
-  ];
+function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
+  const { dispatch, filters } = useFilter();
+  const nestedFilters = useRef(new Map<number, ParentTagFilter>());
+
+  useEffect(() => {
+    nestFilters();
+    // console.log(nestedFilters.current);
+  }, [filters]);
+
+  const nestFilters = () => {
+    Array.from(filters)
+      .filter(([_, { parent }]) => parent === null)
+      .map(([id, parent]) =>
+        nestedFilters.current.set(id, {
+          ...parent,
+          children: [],
+        } as ParentTagFilter),
+      );
+
+    Array.from(filters).map(([_, filter]) => {
+      if (filter.parent) {
+        nestedFilters.current.get(filter.parent)?.children.push(filter);
+      }
+    });
+  };
 
   return (
     <SafeAreaProvider>
@@ -59,20 +65,24 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
               bounces={false}
               style={styles.scrollView}
             >
-              {genres.map(item => {
-                return (
-                  <CheckBox
-                    key={item.title}
-                    title={item.title}
-                    checked={item.state}
-                    onPress={() => item.setState(!item.state)}
-                    iconType="material-community"
-                    checkedIcon="checkbox-marked"
-                    uncheckedIcon="checkbox-blank-outline"
-                    checkedColor="black"
-                  />
-                );
-              })}
+              {Array.from(nestedFilters.current).map(
+                ([id, parentFilter]: [number, ParentTagFilter]) => {
+                  return (
+                    <CheckBox
+                      key={id}
+                      title={parentFilter.name}
+                      checked={parentFilter.active}
+                      onPress={() =>
+                        dispatch({ type: 'TOGGLE_FILTER', id: parentFilter.id })
+                      }
+                      iconType="material-community"
+                      checkedIcon="checkbox-marked"
+                      uncheckedIcon="checkbox-blank-outline"
+                      checkedColor="black"
+                    ></CheckBox>
+                  );
+                },
+              )}
             </ScrollView>
           </View>
         </View>

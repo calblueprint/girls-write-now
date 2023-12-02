@@ -22,6 +22,7 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
+import { useFilter } from '../../../utils/FilterContext';
 
 const getRecentSearch = async () => {
   try {

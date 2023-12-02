@@ -1,8 +1,8 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, Alert, Platform } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Text, StyleSheet, Alert, Platform } from 'react-native';
+import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import StyledButton from '../components/StyledButton/StyledButton';
@@ -13,6 +13,7 @@ import supabase from '../utils/supabase';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
+
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

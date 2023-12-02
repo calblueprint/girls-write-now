@@ -9,7 +9,7 @@ import supabase from './supabase';
 
 type FilterAction =
   | { type: 'SET_TAGS'; tags: TagFilter[] }
-  | { type: 'TOGGLE_FILTER'; name: string }
+  | { type: 'TOGGLE_FILTER'; id: number }
   | { type: 'CLEAR_ALL'; category: string }
   | { type: 'TOGGLE_MAIN_GENRE'; mainGenre: string };
 
@@ -46,7 +46,7 @@ export const useFilterReducer = () =>
           const nextState = {
             ...prevState,
             filters: prevState.filters.map(tag =>
-              tag.name == action.name ? { ...tag, active: !tag.active } : tag,
+              tag.id == action.id ? { ...tag, active: !tag.active } : tag,
             ),
           };
           console.log('Toggle time' + (+Date.now() - start));

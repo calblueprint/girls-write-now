@@ -1,5 +1,5 @@
 import { BottomSheet, CheckBox } from '@rneui/themed';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -7,6 +7,8 @@ import 'react-native-gesture-handler';
 import styles from './styles';
 import Icon from '../../../assets/icons';
 import { TagFilter, useFilter } from '../../utils/FilterContext';
+import ChildFilter from './ChildFilter';
+import ParentFilter from './ParentFilter';
 
 type FilterModalProps = {
   isVisible: boolean;
@@ -18,6 +20,13 @@ type ParentFilter = { children: TagFilter[] } & TagFilter;
 
 function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
   const { dispatch, filters } = useFilter();
+
+  const toggleFilter = useCallback(
+    (id: number) => {
+      dispatch({ type: 'TOGGLE_FILTER', id });
+    },
+    [dispatch],
+  );
 
   const nestFilters = (filters: TagFilter[]) => {
     const parents = new Map<number, ParentFilter>();
@@ -62,45 +71,26 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
               bounces={true}
               style={styles.scrollView}
             >
-              {Array.from(nestFilters(filters)).map(([id, parentFilter]) => {
+              {Array.from(nestFilters(filters)).map(([_, parentFilter]) => {
                 console.log('rerendering ' + parentFilter.name);
                 return (
                   <>
-                    <CheckBox
-                      key={parentFilter.id}
-                      title={parentFilter.name}
+                    <ParentFilter
+                      id={parentFilter.id}
+                      name={parentFilter.name}
                       checked={parentFilter.active}
-                      onPress={() =>
-                        dispatch({
-                          type: 'TOGGLE_FILTER',
-                          name: parentFilter.name,
-                        })
-                      }
-                      iconType="material-community"
-                      checkedIcon="checkbox-marked"
-                      uncheckedIcon="checkbox-blank-outline"
-                      checkedColor="black"
+                      onPress={toggleFilter}
                     />
 
                     {parentFilter.children.map(filter => {
                       console.log('rerendering ' + filter.name);
 
                       return (
-                        <CheckBox
-                          textStyle={{ color: 'purple' }}
-                          key={filter.id}
-                          title={filter.name}
+                        <ChildFilter
+                          id={filter.id}
+                          name={filter.name}
                           checked={filter.active}
-                          onPress={() =>
-                            dispatch({
-                              type: 'TOGGLE_FILTER',
-                              name: filter.name,
-                            })
-                          }
-                          iconType="material-community"
-                          checkedIcon="checkbox-marked"
-                          uncheckedIcon="checkbox-blank-outline"
-                          checkedColor="black"
+                          onPress={toggleFilter}
                         />
                       );
                     })}

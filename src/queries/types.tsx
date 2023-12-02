@@ -11,6 +11,19 @@ export interface StoryPreview {
   genre_medium: string[];
 }
 
+export interface Author {
+  id: number;
+  name: string;
+  pronouns: string;
+  bio: string;
+  artist_statement: string;
+  image: string;
+}
+
+export interface RecentSearch {
+  value: string;
+  numResults: number;
+}
 export interface Story {
   id: number;
   date: string;
@@ -34,7 +47,14 @@ export interface StoryCard {
   author_name: string;
   featured_media: string;
 }
-export interface RecentSearch {
-  value: string;
-  numResults: number;
+
+export interface Subgenre {
+  id: number;
+  name: string;
+}
+
+export interface Genre {
+  parent_id: number;
+  parent_name: string;
+  subgenres: Subgenre[];
 }

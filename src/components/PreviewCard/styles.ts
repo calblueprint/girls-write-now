@@ -23,6 +23,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingLeft: 12,
     paddingRight: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   bottom: {
     flex: 1,

@@ -14,6 +14,13 @@ const colors = {
   white: '#FBFBFB',
   grey: '#A7A5A5',
   darkGrey: '#797979',
+
+  textPrimary: '#000000', // black
+  textSecondary: '#797979', // gray for subtitles
+  textWhite: '#FFFFFF', // white
+  textGreen: '#5A7906', //for sign in
+  textGrey: '#797979', // for sign in
+  lightGrey: '#F9F9F9',
 };
 
 export default colors;

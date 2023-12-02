@@ -16,37 +16,22 @@ type FilterModalProps = {
   title: string;
 };
 
-type ParentFilter = { children: TagFilter[] } & TagFilter;
-
 function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
   const { dispatch, filters } = useFilter();
 
-  const toggleFilter = useCallback(
+  const toggleParentFilter = useCallback(
+    (id: number) => {
+      dispatch({ type: 'TOGGLE_MAIN_GENRE', mainGenreId: id });
+    },
+    [dispatch],
+  );
+
+  const toggleChildFilter = useCallback(
     (id: number) => {
       dispatch({ type: 'TOGGLE_FILTER', id });
     },
     [dispatch],
   );
-
-  const nestFilters = (filters: TagFilter[]) => {
-    const parents = new Map<number, ParentFilter>();
-    filters
-      .filter(filter => filter.parent === null)
-      .map(parentFilter => {
-        parents.set(parentFilter.id, {
-          ...parentFilter,
-          children: [],
-        } as ParentFilter);
-      });
-
-    filters.map(childFilter => {
-      if (childFilter.parent) {
-        parents.get(childFilter.parent)?.children.push(childFilter);
-      }
-    });
-
-    return parents;
-  };
 
   return (
     <SafeAreaProvider>
@@ -71,26 +56,23 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
               bounces={true}
               style={styles.scrollView}
             >
-              {Array.from(nestFilters(filters)).map(([_, parentFilter]) => {
-                console.log('rerendering ' + parentFilter.name);
+              {Array.from(filters).map(([_, parentFilter]) => {
                 return (
                   <>
                     <ParentFilter
                       id={parentFilter.id}
                       name={parentFilter.name}
                       checked={parentFilter.active}
-                      onPress={toggleFilter}
+                      onPress={toggleParentFilter}
                     />
 
                     {parentFilter.children.map(filter => {
-                      console.log('rerendering ' + filter.name);
-
                       return (
                         <ChildFilter
                           id={filter.id}
                           name={filter.name}
                           checked={filter.active}
-                          onPress={toggleFilter}
+                          onPress={toggleChildFilter}
                         />
                       );
                     })}

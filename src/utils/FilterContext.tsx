@@ -11,7 +11,7 @@ type FilterAction =
   | { type: 'SET_TAGS'; tags: TagFilter[] }
   | { type: 'TOGGLE_FILTER'; id: number }
   | { type: 'CLEAR_ALL'; category: string }
-  | { type: 'TOGGLE_MAIN_GENRE'; mainGenre: string };
+  | { type: 'TOGGLE_MAIN_GENRE'; mainGenreId: number };
 
 export type FilterDispatch = React.Dispatch<FilterAction>;
 
@@ -23,52 +23,87 @@ export type TagFilter = {
   parent: number | null;
 };
 
+type ParentFilter = { children: TagFilter[] } & TagFilter;
+
 export interface FilterState {
-  filters: TagFilter[];
+  filters: Map<number, ParentFilter>;
   isLoading: boolean;
   dispatch: FilterDispatch;
 }
 
 const FilterContext = createContext({} as FilterState);
 
+const mapParentsAndChildren = (
+  filters: Map<number, ParentFilter>,
+  func: (filter: TagFilter) => TagFilter,
+) => {
+  return new Map(
+    Array.from(filters).map(([id, parent]) => {
+      return [
+        id,
+        {
+          ...func(parent),
+          children: parent.children.map(func),
+        } as ParentFilter,
+      ];
+    }),
+  );
+};
+
 export const useFilterReducer = () =>
   useReducer(
     (prevState: FilterState, action: FilterAction) => {
       switch (action.type) {
         case 'SET_TAGS':
+          const nestedFilters = new Map<number, ParentFilter>();
+          action.tags
+            .filter(filter => filter.parent === null)
+            .map(parentFilter => {
+              nestedFilters.set(parentFilter.id, {
+                ...parentFilter,
+                children: [],
+              } as ParentFilter);
+            });
+
+          action.tags.map(childFilter => {
+            if (childFilter.parent) {
+              nestedFilters.get(childFilter.parent)?.children.push(childFilter);
+            }
+          });
+
           return {
             ...prevState,
-            filters: action.tags,
+            filters: nestedFilters,
             isLoading: false,
           };
         case 'TOGGLE_FILTER':
-          const start = +Date.now();
-          const nextState = {
+          return {
             ...prevState,
-            filters: prevState.filters.map(tag =>
-              tag.id == action.id ? { ...tag, active: !tag.active } : tag,
+            filters: mapParentsAndChildren(prevState.filters, fitler =>
+              fitler.id == action.id
+                ? { ...fitler, active: !fitler.active }
+                : fitler,
             ),
           };
-          console.log('Toggle time' + (+Date.now() - start));
-
-          return nextState;
         case 'CLEAR_ALL':
           return {
             ...prevState,
-            filters: prevState.filters.map(tag =>
-              tag.category == action.category ? { ...tag, active: false } : tag,
+            filters: mapParentsAndChildren(prevState.filters, filter =>
+              filter.category == action.category
+                ? { ...filter, active: false }
+                : filter,
             ),
           };
         case 'TOGGLE_MAIN_GENRE':
-          const parentGenre = prevState.filters.find(
-            ({ name }) => name === action.mainGenre,
-          );
+          const parentGenre = prevState.filters.get(action.mainGenreId);
           const newActiveState = !parentGenre?.active;
 
-          const updatedFilters = prevState.filters.map(tag =>
-            tag.parent == parentGenre?.id || tag.name == action.mainGenre
-              ? { ...tag, active: newActiveState }
-              : tag,
+          const updatedFilters = mapParentsAndChildren(
+            prevState.filters,
+            tag =>
+              tag.parent == action.mainGenreId || tag.id == action.mainGenreId
+                ? { ...tag, active: newActiveState }
+                : tag,
           );
 
           return {
@@ -80,7 +115,7 @@ export const useFilterReducer = () =>
       }
     },
     {
-      filters: [],
+      filters: new Map(),
       isLoading: true,
       dispatch: () => null,
     },
@@ -124,10 +159,6 @@ export function FilterContextProvider({
   useEffect(() => {
     getTags().then(tags => dispatch({ type: 'SET_TAGS', tags: tags ?? [] }));
   }, []);
-
-  useEffect(() => {
-    console.log('shit');
-  }, [filterState.filters[0]]);
 
   const filterContextValue = useMemo(
     () => ({

@@ -1,5 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import Icon from '../../../assets/icons';
 import colors from '../../styles/colors';
@@ -31,6 +35,8 @@ function DocumentIcon() {
 // }
 
 function TabNav() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
@@ -38,7 +44,12 @@ function TabNav() {
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: colors.citrus,
         tabBarInactiveTintColor: colors.fadedBlack,
-        tabBarStyle: { paddingTop: 16, backgroundColor: colors.white }, //14 in design
+        tabBarStyle: {
+          paddingTop: 16,
+          paddingBottom: 8,
+          height: 68,
+          backgroundColor: colors.white,
+        }, //14 in design
       }}
     >
       <Tabs.Screen
@@ -46,7 +57,7 @@ function TabNav() {
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
-          // tabBarIcon: ({ color }) => HomeIcon({ color }),
+          tabBarIcon: ({ color }) => HomeIcon({ color }),
           // tabBarLabelStyle: { borderTopWidth: 12, paddingTop: 12 },
         }}
       />

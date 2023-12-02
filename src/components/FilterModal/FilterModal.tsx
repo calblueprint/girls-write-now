@@ -1,4 +1,5 @@
 import { BottomSheet, CheckBox } from '@rneui/themed';
+import { useState } from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -6,7 +7,6 @@ import 'react-native-gesture-handler';
 import styles from './styles';
 import Icon from '../../../assets/icons';
 import { TagFilter, useFilter } from '../../utils/FilterContext';
-import { useEffect, useRef } from 'react';
 
 type FilterModalProps = {
   isVisible: boolean;
@@ -14,33 +14,8 @@ type FilterModalProps = {
   title: string;
 };
 
-type ParentTagFilter = { children: TagFilter[] } & TagFilter;
-
 function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
   const { dispatch, filters } = useFilter();
-  const nestedFilters = useRef(new Map<number, ParentTagFilter>());
-
-  useEffect(() => {
-    nestFilters();
-    // console.log(nestedFilters.current);
-  }, [filters]);
-
-  const nestFilters = () => {
-    Array.from(filters)
-      .filter(([_, { parent }]) => parent === null)
-      .map(([id, parent]) =>
-        nestedFilters.current.set(id, {
-          ...parent,
-          children: [],
-        } as ParentTagFilter),
-      );
-
-    Array.from(filters).map(([_, filter]) => {
-      if (filter.parent) {
-        nestedFilters.current.get(filter.parent)?.children.push(filter);
-      }
-    });
-  };
 
   return (
     <SafeAreaProvider>
@@ -65,24 +40,22 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
               bounces={false}
               style={styles.scrollView}
             >
-              {Array.from(nestedFilters.current).map(
-                ([id, parentFilter]: [number, ParentTagFilter]) => {
-                  return (
-                    <CheckBox
-                      key={id}
-                      title={parentFilter.name}
-                      checked={parentFilter.active}
-                      onPress={() =>
-                        dispatch({ type: 'TOGGLE_FILTER', id: parentFilter.id })
-                      }
-                      iconType="material-community"
-                      checkedIcon="checkbox-marked"
-                      uncheckedIcon="checkbox-blank-outline"
-                      checkedColor="black"
-                    ></CheckBox>
-                  );
-                },
-              )}
+              {filters.map(filter => {
+                return (
+                  <CheckBox
+                    key={filter.id}
+                    title={filter.name}
+                    checked={filter.active}
+                    onPress={() =>
+                      dispatch({ type: 'TOGGLE_FILTER', name: filter.name })
+                    }
+                    iconType="material-community"
+                    checkedIcon="checkbox-marked"
+                    uncheckedIcon="checkbox-blank-outline"
+                    checkedColor="black"
+                  />
+                );
+              })}
             </ScrollView>
           </View>
         </View>

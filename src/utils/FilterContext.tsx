@@ -9,9 +9,9 @@ import supabase from './supabase';
 
 type FilterAction =
   | { type: 'SET_TAGS'; tags: TagFilter[] }
-  | { type: 'TOGGLE_FILTER'; id: number }
+  | { type: 'TOGGLE_FILTER'; name: string }
   | { type: 'CLEAR_ALL'; category: string }
-  | { type: 'TOGGLE_MAIN_GENRE'; mainGenreId: number };
+  | { type: 'TOGGLE_MAIN_GENRE'; mainGenre: string };
 
 export type FilterDispatch = React.Dispatch<FilterAction>;
 
@@ -24,7 +24,7 @@ export type TagFilter = {
 };
 
 export interface FilterState {
-  filters: Map<number, TagFilter>;
+  filters: TagFilter[];
   isLoading: boolean;
   dispatch: FilterDispatch;
 }
@@ -36,61 +36,47 @@ export const useFilterReducer = () =>
     (prevState: FilterState, action: FilterAction) => {
       switch (action.type) {
         case 'SET_TAGS':
-          const filterMap = new Map();
-          action.tags.map(tag => filterMap.set(tag.id, tag));
-
           return {
             ...prevState,
-            filters: filterMap,
+            filters: action.tags,
             isLoading: false,
           };
         case 'TOGGLE_FILTER':
-          const desiredTag: TagFilter =
-            prevState.filters.get(action.id) ?? ({} as TagFilter);
-
-          prevState.filters.set(action.id, {
-            ...desiredTag,
-            active: !desiredTag?.active,
-          });
           return {
             ...prevState,
-            filters: prevState.filters,
+            filters: prevState.filters.map(tag =>
+              tag.name == action.name ? { ...tag, active: !tag.active } : tag,
+            ),
           };
         case 'CLEAR_ALL':
-          const clearedFilters = Array.from(
-            prevState.filters,
-            ([id, filter]): [number, TagFilter] =>
-              filter.category == action.category
-                ? [id, { ...filter, active: false }]
-                : [id, filter],
-          );
-
           return {
             ...prevState,
-            filters: new Map(clearedFilters),
+            filters: prevState.filters.map(tag =>
+              tag.category == action.category ? { ...tag, active: false } : tag,
+            ),
           };
         case 'TOGGLE_MAIN_GENRE':
-          const parentGenre = prevState.filters.get(action.mainGenreId);
+          const parentGenre = prevState.filters.find(
+            ({ name }) => name === action.mainGenre,
+          );
           const newActiveState = !parentGenre?.active;
 
-          const updatedFilters = Array.from(
-            prevState.filters,
-            ([id, filter]): [number, TagFilter] =>
-              filter.parent == parentGenre?.id || id == action.mainGenreId
-                ? [id, { ...filter, active: newActiveState }]
-                : [id, filter],
+          const updatedFilters = prevState.filters.map(tag =>
+            tag.parent == parentGenre?.id || tag.name == action.mainGenre
+              ? { ...tag, active: newActiveState }
+              : tag,
           );
 
           return {
             ...prevState,
-            filters: new Map(updatedFilters),
+            filters: updatedFilters,
           };
         default:
           return prevState;
       }
     },
     {
-      filters: new Map(),
+      filters: [],
       isLoading: true,
       dispatch: () => null,
     },
@@ -116,13 +102,11 @@ export function FilterContextProvider({
 }) {
   const [filterState, dispatch] = useFilterReducer();
 
-  const initTagsFromSupabase = async () => {
+  const getTags = async () => {
     const { data } = await supabase.from('tags').select(`*`);
 
     return data?.map(entry => {
       const { category, id, name, parent_id } = entry;
-      console.log(entry);
-
       return {
         id,
         name,
@@ -134,14 +118,8 @@ export function FilterContextProvider({
   };
 
   useEffect(() => {
-    initTagsFromSupabase().then(tags =>
-      dispatch({ type: 'SET_TAGS', tags: tags ?? [] }),
-    );
+    getTags().then(tags => dispatch({ type: 'SET_TAGS', tags: tags ?? [] }));
   }, []);
-
-  useEffect(() => {
-    console.log(filterState);
-  }, [filterState]);
 
   const filterContextValue = useMemo(
     () => ({

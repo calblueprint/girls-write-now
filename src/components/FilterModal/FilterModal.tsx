@@ -14,8 +14,30 @@ type FilterModalProps = {
   title: string;
 };
 
+type ParentFilter = { children: TagFilter[] } & TagFilter;
+
 function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
   const { dispatch, filters } = useFilter();
+
+  const nestFilters = (filters: TagFilter[]) => {
+    const parents = new Map<number, ParentFilter>();
+    filters
+      .filter(filter => filter.parent === null)
+      .map(parentFilter => {
+        parents.set(parentFilter.id, {
+          ...parentFilter,
+          children: [],
+        } as ParentFilter);
+      });
+
+    filters.map(childFilter => {
+      if (childFilter.parent) {
+        parents.get(childFilter.parent)?.children.push(childFilter);
+      }
+    });
+
+    return parents;
+  };
 
   return (
     <SafeAreaProvider>
@@ -37,23 +59,52 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
             <Text style={styles.modalTitle}> {title} </Text>
             <ScrollView
               showsVerticalScrollIndicator
-              bounces={false}
+              bounces={true}
               style={styles.scrollView}
             >
-              {filters.map(filter => {
+              {Array.from(nestFilters(filters)).map(([id, parentFilter]) => {
+                console.log('rerendering ' + parentFilter.name);
                 return (
-                  <CheckBox
-                    key={filter.id}
-                    title={filter.name}
-                    checked={filter.active}
-                    onPress={() =>
-                      dispatch({ type: 'TOGGLE_FILTER', name: filter.name })
-                    }
-                    iconType="material-community"
-                    checkedIcon="checkbox-marked"
-                    uncheckedIcon="checkbox-blank-outline"
-                    checkedColor="black"
-                  />
+                  <>
+                    <CheckBox
+                      key={parentFilter.id}
+                      title={parentFilter.name}
+                      checked={parentFilter.active}
+                      onPress={() =>
+                        dispatch({
+                          type: 'TOGGLE_FILTER',
+                          name: parentFilter.name,
+                        })
+                      }
+                      iconType="material-community"
+                      checkedIcon="checkbox-marked"
+                      uncheckedIcon="checkbox-blank-outline"
+                      checkedColor="black"
+                    />
+
+                    {parentFilter.children.map(filter => {
+                      console.log('rerendering ' + filter.name);
+
+                      return (
+                        <CheckBox
+                          textStyle={{ color: 'purple' }}
+                          key={filter.id}
+                          title={filter.name}
+                          checked={filter.active}
+                          onPress={() =>
+                            dispatch({
+                              type: 'TOGGLE_FILTER',
+                              name: filter.name,
+                            })
+                          }
+                          iconType="material-community"
+                          checkedIcon="checkbox-marked"
+                          uncheckedIcon="checkbox-blank-outline"
+                          checkedColor="black"
+                        />
+                      );
+                    })}
+                  </>
                 );
               })}
             </ScrollView>

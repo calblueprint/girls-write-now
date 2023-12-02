@@ -42,12 +42,16 @@ export const useFilterReducer = () =>
             isLoading: false,
           };
         case 'TOGGLE_FILTER':
-          return {
+          const start = +Date.now();
+          const nextState = {
             ...prevState,
             filters: prevState.filters.map(tag =>
               tag.name == action.name ? { ...tag, active: !tag.active } : tag,
             ),
           };
+          console.log('Toggle time' + (+Date.now() - start));
+
+          return nextState;
         case 'CLEAR_ALL':
           return {
             ...prevState,
@@ -120,6 +124,10 @@ export function FilterContextProvider({
   useEffect(() => {
     getTags().then(tags => dispatch({ type: 'SET_TAGS', tags: tags ?? [] }));
   }, []);
+
+  useEffect(() => {
+    console.log('shit');
+  }, [filterState.filters[0]]);
 
   const filterContextValue = useMemo(
     () => ({

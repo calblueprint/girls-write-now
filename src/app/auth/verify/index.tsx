@@ -18,15 +18,15 @@ function VerificationScreen() {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [otpInput, setOtpInput] = useState<string>('');
 
-  const input = useRef<OTPTextInput>(null);
+  const inputRef = useRef<OTPTextInput>(null);
 
   const clearText = () => {
-    input.current?.clear();
+    inputRef.current?.clear();
   };
 
   const setText = () => {
     setShowErrorMessage(false);
-    input.current?.setValue(otpInput);
+    inputRef.current?.setValue(otpInput);
   };
 
   const verifyAccount = async () => {
@@ -68,17 +68,25 @@ function VerificationScreen() {
 
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.container]}>
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         keyboardType="numeric"
         onChangeText={setCode}
         placeholder="Verification Code"
         value={verificationCode}
         maxLength={6}
-      />
+      /> */}
+
+      <Button title="< Back" titleStyle={styles.backButton} type="clear" />
+
+      <Text style={globalStyles.h1}> Enter Verification Code </Text>
+
+      <Text style={globalStyles.body1}>
+        We have sent the verification code to {}.
+      </Text>
 
       <OTPTextInput
-        ref={otpInput}
+        ref={inputRef}
         inputCount={6}
         defaultValue={verificationCode}
         inputCellLength={1}
@@ -93,6 +101,7 @@ function VerificationScreen() {
 
       <View style={[styles.verticallySpaced, globalStyles.mt20]} />
       <View style={[styles.verticallySpaced, globalStyles.mt20]}>
+        <Text> Didn't receive a code? </Text>
         <Button title="Resend code" disabled={loading} onPress={resendCode} />
       </View>
       <View style={[styles.verticallySpaced, globalStyles.mt20]}>

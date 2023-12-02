@@ -2,15 +2,16 @@ import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { Button } from 'react-native-elements/dist/buttons/Button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-import StyledButton from '../../../components/StyledButton/StyledButton';
-import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 
 function LoginScreen() {
   const sessionHandler = useSession();
@@ -102,6 +103,11 @@ function LoginScreen() {
         </Link>
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
+
+      <Button
+        title="test nav bar"
+        onPress={() => resetAndPushToRouter('home')}
+      />
 
       <View>
         <View>

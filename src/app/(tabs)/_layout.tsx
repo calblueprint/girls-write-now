@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import {
   SafeAreaView,
@@ -16,23 +15,25 @@ function HomeIcon({ color }: { color: string }) {
   );
 }
 
-function SearchIcon() {
-  return <Icon type="search_nav_bar" />;
+function SearchIcon({ color }: { color: string }) {
+  return (
+    <Icon
+      type={
+        color === colors.fadedBlack ? 'search_nav_bar' : 'search_nav_active'
+      }
+    />
+  );
 }
 
-function DocumentIcon() {
-  return <Icon type="library_nav_bar" />;
+function LibraryIcon({ color }: { color: string }) {
+  return (
+    <Icon
+      type={
+        color === colors.fadedBlack ? 'library_nav_bar' : 'library_nav_active'
+      }
+    />
+  );
 }
-
-// function HomeIcon({ color }: { color: string }) {
-//   return <Ionicons name="home-outline" color={color} size={26} />;
-// }
-// function SearchIcon({ color }: { color: string }) {
-//   return <Ionicons name="search-outline" color={color} size={26} />;
-// }
-// function DocumentIcon({ color }: { color: string }) {
-//   return <Ionicons name="document-outline" color={color} size={26} />;
-// }
 
 function TabNav() {
   const insets = useSafeAreaInsets();
@@ -46,10 +47,10 @@ function TabNav() {
         tabBarInactiveTintColor: colors.fadedBlack,
         tabBarStyle: {
           paddingTop: 16,
-          paddingBottom: 8,
-          height: 68,
+          paddingBottom: insets.bottom,
+          height: 68 + insets.bottom,
           backgroundColor: colors.white,
-        }, //14 in design
+        },
       }}
     >
       <Tabs.Screen
@@ -66,7 +67,7 @@ function TabNav() {
         options={{
           headerShown: false,
           tabBarLabel: 'Search',
-          // tabBarIcon: SearchIcon,
+          tabBarIcon: ({ color }) => SearchIcon({ color }),
         }}
       />
       <Tabs.Screen
@@ -88,7 +89,7 @@ function TabNav() {
         options={{
           headerShown: false,
           tabBarLabel: 'Library',
-          // tabBarIcon: DocumentIcon,
+          tabBarIcon: ({ color }) => LibraryIcon({ color }),
         }}
       />
     </Tabs>

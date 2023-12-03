@@ -1,6 +1,7 @@
 import { BottomSheet, CheckBox } from '@rneui/themed';
 import { useCallback, useState } from 'react';
-import { View, Text, ScrollView, Pressable, FlatList } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import 'react-native-gesture-handler';
@@ -42,7 +43,6 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
   return (
     <SafeAreaProvider>
       <BottomSheet
-        modalProps={{}}
         isVisible={isVisible}
         containerStyle={styles.modalBackground}
         scrollViewProps={{ bounces: false }}

@@ -1,6 +1,6 @@
 import { BottomSheet, CheckBox } from '@rneui/themed';
 import { useCallback, useState } from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { View, Text, ScrollView, Pressable, FlatList } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import 'react-native-gesture-handler';
@@ -57,12 +57,10 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.modalTitle}> {title} </Text>
-            <ScrollView
-              showsVerticalScrollIndicator
-              bounces={true}
-              style={styles.scrollView}
-            >
-              {Array.from(filters).map(([_, parentFilter]) => {
+            <FlatList
+              data={Array.from(filters)}
+              renderItem={({ item }) => {
+                const [_, parentFilter] = item;
                 return (
                   <>
                     <ParentFilter
@@ -72,20 +70,23 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
                       onPress={toggleParentFilter}
                     />
 
-                    {parentFilter.children.map(filter => {
-                      return (
-                        <ChildFilter
-                          id={filter.id}
-                          name={filter.name}
-                          checked={filter.active}
-                          onPress={toggleChildFilter}
-                        />
-                      );
-                    })}
+                    <FlatList
+                      data={parentFilter.children}
+                      renderItem={({ item }) => {
+                        return (
+                          <ChildFilter
+                            id={item.id}
+                            name={item.name}
+                            checked={item.active}
+                            onPress={toggleChildFilter}
+                          />
+                        );
+                      }}
+                    />
                   </>
                 );
-              })}
-            </ScrollView>
+              }}
+            />
           </View>
         </View>
       </BottomSheet>

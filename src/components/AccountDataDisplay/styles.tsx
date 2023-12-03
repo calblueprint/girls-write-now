@@ -16,6 +16,7 @@ export default StyleSheet.create({
   },
   value: {
     paddingTop: 18,
+    paddingRight: 20,
     fontSize: 14,
     fontFamily: 'Manrope',
     fontStyle: 'normal',

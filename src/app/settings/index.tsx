@@ -154,7 +154,10 @@ function SettingsScreen() {
           <Text style={styles.subheading}>Account</Text>
 
           <View style={styles.staticData}>
-            <AccountDataDisplay label="First Name" value={firstName} />
+            <AccountDataDisplay
+              label="First Name"
+              value="ashdkjashdkjashdkajshdjkashdjkashdjkashdakjshd"
+            />
             <AccountDataDisplay label="Last Name" value={lastName} />
             <AccountDataDisplay label="Username" value={username} />
             <AccountDataDisplay

@@ -16,6 +16,12 @@ type FilterModalProps = {
   title: string;
 };
 
+export enum CATEGORIES {
+  GENRE = 'genre-medium',
+  TOPIC = 'topic',
+  TONE = 'tone',
+}
+
 function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
   const { dispatch, filters } = useFilter();
 

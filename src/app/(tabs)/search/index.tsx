@@ -13,7 +13,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import FilterModal from '../../../components/FilterModal/FilterModal';
+import FilterModal, {
+  CATEGORIES as FilterCategories,
+} from '../../../components/FilterModal/FilterModal';
 import GenreCard from '../../../components/GenreCard/GenreCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
@@ -22,6 +24,8 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
+import { TagFilter, useFilter } from '../../../utils/FilterContext';
+import { ActivityIndicator } from 'react-native-paper';
 
 const getRecentSearch = async () => {
   try {
@@ -60,6 +64,7 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
 };
 
 function SearchScreen() {
+  const { filters } = useFilter();
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
@@ -81,6 +86,10 @@ function SearchScreen() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!filterVisible) searchFunction(search);
+  }, [filterVisible]);
+
   const getColor = (index: number) => {
     const genreColors = [colors.citrus, colors.lime, colors.lilac];
     return genreColors[index % genreColors.length];
@@ -92,11 +101,39 @@ function SearchScreen() {
       setSearchResults([]);
       return;
     }
+    const flattenenedFilters = Array.from(filters)
+      .map(([id, parent]) => [...parent.children, parent as TagFilter])
+      .flat();
+    const activeFilterNames = flattenenedFilters.filter(({ active }) => active);
+
+    const activeGenreNames = activeFilterNames
+      .filter(({ category }) => category == FilterCategories.GENRE)
+      .map(({ name }) => name);
+    const activeToneNames = activeFilterNames
+      .filter(({ category }) => category == FilterCategories.TONE)
+      .map(({ name }) => name);
+    const activeTopicNames = activeFilterNames
+      .filter(({ category }) => category == FilterCategories.TOPIC)
+      .map(({ name }) => name);
+
     const updatedData = allStories.filter((item: StoryPreview) => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
-      return title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1;
+
+      const matchesFilter =
+        activeFilterNames.length == 0 ||
+        ((activeGenreNames.length == 0 ||
+          item.genre_medium.some(genre => activeGenreNames.includes(genre))) &&
+          (activeToneNames.length == 0 ||
+            item.tone.some(tone => activeToneNames.includes(tone))) &&
+          (activeTopicNames.length == 0 ||
+            item.topic.some(topic => activeTopicNames.includes(topic))));
+
+      return (
+        (title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1) &&
+        matchesFilter
+      );
     });
     setSearch(text);
     setSearchResults(updatedData);

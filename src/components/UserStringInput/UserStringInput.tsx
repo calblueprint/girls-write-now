@@ -9,6 +9,7 @@ type UserStringInputProps = {
   attributes?: TextInput['props'] | null;
   children?: ReactNode;
   label?: string;
+  labelColor?: string;
   onChange?: (text: string) => any;
 };
 
@@ -18,11 +19,14 @@ export default function UserStringInput({
   attributes = {},
   label,
   children,
+  labelColor = '#000',
   onChange = _ => {},
 }: UserStringInputProps) {
   return (
     <View style={styles.mt16}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && (
+        <Text style={{ color: labelColor, ...styles.label }}>{label}</Text>
+      )}
       <View style={[styles.container, styles.verticallySpaced]}>
         <TextInput
           onChange={e => onChange(e.nativeEvent.text)}

@@ -19,7 +19,7 @@
     "@mui/material": "^5.14.13",
     "@mui/styled-engine-sc": "^6.0.0-alpha.1",
     "@mui/system": "^5.14.13",
-    "@react-native-async-storage/async-storage": "^1.18.2",
+    "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/material-bottom-tabs": "^6.2.17",
@@ -42,6 +42,7 @@
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-dom-parser": "^1.5.3",
+    "react-native-element-dropdown": "^2.10.0",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-htmlview": "^0.16.0",
@@ -55,10 +56,9 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-native-url-polyfill": "^2.0.0",
-    "validator": "^13.11.0",
     "react-native-vector-icons": "^10.0.2",
     "react-scroll-to-top": "^3.0.0",
-    "expo-font": "~11.4.0"
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

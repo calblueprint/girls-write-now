@@ -6,8 +6,7 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingHorizontal: 24,
   },
   authContainer: {
     marginHorizontal: 38,

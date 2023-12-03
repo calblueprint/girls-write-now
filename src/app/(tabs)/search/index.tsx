@@ -22,7 +22,8 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
-import { useFilter } from '../../../utils/FilterContext';
+import { TagFilter, useFilter } from '../../../utils/FilterContext';
+import { ActivityIndicator } from 'react-native-paper';
 
 const getRecentSearch = async () => {
   try {
@@ -61,6 +62,7 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
 };
 
 function SearchScreen() {
+  const { filters } = useFilter();
   const [allStories, setAllStories] = useState<StoryPreview[]>([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
   const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
@@ -82,6 +84,10 @@ function SearchScreen() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!filterVisible) searchFunction(search);
+  }, [filterVisible]);
+
   const getColor = (index: number) => {
     const genreColors = [colors.citrus, colors.lime, colors.lilac];
     return genreColors[index % genreColors.length];
@@ -93,11 +99,26 @@ function SearchScreen() {
       setSearchResults([]);
       return;
     }
+    const flattenenedFilters = Array.from(filters)
+      .map(([id, parent]) => [...parent.children, parent as TagFilter])
+      .flat();
+    const activeFilterNames = flattenenedFilters
+      .filter(({ active }) => active)
+      .map(({ name }) => name);
+
     const updatedData = allStories.filter((item: StoryPreview) => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
-      return title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1;
+
+      const matchesFilter =
+        activeFilterNames.length == 0 ||
+        item.genre_medium.some(genre => activeFilterNames.includes(genre));
+
+      return (
+        (title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1) &&
+        matchesFilter
+      );
     });
     setSearch(text);
     setSearchResults(updatedData);

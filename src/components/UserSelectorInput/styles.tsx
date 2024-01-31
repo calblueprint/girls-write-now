@@ -26,7 +26,7 @@ export default StyleSheet.create({
   dropdownContainer: {
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: colors.shadowDark,
+    borderColor: colors.fadedBlack,
     borderTopWidth: 0,
     borderTopEndRadius: 0,
     borderTopStartRadius: 0,

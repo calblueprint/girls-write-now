@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 
 import SplashScreen from '../components/SplashScreen/SplashScreen';
 import { useSession } from '../utils/AuthContext';
-import { useFonts, Manrope_700Bold, Manrope_400Regular, Manrope_600SemiBold } from '@expo-google-fonts/manrope';
+import {
+  useFonts,
+  Manrope_700Bold,
+  Manrope_400Regular,
+  Manrope_600SemiBold,
+} from '@expo-google-fonts/manrope';
 
 function StartPage() {
   const { session, isLoading } = useSession();
@@ -11,7 +16,7 @@ function StartPage() {
   let [fontsLoaded, fontError] = useFonts({
     'Manrope-Bold': Manrope_700Bold,
     'Manrope-Regular': Manrope_400Regular,
-    'Manrope-Semibold': Manrope_600SemiBold
+    'Manrope-Semibold': Manrope_600SemiBold,
   });
 
   useEffect(() => {

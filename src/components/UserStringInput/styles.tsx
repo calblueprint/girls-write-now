@@ -9,6 +9,7 @@ export default StyleSheet.create({
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400',
+    fontFamily: 'Manrope-Regular',
   },
   container: {
     paddingRight: 10,
@@ -19,11 +20,11 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'black',
+    fontFamily: 'Manrope-Regular',
   },
   inputField: {
     flex: 1,
     fontSize: 14,
-    fontFamily: 'Manrope',
     padding: 10,
     color: '#000000',
   },

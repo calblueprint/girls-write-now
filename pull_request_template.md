@@ -34,6 +34,6 @@
 
 [//]: # "Add screenshots of expected behavior - GIFs if you're feeling fancy!"
 
-CC: @akshaynthakur
+CC: @adityapawar1
 
-[//]: # 'This tags in Akshay as a default. Feel free to change, or add on anyone who you should be in on the conversation.'
+[//]: # 'This tags in Adi as a default. Feel free to change, or add on anyone who you should be in on the conversation.'

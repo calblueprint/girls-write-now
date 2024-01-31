@@ -9,7 +9,7 @@ export default StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    fontFamily: 'Manrope',
+    fontFamily: 'Manrope-Regular',
     fontStyle: 'normal',
     fontWeight: '400',
     color: colors.textGrey,
@@ -18,7 +18,7 @@ export default StyleSheet.create({
     paddingTop: 18,
     paddingRight: 20,
     fontSize: 14,
-    fontFamily: 'Manrope',
+    fontFamily: 'Manrope-Regular',
     fontStyle: 'normal',
     fontWeight: '400',
   },

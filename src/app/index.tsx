@@ -9,11 +9,13 @@ function StartPage() {
   const { session, isLoading } = useSession();
   const [delay, setDelay] = useState(true);
   let [fontsLoaded, fontError] = useFonts({
-    Manrope_700Bold, Manrope_400Regular, Manrope_600SemiBold
+    'Manrope-Bold': Manrope_700Bold,
+    'Manrope-Regular': Manrope_400Regular,
+    'Manrope-Semibold': Manrope_600SemiBold
   });
 
   useEffect(() => {
-    if (!delay && !isLoading && fontsLoaded && fontError) {
+    if (!delay && !isLoading && fontsLoaded && !fontError) {
       if (session) {
         router.replace('/home');
       } else {

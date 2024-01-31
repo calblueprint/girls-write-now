@@ -5,6 +5,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   forgotPassword: {
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     textDecorationLine: 'underline',
     paddingTop: 18,
@@ -21,6 +22,7 @@ export default StyleSheet.create({
     marginBottom: 64,
   },
   title: {
+    fontFamily: 'Manrope-Bold',
     lineHeight: 33,
     paddingTop: 64,
     marginBottom: 28,

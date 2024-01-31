@@ -1,12 +1,15 @@
 import { StyleSheet } from 'react-native';
 
+import colors from './colors';
+
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingHorizontal: 24,
+    paddingLeft: 24,
+    paddingRight: 24,
   },
   authContainer: {
     marginHorizontal: 38,
@@ -14,58 +17,104 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  h1: {
-    // fontFamily: 'DMSans-Bold',
-    fontSize: 40,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
-  },
-  h2: {
-    // fontFamily: 'DMSans-Bold',
-    fontSize: 32,
-    fontWeight: '600',
-    textAlign: 'left',
-    color: 'black',
-  },
-  h3: {
-    // fontFamily: 'DMSans-Regular',
-    fontSize: 20,
-    fontWeight: '600',
-    textAlign: 'left',
-    color: 'black',
-  },
-  h4: {
-    // fontFamily: 'DMSans-Regular',
-    fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'left',
-    color: 'black',
-    lineHeight: 22,
-  },
-  body1: {
-    // fontFamily: 'DMSans-Regular',
-    fontSize: 16,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
-    lineHeight: 22,
-  },
-  body2: {
-    // fontFamily: 'DMSans-Regular',
-    fontSize: 14,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
-  },
-  body3: {
-    fontFamily: 'Avenir',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
   },
   mt20: {
     marginTop: 20,
+  },
+  h1: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 24,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  h2: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 20,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  h3: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 18,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  sh1: {
+    fontFamily: 'Manrope-SemiBold',
+    fontSize: 14,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  sh2: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 14,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  sh3: {
+    fontFamily: 'Manrope-SemiBold',
+    fontSize: 12,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  body1: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 14,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  body2: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 16,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  body3: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 18,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  subtext: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  button1: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  button2: {
+    fontFamily: 'Manrope-SemiBold',
+    fontSize: 21,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  errorMessage: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    textAlign: 'left',
+    color: colors.black,
+  },
+  bodyUnderline: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    textAlign: 'left',
+    color: colors.black,
+    textDecorationLine: 'underline',
+  },
+  bodyBoldUnderline: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 14,
+    textAlign: 'left',
+    color: colors.black,
+    textDecorationLine: 'underline',
   },
 });

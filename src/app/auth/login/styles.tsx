@@ -27,7 +27,7 @@ export default StyleSheet.create({
     paddingTop: 64,
     marginBottom: 28,
     fontSize: 24,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   error: {
     color: 'red',

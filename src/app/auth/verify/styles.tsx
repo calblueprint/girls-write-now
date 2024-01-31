@@ -3,12 +3,16 @@ import { StyleSheet } from 'react-native';
 import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
-  input: {
+  otpTextInputStyle: {
+    borderRadius: 10,
+    borderWidth: 2,
+    borderBottomWidth: 2,
     height: 80,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
+    width: 40,
+    borderColor: colors.black,
+  },
+  otpContainerStyle: {
+    marginBottom: 20,
   },
   verticallySpaced: {
     paddingTop: 4,

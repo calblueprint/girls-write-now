@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,7 +7,7 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
+// import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,

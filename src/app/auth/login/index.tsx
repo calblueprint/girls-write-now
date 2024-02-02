@@ -69,7 +69,9 @@ function LoginScreen() {
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
       <View>
-        <Text style={[globalStyles.h1, styles.title]}>{'Read stories from \nyoung creators'}</Text>
+        <Text style={[globalStyles.h1, styles.title]}>
+          {'Read stories from \nyoung creators'}
+        </Text>
 
         <UserStringInput
           placeholder="Email or Username"
@@ -100,7 +102,10 @@ function LoginScreen() {
           />
         </UserStringInput>
 
-        <Link style={[globalStyles.bodyUnderline, styles.forgotPassword]} href="/auth/forgotPassword">
+        <Link
+          style={[globalStyles.bodyUnderline, styles.forgotPassword]}
+          href="/auth/forgotPassword"
+        >
           Forgot password?
         </Link>
         {error && <Text style={globalStyles.errorMessage}>{error}</Text>}

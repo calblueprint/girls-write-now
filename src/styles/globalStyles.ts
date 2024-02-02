@@ -60,7 +60,6 @@ export default StyleSheet.create({
     color: 'black',
   },
 
-
   body1: {
     fontFamily: 'Manrope-Regular',
     fontSize: 14,
@@ -125,7 +124,8 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: colors.error,
   },
-  test: { // TODO: Remove when done testing styles
+  test: {
+    // TODO: Remove when done testing styles
     fontFamily: 'Avenir',
     fontSize: 12,
     textAlign: 'left',

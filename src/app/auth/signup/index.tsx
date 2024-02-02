@@ -178,7 +178,9 @@ function SignUpScreen() {
             value={username}
           />
           {usernameError && (
-            <Text style={[globalStyles.errorMessage, styles.inputError]}>{usernameError}</Text>
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {usernameError}
+            </Text>
           )}
 
           <UserStringInput
@@ -206,7 +208,11 @@ function SignUpScreen() {
               secureTextEntry: false,
             }}
           />
-          {emailError && <Text style={[globalStyles.errorMessage, styles.inputError]}>{emailError}</Text>}
+          {emailError && (
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {emailError}
+            </Text>
+          )}
 
           <UserStringInput
             placeholder="Password"

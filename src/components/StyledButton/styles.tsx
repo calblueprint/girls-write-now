@@ -12,15 +12,11 @@ export default StyleSheet.create({
     backgroundColor: colors.gwnOrange,
   },
   disabledTitleStyle: {
-    fontSize: 21,
-    fontWeight: '400',
     paddingHorizontal: 24,
     paddingVertical: 10,
     color: 'white',
   },
   titleStyle: {
-    fontSize: 21,
-    fontWeight: '400',
     paddingHorizontal: 24,
     paddingVertical: 10,
     color: 'white',

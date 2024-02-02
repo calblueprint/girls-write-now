@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from './colors';
 
 export default StyleSheet.create({
   container: {
@@ -106,7 +107,7 @@ export default StyleSheet.create({
     color: 'black',
   },
   button2: {
-    fontFamily: 'Manrope-Semibold',
+    fontFamily: 'Manrope-Regular',
     fontSize: 21,
     textAlign: 'left',
     color: 'black',
@@ -120,6 +121,12 @@ export default StyleSheet.create({
   },
   errorMessage: {
     fontFamily: 'Manrope-Semibold',
+    fontSize: 12,
+    textAlign: 'left',
+    color: colors.error,
+  },
+  test: { // TODO: Remove when done testing styles
+    fontFamily: 'Avenir',
     fontSize: 12,
     textAlign: 'left',
     color: 'black',

@@ -5,12 +5,6 @@ export default StyleSheet.create({
     marginTop: 16,
     width: '100%',
   },
-  label: {
-    fontSize: 12,
-    fontStyle: 'normal',
-    fontWeight: '400',
-    fontFamily: 'Manrope-Regular',
-  },
   container: {
     paddingRight: 10,
     marginTop: 8,

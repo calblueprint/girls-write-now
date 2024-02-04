@@ -126,7 +126,6 @@ export default StyleSheet.create({
   },
   test: {
     // TODO: Remove when done testing styles
-    fontFamily: 'Avenir',
     fontSize: 12,
     textAlign: 'left',
     color: 'black',

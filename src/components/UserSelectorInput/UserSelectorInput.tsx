@@ -3,6 +3,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Icon } from 'react-native-elements';
 
 import styles from './styles';
+import globalStyles from '../../styles/globalStyles';
 
 type UserSelectorInputProps = {
   options: string[];
@@ -26,7 +27,7 @@ function UserSelectorInput({
 }: UserSelectorInputProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[globalStyles.subtext, styles.label]}>{label}</Text>
       <View style={styles.outer}>
         <Dropdown
           mode="default"

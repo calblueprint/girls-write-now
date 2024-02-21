@@ -124,12 +124,6 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: colors.error,
   },
-  test: {
-    // TODO: Remove when done testing styles
-    fontSize: 12,
-    textAlign: 'left',
-    color: 'black',
-  },
 
   mt20: {
     marginTop: 20,

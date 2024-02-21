@@ -233,6 +233,9 @@ function SettingsScreen() {
               disabled={loading}
             />
           )}
+          <Link href={"/auth/onboarding"} > arseins </Link>
+          {/* TODO REMOVE */}
+
         </View>
       </ScrollView>
     </SafeAreaView>

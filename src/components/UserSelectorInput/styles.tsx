@@ -11,10 +11,6 @@ export default StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 12,
-    fontStyle: 'normal',
-    fontWeight: '400',
-    color: colors.textGrey,
     marginBottom: 10,
   },
   dropdown: {

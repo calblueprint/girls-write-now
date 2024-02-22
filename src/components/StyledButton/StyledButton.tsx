@@ -14,8 +14,8 @@ function StyledButton({ disabled, onPress, text }: StyledButtonProps) {
     <Button
       disabledStyle={styles.disabledStyle}
       buttonStyle={styles.buttonStyle}
-      disabledTitleStyle={[globalStyles.button2, styles.disabledTitleStyle]}
-      titleStyle={styles.titleStyle}
+      disabledTitleStyle={[globalStyles.button2, styles.titleStyle]}
+      titleStyle={[globalStyles.button2, styles.titleStyle]}
       title={text}
       disabled={disabled}
       onPress={onPress}

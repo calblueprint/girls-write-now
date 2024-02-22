@@ -37,9 +37,6 @@ export default StyleSheet.create({
   icon: {
     marginRight: 5,
   },
-  textStyle: {
-    fontSize: 14,
-  },
   iconStyle: {
     width: 20,
     height: 20,

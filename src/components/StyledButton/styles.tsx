@@ -11,11 +11,6 @@ export default StyleSheet.create({
     borderRadius: 5,
     backgroundColor: colors.gwnOrange,
   },
-  disabledTitleStyle: {
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    color: 'white',
-  },
   titleStyle: {
     paddingHorizontal: 24,
     paddingVertical: 10,

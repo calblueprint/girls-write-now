@@ -8,7 +8,8 @@ import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
 import globalStyles from '../../../styles/globalStyles';
 import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
-import DatePicker from '../../../components/DatePicker/DatePicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+// import DatePicker from '../../../components/DatePicker/DatePicker';
 
 function OnboardingScreen() {
   const { session } = useSession();
@@ -29,7 +30,9 @@ function OnboardingScreen() {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`first_name, last_name, username, pronouns, birthday, gender, race_ethnicity`)
+        .select(
+          `first_name, last_name, username, pronouns, birthday, gender, race_ethnicity`,
+        )
         .eq('user_id', session?.user.id)
         .single();
 
@@ -113,22 +116,16 @@ function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={globalStyles.h1}>
-        Welcome, {username}
-      </Text>
-
-      <DatePicker title='Show Birthday' setDate={setBirthday} date={birthday} />
+      <Text style={globalStyles.h1}>Welcome, {username}</Text>
 
       <UserSelectorInput
         options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
-        placeholder="Gender"
         label="Gender"
         value={gender}
         setValue={setGender}
       />
       <UserSelectorInput
         options={['she/her', 'he/him', 'they/them', 'Other']}
-        placeholder="Pronouns"
         label="Pronouns"
         value={pronouns}
         setValue={setPronouns}
@@ -142,12 +139,23 @@ function OnboardingScreen() {
           'White',
           'Prefer Not to Disclose',
         ]}
-        placeholder="Race/Ethnicity"
         label="Race/Ethnicity"
         value={raceEthnicity}
         setValue={setRaceEthnicity}
       />
-
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={birthday}
+          mode="date"
+          onChange={date => {
+            setShowDatePicker(Platform.OS === 'ios');
+            if (date.nativeEvent.timestamp) {
+              setBirthday(new Date(date.nativeEvent.timestamp));
+            }
+          }}
+        />
+      )}
       <StyledButton
         text={loading ? 'Loading ...' : 'Update profile'}
         onPress={updateProfileAndGoHome}

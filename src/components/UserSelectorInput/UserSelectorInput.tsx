@@ -8,7 +8,6 @@ import globalStyles from '../../styles/globalStyles';
 type UserSelectorInputProps = {
   options: string[];
   label: string;
-  placeholder: string;
   setValue: (value: string) => any;
   value: string;
 };
@@ -21,7 +20,6 @@ type Option = {
 function UserSelectorInput({
   options,
   label,
-  placeholder,
   setValue,
   value,
 }: UserSelectorInputProps) {
@@ -32,10 +30,10 @@ function UserSelectorInput({
         <Dropdown
           mode="default"
           style={styles.dropdown}
-          placeholderStyle={styles.textStyle}
-          selectedTextStyle={styles.textStyle}
-          inputSearchStyle={styles.textStyle}
-          itemTextStyle={styles.textStyle}
+          placeholderStyle={globalStyles.body1}
+          selectedTextStyle={globalStyles.body1}
+          inputSearchStyle={globalStyles.body1}
+          itemTextStyle={globalStyles.body1}
           containerStyle={styles.dropdownContainer}
           dropdownPosition="bottom"
           itemContainerStyle={styles.itemContainer}
@@ -46,10 +44,12 @@ function UserSelectorInput({
           maxHeight={400}
           labelField="label"
           valueField="value"
-          placeholder={placeholder}
+          placeholder={'Select Option'}
           value={value}
           renderItem={(item: Option, selected: boolean | undefined) => (
-            <Text style={styles.itemContainer}>{item.value}</Text>
+            <Text style={[globalStyles.body1, styles.itemContainer]}>
+              {item.value}
+            </Text>
           )}
           renderRightIcon={() => (
             <Icon name="arrow-drop-down" type="material" />

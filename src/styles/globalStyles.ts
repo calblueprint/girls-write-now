@@ -106,7 +106,7 @@ export default StyleSheet.create({
     color: 'black',
   },
   button2: {
-    fontFamily: 'Manrope-Regular',
+    fontFamily: 'Manrope-Semibold',
     fontSize: 21,
     textAlign: 'left',
     color: 'black',

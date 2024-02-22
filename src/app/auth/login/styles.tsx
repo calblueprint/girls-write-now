@@ -1,15 +1,13 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   flex: {
     justifyContent: 'space-between',
   },
   forgotPassword: {
-    fontSize: 12,
-    textDecorationLine: 'underline',
     paddingTop: 18,
     paddingBottom: 16,
-    fontWeight: '400',
   },
   link: {
     fontWeight: '700',
@@ -24,11 +22,6 @@ export default StyleSheet.create({
     lineHeight: 33,
     paddingTop: 64,
     marginBottom: 28,
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  error: {
-    color: 'red',
   },
   icon: {
     paddingRight: 10,

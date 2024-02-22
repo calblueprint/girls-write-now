@@ -7,7 +7,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   inputError: {
-    color: 'red',
     marginTop: 8,
   },
   link: {
@@ -20,10 +19,8 @@ export default StyleSheet.create({
     marginTop: 16,
   },
   title: {
-    fontSize: 24,
     paddingTop: 64,
     marginBottom: 23,
-    fontWeight: '700',
   },
   icon: {
     marginRight: 10,
@@ -34,7 +31,6 @@ export default StyleSheet.create({
     paddingBottom: 8,
   },
   passwordErrorText: {
-    fontSize: 12,
     marginLeft: 8,
   },
   verticallySpaced: {

@@ -1,5 +1,6 @@
 import { Button } from 'react-native-elements';
 
+import globalStyles from '../../styles/globalStyles';
 import styles from './styles';
 
 type StyledButtonProps = {
@@ -13,8 +14,8 @@ function StyledButton({ disabled, onPress, text }: StyledButtonProps) {
     <Button
       disabledStyle={styles.disabledStyle}
       buttonStyle={styles.buttonStyle}
-      disabledTitleStyle={styles.disabledTitleStyle}
-      titleStyle={styles.titleStyle}
+      disabledTitleStyle={[globalStyles.button2, styles.titleStyle]}
+      titleStyle={[globalStyles.button2, styles.titleStyle]}
       title={text}
       disabled={disabled}
       onPress={onPress}

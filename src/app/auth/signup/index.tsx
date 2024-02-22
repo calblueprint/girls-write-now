@@ -165,39 +165,44 @@ function SignUpScreen() {
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
-        // bounces={false}
         contentContainerStyle={styles.flex}
       >
         <View style={styles.inputs}>
-          <Text style={styles.title}>
+          <Text style={[globalStyles.h1, styles.title]}>
             {'Read stories from \nyoung creators'}
           </Text>
 
           <UserStringInput
             placeholder="Username"
             label="Username"
+            placeholderTextColor={colors.darkGrey}
             onChange={setAndCheckUsername}
             value={username}
           />
           {usernameError && (
-            <Text style={styles.inputError}>{usernameError}</Text>
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {usernameError}
+            </Text>
           )}
 
           <UserStringInput
             placeholder="First Name"
             label="First Name"
+            placeholderTextColor={colors.darkGrey}
             onChange={setFirstName}
             value={firstName}
           />
           <UserStringInput
             placeholder="Last Name"
             label="Last Name"
+            placeholderTextColor={colors.darkGrey}
             onChange={setLastName}
             value={lastName}
           />
           <UserStringInput
             placeholder="Email"
             label="Email"
+            placeholderTextColor={colors.darkGrey}
             onChange={setAndCheckEmail}
             value={email}
             attributes={{
@@ -205,11 +210,16 @@ function SignUpScreen() {
               secureTextEntry: false,
             }}
           />
-          {emailError && <Text style={styles.inputError}>{emailError}</Text>}
+          {emailError && (
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {emailError}
+            </Text>
+          )}
 
           <UserStringInput
             placeholder="Password"
             label="Password"
+            placeholderTextColor={colors.darkGrey}
             onChange={text => {
               setPassword(text);
               checkPassword(text);
@@ -233,6 +243,7 @@ function SignUpScreen() {
             <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
             <Text
               style={[
+                globalStyles.errorMessage,
                 styles.passwordErrorText,
                 hasUppercase
                   ? { color: colors.textGreen }
@@ -248,6 +259,7 @@ function SignUpScreen() {
             <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
             <Text
               style={[
+                globalStyles.errorMessage,
                 styles.passwordErrorText,
                 hasLowercase
                   ? { color: colors.textGreen }
@@ -263,6 +275,7 @@ function SignUpScreen() {
             <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
             <Text
               style={[
+                globalStyles.errorMessage,
                 styles.passwordErrorText,
                 hasNumber
                   ? { color: colors.textGreen }
@@ -278,6 +291,7 @@ function SignUpScreen() {
             <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
             <Text
               style={[
+                globalStyles.errorMessage,
                 styles.passwordErrorText,
                 hasLength
                   ? { color: colors.textGreen }
@@ -301,17 +315,17 @@ function SignUpScreen() {
               disabled={
                 !passwordComplexity ||
                 loading ||
-                emailError != '' ||
-                usernameError != '' ||
+                emailError !== '' ||
+                usernameError !== '' ||
                 email.length === 0 ||
                 username.length === 0
               }
               onPress={signUpWithEmail}
             />
           </View>
-          <Text style={styles.redirectText}>
+          <Text style={[globalStyles.body1, styles.redirectText]}>
             Already have an account?{' '}
-            <Link style={styles.link} href="/auth/login">
+            <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
               Log In
             </Link>
           </Text>

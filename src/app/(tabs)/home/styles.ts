@@ -29,10 +29,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 24,
     marginBottom: 12,
+    marginRight: 24,
   },
   featuredDescription: {
     marginBottom: 16,
     marginTop: 8,
+    marginRight: 24,
   },
 });
 

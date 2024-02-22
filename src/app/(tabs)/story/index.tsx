@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Share,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -68,17 +69,25 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          <Image style={styles.image} source={{ uri: story.featured_media }} />
+          {/* <Image style={styles.image} source={{ uri: story.featured_media }} /> */}
 
           <Text style={styles.title}>{story?.title}</Text>
-
-          <View style={styles.author}>
-            <Image
-              style={styles.authorImage}
-              source={{ uri: story.author_image }}
-            />
-            <Text style={styles.authorText}>By {story.author_name}</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              router.push({
+                pathname: '/author',
+                params: { author: story.author_id.toString() },
+              });
+            }}
+          >
+            <View style={styles.author}>
+              <Image
+                style={styles.authorImage}
+                source={{ uri: story.author_image ? story.author_image : '' }}
+              />
+              <Text style={styles.authorText}>By {story.author_name}</Text>
+            </View>
+          </TouchableOpacity>
 
           <View>
             <FlatList

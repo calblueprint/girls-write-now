@@ -53,8 +53,11 @@ function HomeScreen() {
       setLoading(false);
     });
   }, [user]);
+
   return (
-    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
+    <SafeAreaView
+      style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}
+    >
       {loading && (
         <View style={styles.loading}>
           <Text>Loading</Text>
@@ -82,7 +85,7 @@ function HomeScreen() {
             <Text style={[globalStyles.body1, styles.featuredDescription]}>
               {featuredStoriesDescription}
             </Text>
-            <View>
+            <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (
                 <PreviewCard
                   key={story.title}

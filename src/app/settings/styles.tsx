@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignSelf: 'stretch',
   },
   subheading: {
-    fontFamily: 'Manrope',
+    fontFamily: 'Manrope-Regular',
     fontSize: 18,
     fontStyle: 'normal',
     fontWeight: '700',
@@ -24,7 +24,7 @@ export default StyleSheet.create({
   },
   heading: {
     paddingBottom: 24,
-    fontFamily: 'Manrope',
+    fontFamily: 'Manrope-Regular',
     fontSize: 24,
     fontStyle: 'normal',
     fontWeight: '700',
@@ -44,7 +44,7 @@ export default StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    fontFamily: 'Manrope',
+    fontFamily: 'Manrope-Regular',
     fontStyle: 'normal',
     fontWeight: '400',
   },

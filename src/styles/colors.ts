@@ -6,7 +6,8 @@ const colors = {
   lime: '#ACC073',
   melanin: '#703929',
   citrus: '#E66E3F',
-  moss: '5A7906',
+  moss: '#5A7906',
+  error: '#EB563B',
 
   // Neutrals
   black: '#000000',

@@ -34,7 +34,7 @@ function PreviewCard({
         <View style={styles.top}>
           <Image style={styles.image} source={{ uri: image }} />
           <View style={styles.cardTextContainer}>
-            <Text numberOfLines={1} style={[globalStyles.h4, styles.title]}>
+            <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
               {title}
             </Text>
             <View style={styles.authorContainer}>
@@ -46,7 +46,7 @@ function PreviewCard({
                 {author}
               </Text>
             </View>
-            <Text numberOfLines={2} style={[globalStyles.body3]}>
+            <Text numberOfLines={2} style={[globalStyles.subtext]}>
               {excerpt.html.slice(3, -3)}
             </Text>
           </View>

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 2,
   },
   title: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 24,
     fontWeight: '400',
     textAlign: 'left',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   authorText: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '400',
     textAlign: 'left',
@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   genresText: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '400',
     color: 'black',
     backgroundColor: '#D9D9D9',
   },
   shareButtonText: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '400',
     textAlign: 'left',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
   },
   excerpt: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'left',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   story: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '400',
     textAlign: 'left',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   authorProcess: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'left',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   process: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '400',
     textAlign: 'left',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   backToTopButtonText: {
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '800',
     textAlign: 'left',

@@ -27,7 +27,7 @@ function ContentCard({
       <View style={styles.contentCard}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.textContainer}>
-          <Text style={[globalStyles.h4, styles.title]} numberOfLines={1}>
+          <Text style={[globalStyles.h3, styles.title]} numberOfLines={1}>
             {title}
           </Text>
           <Text style={globalStyles.body1} numberOfLines={1}>

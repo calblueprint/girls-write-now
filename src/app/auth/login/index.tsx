@@ -10,6 +10,7 @@ import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
 import globalStyles from '../../../styles/globalStyles';
+import colors from '../../../styles/colors';
 import { useSession } from '../../../utils/AuthContext';
 
 function LoginScreen() {
@@ -68,13 +69,16 @@ function LoginScreen() {
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.flex]}>
       <View>
-        <Text style={styles.title}>{'Read stories from \nyoung creators'}</Text>
+        <Text style={[globalStyles.h1, styles.title]}>
+          {'Read stories from \nyoung creators'}
+        </Text>
 
         <UserStringInput
           placeholder="Email or Username"
           label="Email or Username"
           onChange={setEmailOrUsername}
           value={emailOrUsername}
+          placeholderTextColor={colors.darkGrey}
           attributes={{
             textContentType: 'emailAddress',
           }}
@@ -84,6 +88,7 @@ function LoginScreen() {
           placeholder="Password"
           onChange={setPassword}
           value={password}
+          placeholderTextColor={colors.darkGrey}
           attributes={{
             textContentType: 'password',
             secureTextEntry: passwordTextHidden,
@@ -97,10 +102,13 @@ function LoginScreen() {
           />
         </UserStringInput>
 
-        <Link style={styles.forgotPassword} href="/auth/forgotPassword">
+        <Link
+          style={[globalStyles.bodyUnderline, styles.forgotPassword]}
+          href="/auth/forgotPassword"
+        >
           Forgot password?
         </Link>
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Text style={globalStyles.errorMessage}>{error}</Text>}
       </View>
 
       <View>
@@ -112,9 +120,9 @@ function LoginScreen() {
           />
         </View>
 
-        <Text style={styles.redirectText}>
+        <Text style={[globalStyles.body1, styles.redirectText]}>
           Don&apos;t have an account?{' '}
-          <Link style={styles.link} href="/auth/signup">
+          <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
             Sign Up
           </Link>
         </Text>

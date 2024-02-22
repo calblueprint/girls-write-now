@@ -11,10 +11,6 @@ export default StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 12,
-    fontStyle: 'normal',
-    fontWeight: '400',
-    color: colors.textGrey,
     marginBottom: 10,
   },
   dropdown: {
@@ -40,9 +36,6 @@ export default StyleSheet.create({
   },
   icon: {
     marginRight: 5,
-  },
-  textStyle: {
-    fontSize: 14,
   },
   iconStyle: {
     width: 20,

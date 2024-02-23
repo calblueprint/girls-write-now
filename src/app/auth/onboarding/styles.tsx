@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import colors from '../../../styles/colors';
+
 export default StyleSheet.create({
   input: {
     height: 40,
@@ -17,5 +19,8 @@ export default StyleSheet.create({
     paddingVertical: 63,
     paddingLeft: 43,
     paddingRight: 44,
+  },
+  subtext: {
+    color: colors.darkGrey,
   },
 });

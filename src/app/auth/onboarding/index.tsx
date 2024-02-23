@@ -1,14 +1,15 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { Alert, ScrollView, Platform, Text } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import styles from './styles';
 import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import globalStyles from '../../../styles/globalStyles';
-import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
-import DateTimePicker from '@react-native-community/datetimepicker';
 // import DatePicker from '../../../components/DatePicker/DatePicker';
 
 function OnboardingScreen() {
@@ -109,14 +110,25 @@ function OnboardingScreen() {
       setLoading(false);
     }
   };
-
-  if (!session) {
-    return <Redirect href="/auth/login" />;
-  }
+  // TODO add back when doen testing
+  // if (!session) {
+  //   return <Redirect href="/auth/login" />;
+  // }
 
   return (
     <ScrollView style={styles.container}>
       <Text style={globalStyles.h1}>Welcome, {username}</Text>
+
+      <Text style={globalStyles.subHeading1}>
+        Input your profile information below.
+      </Text>
+
+      <Icon type="material" name="info" />
+
+      <Text style={[globalStyles.subtext, styles.subtext]}>
+        This information is only used for outreach efforts, and will not be
+        visible to other users on the app.
+      </Text>
 
       <UserSelectorInput
         options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}

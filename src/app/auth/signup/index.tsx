@@ -163,6 +163,7 @@ function SignUpScreen() {
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
+        automaticallyAdjustKeyboardInsets={true}
         contentContainerStyle={styles.flex}
       >
         <View style={styles.inputs}>

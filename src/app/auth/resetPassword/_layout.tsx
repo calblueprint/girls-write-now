@@ -9,4 +9,3 @@ function StackLayout() {
 }
 
 export default StackLayout;
-//fefefr

@@ -53,6 +53,7 @@ function HomeScreen() {
       setLoading(false);
     });
   }, [user]);
+
   return (
     <SafeAreaView
       style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}

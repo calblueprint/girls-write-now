@@ -151,6 +151,8 @@ function SettingsScreen() {
       <ScrollView bounces={false} contentContainerStyle={styles.main}>
         <View>
           <Text style={styles.heading}>Settings</Text>
+          <Link href={"/auth/onboarding"}><Text>Go to onboarding</Text></Link>
+
           <Text style={styles.subheading}>Account</Text>
 
           <View style={styles.staticData}>

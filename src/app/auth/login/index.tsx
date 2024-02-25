@@ -9,8 +9,8 @@ import styles from './styles';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
-import globalStyles from '../../../styles/globalStyles';
 import colors from '../../../styles/colors';
+import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
 function LoginScreen() {
@@ -72,7 +72,10 @@ function LoginScreen() {
         <Text style={[globalStyles.h1, styles.title]}>
           {'Read stories from \nyoung creators'}
         </Text>
-
+        {/* TODO add back when doen testing */}
+        <Link href="/auth/onboarding">
+          <Text>Go to onboarding</Text>
+        </Link>
         <UserStringInput
           placeholder="Email or Username"
           label="Email or Username"
@@ -101,7 +104,6 @@ function LoginScreen() {
             onPress={() => setPasswordTextHidden(!passwordTextHidden)}
           />
         </UserStringInput>
-
         <Link
           style={[globalStyles.bodyUnderline, styles.forgotPassword]}
           href="/auth/forgotPassword"

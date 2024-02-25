@@ -126,9 +126,6 @@ function LoginScreen() {
             Sign Up
           </Link>
         </Text>
-        <Link href="/auth/resetPassword">
-          <Text>Go to resetPassword</Text>
-        </Link>
       </View>
     </SafeAreaView>
   );

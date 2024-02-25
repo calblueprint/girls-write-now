@@ -5,16 +5,15 @@ export default StyleSheet.create({
     paddingVertical: 63,
     paddingLeft: 43,
     paddingRight: 44,
+    flex: 1,
+    justifyContent: 'space-between',
   },
 
   newPassword: {
     paddingBottom: 8,
   },
 
-  updatePassword: {
-    justifyContent: 'flex-end',
-    marginBottom: 99,
-  },
+  updatePassword: {},
 
   passwordComplexity: {
     display: 'flex',

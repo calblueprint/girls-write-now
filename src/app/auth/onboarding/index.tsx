@@ -110,10 +110,10 @@ function OnboardingScreen() {
       setLoading(false);
     }
   };
-  // TODO add back when doen testing
-  // if (!session) {
-  //   return <Redirect href="/auth/login" />;
-  // }
+
+  if (!session) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <ScrollView style={styles.container}>

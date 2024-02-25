@@ -72,10 +72,6 @@ function LoginScreen() {
         <Text style={[globalStyles.h1, styles.title]}>
           {'Read stories from \nyoung creators'}
         </Text>
-        {/* TODO add back when doen testing */}
-        <Link href="/auth/onboarding">
-          <Text>Go to onboarding</Text>
-        </Link>
         <UserStringInput
           placeholder="Email or Username"
           label="Email or Username"

@@ -10,4 +10,23 @@ export default StyleSheet.create({
   newPassword: {
     paddingVertical: 24,
   },
+
+  updatePassword: {
+    paddingBottom: 99,
+    paddingVertical: 268,
+  },
+
+  passwordComplexity: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 8,
+  },
+
+  passwordErrorText: {
+    marginLeft: 8,
+  },
+
+  icon: {
+    marginRight: 10,
+  },
 });

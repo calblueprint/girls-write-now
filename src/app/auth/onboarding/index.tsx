@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { Alert, ScrollView, Platform, Text } from 'react-native';
+import { Alert, ScrollView, Platform, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import styles from './styles';
@@ -117,19 +117,17 @@ function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={globalStyles.h1}>Welcome, {username}</Text>
-
-      <Text style={globalStyles.subHeading1}>
+      <Text style={[globalStyles.h1, styles.h1]}>Welcome, {username}</Text>
+      <Text style={[globalStyles.body1, styles.body1]}>
         Input your profile information below.
       </Text>
-
-      <Icon type="material" name="info" />
-
-      <Text style={[globalStyles.subtext, styles.subtext]}>
-        This information is only used for outreach efforts, and will not be
-        visible to other users on the app.
-      </Text>
-
+      <View style={styles.info}>
+        <Icon type="material" name="info-outline" color="#797979" />
+        <Text style={[globalStyles.subtext, styles.subtext]}>
+          This information is only used for outreach efforts, and will not be
+          visible to other users on the app.
+        </Text>
+      </View>
       <UserSelectorInput
         options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
         label="Gender"

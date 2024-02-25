@@ -86,6 +86,7 @@ function ResetPasswordScreen() {
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.h1]}>Create a New Password</Text>
+      <View style = {styles.newPassword}> 
       <UserStringInput
         placeholder="Password"
         label="New password"
@@ -107,12 +108,14 @@ function ResetPasswordScreen() {
           onPress={() => setPasswordTextHidden(!passwordTextHidden)}
         />
       </UserStringInput>
+      </View>
 
       {password !== '' && (
         <View style={styles.passwordComplexity}>
           <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
           <Text
             style={[
+              globalStyles.errorMessage,
               styles.passwordErrorText,
               hasUppercase
                 ? { color: colors.textGreen }
@@ -189,29 +192,31 @@ function ResetPasswordScreen() {
         </View>
       )}
 
-      <UserStringInput
-        placeholder="Confirm Password"
-        label="Confirm password"
-        placeholderTextColor={colors.darkGrey}
-        onChange={text => {
-          setConfirmPassword(text);
-          checkConfirmPassword(text);
-        }}
-        value={confirmPassword}
-        attributes={{
-          textContentType: 'password',
-          secureTextEntry: confirmPasswordTextHidden,
-        }}
-      >
-        <RNEIcon
-          name={confirmPasswordTextHidden ? 'visibility-off' : 'visibility'}
-          type="material"
-          style={styles.icon}
-          onPress={() =>
-            setConfirmPasswordTextHidden(!confirmPasswordTextHidden)
-          }
-        />
-      </UserStringInput>
+      <View style = {styles.newPassword}>
+        <UserStringInput
+          placeholder="Confirm Password"
+          label="Confirm password"
+          placeholderTextColor={colors.darkGrey}
+          onChange={text => {
+            setConfirmPassword(text);
+            checkConfirmPassword(text);
+          }}
+          value={confirmPassword}
+          attributes={{
+            textContentType: 'password',
+            secureTextEntry: confirmPasswordTextHidden,
+          }}
+        >
+          <RNEIcon
+            name={confirmPasswordTextHidden ? 'visibility-off' : 'visibility'}
+            type="material"
+            style={styles.icon}
+            onPress={() =>
+              setConfirmPasswordTextHidden(!confirmPasswordTextHidden)
+            }
+          />
+        </UserStringInput>
+      </View>
 
       {password !== '' && (
         <View style={styles.passwordComplexity}>
@@ -232,7 +237,7 @@ function ResetPasswordScreen() {
 
       <View style={styles.updatePassword}>
         <StyledButton
-          disabled={!hasLength}
+          disabled={!hasLength || !isMatching}
           onPress={changePassword}
           text="Update Password"
         />

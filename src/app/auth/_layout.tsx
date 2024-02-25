@@ -8,6 +8,7 @@ function StackLayout() {
       <Stack.Screen name="onboarding" options={{ headerShown: false }} />
       <Stack.Screen name="verify" options={{ headerShown: false }} />
       <Stack.Screen name="forgotPassword" options={{ headerShown: false }} />
+      <Stack.Screen name="resetPassword" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -8,12 +8,12 @@ export default StyleSheet.create({
   },
 
   newPassword: {
-    paddingVertical: 24,
+    paddingBottom: 8,
   },
 
   updatePassword: {
-    paddingBottom: 99,
-    paddingVertical: 268,
+    justifyContent: 'flex-end',
+    marginBottom: 99,
   },
 
   passwordComplexity: {

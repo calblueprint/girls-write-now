@@ -127,6 +127,7 @@ function LoginScreen() {
           </Link>
         </Text>
       </View>
+      <Link href={'/auth/resetPassword'}> go to resetpass</Link>
     </SafeAreaView>
   );
 }

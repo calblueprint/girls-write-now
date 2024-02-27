@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
+    paddingVertical: 64,
+    paddingLeft: 44,
     paddingRight: 44,
     flex: 1,
     justifyContent: 'space-between',
@@ -12,8 +12,6 @@ export default StyleSheet.create({
   newPassword: {
     paddingBottom: 8,
   },
-
-  updatePassword: {},
 
   passwordComplexity: {
     display: 'flex',

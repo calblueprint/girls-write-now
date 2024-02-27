@@ -34,26 +34,10 @@ function ResetPasswordScreen() {
   const checkPassword = (text: string) => {
     setPassword(text);
     if (text !== '') {
-      if (text !== text.toLowerCase()) {
-        setHasUppercase(true);
-      } else {
-        setHasUppercase(false);
-      }
-      if (text !== text.toUpperCase()) {
-        setHasLowercase(true);
-      } else {
-        setHasLowercase(false);
-      }
-      if (/[0-9]/.test(text)) {
-        setHasNumber(true);
-      } else {
-        setHasNumber(false);
-      }
-      if (text.length >= 8) {
-        setHasLength(true);
-      } else {
-        setHasLength(false);
-      }
+      setHasUppercase(text !== text.toLowerCase());
+      setHasLowercase(text !== text.toUpperCase());
+      setHasNumber(/[0-9]/.test(text));
+      setHasLength(text.length >= 8);
       //need to check that it is different from old password
     }
   };
@@ -61,11 +45,7 @@ function ResetPasswordScreen() {
   const checkConfirmPassword = (text: string) => {
     setConfirmPassword(text);
     if (text !== '') {
-      if (text == password) {
-        setIsMatching(true);
-      } else {
-        setIsMatching(false);
-      }
+      setIsMatching(text == password);
     }
   };
 
@@ -95,6 +75,7 @@ function ResetPasswordScreen() {
             onChange={text => {
               setPassword(text);
               checkPassword(text);
+              checkConfirmPassword(confirmPassword);
             }}
             value={password}
             attributes={{
@@ -236,7 +217,7 @@ function ResetPasswordScreen() {
           </View>
         )}
       </View>
-      <View style={styles.updatePassword}>
+      <View>
         <StyledButton
           disabled={!hasLength || !isMatching}
           onPress={changePassword}

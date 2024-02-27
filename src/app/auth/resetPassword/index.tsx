@@ -101,25 +101,25 @@ function ResetPasswordScreen() {
           <PasswordComplexityText
             condition={hasUppercase}
             message="At least 1 uppercase letter"
-          ></PasswordComplexityText>
+          />
         )}
         {password !== '' && (
           <PasswordComplexityText
             condition={hasLowercase}
             message="At least 1 lowercase letter"
-          ></PasswordComplexityText>
+          />
         )}
         {password !== '' && (
           <PasswordComplexityText
             condition={hasNumber}
             message="At least 1 number"
-          ></PasswordComplexityText>
+          />
         )}
         {password !== '' && (
           <PasswordComplexityText
             condition={hasLength}
             message="At least 8 characters"
-          ></PasswordComplexityText>
+          />
         )}
 
         {/* functionality for this has not been implemented */}
@@ -127,7 +127,7 @@ function ResetPasswordScreen() {
           <PasswordComplexityText
             condition={isDifferent}
             message="Must be different than your old password"
-          ></PasswordComplexityText>
+          />
         )}
 
         <View style={styles.newPassword}>
@@ -160,7 +160,7 @@ function ResetPasswordScreen() {
           <PasswordComplexityText
             condition={isMatching}
             message="Inputs must match"
-          ></PasswordComplexityText>
+          />
         )}
       </View>
       <View>

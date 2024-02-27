@@ -226,25 +226,25 @@ function SignUpScreen() {
           <PasswordComplexityText
             condition={hasUppercase}
             message="At least 1 uppercase letter"
-          ></PasswordComplexityText>
+          />
         )}
         {password !== '' && (
           <PasswordComplexityText
             condition={hasLowercase}
             message="At least 1 lowercase letter"
-          ></PasswordComplexityText>
+          />
         )}
         {password !== '' && (
           <PasswordComplexityText
             condition={hasNumber}
             message="At least 1 number"
-          ></PasswordComplexityText>
+          />
         )}
         {password !== '' && (
           <PasswordComplexityText
             condition={hasLength}
             message="At least 8 characters"
-          ></PasswordComplexityText>
+          />
         )}
 
         <View style={styles.navigation}>

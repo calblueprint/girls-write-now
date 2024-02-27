@@ -2,9 +2,6 @@ import { Link, router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
-import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import validator from 'validator';
 
 import styles from './styles';
 import Icon from '../../../../assets/icons';
@@ -13,6 +10,7 @@ import UserStringInput from '../../../components/UserStringInput/UserStringInput
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
+import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
 import supabase from '../../../utils/supabase';
 
 function ResetPasswordScreen() {
@@ -93,85 +91,41 @@ function ResetPasswordScreen() {
         </View>
 
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasUppercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 uppercase letter
-            </Text>
-          </View>
+          <PasswordComplexityText 
+          condition = {hasUppercase} 
+          message = 'At least 1 uppercase letter'
+          >
+          </PasswordComplexityText>
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasLowercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 lowercase letter
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition = {hasLowercase}
+            message = 'At least 1 lowercase letter'
+          >
+          </PasswordComplexityText>
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasNumber
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 number
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition = {hasNumber}
+            message = 'At least 1 number'
+          >
+          </PasswordComplexityText>
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasLength
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 8 characters
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition = {hasLength}
+            message = 'At least 8 characters'
+          >
+          </PasswordComplexityText>
         )}
+
         {/* functionality for this has not been implemented */}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={isDifferent ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                isDifferent
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              Must be different than your old password
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition = {isDifferent}
+            message = 'Must be different than your old password'
+          >
+          </PasswordComplexityText>
         )}
 
         <View style={styles.newPassword}>
@@ -201,20 +155,10 @@ function ResetPasswordScreen() {
         </View>
 
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={isMatching ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                isMatching
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              Inputs must match
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition = {isMatching}
+            message = 'Inputs must match'
+          ></PasswordComplexityText>
         )}
       </View>
       <View>

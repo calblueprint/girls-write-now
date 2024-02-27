@@ -40,7 +40,14 @@ function ResetPasswordScreen() {
     }
   };
 
-  const checkConfirmPassword = (text: string) => {
+  const checkPasswordMatchConfirmPassword = (text: string) => {
+    setPassword(text);
+    if (text !== '') {
+      setIsMatching(text == confirmPassword);
+    }
+  };
+
+  const checkConfirmPasswordMatchPassword = (text: string) => {
     setConfirmPassword(text);
     if (text !== '') {
       setIsMatching(text == password);
@@ -73,7 +80,7 @@ function ResetPasswordScreen() {
             onChange={text => {
               setPassword(text);
               checkPassword(text);
-              checkConfirmPassword(confirmPassword);
+              checkPasswordMatchConfirmPassword(text);
             }}
             value={password}
             attributes={{
@@ -91,41 +98,36 @@ function ResetPasswordScreen() {
         </View>
 
         {password !== '' && (
-          <PasswordComplexityText 
-          condition = {hasUppercase} 
-          message = 'At least 1 uppercase letter'
-          >
-          </PasswordComplexityText>
+          <PasswordComplexityText
+            condition={hasUppercase}
+            message="At least 1 uppercase letter"
+          ></PasswordComplexityText>
         )}
         {password !== '' && (
           <PasswordComplexityText
-            condition = {hasLowercase}
-            message = 'At least 1 lowercase letter'
-          >
-          </PasswordComplexityText>
+            condition={hasLowercase}
+            message="At least 1 lowercase letter"
+          ></PasswordComplexityText>
         )}
         {password !== '' && (
           <PasswordComplexityText
-            condition = {hasNumber}
-            message = 'At least 1 number'
-          >
-          </PasswordComplexityText>
+            condition={hasNumber}
+            message="At least 1 number"
+          ></PasswordComplexityText>
         )}
         {password !== '' && (
           <PasswordComplexityText
-            condition = {hasLength}
-            message = 'At least 8 characters'
-          >
-          </PasswordComplexityText>
+            condition={hasLength}
+            message="At least 8 characters"
+          ></PasswordComplexityText>
         )}
 
         {/* functionality for this has not been implemented */}
         {password !== '' && (
           <PasswordComplexityText
-            condition = {isDifferent}
-            message = 'Must be different than your old password'
-          >
-          </PasswordComplexityText>
+            condition={isDifferent}
+            message="Must be different than your old password"
+          ></PasswordComplexityText>
         )}
 
         <View style={styles.newPassword}>
@@ -135,7 +137,7 @@ function ResetPasswordScreen() {
             placeholderTextColor={colors.darkGrey}
             onChange={text => {
               setConfirmPassword(text);
-              checkConfirmPassword(text);
+              checkConfirmPasswordMatchPassword(text);
             }}
             value={confirmPassword}
             attributes={{
@@ -156,8 +158,8 @@ function ResetPasswordScreen() {
 
         {password !== '' && (
           <PasswordComplexityText
-            condition = {isMatching}
-            message = 'Inputs must match'
+            condition={isMatching}
+            message="Inputs must match"
           ></PasswordComplexityText>
         )}
       </View>

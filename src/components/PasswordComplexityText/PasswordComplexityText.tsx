@@ -6,30 +6,26 @@ import globalStyles from '../../styles/globalStyles';
 import colors from '../../styles/colors';
 
 type PasswordComplexityTextProps = {
-    message: string;
-    condition: boolean;
+  message: string;
+  condition: boolean;
 };
 
 export default function PasswordComplexityText({
-    condition,
-    message,
-    }: PasswordComplexityTextProps) {
-    return (
-        <View style = {styles.passwordComplexity}>
-            <Icon type={condition ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                condition
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              {message}
-            </Text>
-        </View>
-    )
-};
-  
-
+  condition,
+  message,
+}: PasswordComplexityTextProps) {
+  return (
+    <View style={styles.passwordComplexity}>
+      <Icon type={condition ? 'green_check' : 'grey_dot'} />
+      <Text
+        style={[
+          globalStyles.errorMessage,
+          styles.passwordErrorText,
+          condition ? { color: colors.textGreen } : { color: colors.textGrey },
+        ]}
+      >
+        {message}
+      </Text>
+    </View>
+  );
+}

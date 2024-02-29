@@ -13,7 +13,7 @@ import supabase from '../../../utils/supabase';
 // import DatePicker from '../../../components/DatePicker/DatePicker';
 
 function OnboardingScreen() {
-  const { session } = useSession();
+  const { session, user } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [username, setUsername] = useState('');
@@ -117,7 +117,9 @@ function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={[globalStyles.h1, styles.h1]}>Welcome, {username}</Text>
+      <Text style={[globalStyles.h1, styles.h1]}>
+        Welcome, {user?.user_metadata.username}
+      </Text>
       <Text style={[globalStyles.body1, styles.body1]}>
         Input your profile information below.
       </Text>

@@ -14,6 +14,7 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
+import { isEmailTaken } from '../../../queries/profiles';
 
 function SignUpScreen() {
   const { signUp } = useSession();
@@ -96,18 +97,11 @@ function SignUpScreen() {
       return;
     }
 
-    const { count } = await supabase
-      .from('profiles')
-      .select(`*`, { count: 'exact' })
-      .limit(1)
-      .eq('email', newEmail);
-    const emailIsTaken = (count ?? 0) >= 1;
-
+    const emailIsTaken = await isEmailTaken(newEmail);
     if (emailIsTaken) {
       setEmailError('That email is not available. Please try again.');
       return;
     }
-
     setEmailError('');
   };
 

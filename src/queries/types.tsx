@@ -62,6 +62,7 @@ export interface Genre {
 export interface GenreStories {
   parent_id: number;
   parent_name: string;
-  subgenres: Subgenre[];
+  subgenre_id: number;
+  subgenre_name: string;
   genre_story_previews: string[];
 }

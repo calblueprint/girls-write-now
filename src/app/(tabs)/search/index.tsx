@@ -9,6 +9,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -289,7 +290,20 @@ function SearchScreen() {
               <>
                 <View style={styles.genreText}>
                   <Text style={styles.parentName}>{genre.parent_name}</Text>
-                  <Text style={styles.seeAll}>See All</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.push({
+                        pathname: '/genre',
+                        params: {
+                          genreId: genre.parent_id.toString(),
+                          genreType: 'parent_genre',
+                          genreName: genre.parent_name,
+                        },
+                      });
+                    }}
+                  >
+                    <Text style={styles.seeAll}>See All</Text>
+                  </TouchableOpacity>
                 </View>
                 <ScrollView
                   horizontal
@@ -300,11 +314,16 @@ function SearchScreen() {
                   {genre.subgenres.map(subgenre => (
                     <GenreCard
                       subgenres={subgenre.name}
+                      subgenre_id={subgenre.id}
                       cardColor={getColor(index)}
                       pressFunction={() => {
                         router.push({
                           pathname: '/genre',
-                          params: { genreId: genre.parent_id.toString() },
+                          params: {
+                            genreId: genre.parent_id.toString(),
+                            genreType: 'subgenre',
+                            genreName: subgenre.name,
+                          },
                         });
                       }}
                     />

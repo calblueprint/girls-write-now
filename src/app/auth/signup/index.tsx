@@ -304,7 +304,7 @@ function SignUpScreen() {
           </View>
         )}
 
-        <View style={styles.navigation}>
+        <View>
           <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <StyledButton
               text="Sign Up"

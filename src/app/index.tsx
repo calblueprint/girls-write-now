@@ -43,7 +43,7 @@ function StartPage() {
     return () => {
       clearTimeout(timer);
     };
-  }, [delay]);
+  }, [delay, isLoading]);
 
   return <SplashScreen />;
 }

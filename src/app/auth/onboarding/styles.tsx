@@ -28,12 +28,13 @@ export default StyleSheet.create({
     marginTop: 30,
   },
   body1: {
-    marginTop: 25,
+    marginTop: 26,
   },
   info: {
     flex: 1,
     flexDirection: 'row',
     marginTop: 10,
+    marginBottom: 16,
     width: 250,
   },
 });

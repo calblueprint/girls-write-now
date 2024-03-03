@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Alert, Text, View } from 'react-native';
 import validator from 'validator';
+import { Mutex } from 'async-mutex';
 
 import styles from './styles';
 import globalStyles from '../../../styles/globalStyles';
@@ -10,6 +11,7 @@ import UserStringInput from '../../../components/UserStringInput/UserStringInput
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import { isEmailTaken } from '../../../queries/profiles';
 import { queryEmailByUsername } from '../../../queries/auth';
+import colors from '../../../styles/colors';
 
 function ForgotPasswordScreen() {
   const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
@@ -17,6 +19,8 @@ function ForgotPasswordScreen() {
   const [emailToReset, setEmailToReset] = useState('');
   const [emailError, setEmailError] = useState('');
   const [validEmail, setValidEmail] = useState(false);
+
+  const mutex = useRef(new Mutex());
 
   const sendResetEmail = async () => {
     const { error } = await resetPassword(emailToReset);
@@ -27,45 +31,53 @@ function ForgotPasswordScreen() {
 
   const setAndCheckEmailOrUsername = async (newEmail: string) => {
     setEmail(newEmail);
-    if (validator.isEmail(newEmail)) {
-      if (newEmail.length === 0) {
-        setEmailError('');
-        return;
-      }
-      const emailIsTaken = await isEmailTaken(newEmail);
-      if (!emailIsTaken) {
-        setEmailError(
-          'An account with that email does not exist. Please try again.',
-        );
-        setValidEmail(false);
-        return;
-      }
-      setEmailToReset(newEmail);
-    } else {
-      const { data, error } = await queryEmailByUsername(newEmail);
+    const release = await mutex.current.acquire();
 
-      if (data && data?.length > 0 && !error) {
-        setValidEmail(true);
-        setEmailToReset(data[0].email);
+    try {
+      console.log('try');
+      if (validator.isEmail(newEmail)) {
+        if (newEmail.length === 0) {
+          setEmailError('');
+          return;
+        }
+        const emailIsTaken = await isEmailTaken(newEmail);
+        if (!emailIsTaken) {
+          setEmailError(
+            'An account with that email does not exist. Please try again.',
+          );
+          setValidEmail(false);
+          return;
+        }
+        setEmailToReset(newEmail);
       } else {
-        setEmailError(
-          'An account with that username does not exist. Please try again.',
-        );
-        setValidEmail(false);
-        return;
+        const { data, error } = await queryEmailByUsername(newEmail);
+
+        if (data && data?.length > 0 && !error) {
+          setValidEmail(true);
+          setEmailToReset(data[0].email);
+        } else {
+          setEmailError(
+            'An account with that username does not exist. Please try again.',
+          );
+          setValidEmail(false);
+          return;
+        }
       }
+      setValidEmail(true);
+      setEmailError('');
+    } finally {
+      console.log('finally');
+      release();
     }
-    setValidEmail(true);
-    setEmailError('');
   };
 
   return (
     <View style={styles.container}>
       <View>
-        <Text style={[globalStyles.h1]}>Forgot Password?</Text>
+        <Text style={[globalStyles.h1, styles.heading]}>Forgot Password?</Text>
         <UserStringInput
           placeholder="Email or account username"
-          placeholderTextColor="#797979"
+          placeholderTextColor={colors.darkGrey}
           value={email}
           label="Email or account username"
           onChange={setAndCheckEmailOrUsername}

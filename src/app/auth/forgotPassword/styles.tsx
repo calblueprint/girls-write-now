@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
@@ -9,8 +10,12 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
 
+  heading: {
+    paddingBottom: 8,
+  },
+
   subtext: {
     paddingVertical: 18,
-    color: '#797979',
+    color: colors.darkGrey,
   },
 });

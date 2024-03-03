@@ -30,6 +30,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.36.0",
     "@types/validator": "^13.11.5",
+    "async-mutex": "^0.4.1",
     "axios": "^1.5.0",
     "deprecated-react-native-prop-types": "^4.2.1",
     "dom-parser": "^0.1.6",

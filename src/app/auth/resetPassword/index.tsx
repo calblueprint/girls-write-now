@@ -21,16 +21,22 @@ function ResetPasswordScreen() {
   const [confirmPasswordTextHidden, setConfirmPasswordTextHidden] =
     useState(true);
   const [loading, setLoading] = useState(false);
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
 
   const [hasUppercase, setHasUppercase] = useState(false);
   const [hasLowercase, setHasLowercase] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
   const [hasLength, setHasLength] = useState(false);
-  const [isDifferent, setIsDifferent] = useState(false);
+  const [isDifferent, setIsDifferent] = useState(true);
   const [isMatching, setIsMatching] = useState(false);
 
+  useEffect(() => {
+    if (hasUppercase && hasLowercase && hasLength && hasNumber && isDifferent) {
+      setPasswordIsValid(true);
+    }
+  });
+
   const checkPassword = (text: string) => {
-    setPassword(text);
     if (text !== '') {
       setHasUppercase(text !== text.toLowerCase());
       setHasLowercase(text !== text.toUpperCase());
@@ -40,15 +46,13 @@ function ResetPasswordScreen() {
     }
   };
 
-  const checkPasswordMatchConfirmPassword = (text: string) => {
-    setPassword(text);
+  const checkPasswordMatchesConfirmPassword = (text: string) => {
     if (text !== '') {
       setIsMatching(text == confirmPassword);
     }
   };
 
-  const checkConfirmPasswordMatchPassword = (text: string) => {
-    setConfirmPassword(text);
+  const checkConfirmPasswordMatchesPassword = (text: string) => {
     if (text !== '') {
       setIsMatching(text == password);
     }
@@ -80,7 +84,7 @@ function ResetPasswordScreen() {
             onChange={text => {
               setPassword(text);
               checkPassword(text);
-              checkPasswordMatchConfirmPassword(text);
+              checkPasswordMatchesConfirmPassword(text);
             }}
             value={password}
             attributes={{
@@ -130,42 +134,57 @@ function ResetPasswordScreen() {
           />
         )}
 
-        <View style={styles.newPassword}>
-          <UserStringInput
-            placeholder="Confirm Password"
-            label="Confirm password"
-            placeholderTextColor={colors.darkGrey}
-            onChange={text => {
-              setConfirmPassword(text);
-              checkConfirmPasswordMatchPassword(text);
-            }}
-            value={confirmPassword}
-            attributes={{
-              textContentType: 'password',
-              secureTextEntry: confirmPasswordTextHidden,
-            }}
-          >
-            <RNEIcon
-              name={confirmPasswordTextHidden ? 'visibility-off' : 'visibility'}
-              type="material"
-              style={styles.icon}
-              onPress={() =>
-                setConfirmPasswordTextHidden(!confirmPasswordTextHidden)
-              }
-            />
-          </UserStringInput>
-        </View>
+        {passwordIsValid && (
+          <View>
+            <View style={styles.newPassword}>
+              <UserStringInput
+                placeholder="Confirm Password"
+                label="Confirm password"
+                placeholderTextColor={colors.darkGrey}
+                onChange={text => {
+                  setConfirmPassword(text);
+                  checkConfirmPasswordMatchesPassword(text);
+                }}
+                value={confirmPassword}
+                attributes={{
+                  textContentType: 'password',
+                  secureTextEntry: confirmPasswordTextHidden,
+                }}
+              >
+                <RNEIcon
+                  name={
+                    confirmPasswordTextHidden ? 'visibility-off' : 'visibility'
+                  }
+                  type="material"
+                  style={styles.icon}
+                  onPress={() =>
+                    setConfirmPasswordTextHidden(!confirmPasswordTextHidden)
+                  }
+                />
+              </UserStringInput>
+            </View>
 
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={isMatching}
-            message="Inputs must match"
-          />
+            <View>
+              {password !== '' && (
+                <PasswordComplexityText
+                  condition={isMatching}
+                  message="Inputs must match"
+                />
+              )}
+            </View>
+          </View>
         )}
       </View>
       <View>
         <StyledButton
-          disabled={!hasLength || !isMatching}
+          disabled={
+            !hasLength ||
+            !isMatching ||
+            !hasLowercase ||
+            !hasNumber ||
+            !hasUppercase ||
+            !isDifferent
+          }
           onPress={changePassword}
           text="Update Password"
         />

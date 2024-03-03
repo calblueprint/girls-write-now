@@ -10,6 +10,7 @@ export default StyleSheet.create({
   },
 
   newPassword: {
+    padding: 8,
     paddingBottom: 8,
   },
 

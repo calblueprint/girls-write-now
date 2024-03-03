@@ -59,3 +59,23 @@ export async function setUserStoriesReadingList(
 ) {
   setUserStories(user_id, story_id, 'reading list');
 }
+
+export async function deleteUserStories(
+  user_id: string | undefined,
+  story_id: number,
+  name: string,
+) {
+  const { error } = await supabase
+    .from('Saved Stories')
+    .delete()
+    .eq('user_id', user_id)
+    .eq('story_id', story_id)
+    .eq('name', name);
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to delete user saved stories: ${error.details}`,
+    );
+  }
+}

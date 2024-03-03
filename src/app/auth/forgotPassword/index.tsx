@@ -34,7 +34,6 @@ function ForgotPasswordScreen() {
     const release = await mutex.current.acquire();
 
     try {
-      console.log('try');
       if (validator.isEmail(newEmail)) {
         if (newEmail.length === 0) {
           setEmailError('');
@@ -66,7 +65,6 @@ function ForgotPasswordScreen() {
       setValidEmail(true);
       setEmailError('');
     } finally {
-      console.log('finally');
       release();
     }
   };

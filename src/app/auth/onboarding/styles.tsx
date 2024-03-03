@@ -22,10 +22,10 @@ export default StyleSheet.create({
   },
   subtext: {
     color: colors.darkGrey,
-    marginLeft: 10,
+    marginLeft: 8,
   },
   h1: {
-    marginTop: 30,
+    marginTop: 66,
   },
   body1: {
     marginTop: 26,
@@ -33,7 +33,7 @@ export default StyleSheet.create({
   info: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 12,
     marginBottom: 16,
     width: 250,
   },

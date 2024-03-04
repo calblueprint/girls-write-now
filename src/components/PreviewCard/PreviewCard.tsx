@@ -59,7 +59,7 @@ function PreviewCard({
         <View style={styles.tagsContainer}>
           <View style={styles.tagsRow}>
             <View style={styles.tag}>
-              <Text key={tags[0]} style={[globalStyles.button1]}>
+              <Text key={tags[0]} style={globalStyles.button1}>
                 {tags[0]}
               </Text>
             </View>

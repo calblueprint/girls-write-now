@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import * as cheerio from "cheerio";
+import * as cheerio from 'cheerio';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';

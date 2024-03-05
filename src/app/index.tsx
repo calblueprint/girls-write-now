@@ -26,14 +26,6 @@ function StartPage() {
       } else {
         router.replace('/auth/login');
       }
-    } else {
-      if (!delay) {
-        console.error(`COULD NOT LOAD APP`);
-        console.error(`Delay ${delay}`);
-        console.error(`isLoading ${isLoading}`);
-        console.error(`fontsLoaded ${fontsLoaded}`);
-        console.error(`fontError ${fontError}`);
-      }
     }
 
     const timer = setTimeout(() => {
@@ -43,7 +35,7 @@ function StartPage() {
     return () => {
       clearTimeout(timer);
     };
-  }, [delay]);
+  }, [delay, isLoading]);
 
   return <SplashScreen />;
 }

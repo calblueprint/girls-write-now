@@ -5,6 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import * as cheerio from "cheerio";
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
@@ -52,7 +53,7 @@ function PreviewCard({
               numberOfLines={3}
               style={[globalStyles.subtext, styles.storyDescription]}
             >
-              {excerpt.html.slice(3, -3)}
+              "{cheerio.load(excerpt.html).text()}"
             </Text>
           </View>
         </View>

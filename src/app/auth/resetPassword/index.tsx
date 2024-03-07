@@ -34,7 +34,7 @@ function ResetPasswordScreen() {
     if (hasUppercase && hasLowercase && hasLength && hasNumber && isDifferent) {
       setPasswordIsValid(true);
     }
-  });
+  }, [hasUppercase, hasLowercase, hasLength, hasNumber, isDifferent]);
 
   const checkPassword = (text: string) => {
     if (text !== '') {
@@ -49,12 +49,16 @@ function ResetPasswordScreen() {
   const checkPasswordMatchesConfirmPassword = (text: string) => {
     if (text !== '') {
       setIsMatching(text == confirmPassword);
+    } else {
+      setIsMatching(false);
     }
   };
 
   const checkConfirmPasswordMatchesPassword = (text: string) => {
     if (text !== '') {
       setIsMatching(text == password);
+    } else {
+      setIsMatching(false);
     }
   };
 

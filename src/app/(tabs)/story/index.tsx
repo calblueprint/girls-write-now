@@ -9,7 +9,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
@@ -26,7 +25,6 @@ function StoryScreen() {
 
   const params = useLocalSearchParams<{ storyId: string }>();
   const { storyId } = params;
-  const dimensions = useWindowDimensions();
 
   const scrollUp = () => {
     scrollRef.current?.scrollTo({ x: 0, y: 0 });
@@ -82,7 +80,7 @@ function StoryScreen() {
           >
             <View style={styles.author}>
               <Image
-                style={(styles.authorImage, { width: dimensions.width })}
+                style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
               <Text style={styles.authorText}>By {story.author_name}</Text>

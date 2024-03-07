@@ -31,6 +31,7 @@
     "@supabase/supabase-js": "^2.36.0",
     "@types/validator": "^13.11.5",
     "axios": "^1.5.0",
+    "cheerio": "^1.0.0-rc.12",
     "deprecated-react-native-prop-types": "^4.2.1",
     "dom-parser": "^0.1.6",
     "expo": "~49.0.11",

@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
+import GenreStoryPreviewCard from '../../../components/GenreStoryPreviewCard/GenreStoryPreviewCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
 import { fetchStoryPreviewById } from '../../../queries/stories';
@@ -226,14 +227,16 @@ function GenreScreen() {
                   data={allStoryPreviews}
                   style={styles.flatListStyle}
                   renderItem={({ item }) => (
-                    <PreviewCard
+                    <GenreStoryPreviewCard
                       key={item.title}
-                      title={item.title}
-                      image={item.featured_media}
-                      author={item.author_name}
+                      topic={item.topic}
+                      tone={item.tone}
+                      genreMedium={item.genre_medium}
+                      authorName={item.author_name}
+                      storyImage={item.featured_media}
                       authorImage={item.author_image}
+                      storyTitle={item.title}
                       excerpt={item.excerpt}
-                      tags={item.genre_medium}
                       pressFunction={() => {
                         router.push({
                           pathname: '/story',

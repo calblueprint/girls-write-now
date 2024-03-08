@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   scrollView: {
     marginBottom: 20,
     flexGrow: 0,
+    padding: 8,
   },
   headerContainer: {
     flexDirection: 'row',

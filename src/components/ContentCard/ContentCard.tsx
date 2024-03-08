@@ -30,9 +30,17 @@ function ContentCard({
           <Text style={[globalStyles.h3, styles.title]} numberOfLines={1}>
             {title}
           </Text>
-          <Text style={globalStyles.body1} numberOfLines={1}>
-            {author}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={globalStyles.subtext} numberOfLines={1}>
+              By{'  '}
+            </Text>
+            <Text style={globalStyles.subHeading1} numberOfLines={1}>
+              {author}
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>Add reactions and plus button here</Text>
+          </View>
         </View>
       </View>
     </Pressable>

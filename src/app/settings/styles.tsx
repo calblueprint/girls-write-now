@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
 export default StyleSheet.create({
   button: {
@@ -47,5 +48,25 @@ export default StyleSheet.create({
     fontFamily: 'Manrope-Regular',
     fontStyle: 'normal',
     fontWeight: '400',
+  },
+  icon: {
+    paddingLeft: 8,
+  },
+  dateButtonText: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  dateButton: {
+    paddingTop: 18,
+  },
+  info: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 12,
+    marginBottom: 16,
+  },
+  subtext: {
+    color: colors.darkGrey,
+    marginLeft: 8,
   },
 });

@@ -1,12 +1,14 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Alert, Platform } from 'react-native';
+import { Text, View, Alert, Platform, Pressable } from 'react-native';
 import { Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DatePicker from 'react-native-neat-date-picker';
+import { Icon } from 'react-native-elements';
 
 import styles from './styles';
+import colors from '../../styles/colors';
 import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
 import StyledButton from '../../components/StyledButton/StyledButton';
 import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorInput';
@@ -21,12 +23,14 @@ function SettingsScreen() {
   const [username, setUsername] = useState('');
   const [lastName, setLastName] = useState('');
   const [pronouns, setPronouns] = useState('');
-  const [birthday, setBirthday] = useState(new Date());
+  const [birthday, setBirthday] = useState('');
+  const [birthdayExists, setBirthdayExists] = useState(false);
+  const [birthdayChanged, setBirthdayChanged] = useState(false);
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
 
   const [showSaveEdits, setShowSaveEdits] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const wrapInDetectChange = (onChange: (_: any) => any) => {
     return (value: any) => {
@@ -58,10 +62,8 @@ function SettingsScreen() {
         setUsername(data.username || username);
 
         if (data.birthday) {
-          setBirthday(new Date(data.birthday));
-          setShowDatePicker(false);
-        } else {
-          setShowDatePicker(true);
+          setBirthday(data.birthday);
+          setBirthdayExists(true);
         }
 
         setGender(data.gender || gender);
@@ -138,6 +140,14 @@ function SettingsScreen() {
     }
   };
 
+  const onConfirmDate = (output: any) => {
+    console.log(output.dateString);
+    setBirthday(new Date(output.dateString).toLocaleDateString('en-US'));
+    setShowDatePicker(false);
+    setShowSaveEdits(true);
+    setBirthdayChanged(true);
+  };
+
   if (!session) {
     return <Redirect href="/auth/login" />;
   }
@@ -153,6 +163,15 @@ function SettingsScreen() {
           <Text style={styles.heading}>Settings</Text>
           <Text style={styles.subheading}>Account</Text>
 
+          <DatePicker
+            isVisible={showDatePicker}
+            mode={'single'}
+            onCancel={() => {
+              setShowDatePicker(false);
+            }}
+            onConfirm={onConfirmDate}
+          ></DatePicker>
+
           <View style={styles.staticData}>
             <AccountDataDisplay label="First Name" value={firstName} />
             <AccountDataDisplay label="Last Name" value={lastName} />
@@ -160,28 +179,30 @@ function SettingsScreen() {
             <AccountDataDisplay
               label="Birthday"
               value={
-                showDatePicker ? (
-                  <View>
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={birthday}
-                      mode="date"
-                      onChange={date => {
-                        setShowDatePicker(Platform.OS === 'ios');
-                        if (date.nativeEvent.timestamp) {
-                          setBirthday(new Date(date.nativeEvent.timestamp));
-                        }
+                !birthdayExists ? (
+                  <View style={styles.dateButton}>
+                    <Pressable
+                      onPress={() => {
+                        setShowDatePicker(true);
                       }}
-                    />
-                    {Platform.OS !== 'ios' && (
-                      <Button
-                        title="Change Birthday"
-                        onPress={() => setShowDatePicker(true)}
-                      />
-                    )}
+                    >
+                      <View style={styles.dateButtonText}>
+                        <Text style={globalStyles.body1}>
+                          {birthdayChanged ? birthday : 'Select Date'}
+                        </Text>
+                        <Icon
+                          name="event"
+                          type="material"
+                          color={colors.darkGrey}
+                          style={styles.icon}
+                        ></Icon>
+                      </View>
+                    </Pressable>
                   </View>
                 ) : (
-                  birthday.toLocaleDateString().toString()
+                  <View style={styles.dateButton}>
+                    <Text style={globalStyles.body1}>{birthday}</Text>
+                  </View>
                 )
               }
             />
@@ -213,6 +234,18 @@ function SettingsScreen() {
             setValue={wrapInDetectChange(setRaceEthnicity)}
           />
         </View>
+
+        {birthdayChanged && (
+          <View style={styles.info}>
+            <Icon type="material" name="info-outline" color="#797979" />
+            <Text style={[globalStyles.subtext, styles.subtext]}>
+              You can only input your birthday once. Please make sure the date
+              is correct before saving as you will not be able to change your
+              birthday in the future.
+            </Text>
+          </View>
+        )}
+
         <View style={styles.button}>
           {showSaveEdits ? (
             <StyledButton

@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 import { View, Text, TextInput } from 'react-native';
 
 import styles from './styles';
-import globalStyles from '../../styles/globalStyles';
 import colors from '../../styles/colors';
+import globalStyles from '../../styles/globalStyles';
 
 type UserStringInputProps = {
   placeholder: string;

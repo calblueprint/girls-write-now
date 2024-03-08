@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Redirect, router } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { Alert, ScrollView, Platform, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -7,6 +7,8 @@ import { Icon } from 'react-native-elements';
 import styles from './styles';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
@@ -19,7 +21,7 @@ function OnboardingScreen() {
   const [username, setUsername] = useState('');
   const [lastName, setLastName] = useState('');
   const [pronouns, setPronouns] = useState('');
-  const [birthday, setBirthday] = useState(new Date());
+  const [birthday, setBirthday] = useState('');
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
@@ -46,7 +48,7 @@ function OnboardingScreen() {
         setLastName(data.last_name || lastName);
         setUsername(data.username || username);
         setPronouns(data.pronouns || pronouns);
-        setBirthday(new Date(data.birthday) || birthday);
+        setBirthday('');
         setGender(data.gender || gender);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
@@ -111,9 +113,10 @@ function OnboardingScreen() {
     }
   };
 
-  if (!session) {
-    return <Redirect href="/auth/login" />;
-  }
+  // Make sure to bring this back !!!!!
+  // if (!session) {
+  //   return <Redirect href="/auth/login" />;
+  // }
 
   return (
     <ScrollView style={styles.container}>
@@ -130,6 +133,20 @@ function OnboardingScreen() {
           visible to other users on the app.
         </Text>
       </View>
+      <UserStringInput
+        label="Birthday"
+        placeholder="Select Date"
+        // onChange={setBirthday}
+        value={birthday}
+        placeholderTextColor={colors.darkGrey}
+        attributes={null}
+      >
+        <Icon
+          name="calendar-outline"
+          type="material-community"
+          color={colors.darkGrey}
+        />
+      </UserStringInput>
       <UserSelectorInput
         options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
         label="Gender"
@@ -155,7 +172,8 @@ function OnboardingScreen() {
         value={raceEthnicity}
         setValue={setRaceEthnicity}
       />
-      {showDatePicker && (
+      {/* Birthday Button Implementation */}
+      {/* {showDatePicker && (
         <DateTimePicker
           testID="dateTimePicker"
           value={birthday}
@@ -167,17 +185,22 @@ function OnboardingScreen() {
             }
           }}
         />
-      )}
-      <StyledButton
-        text={loading ? 'Loading ...' : 'Update profile'}
-        onPress={updateProfileAndGoHome}
-        disabled={loading}
-      />
-      <StyledButton
-        text="Skip"
-        onPress={() => router.replace('/home')}
-        disabled={false}
-      />
+      )} */}
+      <View style={styles.bottomContainer}>
+        <View style={styles.updateProfileButton}>
+          <StyledButton
+            text={loading ? 'Loading ...' : 'Update profile'}
+            onPress={updateProfileAndGoHome}
+            disabled={loading}
+          />
+        </View>
+        <Link
+          style={[globalStyles.bodyBoldUnderline, styles.skipButton]}
+          href="/(tabs)/home"
+        >
+          Skip For Now
+        </Link>
+      </View>
     </ScrollView>
   );
 }

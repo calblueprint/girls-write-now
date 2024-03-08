@@ -25,4 +25,16 @@ export default StyleSheet.create({
     marginBottom: 16,
     width: 250,
   },
+  bottomContainer: {
+    marginTop: 112,
+  },
+  updateProfileButton: {
+    marginTop: 30,
+    marginBottom: 24,
+  },
+  skipButton: {
+    flex: 1,
+    alignSelf: 'center',
+    color: colors.darkGrey,
+  },
 });

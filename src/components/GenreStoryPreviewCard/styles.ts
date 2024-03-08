@@ -11,12 +11,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 1, height: 3 },
     shadowOpacity: 0.5,
     elevation: 10,
     paddingRight: 30,
     marginRight: 30,
     width: '98%',
+    marginHorizontal: '0.75%',
   },
   top: {
     flex: 1,
@@ -78,9 +79,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   tagsContainer: {
-    // backgroundColor: colors.darkGrey,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+
     alignItems: 'center',
     flexWrap: 'wrap',
   },
@@ -104,6 +105,16 @@ const styles = StyleSheet.create({
   subtext: {
     color: '#797979',
     fontSize: 15,
+  },
+  tagSubtext: {
+    color: '#797979',
+  },
+  tagParent: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
 });
 

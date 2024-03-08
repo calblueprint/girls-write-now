@@ -8,12 +8,12 @@ import {
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
-import HorizontalLine from '../HorizontalLine/HorizontalLine';
 
 type GenreStoryPreviewCardProps = {
   topic: string[];
   tone: string[];
   genreMedium: string[];
+  allTags: string[];
   authorName: string;
   storyImage: string;
   authorImage: string;
@@ -26,6 +26,7 @@ function GenreStoryPreviewCard({
   topic,
   tone,
   genreMedium,
+  allTags,
   authorName,
   storyImage,
   authorImage,
@@ -63,12 +64,20 @@ function GenreStoryPreviewCard({
               </View>
             </View>
             <View style={styles.horizontalLine} />
-            <View style={styles.tagsContainer}>
-              <View style={styles.tags}>
-                <Text>{genreMedium[0]}</Text>
+            <View style={styles.tagParent}>
+              <View style={styles.tagsContainer}>
+                <View style={styles.tags}>
+                  <Text>{genreMedium[0]}</Text>
+                </View>
+                <View style={styles.tags}>
+                  <Text>{genreMedium[1]}</Text>
+                </View>
               </View>
-              <View style={styles.tags}>
-                <Text>{genreMedium[1]}</Text>
+              <View>
+                <Text style={styles.tagSubtext}>
+                  + {allTags.length} more{' '}
+                  {allTags.length === 1 ? 'tag' : 'tags'}
+                </Text>
               </View>
             </View>
           </View>

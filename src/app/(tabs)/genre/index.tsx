@@ -1,21 +1,20 @@
 import { useLocalSearchParams, router } from 'expo-router';
-import { decode } from 'html-entities';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
   View,
   Text,
-  Image,
   FlatList,
 } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
 import GenreStoryPreviewCard from '../../../components/GenreStoryPreviewCard/GenreStoryPreviewCard';
-import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
 import { fetchStoryPreviewById } from '../../../queries/stories';
 import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
@@ -31,6 +30,10 @@ function GenreScreen() {
   const [selectedSubgenre, setSelectedSubgenre] = useState<string>('');
   const [mainGenre, setMainGenre] = useState<string>('');
   const [isLoading, setLoading] = useState(true);
+  const [genreTones, setgenreTones] = useState<string[]>([]);
+  const [genreTopics, setgenreTopics] = useState<string[]>([]);
+  const [currTone, setCurrTone] = useState<string>('');
+  const [currTopic, setCurrTopic] = useState<string>('');
   const params = useLocalSearchParams<{ genreId: string }>();
   const params2 = useLocalSearchParams<{ genreType: string }>();
   const params3 = useLocalSearchParams<{ genreName: string }>();
@@ -128,6 +131,8 @@ function GenreScreen() {
       );
       setGenreStoryIds(filteredStoryIds);
       setLoading(false);
+      setgenreTones([]);
+      setgenreTopics([]);
     }
   }
 
@@ -136,11 +141,20 @@ function GenreScreen() {
       if (genreStoryIds.length > 0) {
         setLoading(true);
         const previews: StoryPreview[] = [];
+        const tones: string[] = [];
+        const topics: string[] = [];
         for (const idString of genreStoryIds) {
           const id = parseInt(idString, 10);
           try {
-            const storyPreview: StoryPreview = await fetchStoryPreviewById(id);
-            previews.push(storyPreview);
+            const storyPreview: StoryPreview[] =
+              await fetchStoryPreviewById(id);
+            previews.push(storyPreview[0]);
+            storyPreview[0].tone.forEach(item => {
+              tones.push(item);
+            });
+            storyPreview[0].topic.forEach(item => {
+              topics.push(item);
+            });
             console.log('testing storyPreview outputs:', storyPreview);
           } catch (error) {
             console.log(
@@ -148,7 +162,16 @@ function GenreScreen() {
             );
           }
         }
+        const filteredTopics: string[] = topics.filter(
+          (item): item is string => item !== null,
+        );
+        const filteredTones: string[] = tones.filter(
+          (item): item is string => item !== null,
+        );
         setAllStoryPreviews(previews.flat());
+        setgenreTopics(filteredTopics);
+        setgenreTones(filteredTones);
+        console.log('testing tone usestate');
         setLoading(false);
       } else {
         setLoading(false); //if there are no story IDs, we cannot load anything, there are no results
@@ -205,6 +228,63 @@ function GenreScreen() {
             ))}
           </ScrollView>
         </View>
+        <View style={[styles.dropdownContainer, styles.firstDropdown]}>
+          <Dropdown
+            mode="default"
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={globalStyles.body1}
+            inputSearchStyle={globalStyles.body1}
+            itemTextStyle={globalStyles.body1}
+            dropdownPosition="bottom"
+            itemContainerStyle={styles.itemContainer}
+            iconStyle={styles.iconStyle}
+            data={genreTones.map(tone => {
+              return { label: tone, value: tone };
+            })}
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder="Tone"
+            renderRightIcon={() => (
+              <Icon name="arrow-drop-down" type="material" />
+            )}
+            onChange={item => {
+              if (item) {
+                // Check if item is not null or undefined
+                setCurrTone(item.label); // Use the label property of the selected item
+              }
+            }}
+          />
+
+          <Dropdown
+            mode="default"
+            style={[styles.dropdown, styles.secondDropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={globalStyles.body1}
+            inputSearchStyle={globalStyles.body1}
+            itemTextStyle={globalStyles.body1}
+            dropdownPosition="bottom"
+            itemContainerStyle={styles.itemContainer}
+            iconStyle={styles.iconStyle}
+            data={genreTopics.map(topic => {
+              return { label: topic, value: topic };
+            })}
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder="Topic"
+            renderRightIcon={() => (
+              <Icon name="arrow-drop-down" type="material" />
+            )}
+            onChange={item => {
+              if (item) {
+                // Check if item is not null or undefined
+                setCurrTone(item.label); // Use the label property of the selected item
+              }
+            }}
+          />
+        </View>
 
         {genreStoryIds.length === 0 ? ( // Check if there are no story IDs
           <View>
@@ -232,6 +312,9 @@ function GenreScreen() {
                       topic={item.topic}
                       tone={item.tone}
                       genreMedium={item.genre_medium}
+                      allTags={item.genre_medium
+                        .concat(item.tone)
+                        .concat(item.topic)}
                       authorName={item.author_name}
                       storyImage={item.featured_media}
                       authorImage={item.author_image}

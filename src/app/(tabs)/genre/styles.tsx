@@ -34,6 +34,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer: {},
+  dropdown: {
+    borderColor: '#797979',
+    flexGrow: 0,
+    flexShrink: 0,
+    borderWidth: 2,
+    borderRadius: 7,
+    width: 150,
+    height: 30,
+    color: '#797979',
+  },
+  dropdownContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  firstDropdown: {
+    marginRight: 10,
+  },
+  secondDropdown: {
+    marginLeft: 10,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  itemContainer: {},
+  placeholderStyle: {
+    color: colors.darkGrey,
+    marginLeft: 45,
+  },
 });
 
 export default styles;

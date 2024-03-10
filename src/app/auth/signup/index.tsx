@@ -1,10 +1,8 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
-import { Button } from 'react-native-elements/dist/buttons/Button';
 import { ScrollView } from 'react-native-gesture-handler';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 

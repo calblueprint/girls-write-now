@@ -121,8 +121,8 @@ function LoginScreen() {
         </View>
 
         <Text style={[globalStyles.body1, styles.redirectText]}>
-          Don&apos;t have an account?{' '}
-          <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
+          Don&apos;t have an account? {/* TODO Change back */}
+          <Link style={globalStyles.bodyBoldUnderline} href="/auth/verify">
             Sign Up
           </Link>
         </Text>

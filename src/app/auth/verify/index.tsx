@@ -1,7 +1,6 @@
-import { router } from 'expo-router';
-import React, { useState, useRef } from 'react';
-import { Alert, TextInput, View, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Link, router } from 'expo-router';
+import { useState, useRef, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import OTPTextInput from 'react-native-otp-textinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,169 +8,129 @@ import styles from './styles';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
+import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
+import { Icon } from 'react-native-elements';
 
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();
-  const [loading, setLoading] = useState(false);
-  const [verificationCode, setCode] = useState<string>(''); // actual code
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const [otpInput, setOtpInput] = useState<string>(''); // user enters
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showX, setShowX] = useState(false);
+  const [userInput, setUserInput] = useState('');
 
   const inputRef = useRef<OTPTextInput>(null);
+
+  useEffect(() => {
+    if (userInput.length === 6) {
+      console.log('we are checking');
+      console.log(userInput);
+
+      verifyCode();
+    }
+  }, [userInput]);
 
   const clearText = () => {
     inputRef.current?.clear();
   };
 
-  const setText = () => {
-    setShowErrorMessage(false);
-    inputRef.current?.setValue(otpInput);
-  };
+  const verifyCode = async () => {
+    if (user?.email) {
+      const { error } = await verifyOtp(user.email, userInput);
 
-  const resetAndPushToRouter = (path: string) => {
-    while (router.canGoBack()) {
-      router.back();
-    }
-    router.replace(path);
-  };
-
-  const verifyAccount = async () => {
-    setLoading(true);
-
-    if (user?.email && verificationCode) {
-      const { error } = await verifyOtp(user.email, verificationCode);
-
+      console.log(error);
       if (error) {
-        setErrorMessage(
-          'Please wait 1 minute for us to send the verification code.',
-        );
-        setShowErrorMessage(true);
-      } else if (otpInput !== verificationCode) {
+        setShowX(true);
         setErrorMessage('Incorrect code. Please try again.');
-        setShowErrorMessage(true);
-        clearText();
       } else {
         router.replace('/auth/onboarding');
       }
     }
-    setLoading(false);
   };
 
-  // const verifyAccount = async () => {
-  //   setLoading(true);
-  //   if (user?.email && verificationCode) {
-  //     const { error } = await verifyOtp(user.email, verificationCode);
-  //     if (error) {
-  //       Alert.alert(error.message);
-  //       setErrorMessage(
-  //         'Please wait 1 minute for us to resend the verification code.',
-  //       );
-  //       setShowErrorMessage(true);
-  //     } else router.replace('/auth/onboarding');
-  //   } else if (!verificationCode && otpInput.length === 6) {
-  //     setErrorMessage('Please enter a verification code');
-  //     clearText();
-  //   } else if (otpInput.length === 6) {
-  //     setErrorMessage('Please sign up again');
-  //     clearText();
-  //   }
-  //   setLoading(false);
-  // };
-
   const resendCode = async () => {
-    setLoading(true);
     clearText();
 
     if (user?.email) {
       const { error } = await resendVerification(user.email);
 
       if (error) {
+        setShowX(false);
         setErrorMessage(
           'Please wait 1 minute for us to resend the verification code.',
         );
-        setShowErrorMessage(true);
       } else {
-        setErrorMessage('Verification email sent to ${user.email}.');
+        Toast.show({
+          type: 'success',
+          text1: `A new verification code has been sent to`,
+          text2: `${blurrEmail()}.`,
+          text2Style: globalStyles.subtextBold,
+          text1Style: globalStyles.subtext,
+          position: 'bottom',
+        });
       }
     }
-
-    setLoading(false);
   };
 
-  // const resendCode = async () => {
-  //   setLoading(true);
-  //   if (user?.email) {
-  //     const { error } = await resendVerification(user.email);
-  //     if (error) Alert.alert(error.message);
-  //     else Alert.alert(`Verification email sent to ${user.email}.`);
-  //   } else {
-  //     Alert.alert(`Please sign up again.`);
-  //   }
-  //   setLoading(false);
-  // };
+  const blurrEmail = () => {
+    if (user?.email) {
+      const length = user?.email?.split('@')[0].length;
+      return `${user?.email?.substring(0, 2)}*****${user?.email
+        ?.split('@')[0]
+        .substring(length - 1, length)}@${user?.email?.split('@')[1]}`;
+    }
+    return 'your email';
+  };
+
+  const renderBlurredEmail = () => {
+    return <Text style={globalStyles.subtextBold}>{blurrEmail()}.</Text>;
+  };
 
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.container]}>
-      {/* <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={setCode}
-        placeholder="Verification Code"
-        value={verificationCode}
-        maxLength={6}
-      /> */}
+      <Link href="/auth/signup" style={[globalStyles.subtext, styles.back]}>
+        <Text>{'<Back'}</Text>
+      </Link>
+      <View style={styles.marginHorizontal}>
+        <Text style={[globalStyles.h1, styles.title]}>
+          Enter Verification Code{' '}
+        </Text>
 
-      <Button
-        title="< Back"
-        titleStyle={styles.backButton}
-        type="clear"
-        onPress={() => resetAndPushToRouter('/auth')}
-      />
+        <Text style={[globalStyles.subtext, styles.sent]}>
+          We have sent the verification code to {renderBlurredEmail()}
+        </Text>
 
-      <Text style={globalStyles.h1}> Enter Verification Code </Text>
-
-      <Text style={globalStyles.body1}>
-        We have sent the verification code to {}.
-      </Text>
-
-      <OTPTextInput
-        ref={inputRef}
-        inputCount={6}
-        defaultValue={verificationCode}
-        inputCellLength={1}
-        handleTextChange={verifyAccount}
-        containerStyle={styles.otpContainerStyle}
-        textInputStyle={styles.otpTextInputStyle}
-        // isValid={!showErrorMessage}
-        keyboardType="number-pad"
-        // returnKeyType="done"
-        autoFocus={false}
-        tintColor={colors.citrus}
-        offTintColor={colors.darkGrey}
-      />
-
-      <View style={[styles.verticallySpaced, globalStyles.mt20]} />
-      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-        <Text> Didn't receive a code? </Text>
-        <Button
-          title="Resend code"
-          disabled={loading}
-          onPress={resendCode}
-          // buttonStyle={styles.resendButton}
+        <OTPTextInput
+          ref={inputRef}
+          inputCount={6}
+          defaultValue={userInput}
+          inputCellLength={1}
+          handleTextChange={setUserInput}
+          containerStyle={styles.otpContainerStyle}
+          textInputStyle={styles.otpTextInputStyle}
+          // isValid={!showErrorMessage}
+          keyboardType="number-pad"
+          autoFocus={true}
+          tintColor={colors.black}
+          offTintColor={colors.black}
         />
+
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={globalStyles.subtext}>Didn't receive a code?</Text>
+          <Text
+            style={[globalStyles.subtextBold, styles.resendButton]}
+            onPress={resendCode}
+          >
+            Resend Code
+          </Text>
+        </View>
+        {errorMessage && (
+          <View style={styles.errorContainer}>
+            {showX && <Text style={styles.x}>x</Text>}
+            <Text style={[globalStyles.errorMessage, styles.errorMessage]}>
+              {errorMessage}
+            </Text>
+          </View>
+        )}
       </View>
-      {otpInput.length === 6 && showErrorMessage && (
-        <Text> {errorMessage} </Text>
-      )}
-      {/* <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-        <Button
-          title="Verify Account"
-          disabled={loading}
-          onPress={verifyAccount}
-        />
-      </View> */}
     </SafeAreaView>
   );
 }

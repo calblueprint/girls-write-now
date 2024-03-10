@@ -6,9 +6,6 @@ export const isEmailUsed = async (email: string) => {
     .select(`*`, { count: 'exact' })
     .eq('email', email);
 
-  console.log(count);
-  console.log(email);
-
   return count !== 0;
 };
 

@@ -9,8 +9,8 @@ import styles from './styles';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import { isEmailUsed, queryEmailByUsername } from '../../../queries/auth';
-import globalStyles from '../../../styles/globalStyles';
 import colors from '../../../styles/colors';
+import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
 function LoginScreen() {
@@ -72,7 +72,6 @@ function LoginScreen() {
         <Text style={[globalStyles.h1, styles.title]}>
           {'Read stories from \nyoung creators'}
         </Text>
-
         <UserStringInput
           placeholder="Email or Username"
           label="Email or Username"
@@ -101,7 +100,6 @@ function LoginScreen() {
             onPress={() => setPasswordTextHidden(!passwordTextHidden)}
           />
         </UserStringInput>
-
         <Link
           style={[globalStyles.bodyUnderline, styles.forgotPassword]}
           href="/auth/forgotPassword"
@@ -120,12 +118,12 @@ function LoginScreen() {
           />
         </View>
 
-        <Text style={[globalStyles.body1, styles.redirectText]}>
-          Don&apos;t have an account?{' '}
+        <View style={styles.redirectText}>
+          <Text style={globalStyles.body1}>Don&apos;t have an account?</Text>
           <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
             Sign Up
           </Link>
-        </Text>
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthContextProvider } from '../utils/AuthContext';
+import ToastComponent from '../components/Toast/Toast';
 
 function StackLayout() {
   return (
@@ -14,6 +15,7 @@ function StackLayout() {
           <Stack.Screen name="auth" options={{ headerShown: false }} />
         </Stack>
       </AuthContextProvider>
+      <ToastComponent />
     </SafeAreaProvider>
   );
 }

@@ -41,7 +41,4 @@ export default StyleSheet.create({
   inputs: {
     paddingBottom: 8,
   },
-  navigation: {
-    // marginTop: 'auto',
-  },
 });

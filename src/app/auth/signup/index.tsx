@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -148,6 +148,8 @@ function SignUpScreen() {
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
+        automaticallyAdjustKeyboardInsets={true}
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.flex}
       >
         <View style={styles.inputs}>
@@ -221,7 +223,6 @@ function SignUpScreen() {
             />
           </UserStringInput>
         </View>
-
         {password !== '' && (
           <PasswordComplexityText
             condition={hasUppercase}
@@ -247,7 +248,7 @@ function SignUpScreen() {
           />
         )}
 
-        <View style={styles.navigation}>
+        <View>
           <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <StyledButton
               text="Sign Up"

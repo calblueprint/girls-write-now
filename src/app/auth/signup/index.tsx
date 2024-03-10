@@ -300,11 +300,6 @@ function SignUpScreen() {
             </Text>
           </View>
         )}
-        {/* <Button
-          title="test verification"
-          onPress={() => router.replace('/auth/verify')}
-          titleStyle={{ color: 'black' }}
-        /> */}
 
         <View style={styles.navigation}>
           <View style={[styles.verticallySpaced, globalStyles.mt20]}>

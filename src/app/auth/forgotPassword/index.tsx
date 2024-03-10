@@ -34,7 +34,7 @@ function ForgotPasswordScreen() {
         Alert.alert(error.message);
         setChangingPassword(false);
       } else {
-        setChangingPassword(true);
+        router.push('auth/resetPassword');
       }
     } else if (!verificationCode) {
       Alert.alert(`Please enter a verification code`);

@@ -4,6 +4,7 @@ import {
   Pressable,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 import styles from './styles';
@@ -22,10 +23,31 @@ function ContentCard({
   image,
   pressFunction,
 }: ContentCardProps) {
+  const saveStory = () => {
+    console.log("testing '+' icon does something for story " + title);
+  };
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.contentCard}>
-        <Image style={styles.image} source={{ uri: image }} />
+        <View style={{ flexDirection: 'row' }}>
+          <Image style={styles.image} source={{ uri: image }} />
+          {/* <View style={styles.authors}>
+            <Image
+              style={styles.reactions}
+              source={require('./savedStoriesIcon.png')}
+            />
+            <Image
+              style={styles.reactions}
+              source={require('./savedStoriesIcon.png')}
+            />
+            <Image
+              style={styles.reactions}
+              source={require('./savedStoriesIcon.png')}
+            />
+          </View> */}
+        </View>
+
         <View style={styles.textContainer}>
           <Text style={[globalStyles.h3, styles.title]} numberOfLines={1}>
             {title}
@@ -38,8 +60,37 @@ function ContentCard({
               {author}
             </Text>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text>Add reactions and plus button here</Text>
+          <View style={styles.buttons}>
+            <View>
+              <TouchableOpacity
+                onPress={() => null}
+                style={{ flexDirection: 'row' }}
+              >
+                <Image
+                  style={styles.reactions}
+                  source={require('./savedStoriesIcon.png')}
+                />
+                <Image
+                  style={styles.reactions}
+                  source={require('./savedStoriesIcon.png')}
+                />
+                <Image
+                  style={styles.reactions}
+                  source={require('./savedStoriesIcon.png')}
+                />
+                <View style={styles.reactionNumber}>
+                  <Text style={globalStyles.subtext}>
+                    14{/*change number to work*/}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={() => saveStory()}>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={require('./savedStoriesIcon.png')}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

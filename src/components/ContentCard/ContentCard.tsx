@@ -14,6 +14,7 @@ type ContentCardProps = {
   title: string;
   author: string;
   image: string;
+  authorImage: string;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -21,6 +22,7 @@ function ContentCard({
   title,
   author,
   image,
+  authorImage,
   pressFunction,
 }: ContentCardProps) {
   const saveStory = () => {
@@ -32,20 +34,12 @@ function ContentCard({
       <View style={styles.contentCard}>
         <View style={{ flexDirection: 'row' }}>
           <Image style={styles.image} source={{ uri: image }} />
-          {/* <View style={styles.authors}>
-            <Image
-              style={styles.reactions}
-              source={require('./savedStoriesIcon.png')}
-            />
-            <Image
-              style={styles.reactions}
-              source={require('./savedStoriesIcon.png')}
-            />
-            <Image
-              style={styles.reactions}
-              source={require('./savedStoriesIcon.png')}
-            />
-          </View> */}
+          <Image
+            style={styles.authors}
+            source={{
+              uri: 'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2023/12/10090438/Angela-Trakoshis-100x100.jpg' /* change image for proper author when we can pull author images properly */,
+            }}
+          />
         </View>
 
         <View style={styles.textContainer}>

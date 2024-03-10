@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -238,7 +238,6 @@ function SignUpScreen() {
             />
           </UserStringInput>
         </View>
-
         {password !== '' && (
           <View style={styles.passwordComplexity}>
             <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />

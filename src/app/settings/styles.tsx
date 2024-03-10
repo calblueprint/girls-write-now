@@ -17,18 +17,10 @@ export default StyleSheet.create({
     alignSelf: 'stretch',
   },
   subheading: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 18,
-    fontStyle: 'normal',
-    fontWeight: '700',
     paddingBottom: 16,
   },
   heading: {
-    paddingBottom: 24,
-    fontFamily: 'Manrope-Regular',
-    fontSize: 24,
-    fontStyle: 'normal',
-    fontWeight: '700',
+    paddingBottom: 20,
   },
   back: {
     paddingTop: 30,
@@ -43,12 +35,6 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 6,
   },
-  label: {
-    fontSize: 12,
-    fontFamily: 'Manrope-Regular',
-    fontStyle: 'normal',
-    fontWeight: '400',
-  },
   icon: {
     paddingLeft: 8,
   },
@@ -60,13 +46,22 @@ export default StyleSheet.create({
     paddingTop: 18,
   },
   info: {
-    flex: 1,
     flexDirection: 'row',
-    marginTop: 12,
-    marginBottom: 16,
+    marginLeft: 8,
+    marginTop: 40,
+    marginBottom: 20,
+    marginRight: 30,
+    maxWidth: '80%',
   },
   subtext: {
     color: colors.darkGrey,
     marginLeft: 8,
+    flexWrap: 'wrap',
+  },
+  datePicker: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
   },
 });

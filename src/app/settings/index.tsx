@@ -141,8 +141,11 @@ function SettingsScreen() {
   };
 
   const onConfirmDate = (output: any) => {
-    console.log(output.dateString);
-    setBirthday(new Date(output.dateString).toLocaleDateString('en-US'));
+    setBirthday(
+      new Date(output.dateString).toLocaleDateString('en-US', {
+        timeZone: 'UTC',
+      }),
+    );
     setShowDatePicker(false);
     setShowSaveEdits(true);
     setBirthdayChanged(true);
@@ -153,24 +156,29 @@ function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={globalStyles.container}>
-      <Link href="/home" style={styles.back}>
-        <Text>{'<Back'}</Text>
-      </Link>
-
+    <SafeAreaView
+      style={globalStyles.container}
+      edges={['right', 'left', 'top']}
+    >
       <ScrollView bounces={false} contentContainerStyle={styles.main}>
         <View>
-          <Text style={styles.heading}>Settings</Text>
-          <Text style={styles.subheading}>Account</Text>
+          <Link href="/home" style={styles.back}>
+            <Text>{'<Back'}</Text>
+          </Link>
+          <View style={styles.datePicker}>
+            <DatePicker
+              isVisible={showDatePicker}
+              mode={'single'}
+              onCancel={() => {
+                setShowDatePicker(false);
+              }}
+              onConfirm={onConfirmDate}
+              // colorOptions={{headerColor: colors.darkGrey}}
+            />
+          </View>
 
-          <DatePicker
-            isVisible={showDatePicker}
-            mode={'single'}
-            onCancel={() => {
-              setShowDatePicker(false);
-            }}
-            onConfirm={onConfirmDate}
-          ></DatePicker>
+          <Text style={[globalStyles.h1, styles.heading]}>Settings</Text>
+          <Text style={[globalStyles.h2, styles.subheading]}>Account</Text>
 
           <View style={styles.staticData}>
             <AccountDataDisplay label="First Name" value={firstName} />
@@ -179,7 +187,7 @@ function SettingsScreen() {
             <AccountDataDisplay
               label="Birthday"
               value={
-                !birthdayExists ? (
+                birthdayExists ? (
                   <View style={styles.dateButton}>
                     <Pressable
                       onPress={() => {
@@ -233,18 +241,17 @@ function SettingsScreen() {
             value={raceEthnicity}
             setValue={wrapInDetectChange(setRaceEthnicity)}
           />
+          {birthdayChanged && (
+            <View style={styles.info}>
+              <Icon type="material" name="info-outline" color="#797979" />
+              <Text style={[globalStyles.subtext, styles.subtext]}>
+                You can only input your birthday once. Please make sure the date
+                is correct before saving as you will not be able to change your
+                birthday in the future.
+              </Text>
+            </View>
+          )}
         </View>
-
-        {birthdayChanged && (
-          <View style={styles.info}>
-            <Icon type="material" name="info-outline" color="#797979" />
-            <Text style={[globalStyles.subtext, styles.subtext]}>
-              You can only input your birthday once. Please make sure the date
-              is correct before saving as you will not be able to change your
-              birthday in the future.
-            </Text>
-          </View>
-        )}
 
         <View style={styles.button}>
           {showSaveEdits ? (

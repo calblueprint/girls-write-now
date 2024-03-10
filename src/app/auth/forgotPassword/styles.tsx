@@ -18,4 +18,11 @@ export default StyleSheet.create({
     paddingVertical: 18,
     color: colors.darkGrey,
   },
+  back: {
+    paddingTop: 30,
+    paddingBottom: 16,
+    color: '#797979',
+    fontSize: 12,
+    fontWeight: '400',
+  },
 });

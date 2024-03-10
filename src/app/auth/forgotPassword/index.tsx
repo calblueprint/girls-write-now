@@ -1,8 +1,8 @@
-import { router } from 'expo-router';
-import React, { useState, useRef } from 'react';
+import { router, Link } from 'expo-router';
+import { useState, useRef } from 'react';
 import { Alert, Text, View } from 'react-native';
 import validator from 'validator';
-import { Mutex } from 'async-mutex';
+// import { Mutex } from 'async-mutex';
 
 import styles from './styles';
 import globalStyles from '../../../styles/globalStyles';
@@ -20,7 +20,7 @@ function ForgotPasswordScreen() {
   const [emailError, setEmailError] = useState('');
   const [validEmail, setValidEmail] = useState(false);
 
-  const mutex = useRef(new Mutex());
+  // const mutex = useRef(new Mutex());
 
   const sendResetEmail = async () => {
     const { error } = await resetPassword(emailToReset);
@@ -31,7 +31,7 @@ function ForgotPasswordScreen() {
 
   const setAndCheckEmailOrUsername = async (newEmail: string) => {
     setEmail(newEmail);
-    const release = await mutex.current.acquire();
+    // const release = await mutex.current.acquire();
 
     try {
       if (validator.isEmail(newEmail)) {
@@ -65,13 +65,16 @@ function ForgotPasswordScreen() {
       setValidEmail(true);
       setEmailError('');
     } finally {
-      release();
+      // release();
     }
   };
 
   return (
     <View style={styles.container}>
       <View>
+        <Link href="/home" style={styles.back}>
+          <Text>{'<Back'}</Text>
+        </Link>
         <Text style={[globalStyles.h1, styles.heading]}>Forgot Password?</Text>
         <UserStringInput
           placeholder="Email or account username"

@@ -120,12 +120,12 @@ function LoginScreen() {
           />
         </View>
 
-        <Text style={[globalStyles.body1, styles.redirectText]}>
-          Don&apos;t have an account?
+        <View style={styles.redirectText}>
+          <Text style={globalStyles.body1}>Don&apos;t have an account?</Text>
           <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
             Sign Up
           </Link>
-        </Text>
+        </View>
       </View>
     </SafeAreaView>
   );

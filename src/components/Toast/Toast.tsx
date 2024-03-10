@@ -1,7 +1,11 @@
-import Toast, { BaseToast, BaseToastProps, ToastConfig } from "react-native-toast-message";
-import colors from '../../styles/colors'
-import { Icon } from "react-native-elements";
-import styles from "./styles";
+import Toast, {
+  BaseToast,
+  BaseToastProps,
+  ToastConfig,
+} from 'react-native-toast-message';
+import colors from '../../styles/colors';
+import { Icon } from 'react-native-elements';
+import styles from './styles';
 
 const toastConfig: ToastConfig = {
   success: (props: BaseToastProps) => (
@@ -21,7 +25,7 @@ const toastConfig: ToastConfig = {
 };
 
 function ToastComponent() {
-  return <Toast config={toastConfig} />
+  return <Toast config={toastConfig} />;
 }
 
 export default ToastComponent;

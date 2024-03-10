@@ -20,7 +20,7 @@ import { fetchStoryPreviewById } from '../../../queries/stories';
 import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 
-//TODO: Create a storyPreview query function that returns a story or list of stories based on a subgenre rather than main genre
+//TODO figure out the logic for the tone and topic dropdowns, especially when we're dealing with multiselect on both parts
 
 function GenreScreen() {
   const [genreStoryInfo, setGenreStoryInfo] = useState<GenreStories[]>();
@@ -34,6 +34,7 @@ function GenreScreen() {
   const [genreTopics, setgenreTopics] = useState<string[]>([]);
   const [currTone, setCurrTone] = useState<string>('');
   const [currTopic, setCurrTopic] = useState<string>('');
+  const [toneTopicFilters, setToneTopicFilters] = useState<string[]>([]);
   const params = useLocalSearchParams<{ genreId: string }>();
   const params2 = useLocalSearchParams<{ genreType: string }>();
   const params3 = useLocalSearchParams<{ genreName: string }>();
@@ -88,6 +89,38 @@ function GenreScreen() {
     return subGenres;
   }
 
+  async function filterBySubgenre(filter_name: string) {
+    setLoading(true);
+    setSelectedSubgenre(filter_name);
+    if (!genreStoryInfo) {
+      return [];
+    }
+    if (filter_name === 'All') {
+      const storyIds = await getAllStoryIds(genreStoryInfo);
+      setGenreStoryIds(storyIds);
+    } else {
+      const filteredStoryIds = await findStoryIdsByName(
+        filter_name,
+        genreStoryInfo,
+      );
+      setGenreStoryIds(filteredStoryIds);
+      setLoading(false);
+      setgenreTones([]);
+      setgenreTopics([]);
+    }
+  }
+
+  //will be triggered when users click checkboxes, will concat all of these clicked and added to a usestate?
+  //this concatted array will be passed into filterByToneAndTopic array which will go through, genreStoryInfo, and filter
+  //out each story based on the array that is passed into this fu
+  async function filterByToneAndTopic(filters: string[]) {
+    setLoading(true);
+    setToneTopicFilters(filters);
+    if (!genreStoryInfo) {
+      return [];
+    }
+  }
+
   useEffect(() => {
     const getGenre = async () => {
       const genreStoryPreviewData: GenreStories[] =
@@ -114,27 +147,6 @@ function GenreScreen() {
     };
     getGenre();
   }, [genreName]);
-
-  async function filterBySubgenre(filter_name: string) {
-    setLoading(true);
-    setSelectedSubgenre(filter_name);
-    if (!genreStoryInfo) {
-      return [];
-    }
-    if (filter_name === 'All') {
-      const storyIds = await getAllStoryIds(genreStoryInfo);
-      setGenreStoryIds(storyIds);
-    } else {
-      const filteredStoryIds = await findStoryIdsByName(
-        filter_name,
-        genreStoryInfo,
-      );
-      setGenreStoryIds(filteredStoryIds);
-      setLoading(false);
-      setgenreTones([]);
-      setgenreTopics([]);
-    }
-  }
 
   useEffect(() => {
     const showAllStoryPreviews = async () => {
@@ -213,7 +225,7 @@ function GenreScreen() {
           >
             {subgenres.map((subgenre, index) => (
               <TouchableOpacity
-                onPress={() => filterBySubgenre(subgenre)}
+                onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
                 style={{ marginRight: 40 }}
               >
                 <Text

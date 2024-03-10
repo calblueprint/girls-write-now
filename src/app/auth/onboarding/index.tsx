@@ -1,18 +1,19 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { Alert, ScrollView, Platform, Text } from 'react-native';
+import { Alert, ScrollView, Platform, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import styles from './styles';
 import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import globalStyles from '../../../styles/globalStyles';
-import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
-import DateTimePicker from '@react-native-community/datetimepicker';
 // import DatePicker from '../../../components/DatePicker/DatePicker';
 
 function OnboardingScreen() {
-  const { session } = useSession();
+  const { session, user } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [username, setUsername] = useState('');
@@ -116,8 +117,19 @@ function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={globalStyles.h1}>Welcome, {username}</Text>
-
+      <Text style={[globalStyles.h1, styles.h1]}>
+        Welcome, {user?.user_metadata.username}
+      </Text>
+      <Text style={[globalStyles.body1, styles.body1]}>
+        Input your profile information below.
+      </Text>
+      <View style={styles.info}>
+        <Icon type="material" name="info-outline" color="#797979" />
+        <Text style={[globalStyles.subtext, styles.subtext]}>
+          This information is only used for outreach efforts, and will not be
+          visible to other users on the app.
+        </Text>
+      </View>
       <UserSelectorInput
         options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
         label="Gender"

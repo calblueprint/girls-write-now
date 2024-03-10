@@ -113,10 +113,9 @@ function OnboardingScreen() {
     }
   };
 
-  // Make sure to bring this back !!!!!
-  // if (!session) {
-  //   return <Redirect href="/auth/login" />;
-  // }
+  if (!session) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -139,7 +138,7 @@ function OnboardingScreen() {
         // onChange={setBirthday}
         value={birthday}
         placeholderTextColor={colors.darkGrey}
-        attributes={null}
+        attributes={{ editable: false }}
       >
         <Icon
           name="calendar-outline"
@@ -191,7 +190,10 @@ function OnboardingScreen() {
           <StyledButton
             text={loading ? 'Loading ...' : 'Update profile'}
             onPress={updateProfileAndGoHome}
-            disabled={loading}
+            disabled={
+              loading ||
+              (gender === '' && pronouns === '' && raceEthnicity === '')
+            }
           />
         </View>
         <Link

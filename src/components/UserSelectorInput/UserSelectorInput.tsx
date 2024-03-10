@@ -30,7 +30,7 @@ function UserSelectorInput({
         <Dropdown
           mode="default"
           style={styles.dropdown}
-          placeholderStyle={globalStyles.body1}
+          placeholderStyle={[globalStyles.body1, styles.grey]}
           selectedTextStyle={globalStyles.body1}
           inputSearchStyle={globalStyles.body1}
           itemTextStyle={globalStyles.body1}

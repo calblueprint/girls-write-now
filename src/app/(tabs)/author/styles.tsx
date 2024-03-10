@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: 'bold',
     fontSize: 24,
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
   },
   image: {
     height: 68,
@@ -23,14 +23,14 @@ const styles = StyleSheet.create({
   },
   bioText: {
     color: 'black',
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 14,
   },
   authorStatement: {
     fontSize: 14,
     color: 'black',
     fontWeight: '400',
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
   },
   authorTextContainer: {
     paddingLeft: 20,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   authorStatementTitle: {
     fontWeight: 'bold',
-    fontFamily: 'Avenir',
+    fontFamily: 'Manrope-Regular',
     fontSize: 16,
     marginBottom: 8,
   },

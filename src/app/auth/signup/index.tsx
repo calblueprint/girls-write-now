@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -10,6 +10,7 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
@@ -114,26 +115,10 @@ function SignUpScreen() {
   const checkPassword = (text: string) => {
     setPassword(text);
     if (text !== '') {
-      if (text !== text.toLowerCase()) {
-        setHasUppercase(true);
-      } else {
-        setHasUppercase(false);
-      }
-      if (text !== text.toUpperCase()) {
-        setHasLowercase(true);
-      } else {
-        setHasLowercase(false);
-      }
-      if (/[0-9]/.test(text)) {
-        setHasNumber(true);
-      } else {
-        setHasNumber(false);
-      }
-      if (text.length >= 8) {
-        setHasLength(true);
-      } else {
-        setHasLength(false);
-      }
+      setHasUppercase(text !== text.toLowerCase());
+      setHasLowercase(text !== text.toUpperCase());
+      setHasNumber(/[0-9]/.test(text));
+      setHasLength(text.length >= 8);
     }
   };
 
@@ -163,39 +148,46 @@ function SignUpScreen() {
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
-        // bounces={false}
+        automaticallyAdjustKeyboardInsets={true}
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.flex}
       >
         <View style={styles.inputs}>
-          <Text style={styles.title}>
+          <Text style={[globalStyles.h1, styles.title]}>
             {'Read stories from \nyoung creators'}
           </Text>
 
           <UserStringInput
             placeholder="Username"
             label="Username"
+            placeholderTextColor={colors.darkGrey}
             onChange={setAndCheckUsername}
             value={username}
           />
           {usernameError && (
-            <Text style={styles.inputError}>{usernameError}</Text>
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {usernameError}
+            </Text>
           )}
 
           <UserStringInput
             placeholder="First Name"
             label="First Name"
+            placeholderTextColor={colors.darkGrey}
             onChange={setFirstName}
             value={firstName}
           />
           <UserStringInput
             placeholder="Last Name"
             label="Last Name"
+            placeholderTextColor={colors.darkGrey}
             onChange={setLastName}
             value={lastName}
           />
           <UserStringInput
             placeholder="Email"
             label="Email"
+            placeholderTextColor={colors.darkGrey}
             onChange={setAndCheckEmail}
             value={email}
             attributes={{
@@ -203,11 +195,16 @@ function SignUpScreen() {
               secureTextEntry: false,
             }}
           />
-          {emailError && <Text style={styles.inputError}>{emailError}</Text>}
+          {emailError && (
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {emailError}
+            </Text>
+          )}
 
           <UserStringInput
             placeholder="Password"
             label="Password"
+            placeholderTextColor={colors.darkGrey}
             onChange={text => {
               setPassword(text);
               checkPassword(text);
@@ -226,69 +223,32 @@ function SignUpScreen() {
             />
           </UserStringInput>
         </View>
-
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                styles.passwordErrorText,
-                hasUppercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 uppercase letter
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasUppercase}
+            message="At least 1 uppercase letter"
+          />
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                styles.passwordErrorText,
-                hasLowercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 lowercase letter
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasLowercase}
+            message="At least 1 lowercase letter"
+          />
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                styles.passwordErrorText,
-                hasNumber
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 number
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasNumber}
+            message="At least 1 number"
+          />
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                styles.passwordErrorText,
-                hasLength
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 8 characters
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasLength}
+            message="At least 8 characters"
+          />
         )}
 
-        <View style={styles.navigation}>
+        <View>
           <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <StyledButton
               text="Sign Up"
@@ -303,9 +263,9 @@ function SignUpScreen() {
               onPress={signUpWithEmail}
             />
           </View>
-          <Text style={styles.redirectText}>
+          <Text style={[globalStyles.body1, styles.redirectText]}>
             Already have an account?{' '}
-            <Link style={styles.link} href="/auth/login">
+            <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
               Log In
             </Link>
           </Text>

@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 
 export default StyleSheet.create({
+  grey: {
+    color: colors.grey,
+  },
   outer: {
     position: 'relative',
     zIndex: 1,
@@ -11,10 +14,6 @@ export default StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 12,
-    fontStyle: 'normal',
-    fontWeight: '400',
-    color: colors.textGrey,
     marginBottom: 10,
   },
   dropdown: {
@@ -26,7 +25,7 @@ export default StyleSheet.create({
   dropdownContainer: {
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: colors.shadowDark,
+    borderColor: colors.fadedBlack,
     borderTopWidth: 0,
     borderTopEndRadius: 0,
     borderTopStartRadius: 0,
@@ -40,9 +39,6 @@ export default StyleSheet.create({
   },
   icon: {
     marginRight: 5,
-  },
-  textStyle: {
-    fontSize: 14,
   },
   iconStyle: {
     width: 20,

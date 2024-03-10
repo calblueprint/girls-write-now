@@ -7,7 +7,6 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,
@@ -53,6 +52,7 @@ function HomeScreen() {
       setLoading(false);
     });
   }, [user]);
+
   return (
     <SafeAreaView
       style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}

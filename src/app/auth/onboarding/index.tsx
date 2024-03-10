@@ -1,20 +1,24 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { Alert, ScrollView, Platform } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Alert, ScrollView, Platform, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import styles from './styles';
 import StyledButton from '../../../components/StyledButton/StyledButton';
-import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
+// import DatePicker from '../../../components/DatePicker/DatePicker';
 
 function OnboardingScreen() {
-  const { session } = useSession();
+  const { session, user } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
+  const [username, setUsername] = useState('');
   const [lastName, setLastName] = useState('');
+  const [pronouns, setPronouns] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
@@ -27,7 +31,9 @@ function OnboardingScreen() {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`first_name, last_name, birthday, gender, race_ethnicity`)
+        .select(
+          `first_name, last_name, username, pronouns, birthday, gender, race_ethnicity`,
+        )
         .eq('user_id', session?.user.id)
         .single();
 
@@ -38,6 +44,8 @@ function OnboardingScreen() {
       if (data) {
         setFirstName(data.first_name || firstName);
         setLastName(data.last_name || lastName);
+        setUsername(data.username || username);
+        setPronouns(data.pronouns || pronouns);
         setBirthday(new Date(data.birthday) || birthday);
         setGender(data.gender || gender);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
@@ -65,6 +73,7 @@ function OnboardingScreen() {
         ...(firstName && { first_name: firstName }),
         ...(lastName && { last_name: lastName }),
         ...(gender && { gender }),
+        ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
         ...(birthday && { birthday }),
       };
@@ -108,40 +117,44 @@ function OnboardingScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <UserStringInput
-        placeholder="Email"
-        value={session?.user?.email ?? ''}
-        attributes={{
-          editable: false,
-        }}
-      />
-      <UserStringInput
-        placeholder="First Name"
-        value={firstName}
-        onChange={setFirstName}
-      />
-      <UserStringInput
-        placeholder="Last Name"
-        value={lastName}
-        onChange={setLastName}
-      />
-      <UserStringInput
-        placeholder="Gender"
+      <Text style={[globalStyles.h1, styles.h1]}>
+        Welcome, {user?.user_metadata.username}
+      </Text>
+      <Text style={[globalStyles.body1, styles.body1]}>
+        Input your profile information below.
+      </Text>
+      <View style={styles.info}>
+        <Icon type="material" name="info-outline" color="#797979" />
+        <Text style={[globalStyles.subtext, styles.subtext]}>
+          This information is only used for outreach efforts, and will not be
+          visible to other users on the app.
+        </Text>
+      </View>
+      <UserSelectorInput
+        options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
+        label="Gender"
         value={gender}
-        onChange={setGender}
+        setValue={setGender}
       />
-      <UserStringInput
-        placeholder="Race/Ethnicity"
+      <UserSelectorInput
+        options={['she/her', 'he/him', 'they/them', 'Other']}
+        label="Pronouns"
+        value={pronouns}
+        setValue={setPronouns}
+      />
+      <UserSelectorInput
+        options={[
+          'American Indian/Alaska Native',
+          'Asian',
+          // 'Black or African American',
+          'Native Hawaiian or other Pacific Islander',
+          'White',
+          'Prefer Not to Disclose',
+        ]}
+        label="Race/Ethnicity"
         value={raceEthnicity}
-        onChange={setRaceEthnicity}
+        setValue={setRaceEthnicity}
       />
-
-      {Platform.OS !== 'ios' && (
-        <Button
-          title="Change Birthday"
-          onPress={() => setShowDatePicker(true)}
-        />
-      )}
       {showDatePicker && (
         <DateTimePicker
           testID="dateTimePicker"

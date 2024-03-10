@@ -154,10 +154,7 @@ function SettingsScreen() {
           <Text style={styles.subheading}>Account</Text>
 
           <View style={styles.staticData}>
-            <AccountDataDisplay
-              label="First Name"
-              value="ashdkjashdkjashdkajshdjkashdjkashdjkashdakjshd"
-            />
+            <AccountDataDisplay label="First Name" value={firstName} />
             <AccountDataDisplay label="Last Name" value={lastName} />
             <AccountDataDisplay label="Username" value={username} />
             <AccountDataDisplay
@@ -192,14 +189,12 @@ function SettingsScreen() {
 
           <UserSelectorInput
             options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
-            placeholder="Gender"
             label="Gender"
             value={gender}
             setValue={wrapInDetectChange(setGender)}
           />
           <UserSelectorInput
             options={['she/her', 'he/him', 'they/them', 'Other']}
-            placeholder="Pronouns"
             label="Pronouns"
             value={pronouns}
             setValue={wrapInDetectChange(setPronouns)}
@@ -213,7 +208,6 @@ function SettingsScreen() {
               'White',
               'Prefer Not to Disclose',
             ]}
-            placeholder="Race/Ethnicity"
             label="Race/Ethnicity"
             value={raceEthnicity}
             setValue={wrapInDetectChange(setRaceEthnicity)}

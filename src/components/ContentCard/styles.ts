@@ -20,13 +20,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 140,
-    width: 148, //148,
+    width: 148,
     backgroundColor: colors.lime,
     borderRadius: 4,
     marginBottom: 8,
   },
+  authors: {
+    width: 20,
+    height: 20,
+    borderRadius: 20 / 2,
+    borderWidth: 1,
+    backgroundColor: '#89CFF0',
+    borderColor: 'white',
+    marginTop: 10,
+    marginLeft: -80,
+    flexDirection: 'row',
+  },
   textContainer: {
-    width: 148,
+    width: 166,
     paddingLeft: 10,
     paddingRight: 10,
     paddingBottom: 10,
@@ -34,6 +45,25 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 4,
     padding: 0,
+  },
+  reactionNumber: {
+    marginLeft: 15,
+    marginTop: 10,
+  },
+  reactions: {
+    width: 20,
+    height: 20,
+    borderRadius: 20 / 2,
+    borderWidth: 1,
+    backgroundColor: '#89CFF0', //different per emoji reaction
+    borderColor: 'white',
+    marginTop: 10,
+    marginRight: -10,
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
   },
 });
 

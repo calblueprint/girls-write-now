@@ -2,6 +2,9 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.formatDocument": "explicit",
+<<<<<<< HEAD
     "source.fixAll.eslint": "explicit"
+=======
+>>>>>>> 34517a72f545c92bbbbdef1ec30d61a51462d6be
   }
 }

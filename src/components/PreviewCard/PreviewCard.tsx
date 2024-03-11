@@ -5,6 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import * as cheerio from 'cheerio';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
@@ -31,40 +32,48 @@ function PreviewCard({
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
-        <View style={styles.top}>
+        <View style={styles.titleContainer}>
+          <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
+            {title}
+          </Text>
+        </View>
+        <View style={styles.body}>
           <Image style={styles.image} source={{ uri: image }} />
           <View style={styles.cardTextContainer}>
-            <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
-              {title}
-            </Text>
             <View style={styles.authorContainer}>
               <Image style={styles.authorImage} source={{ uri: authorImage }} />
               <Text
                 numberOfLines={1}
-                style={[globalStyles.body2, styles.author]}
+                style={[globalStyles.body1, styles.author]}
               >
                 {author}
               </Text>
             </View>
-            <Text numberOfLines={2} style={[globalStyles.subtext]}>
-              {excerpt.html.slice(3, -3)}
+            <Text
+              numberOfLines={3}
+              style={[globalStyles.subtext, styles.storyDescription]}
+            >
+              "{cheerio.load(excerpt.html).text()}"
             </Text>
           </View>
         </View>
-        {/* <View style={styles.bottom}>
-          <View style={styles.tagsContainer}>
-            {tags.map(tag => (
-              <Text key={tag} style={styles.tag}>
-                {tag}
+        <View style={styles.tagsContainer}>
+          <View style={styles.tagsRow}>
+            <View style={styles.tag}>
+              <Text key={tags[0]} style={globalStyles.button1}>
+                {tags[0]}
               </Text>
-            ))}
+            </View>
           </View>
           <View style={styles.moreTags}>
             <Pressable>
-              <Text>more tags</Text>
+              <Text style={[globalStyles.subtext, styles.moreTagsText]}>
+                {' '}
+                + {tags.length - 1} more tags
+              </Text>
             </Pressable>
           </View>
-        </View> */}
+        </View>
       </View>
     </Pressable>
   );

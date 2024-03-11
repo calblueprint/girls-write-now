@@ -1,8 +1,9 @@
 import { router, Link } from 'expo-router';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Alert, Text, View } from 'react-native';
 import validator from 'validator';
-// import { Mutex } from 'async-mutex';
+import { useDebounce } from 'use-debounce';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import globalStyles from '../../../styles/globalStyles';
@@ -18,9 +19,8 @@ function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
   const [emailToReset, setEmailToReset] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [value] = useDebounce(email, 350);
   const [validEmail, setValidEmail] = useState(false);
-
-  // const mutex = useRef(new Mutex());
 
   const sendResetEmail = async () => {
     const { error } = await resetPassword(emailToReset);
@@ -29,59 +29,55 @@ function ForgotPasswordScreen() {
     else router.replace('auth/signup');
   };
 
-  const setAndCheckEmailOrUsername = async (newEmail: string) => {
-    setEmail(newEmail);
-    // const release = await mutex.current.acquire();
+  useEffect(() => {
+    checkEmailOrUsername(value);
+  }, [value]);
 
-    try {
-      if (validator.isEmail(newEmail)) {
-        if (newEmail.length === 0) {
-          setEmailError('');
-          return;
-        }
-        const emailIsTaken = await isEmailTaken(newEmail);
-        if (!emailIsTaken) {
-          setEmailError(
-            'An account with that email does not exist. Please try again.',
-          );
-          setValidEmail(false);
-          return;
-        }
-        setEmailToReset(newEmail);
-      } else {
-        const { data, error } = await queryEmailByUsername(newEmail);
-
-        if (data && data?.length > 0 && !error) {
-          setValidEmail(true);
-          setEmailToReset(data[0].email);
-        } else {
-          setEmailError(
-            'An account with that username does not exist. Please try again.',
-          );
-          setValidEmail(false);
-          return;
-        }
+  const checkEmailOrUsername = async (newEmail: string) => {
+    if (validator.isEmail(newEmail)) {
+      if (newEmail.length === 0) {
+        setEmailError('');
+        return;
       }
-      setValidEmail(true);
-      setEmailError('');
-    } finally {
-      // release();
+      const emailIsTaken = await isEmailTaken(newEmail);
+      if (!emailIsTaken) {
+        setEmailError(
+          'An account with that email does not exist. Please try again.',
+        );
+        setValidEmail(false);
+        return;
+      }
+      setEmailToReset(newEmail);
+    } else {
+      const { data, error } = await queryEmailByUsername(newEmail);
+
+      if (data && data?.length > 0 && !error) {
+        setValidEmail(true);
+        setEmailToReset(data[0].email);
+      } else {
+        setEmailError(
+          'An account with that username does not exist. Please try again.',
+        );
+        setValidEmail(false);
+        return;
+      }
     }
+    setValidEmail(true);
+    setEmailError('');
   };
 
   return (
     <View style={styles.container}>
       <View>
-        <Link href="/home" style={styles.back}>
-          <Text>{'<Back'}</Text>
-        </Link>
         <Text style={[globalStyles.h1, styles.heading]}>Forgot Password?</Text>
         <UserStringInput
           placeholder="Email or account username"
           placeholderTextColor={colors.darkGrey}
           value={email}
           label="Email or account username"
-          onChange={setAndCheckEmailOrUsername}
+          onChange={e => {
+            setEmail(e);
+          }}
         />
         <Text style={[globalStyles.errorMessage, styles.subtext]}>
           We'll email you a code to confirm your email.

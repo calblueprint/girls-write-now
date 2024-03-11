@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   flex: {
@@ -14,7 +13,9 @@ export default StyleSheet.create({
     textDecorationLine: 'underline',
   },
   redirectText: {
-    textAlign: 'center',
+    gap: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 16,
     marginBottom: 64,
   },

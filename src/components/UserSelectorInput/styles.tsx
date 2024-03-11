@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 
 export default StyleSheet.create({
+  grey: {
+    color: colors.grey,
+  },
   outer: {
     position: 'relative',
     zIndex: 1,

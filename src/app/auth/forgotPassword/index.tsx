@@ -68,32 +68,39 @@ function ForgotPasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={[globalStyles.h1, styles.heading]}>Forgot Password?</Text>
-        <UserStringInput
-          placeholder="Email or account username"
-          placeholderTextColor={colors.darkGrey}
-          value={email}
-          label="Email or account username"
-          onChange={e => {
-            setEmail(e);
-          }}
-        />
-        <Text style={[globalStyles.errorMessage, styles.subtext]}>
-          We'll email you a code to confirm your email.
-        </Text>
+      <Link href="/home" style={styles.back}>
+        <Text>{'<Back'}</Text>
+      </Link>
+      <View style={styles.body}>
+        <View>
+          <Text style={[globalStyles.h1, styles.heading]}>
+            Forgot Password?
+          </Text>
+          <UserStringInput
+            placeholder="Email or account username"
+            placeholderTextColor={colors.darkGrey}
+            value={email}
+            label="Email or account username"
+            onChange={e => {
+              setEmail(e);
+            }}
+          />
+          <Text style={[globalStyles.errorMessage, styles.subtext]}>
+            We'll email you a code to confirm your email.
+          </Text>
 
-        {email !== '' && (
-          <Text style={[globalStyles.errorMessage]}>{emailError}</Text>
-        )}
-      </View>
+          {email !== '' && (
+            <Text style={[globalStyles.errorMessage]}>{emailError}</Text>
+          )}
+        </View>
 
-      <View>
-        <StyledButton
-          disabled={!validEmail}
-          text="Continue"
-          onPress={sendResetEmail}
-        />
+        <View>
+          <StyledButton
+            disabled={!validEmail}
+            text="Continue"
+            onPress={sendResetEmail}
+          />
+        </View>
       </View>
     </View>
   );

@@ -3,15 +3,15 @@ import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
-    justifyContent: 'space-between',
+    paddingVertical: 32,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
-
   heading: {
     paddingBottom: 8,
+  },
+  body: {
+    justifyContent: 'space-between',
   },
 
   subtext: {
@@ -21,7 +21,7 @@ export default StyleSheet.create({
   back: {
     paddingTop: 30,
     paddingBottom: 16,
-    color: '#797979',
+    color: colors.darkGrey,
     fontSize: 12,
     fontWeight: '400',
   },

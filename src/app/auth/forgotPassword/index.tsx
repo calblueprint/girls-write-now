@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Alert, Text, View } from 'react-native';
 import validator from 'validator';
 import { useDebounce } from 'use-debounce';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import globalStyles from '../../../styles/globalStyles';
@@ -15,11 +14,11 @@ import { queryEmailByUsername } from '../../../queries/auth';
 import colors from '../../../styles/colors';
 
 function ForgotPasswordScreen() {
-  const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
+  const { resetPassword } = useSession();
   const [email, setEmail] = useState('');
   const [emailToReset, setEmailToReset] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [value] = useDebounce(email, 350);
+  const [value] = useDebounce(email, 250);
   const [validEmail, setValidEmail] = useState(false);
 
   const sendResetEmail = async () => {
@@ -68,8 +67,8 @@ function ForgotPasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <Link href="/home" style={styles.back}>
-        <Text>{'<Back'}</Text>
+      <Link href="/auth/login" style={styles.back}>
+        <Text style={[globalStyles.subtext, styles.backText]}>{'<Back'}</Text>
       </Link>
       <View style={styles.body}>
         <View>
@@ -94,7 +93,7 @@ function ForgotPasswordScreen() {
           )}
         </View>
 
-        <View>
+        <View style={styles.button}>
           <StyledButton
             disabled={!validEmail}
             text="Continue"

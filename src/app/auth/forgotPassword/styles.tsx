@@ -3,6 +3,7 @@ import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
+    flex: 1,
     paddingVertical: 32,
     paddingLeft: 30,
     paddingRight: 30,
@@ -11,9 +12,13 @@ export default StyleSheet.create({
     paddingBottom: 8,
   },
   body: {
+    flex: 1,
     justifyContent: 'space-between',
+    paddingHorizontal: 12,
   },
-
+  button: {
+    paddingBottom: 40,
+  },
   subtext: {
     paddingVertical: 18,
     color: colors.darkGrey,
@@ -24,5 +29,8 @@ export default StyleSheet.create({
     color: colors.darkGrey,
     fontSize: 12,
     fontWeight: '400',
+  },
+  backText: {
+    color: colors.darkGrey,
   },
 });

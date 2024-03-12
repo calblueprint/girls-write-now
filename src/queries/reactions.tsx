@@ -41,32 +41,37 @@ export async function deleteReactionToStory(
   }
 }
 
-export async function fetchStoryPreviewById(
+export async function fetchAllReactionsToStory(
   storyId: number,
-): Promise<StoryPreview[]> {
-  const { data, error } = await supabase.rpc('fetch_story_preview_by_id', {
+): Promise<Reactions[]> {
+  const { data, error } = await supabase.rpc('curr_get_reactions_for_story', {
     input_story_id: storyId,
   });
   if (error) {
     console.log(error);
     throw new Error(
-      `An error occured when trying to fetch story preview by ID: ${error}`,
+      `An error occured when trying to fetch reactions to a story', ${error}`,
     );
   } else {
     return data;
   }
 }
 
-export async function fetchStoryPreviewById(
-  storyId: number,
-): Promise<StoryPreview[]> {
-  const { data, error } = await supabase.rpc('fetch_story_preview_by_id', {
-    input_story_id: storyId,
-  });
+export async function fetchReactionsToStoryByUser(
+  story_id: number,
+  profile_id: number,
+): Promise<Reactions[]> {
+  const { data, error } = await supabase.rpc(
+    'get_reactions_for_user_and_story',
+    {
+      _story_id: story_id,
+      _profile_id: profile_id,
+    },
+  );
   if (error) {
     console.log(error);
     throw new Error(
-      `An error occured when trying to fetch story preview by ID: ${error}`,
+      `An error occured when trying to fetch reactions for user and story ${error}`,
     );
   } else {
     return data;

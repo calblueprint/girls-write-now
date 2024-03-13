@@ -33,6 +33,7 @@ function ForgotPasswordScreen() {
   }, [value]);
 
   const checkEmailOrUsername = async (newEmail: string) => {
+    setValidEmail(false);
     if (validator.isEmail(newEmail)) {
       if (newEmail.length === 0) {
         setEmailError('');
@@ -95,7 +96,7 @@ function ForgotPasswordScreen() {
 
         <View style={styles.button}>
           <StyledButton
-            disabled={!validEmail}
+            disabled={!validEmail || email !== value}
             text="Continue"
             onPress={sendResetEmail}
           />

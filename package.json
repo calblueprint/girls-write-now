@@ -60,6 +60,7 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.0.2",
     "react-scroll-to-top": "^3.0.0",
+    "use-debounce": "^10.0.0",
     "validator": "^13.11.0"
   },
   "devDependencies": {

@@ -62,7 +62,11 @@ function SettingsScreen() {
         setUsername(data.username || username);
 
         if (data.birthday) {
-          setBirthday(data.birthday);
+          setBirthday(
+            new Date(data.birthday).toLocaleDateString('en-US', {
+              timeZone: 'UTC',
+            }),
+          );
           setBirthdayExists(true);
         }
 
@@ -156,14 +160,13 @@ function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView
-      style={globalStyles.container}
-      edges={['right', 'left', 'top']}
-    >
-      <ScrollView bounces={false} contentContainerStyle={styles.main}>
+    <SafeAreaView style={styles.container} edges={['right', 'left', 'top']}>
+      <ScrollView bounces={true} contentContainerStyle={styles.main}>
         <View>
           <Link href="/home" style={styles.back}>
-            <Text>{'<Back'}</Text>
+            <Text style={[globalStyles.subtext, styles.backText]}>
+              {'<Back'}
+            </Text>
           </Link>
           <View style={styles.datePicker}>
             <DatePicker
@@ -187,6 +190,7 @@ function SettingsScreen() {
             <AccountDataDisplay
               label="Birthday"
               value={
+                // change back to !birthdayExists later
                 birthdayExists ? (
                   <View style={styles.dateButton}>
                     <Pressable

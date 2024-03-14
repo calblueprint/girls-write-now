@@ -2,20 +2,25 @@ import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 24,
+  },
   button: {
     marginBottom: 32,
   },
   main: {
     flex: 1,
-    width: '100%',
     paddingLeft: 12,
+    width: '100%',
     justifyContent: 'space-between',
   },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
+  // verticallySpaced: {
+  //   paddingTop: 4,
+  //   paddingBottom: 4,
+  //   alignSelf: 'stretch',
+  // },
   subheading: {
     paddingBottom: 16,
   },
@@ -28,6 +33,9 @@ export default StyleSheet.create({
     color: '#797979',
     fontSize: 12,
     fontWeight: '400',
+  },
+  backText: {
+    color: colors.darkGrey,
   },
   staticData: {
     flexDirection: 'row',
@@ -59,7 +67,6 @@ export default StyleSheet.create({
     flexWrap: 'wrap',
   },
   datePicker: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 100,

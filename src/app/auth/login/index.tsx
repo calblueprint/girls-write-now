@@ -120,7 +120,7 @@ function LoginScreen() {
 
         <View style={styles.redirectText}>
           <Text style={globalStyles.body1}>Don&apos;t have an account?</Text>
-          <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
+          <Link style={globalStyles.bodyBoldUnderline} href="/auth/onboarding">
             Sign Up
           </Link>
         </View>

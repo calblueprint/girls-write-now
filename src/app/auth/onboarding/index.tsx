@@ -113,13 +113,13 @@ function OnboardingScreen() {
     }
   };
 
-  if (!session) {
-    return <Redirect href="/auth/login" />;
-  }
+  // if (!session) {
+  //   return <Redirect href="/auth/login" />;
+  // }
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={[globalStyles.h1, styles.h1]}>
+      <Text style={globalStyles.h1}>
         Welcome, {user?.user_metadata.username}
       </Text>
       <Text style={[globalStyles.body1, styles.body1]}>

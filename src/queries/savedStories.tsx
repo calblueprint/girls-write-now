@@ -13,6 +13,7 @@ export async function fetchUserStories(
     .eq('user_id', user_id)
     .eq('name', name);
 
+  // TODO remove throw error in production
   if (error) {
     console.log(error);
     throw new Error(
@@ -31,7 +32,7 @@ export async function fetchUserStoriesReadingList(user_id: string | undefined) {
   fetchUserStories(user_id, readingList);
 }
 
-export async function setUserStories(
+export async function addUserStory(
   user_id: string | undefined,
   story_id: number,
   name: string,
@@ -41,6 +42,7 @@ export async function setUserStories(
     .insert([{ user_id: user_id, story_id: story_id, name: name }])
     .select();
 
+  // TODO remove throw error in production
   if (error) {
     console.log(error);
     throw new Error(
@@ -49,18 +51,18 @@ export async function setUserStories(
   }
 }
 
-export async function setUserStoriesFavorites(
+export async function addUserStoryToFavorites(
   user_id: string | undefined,
   story_id: number,
 ) {
-  setUserStories(user_id, story_id, favorites);
+  addUserStory(user_id, story_id, favorites);
 }
 
-export async function setUserStoriesReadingList(
+export async function addUserStoryToReadingList(
   user_id: string | undefined,
   story_id: number,
 ) {
-  setUserStories(user_id, story_id, readingList);
+  addUserStory(user_id, story_id, readingList);
 }
 
 export async function deleteUserStories(
@@ -75,6 +77,7 @@ export async function deleteUserStories(
     .eq('story_id', story_id)
     .eq('name', name);
 
+  // TODO remove throw error in production
   if (error) {
     console.log(error);
     throw new Error(

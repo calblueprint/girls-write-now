@@ -87,7 +87,7 @@ export async function fetchNewStories(): Promise<StoryCard[]> {
 export async function fetchStoryPreviewById(
   storyId: number,
 ): Promise<StoryPreview[]> {
-  const { data, error } = await supabase.rpc('fetch_story_preview_by_id', {
+  const { data, error } = await supabase.rpc('curr_story_preview_by_id', {
     input_story_id: storyId,
   });
   if (error) {

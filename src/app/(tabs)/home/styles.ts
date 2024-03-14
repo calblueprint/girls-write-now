@@ -19,8 +19,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 16,
   },
-  scrollView: {
-    marginBottom: 20,
+  scrollView1: {
+    paddingBottom: 16,
+    flexGrow: 0,
+    padding: 8,
+  },
+  scrollView2: {
+    paddingBottom: 80,
     flexGrow: 0,
     padding: 8,
   },

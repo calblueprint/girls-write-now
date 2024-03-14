@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   title: {
-    marginBottom: 4,
+    marginBottom: 8,
     padding: 0,
   },
   reactionNumber: {
@@ -64,6 +64,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 5,
+  },
+  by: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 10,
+    color: 'grey',
+  },
+  authorSpacing: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    overflow: 'hidden',
   },
 });
 

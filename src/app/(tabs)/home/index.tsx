@@ -116,7 +116,7 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
-              style={styles.scrollView}
+              style={styles.scrollView1}
             >
               {recommendedStories.map(story => (
                 <ContentCard
@@ -145,7 +145,7 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
-              style={styles.scrollView}
+              style={styles.scrollView2}
             >
               {newStories.map(story => (
                 <ContentCard

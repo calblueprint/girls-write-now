@@ -43,14 +43,17 @@ function ContentCard({
         </View>
 
         <View style={styles.textContainer}>
-          <Text style={[globalStyles.h3, styles.title]} numberOfLines={1}>
+          <Text
+            style={[globalStyles.subHeading2, styles.title]}
+            numberOfLines={1}
+          >
             {title}
           </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={globalStyles.subtext} numberOfLines={1}>
-              By{'  '}
+          <View style={styles.authorSpacing}>
+            <Text style={styles.by} numberOfLines={1}>
+              By
             </Text>
-            <Text style={globalStyles.subHeading1} numberOfLines={1}>
+            <Text style={globalStyles.subtext} numberOfLines={1}>
               {author}
             </Text>
           </View>

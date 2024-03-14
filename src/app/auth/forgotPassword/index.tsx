@@ -25,7 +25,11 @@ function ForgotPasswordScreen() {
     const { error } = await resetPassword(emailToReset);
     if (error)
       Alert.alert('Could not send a reset password email. Please try again.');
-    else router.replace('auth/signup');
+    else
+      router.push({
+        pathname: '/auth/verify',
+        params: { finalRedirect: 'login' },
+      });
   };
 
   useEffect(() => {

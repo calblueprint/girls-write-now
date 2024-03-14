@@ -130,7 +130,11 @@ function SignUpScreen() {
     });
 
     if (error) Alert.alert(error.message);
-    else router.replace('/auth/verify');
+    else
+      router.push({
+        pathname: '/auth/verify',
+        params: { finalRedirect: 'onboarding' },
+      });
 
     setLoading(false);
   };

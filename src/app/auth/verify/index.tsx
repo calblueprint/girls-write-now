@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import OTPTextInput from 'react-native-otp-textinput';
@@ -16,6 +16,8 @@ function VerificationScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [showX, setShowX] = useState(false);
   const [userInput, setUserInput] = useState('');
+  const params = useLocalSearchParams<{ finalRedirect: string }>();
+  const { finalRedirect } = params;
 
   const inputRef = useRef<OTPTextInput>(null);
 
@@ -41,7 +43,7 @@ function VerificationScreen() {
         setShowX(true);
         setErrorMessage('Incorrect code. Please try again.');
       } else {
-        router.replace('/auth/onboarding');
+        router.push('/auth/' + finalRedirect);
       }
     }
   };

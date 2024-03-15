@@ -165,7 +165,11 @@ function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'left', 'top']}>
-      <ScrollView bounces={false} contentContainerStyle={styles.main}>
+      <ScrollView
+        bounces={true}
+        contentContainerStyle={styles.main}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           <Link href="/home" style={styles.back}>
             <Text style={[globalStyles.subtext, styles.backText]}>

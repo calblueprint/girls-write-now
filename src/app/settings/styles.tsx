@@ -11,10 +11,10 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   main: {
-    flex: 1,
     paddingLeft: 12,
     width: '100%',
     justifyContent: 'space-between',
+    flexGrow: 1,
   },
   // verticallySpaced: {
   //   paddingTop: 4,

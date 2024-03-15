@@ -1,10 +1,15 @@
 import { Redirect, router, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Alert, Platform, Pressable } from 'react-native';
-import { Button } from 'react-native-elements';
+import {
+  Text,
+  View,
+  Alert,
+  Platform,
+  Pressable,
+  Appearance,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import DatePicker from 'react-native-neat-date-picker';
 import { Icon } from 'react-native-elements';
 
 import styles from './styles';
@@ -15,6 +20,7 @@ import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorIn
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import supabase from '../../utils/supabase';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -28,6 +34,8 @@ function SettingsScreen() {
   const [birthdayChanged, setBirthdayChanged] = useState(false);
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
+  const colorScheme = Appearance.getColorScheme();
+  const [isDark, setIsDark] = useState(colorScheme === 'dark');
 
   const [showSaveEdits, setShowSaveEdits] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -144,15 +152,11 @@ function SettingsScreen() {
     }
   };
 
-  const onConfirmDate = (output: any) => {
-    setBirthday(
-      new Date(output.dateString).toLocaleDateString('en-US', {
-        timeZone: 'UTC',
-      }),
-    );
-    setShowDatePicker(false);
+  const onConfirmDate = (date: Date) => {
+    setBirthday(date.toLocaleDateString());
     setShowSaveEdits(true);
     setBirthdayChanged(true);
+    setShowDatePicker(false);
   };
 
   if (!session) {
@@ -161,22 +165,23 @@ function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'left', 'top']}>
-      <ScrollView bounces={true} contentContainerStyle={styles.main}>
+      <ScrollView bounces={false} contentContainerStyle={styles.main}>
         <View>
           <Link href="/home" style={styles.back}>
             <Text style={[globalStyles.subtext, styles.backText]}>
               {'<Back'}
             </Text>
           </Link>
-          <View style={styles.datePicker}>
-            <DatePicker
+          <View>
+            <DateTimePickerModal
               isVisible={showDatePicker}
-              mode={'single'}
-              onCancel={() => {
-                setShowDatePicker(false);
-              }}
+              mode="date"
               onConfirm={onConfirmDate}
-              // colorOptions={{headerColor: colors.darkGrey}}
+              onCancel={() => setShowDatePicker(false)}
+              date={new Date()}
+              display="inline"
+              isDarkModeEnabled={isDark}
+              themeVariant={isDark ? 'dark' : 'light'}
             />
           </View>
 
@@ -190,12 +195,11 @@ function SettingsScreen() {
             <AccountDataDisplay
               label="Birthday"
               value={
-                // change back to !birthdayExists later
-                birthdayExists ? (
+                !birthdayExists ? (
                   <View style={styles.dateButton}>
                     <Pressable
                       onPress={() => {
-                        setShowDatePicker(true);
+                        setShowDatePicker(!showDatePicker);
                       }}
                     >
                       <View style={styles.dateButtonText}>

@@ -69,6 +69,5 @@ export default StyleSheet.create({
   datePicker: {
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 100,
   },
 });

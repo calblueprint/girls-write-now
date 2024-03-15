@@ -16,11 +16,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     flexGrow: 1,
   },
-  // verticallySpaced: {
-  //   paddingTop: 4,
-  //   paddingBottom: 4,
-  //   alignSelf: 'stretch',
-  // },
   subheading: {
     paddingBottom: 16,
   },
@@ -65,9 +60,5 @@ export default StyleSheet.create({
     color: colors.darkGrey,
     marginLeft: 8,
     flexWrap: 'wrap',
-  },
-  datePicker: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

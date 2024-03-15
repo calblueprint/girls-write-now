@@ -4,9 +4,18 @@ import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
+    flex: 1,
+    backgroundColor: 'white',
+    paddingTop: 64,
+    paddingLeft: 44,
     paddingRight: 44,
+  },
+  verticallySpaced: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  datePickerButton: {
+    paddingBottom: 16,
   },
   subtext: {
     color: colors.darkGrey,
@@ -19,10 +28,12 @@ export default StyleSheet.create({
     marginTop: 26,
   },
   info: {
-    flex: 1,
     flexDirection: 'row',
     marginTop: 12,
     marginBottom: 16,
     width: 250,
+  },
+  icon: {
+    paddingLeft: 8,
   },
 });

@@ -30,10 +30,12 @@ function SettingsScreen() {
   const [lastName, setLastName] = useState('');
   const [pronouns, setPronouns] = useState('');
   const [birthday, setBirthday] = useState('');
+  const [displayDate, setDisplayDate] = useState(new Date(2000, 0));
   const [birthdayExists, setBirthdayExists] = useState(false);
   const [birthdayChanged, setBirthdayChanged] = useState(false);
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
+  //check if phone is in dark mode
   const colorScheme = Appearance.getColorScheme();
   const [isDark, setIsDark] = useState(colorScheme === 'dark');
 
@@ -149,11 +151,13 @@ function SettingsScreen() {
     } finally {
       setLoading(false);
       setShowSaveEdits(false);
+      setBirthdayExists(true);
     }
   };
 
   const onConfirmDate = (date: Date) => {
     setBirthday(date.toLocaleDateString());
+    setDisplayDate(date);
     setShowSaveEdits(true);
     setBirthdayChanged(true);
     setShowDatePicker(false);
@@ -182,7 +186,7 @@ function SettingsScreen() {
               mode="date"
               onConfirm={onConfirmDate}
               onCancel={() => setShowDatePicker(false)}
-              date={new Date()}
+              date={displayDate}
               display="inline"
               isDarkModeEnabled={isDark}
               themeVariant={isDark ? 'dark' : 'light'}

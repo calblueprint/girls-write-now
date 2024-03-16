@@ -63,6 +63,7 @@ function HomeScreen() {
           <Text>Loading</Text>
         </View>
       )}
+      <TestCard />
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}

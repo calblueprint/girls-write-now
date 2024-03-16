@@ -3,11 +3,12 @@ import supabase from '../utils/supabase';
 const favorites = 'favorites';
 const readingList = 'reading list';
 
+
 async function fetchUserStories(
   user_id: string | undefined,
   name: string | undefined,
 ) {
-  const { data: storyIds, error } = await supabase
+  const { data: storyObjects, error } = await supabase
     .from('saved_stories')
     .select('story_id')
     .eq('user_id', user_id)
@@ -24,23 +25,27 @@ async function fetchUserStories(
     return [];
   }
 
-  const { error: storyError, data } = await supabase
-    .from('stories')
-    .select('*')
-    .in('id', storyIds?.map(value => value['story_id']));
+  let storyData = []
+  for (const storyObject of storyObjects) {
+    const storyId = storyObject["story_id"];
+    const { data, error } = await supabase.rpc('fetch_story', {
+      input_id: storyId,
+    });
 
-  if (storyError) {
-    if (process.env.NODE_ENV !== 'production') {
-      throw new Error(
-        `An error occured when trying to fetch user saved stories: ${JSON.stringify(
-          storyError,
-        )}`,
-      );
+    if (error || data.length == 0) {
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error(
+          `An error occured when trying to use rpc to get story data: ${JSON.stringify(
+            error,
+          )}`,
+        );
+      }
+    } else {
+      storyData.push(data[0])
     }
-    return [];
   }
 
-  return data;
+  return storyData;
 }
 
 export async function fetchUserStoriesFavorites(user_id: string | undefined) {

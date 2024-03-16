@@ -15,3 +15,13 @@ export async function fetchUsername(user_id: string | undefined) {
     return data[0].username as string;
   }
 }
+
+export async function isEmailTaken(newEmail: string) {
+  const { count } = await supabase
+    .from('profiles')
+    .select(`*`, { count: 'exact' })
+    .limit(1)
+    .eq('email', newEmail);
+  const emailIsTaken = (count ?? 0) >= 1;
+  return emailIsTaken as boolean;
+}

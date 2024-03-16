@@ -7,7 +7,7 @@ async function fetchUserStories(
   user_id: string | undefined,
   name: string | undefined,
 ) {
-  const { data, error } = await supabase
+  const { data: storyIds, error } = await supabase
     .from('saved_stories')
     .select('story_id')
     .eq('user_id', user_id)
@@ -16,20 +16,39 @@ async function fetchUserStories(
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(
-        `An error occured when trying to fetch user saved stories: ${error.details}`,
+        `An error occured when trying to fetch user saved stories: ${JSON.stringify(
+          error,
+        )}`,
       );
     }
-  } else {
-    return data;
+    return [];
   }
+
+  const { error: storyError, data } = await supabase
+    .from('stories')
+    .select('*')
+    .in('id', storyIds?.map(value => value['story_id']));
+
+  if (storyError) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(
+        `An error occured when trying to fetch user saved stories: ${JSON.stringify(
+          storyError,
+        )}`,
+      );
+    }
+    return [];
+  }
+
+  return data;
 }
 
 export async function fetchUserStoriesFavorites(user_id: string | undefined) {
-  fetchUserStories(user_id, favorites);
+  return await fetchUserStories(user_id, favorites);
 }
 
 export async function fetchUserStoriesReadingList(user_id: string | undefined) {
-  fetchUserStories(user_id, readingList);
+  return await fetchUserStories(user_id, readingList);
 }
 
 async function addUserStory(

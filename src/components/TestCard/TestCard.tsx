@@ -28,13 +28,12 @@ function TestCard() {
         <View style={styles.textContainer}>
           <TextInput onChangeText={t => setStoryId(t)} value={storyId} />
           <Text
-            style={[globalStyles.h3, styles.title]}
-            numberOfLines={1}
+            style={globalStyles.body1}
             onPress={async () =>
               await addUserStoryToReadingList(user?.id, parseInt(storyId))
             }
           >
-            Add story to favorites
+            Add story to reading
           </Text>
           <Text
             style={globalStyles.body1}
@@ -42,10 +41,21 @@ function TestCard() {
               await addUserStoryToFavorites(user?.id, parseInt(storyId))
             }
           >
-            Add story to reading list
+            Add story to favs list
           </Text>
-          <Button onPress={() => fetchUserStoriesFavorites(user?.id)}>
-            log
+          <Button
+            onPress={async () =>
+              console.log(await fetchUserStoriesFavorites(user?.id))
+            }
+          >
+            log favs
+          </Button>
+          <Button
+            onPress={async () =>
+              console.log(await fetchUserStoriesReadingList(user?.id))
+            }
+          >
+            log reading
           </Button>
         </View>
       </View>

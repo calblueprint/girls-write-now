@@ -152,6 +152,7 @@ function SettingsScreen() {
       setLoading(false);
       setShowSaveEdits(false);
       setBirthdayExists(true);
+      setBirthdayChanged(false);
     }
   };
 
@@ -180,6 +181,7 @@ function SettingsScreen() {
               {'<Back'}
             </Text>
           </Link>
+          <Link href="/auth/onboarding">go to onboarding</Link>
           <View>
             <DateTimePickerModal
               isVisible={showDatePicker}

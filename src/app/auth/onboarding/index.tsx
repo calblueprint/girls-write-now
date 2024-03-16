@@ -180,7 +180,14 @@ function OnboardingScreen() {
                 placeholder="Select Date"
                 label="Birthday"
                 value={birthday}
-              />
+              >
+                <Icon
+                  name="event"
+                  type="material"
+                  color={colors.darkGrey}
+                  style={styles.icon}
+                ></Icon>
+              </UserStringInput>
             </View>
           </Pressable>
         </View>
@@ -201,7 +208,7 @@ function OnboardingScreen() {
           options={[
             'American Indian/Alaska Native',
             'Asian',
-            // 'Black or African American',
+            'Black or African American',
             'Native Hawaiian or other Pacific Islander',
             'White',
             'Prefer Not to Disclose',
@@ -213,7 +220,7 @@ function OnboardingScreen() {
       </View>
       <View>
         <StyledButton
-          text={loading ? 'Loading ...' : 'Update Profile'}
+          text={'Update Profile'}
           onPress={updateProfileAndGoHome}
           disabled={loading}
         />

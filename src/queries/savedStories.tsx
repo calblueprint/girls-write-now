@@ -3,7 +3,7 @@ import supabase from '../utils/supabase';
 const favorites = 'favorites';
 const readingList = 'reading list';
 
-export async function fetchUserStories(
+async function fetchUserStories(
   user_id: string | undefined,
   name: string | undefined,
 ) {
@@ -14,13 +14,14 @@ export async function fetchUserStories(
     .eq('name', name);
 
   // TODO remove throw error in production
+  console.log(`fetch user stories ${JSON.stringify(data)}`);
   if (error) {
     console.log(error);
     throw new Error(
       `An error occured when trying to fetch user saved stories: ${error.details}`,
     );
   } else {
-    return data[0].story_id;
+    return data;
   }
 }
 
@@ -32,7 +33,7 @@ export async function fetchUserStoriesReadingList(user_id: string | undefined) {
   fetchUserStories(user_id, readingList);
 }
 
-export async function addUserStory(
+async function addUserStory(
   user_id: string | undefined,
   story_id: number,
   name: string,
@@ -43,6 +44,8 @@ export async function addUserStory(
     .select();
 
   // TODO remove throw error in production
+  console.log(`add user stories ${JSON.stringify(data)}`);
+
   if (error) {
     console.log(error);
     throw new Error(

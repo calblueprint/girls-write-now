@@ -3,7 +3,7 @@ import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: 'flex',
     flexGrow: 1,
     width: '100%',
   },
@@ -20,8 +20,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   horizontal: {
-    flex: 1,
-    flexGrow: 1,
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',

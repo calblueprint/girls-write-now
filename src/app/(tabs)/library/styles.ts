@@ -3,11 +3,15 @@ import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   selector: {
-    flex: 1,
+    display: 'flex',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
     backgroundColor: '#fbfbfb',
+    marginBottom: 24,
+  },
+  header: {
+    marginBottom: 24,
   },
   selectedText: {
     color: colors.gwnOrange,

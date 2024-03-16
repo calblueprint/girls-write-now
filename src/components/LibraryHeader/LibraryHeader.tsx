@@ -12,25 +12,23 @@ export default function LibraryHeader() {
   const { user } = useSession();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.horizontal}>
-        <View style={styles.textContainer}>
-          <Image
-            style={styles.image}
-            source={require('../../../assets/logo.png')}
-          />
-          <View style={styles.username}>
-            <Text style={globalStyles.h1}>{user?.user_metadata.username} </Text>
-          </View>
+    <View style={styles.horizontal}>
+      <View style={styles.textContainer}>
+        <Image
+          style={styles.image}
+          source={require('../../../assets/logo.png')}
+        />
+        <View style={styles.username}>
+          <Text style={globalStyles.h1}>{user?.user_metadata.username} </Text>
         </View>
+      </View>
 
-        <View>
-          <Pressable onPress={() => router.push('/settings')}>
-            <View>
-              <Icon type="settings_gear" />
-            </View>
-          </Pressable>
-        </View>
+      <View>
+        <Pressable onPress={() => router.push('/settings')}>
+          <View>
+            <Icon type="settings_gear" />
+          </View>
+        </Pressable>
       </View>
     </View>
   );

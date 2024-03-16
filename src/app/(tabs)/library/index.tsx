@@ -1,11 +1,18 @@
-import { Text, View, Pressable } from 'react-native';
+import { Text, View, Pressable, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
+import { router } from 'expo-router';
 
 import globalStyles from '../../../styles/globalStyles';
 import styles from './styles';
 import LibraryHeader from '../../../components/LibraryHeader/LibraryHeader';
-import HorizontalLine from '../../../components/HorizontalLine/HorizontalLine';
+import PreviewCard from '../../../components/PreviewCard/PreviewCard';
+import FavouritesList from './favoritesList';
+import ReadingList from './readingList';
+import {
+  fetchUserStoriesFavorites,
+  fetchUserStoriesReadingList,
+} from '../../../queries/savedStories';
 
 function LibraryScreen() {
   const [favoritesSelected, setFavoritesSelected] = useState(true);
@@ -23,7 +30,9 @@ function LibraryScreen() {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <LibraryHeader />
+      <View style={styles.header}>
+        <LibraryHeader />
+      </View>
       <View style={styles.selector}>
         <View style={favoritesSelected && styles.selectedButton}>
           <Pressable onPress={favoritesPressed}>
@@ -53,6 +62,15 @@ function LibraryScreen() {
           </Pressable>
         </View>
       </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        contentContainerStyle={{ paddingHorizontal: 8 }}
+      >
+        {favoritesSelected && <FavouritesList />}
+        {readingSelected && <ReadingList />}
+      </ScrollView>
     </SafeAreaView>
   );
 }

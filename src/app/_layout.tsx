@@ -6,9 +6,6 @@ import ToastComponent from '../components/Toast/Toast';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 function StackLayout() {
-  {
-    /* <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}> */
-  }
   return (
     <SafeAreaProvider>
       <AuthContextProvider>
@@ -22,9 +19,6 @@ function StackLayout() {
       <ToastComponent />
     </SafeAreaProvider>
   );
-  {
-    /* </TouchableWithoutFeedback> */
-  }
 }
 
 export default StackLayout;

@@ -7,6 +7,7 @@ export default StyleSheet.create({
     paddingVertical: 66,
     paddingLeft: 43,
     paddingRight: 44,
+    backgroundColor: 'white',
   },
   subtext: {
     color: colors.darkGrey,

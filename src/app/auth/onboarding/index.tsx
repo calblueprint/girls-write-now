@@ -113,9 +113,9 @@ function OnboardingScreen() {
     }
   };
 
-  // if (!session) {
-  //   return <Redirect href="/auth/login" />;
-  // }
+  if (!session) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <ScrollView style={styles.container}>

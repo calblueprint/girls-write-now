@@ -22,7 +22,6 @@ export default function LibraryHeader() {
           />
           <View style={styles.username}>
             <Text style={globalStyles.h1}>
-              {' '}
               {user?.user_metadata.username}{' '}
             </Text>
           </View>

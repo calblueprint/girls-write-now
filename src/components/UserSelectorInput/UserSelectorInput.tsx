@@ -26,39 +26,35 @@ function UserSelectorInput({
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.subtext, styles.label]}>{label}</Text>
-      <View style={styles.outer}>
-        <Dropdown
-          mode="default"
-          style={styles.dropdown}
-          placeholderStyle={[globalStyles.body1, styles.grey]}
-          selectedTextStyle={globalStyles.body1}
-          inputSearchStyle={globalStyles.body1}
-          itemTextStyle={globalStyles.body1}
-          containerStyle={styles.dropdownContainer}
-          dropdownPosition="bottom"
-          itemContainerStyle={styles.itemContainer}
-          iconStyle={styles.iconStyle}
-          data={options.map(option => {
-            return { label: option, value: option };
-          })}
-          maxHeight={400}
-          labelField="label"
-          valueField="value"
-          placeholder={'Select Option'}
-          value={value}
-          renderItem={(item: Option, selected: boolean | undefined) => (
-            <Text style={[globalStyles.body1, styles.itemContainer]}>
-              {item.value}
-            </Text>
-          )}
-          renderRightIcon={() => (
-            <Icon name="arrow-drop-down" type="material" />
-          )}
-          onChange={(item: Option) => {
-            setValue(item.value);
-          }}
-        />
-      </View>
+      <Dropdown
+        mode="default"
+        style={styles.dropdown}
+        placeholderStyle={[globalStyles.body1, styles.grey]}
+        selectedTextStyle={globalStyles.body1}
+        inputSearchStyle={globalStyles.body1}
+        itemTextStyle={globalStyles.body1}
+        containerStyle={styles.dropdownContainer}
+        dropdownPosition="bottom"
+        itemContainerStyle={styles.itemContainer}
+        iconStyle={styles.iconStyle}
+        data={options.map(option => {
+          return { label: option, value: option };
+        })}
+        maxHeight={400}
+        labelField="label"
+        valueField="value"
+        placeholder={'Select Option'}
+        value={value}
+        renderItem={(item: Option, selected: boolean | undefined) => (
+          <Text style={[globalStyles.body1, styles.itemContainer]}>
+            {item.value}
+          </Text>
+        )}
+        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
+        onChange={(item: Option) => {
+          setValue(item.value);
+        }}
+      />
     </View>
   );
 }

@@ -72,11 +72,6 @@ function HomeScreen() {
           <Text style={globalStyles.h2}>
             {username ? `Welcome, ${username}` : 'Welcome!'}
           </Text>
-          <Pressable onPress={() => router.push('/settings')}>
-            <View>
-              <Icon type="settings_gear" />
-            </View>
-          </Pressable>
         </View>
         {featuredStories.length > 0 && (
           <View>

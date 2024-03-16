@@ -28,7 +28,7 @@ function ForgotPasswordScreen() {
     else
       router.push({
         pathname: '/auth/verify',
-        params: { finalRedirect: 'login' },
+        params: { finalRedirect: 'resetPassword', emailAfterRedirect: email },
       });
   };
 

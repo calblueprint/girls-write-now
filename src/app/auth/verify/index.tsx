@@ -1,4 +1,4 @@
-import { Link, router, useLocalSearchParams } from 'expo-router';
+import { Link, Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import OTPTextInput from 'react-native-otp-textinput';
@@ -16,8 +16,12 @@ function VerificationScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [showX, setShowX] = useState(false);
   const [userInput, setUserInput] = useState('');
-  const params = useLocalSearchParams<{ finalRedirect: string }>();
-  const { finalRedirect } = params;
+  const params = useLocalSearchParams<{
+    finalRedirect: string;
+    emailAfterRedirect: string;
+  }>();
+  const { finalRedirect, emailAfterRedirect } = params;
+  const email = user?.email ?? emailAfterRedirect ?? '';
 
   const inputRef = useRef<OTPTextInput>(null);
 
@@ -35,56 +39,53 @@ function VerificationScreen() {
   };
 
   const verifyCode = async () => {
-    if (user?.email) {
-      const { error } = await verifyOtp(user.email, userInput);
+    const { error } = await verifyOtp(email, userInput);
 
-      console.log(error);
-      if (error) {
-        setShowX(true);
-        setErrorMessage('Incorrect code. Please try again.');
-      } else {
-        router.push('/auth/' + finalRedirect);
-      }
+    console.log(error);
+    if (error) {
+      setShowX(true);
+      setErrorMessage('Incorrect code. Please try again.');
+    } else {
+      router.push('/auth/' + finalRedirect);
     }
   };
 
   const resendCode = async () => {
     clearText();
 
-    if (user?.email) {
-      const { error } = await resendVerification(user.email);
+    const { error } = await resendVerification(email);
 
-      if (error) {
-        setShowX(false);
-        setErrorMessage(
-          'Please wait 1 minute for us to resend the verification code.',
-        );
-      } else {
-        Toast.show({
-          type: 'success',
-          text1: `A new verification code has been sent to`,
-          text2: `${blurrEmail()}.`,
-          text2Style: globalStyles.subtextBold,
-          text1Style: globalStyles.subtext,
-          position: 'bottom',
-        });
-      }
+    if (error) {
+      setShowX(false);
+      setErrorMessage(
+        'Please wait 1 minute for us to resend the verification code.',
+      );
+    } else {
+      Toast.show({
+        type: 'success',
+        text1: `A new verification code has been sent to`,
+        text2: `${blurrEmail()}.`,
+        text2Style: globalStyles.subtextBold,
+        text1Style: globalStyles.subtext,
+        position: 'bottom',
+      });
     }
   };
 
   const blurrEmail = () => {
-    if (user?.email) {
-      const length = user?.email?.split('@')[0].length;
-      return `${user?.email?.substring(0, 2)}*****${user?.email
-        ?.split('@')[0]
-        .substring(length - 1, length)}@${user?.email?.split('@')[1]}`;
-    }
-    return 'your email';
+    const length = email?.split('@')[0].length;
+    return `${email?.substring(0, 2)}*****${email
+      ?.split('@')[0]
+      .substring(length - 1, length)}@${email?.split('@')[1]}`;
   };
 
   const renderBlurredEmail = () => {
     return <Text style={globalStyles.subtextBold}>{blurrEmail()}.</Text>;
   };
+
+  if (email === '') {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.container]}>

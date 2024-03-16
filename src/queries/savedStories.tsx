@@ -3,7 +3,6 @@ import supabase from '../utils/supabase';
 const favorites = 'favorites';
 const readingList = 'reading list';
 
-
 async function fetchUserStories(
   user_id: string | undefined,
   name: string | undefined,
@@ -25,9 +24,9 @@ async function fetchUserStories(
     return [];
   }
 
-  let storyData = []
+  let storyData = [];
   for (const storyObject of storyObjects) {
-    const storyId = storyObject["story_id"];
+    const storyId = storyObject['story_id'];
     const { data, error } = await supabase.rpc('fetch_story', {
       input_id: storyId,
     });
@@ -41,7 +40,7 @@ async function fetchUserStories(
         );
       }
     } else {
-      storyData.push(data[0])
+      storyData.push(data[0]);
     }
   }
 

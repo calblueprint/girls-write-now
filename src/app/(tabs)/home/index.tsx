@@ -18,7 +18,6 @@ import {
 import { StoryCard, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-import TestCard from '../../../components/TestCard/TestCard';
 
 function HomeScreen() {
   const { user } = useSession();

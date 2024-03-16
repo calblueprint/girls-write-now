@@ -105,38 +105,31 @@ function ResetPasswordScreen() {
           </UserStringInput>
         </View>
 
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasUppercase}
-            message="At least 1 uppercase letter"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasLowercase}
-            message="At least 1 lowercase letter"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasNumber}
-            message="At least 1 number"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasLength}
-            message="At least 8 characters"
-          />
-        )}
+        <PasswordComplexityText
+          condition={hasUppercase}
+          message="At least 1 uppercase letter"
+        />
+
+        <PasswordComplexityText
+          condition={hasLowercase}
+          message="At least 1 lowercase letter"
+        />
+
+        <PasswordComplexityText
+          condition={hasNumber}
+          message="At least 1 number"
+        />
+
+        <PasswordComplexityText
+          condition={hasLength}
+          message="At least 8 characters"
+        />
 
         {/* functionality for this has not been implemented */}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={isDifferent}
-            message="Must be different than your old password"
-          />
-        )}
+        <PasswordComplexityText
+          condition={isDifferent}
+          message="Must be different than your old password"
+        />
 
         {passwordIsValid && (
           <View>

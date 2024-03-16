@@ -31,7 +31,7 @@ function TestCard() {
           <Text style={globalStyles.body1} onPress={async () => await addUserStoryToFavorites(user?.id, parseInt(storyId))}>
             Add story to reading list
           </Text>
-          <Button onPress={() => console.log(fetchUserStoriesReadingList(user?.id))}>log</Button>
+          <Button onPress={() => fetchUserStoriesFavorites(user?.id)}>log</Button>
         </View>
       </View>
     </Pressable>

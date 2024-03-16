@@ -4,9 +4,9 @@ import colors from '../../styles/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
     flexDirection: 'column',
-    marginLeft: 0,
-    paddingRight: 0,
+    width: '100%',
   },
   image: {
     height: 51,
@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
   horizontal: {
     flex: 1,
     flexGrow: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  selector: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

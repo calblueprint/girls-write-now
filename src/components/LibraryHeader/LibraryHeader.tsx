@@ -37,9 +37,12 @@ export default function LibraryHeader() {
         </View>
       </View>
 
-      <View style={{ flex: 1 }}>
+      <View style={styles.selector}>
         <Pressable>
-          <Text>favorites</Text>
+          <Text style={globalStyles.subHeading1}>Favorites</Text>
+        </Pressable>
+        <Pressable>
+          <Text style={globalStyles.subHeading1}>Reading List</Text>
         </Pressable>
       </View>
     </View>

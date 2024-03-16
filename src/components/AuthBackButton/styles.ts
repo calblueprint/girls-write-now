@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
-  backButton: {
+  authBackButton: {
     paddingTop: 30,
-    paddingBottom: 16,
+    paddingLeft: 22,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',

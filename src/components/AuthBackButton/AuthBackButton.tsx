@@ -12,14 +12,14 @@ type BackButtonProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
-function BackButton({ pressFunction }: BackButtonProps) {
+function AuthBackButton({ pressFunction }: BackButtonProps) {
   return (
     <TouchableOpacity onPress={pressFunction}>
-      <View style={styles.backButton}>
+      <View style={styles.authBackButton}>
         <Text style={[globalStyles.button1, styles.text]}>&lt; Back</Text>
       </View>
     </TouchableOpacity>
   );
 }
 
-export default BackButton;
+export default AuthBackButton;

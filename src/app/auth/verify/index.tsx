@@ -10,6 +10,7 @@ import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
 import { Icon } from 'react-native-elements';
+import AuthBackButton from '../../../components/AuthBackButton/AuthBackButton';
 
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();
@@ -86,9 +87,8 @@ function VerificationScreen() {
 
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.container]}>
-      <Link href="/auth/signup" style={[globalStyles.subtext, styles.back]}>
-        <Text>{'<Back'}</Text>
-      </Link>
+      <AuthBackButton pressFunction={() => router.back()} />
+
       <View style={styles.marginHorizontal}>
         <Text style={[globalStyles.h1, styles.title]}>
           Enter Verification Code{' '}

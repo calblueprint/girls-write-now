@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexGrow: 1,
-    flexDirection: 'column',
     width: '100%',
   },
   image: {
@@ -25,11 +24,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  selector: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: '100%',
+    alignContent: 'center',
   },
 });
 

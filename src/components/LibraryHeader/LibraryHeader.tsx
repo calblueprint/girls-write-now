@@ -10,7 +10,6 @@ import { useSession } from '../../utils/AuthContext';
 
 export default function LibraryHeader() {
   const { user } = useSession();
-  const [username, setUsername] = useState('');
 
   return (
     <View style={styles.container}>
@@ -21,10 +20,7 @@ export default function LibraryHeader() {
             source={require('../../../assets/logo.png')}
           />
           <View style={styles.username}>
-            <Text style={globalStyles.h1}>
-              {' '}
-              {user?.user_metadata.username}{' '}
-            </Text>
+            <Text style={globalStyles.h1}>{user?.user_metadata.username} </Text>
           </View>
         </View>
 
@@ -35,15 +31,6 @@ export default function LibraryHeader() {
             </View>
           </Pressable>
         </View>
-      </View>
-
-      <View style={styles.selector}>
-        <Pressable>
-          <Text style={globalStyles.subHeading1}>Favorites</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={globalStyles.subHeading1}>Reading List</Text>
-        </Pressable>
       </View>
     </View>
   );

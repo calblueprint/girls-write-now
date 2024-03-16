@@ -31,13 +31,13 @@ export interface AuthState {
   resendVerification: (email: string) => Promise<AuthResponse>;
   resetPassword: (email: string) => Promise<
     | {
-        data: object;
-        error: null;
-      }
+      data: object;
+      error: null;
+    }
     | {
-        data: null;
-        error: AuthError;
-      }
+      data: null;
+      error: AuthError;
+    }
   >;
   updateUser: (attributes: UserAttributes) => Promise<UserResponse>;
   signOut: () => Promise<void>;

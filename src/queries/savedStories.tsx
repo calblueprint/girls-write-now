@@ -13,13 +13,12 @@ async function fetchUserStories(
     .eq('user_id', user_id)
     .eq('name', name);
 
-  // TODO remove throw error in production
-  console.log(`fetch user stories ${JSON.stringify(data)}`);
   if (error) {
-    console.log(error);
-    throw new Error(
-      `An error occured when trying to fetch user saved stories: ${error.details}`,
-    );
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(
+        `An error occured when trying to fetch user saved stories: ${error.details}`,
+      );
+    }
   } else {
     return data;
   }
@@ -38,19 +37,17 @@ async function addUserStory(
   story_id: number,
   name: string,
 ) {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('saved_stories')
     .insert([{ user_id: user_id, story_id: story_id, name: name }])
     .select();
 
-  // TODO remove throw error in production
-  console.log(`add user stories ${JSON.stringify(data)}`);
-
   if (error) {
-    console.log(error);
-    throw new Error(
-      `An error occured when trying to set user saved stories: ${error.details}`,
-    );
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(
+        `An error occured when trying to set user saved stories: ${error.details}`,
+      );
+    }
   }
 }
 
@@ -80,11 +77,11 @@ export async function deleteUserStories(
     .eq('story_id', story_id)
     .eq('name', name);
 
-  // TODO remove throw error in production
   if (error) {
-    console.log(error);
-    throw new Error(
-      `An error occured when trying to delete user saved stories: ${error.details}`,
-    );
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(
+        `An error occured when trying to delete user saved stories: ${error.details}`,
+      );
+    }
   }
 }

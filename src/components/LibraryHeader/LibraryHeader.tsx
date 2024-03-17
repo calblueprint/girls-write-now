@@ -16,6 +16,7 @@ export default function LibraryHeader() {
       <View style={styles.textContainer}>
         <Image
           style={styles.image}
+          //rendering the logo for now but this will change to the user's profile picture
           source={require('../../../assets/logo.png')}
         />
         <View style={styles.username}>

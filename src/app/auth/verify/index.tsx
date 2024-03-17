@@ -21,9 +21,6 @@ function VerificationScreen() {
 
   useEffect(() => {
     if (userInput.length === 6) {
-      console.log('we are checking');
-      console.log(userInput);
-
       verifyCode();
     }
   }, [userInput]);

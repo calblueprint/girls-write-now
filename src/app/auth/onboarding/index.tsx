@@ -1,10 +1,18 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Link, Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { Alert, ScrollView, Platform, Text, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  Text,
+  View,
+  Pressable,
+  Appearance,
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import styles from './styles';
+import colors from '../../../styles/colors';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
@@ -12,7 +20,8 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-// import DatePicker from '../../../components/DatePicker/DatePicker';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 function OnboardingScreen() {
   const { session, user } = useSession();
@@ -22,9 +31,13 @@ function OnboardingScreen() {
   const [lastName, setLastName] = useState('');
   const [pronouns, setPronouns] = useState('');
   const [birthday, setBirthday] = useState('');
+  const [birthdayExists, setBirthdayExists] = useState(false);
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
-  const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [displayDate, setDisplayDate] = useState(new Date(2000, 0));
+  const colorScheme = Appearance.getColorScheme();
+  const [isDark, setIsDark] = useState(colorScheme === 'dark');
 
   const getProfile = async () => {
     try {
@@ -48,7 +61,14 @@ function OnboardingScreen() {
         setLastName(data.last_name || lastName);
         setUsername(data.username || username);
         setPronouns(data.pronouns || pronouns);
-        setBirthday('');
+        if (data.birthday) {
+          setBirthday(
+            new Date(data.birthday).toLocaleDateString('en-US', {
+              timeZone: 'UTC',
+            }) || birthday,
+          );
+          setBirthdayExists(true);
+        }
         setGender(data.gender || gender);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
@@ -77,7 +97,7 @@ function OnboardingScreen() {
         ...(gender && { gender }),
         ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
-        ...(birthday && { birthday }),
+        ...(birthday && { birthday: displayDate }),
       };
 
       // Check if user exists
@@ -94,15 +114,22 @@ function OnboardingScreen() {
           .eq('user_id', session?.user.id)
           .select('*');
 
-        if (error && error instanceof Error) throw error;
+        if (error && error instanceof Error) {
+          if (process.env.NODE_ENV !== 'production') {
+            throw error;
+          }
+        }
       } else {
         // Create user if they don't exist
         const { error } = await supabase.from('profiles').insert(updates);
 
-        if (error && error instanceof Error) throw error;
+        if (error && error instanceof Error) {
+          if (process.env.NODE_ENV !== 'production') {
+            throw error;
+          }
+        }
       }
 
-      Alert.alert('Succesfully updated user!');
       router.replace('/home');
     } catch (error) {
       if (error instanceof Error) {
@@ -113,39 +140,95 @@ function OnboardingScreen() {
     }
   };
 
+  const onConfirmDate = (date: Date) => {
+    setShowDatePicker(false);
+    setBirthday(date.toLocaleDateString());
+    setDisplayDate(date);
+    setBirthdayExists(true);
+  };
+
   if (!session) {
     return <Redirect href="/auth/login" />;
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={globalStyles.h1}>
-        Welcome, {user?.user_metadata.username}
-      </Text>
-      <Text style={[globalStyles.body1, styles.body1]}>
-        Input your profile information below.
-      </Text>
-      <View style={styles.info}>
-        <Icon type="material" name="info-outline" color="#797979" />
-        <Text style={[globalStyles.subtext, styles.subtext]}>
-          This information is only used for outreach efforts, and will not be
-          visible to other users on the app.
-        </Text>
-      </View>
-      <UserStringInput
-        label="Birthday"
-        placeholder="Select Date"
-        // onChange={setBirthday}
-        value={birthday}
-        placeholderTextColor={colors.darkGrey}
-        attributes={{ editable: false }}
-      >
-        <Icon
-          name="calendar-outline"
-          type="material-community"
-          color={colors.darkGrey}
+    <ScrollView contentContainerStyle={styles.container}>
+      <View>
+        <DateTimePickerModal
+          isVisible={showDatePicker}
+          mode="date"
+          onConfirm={onConfirmDate}
+          onCancel={() => setShowDatePicker(false)}
+          date={displayDate}
+          display="inline"
+          isDarkModeEnabled={isDark}
+          themeVariant={isDark ? 'dark' : 'light'}
         />
-      </UserStringInput>
+        <Text style={[globalStyles.h1, styles.h1]}>
+          Welcome, {user?.user_metadata.username}
+        </Text>
+        <Text style={[globalStyles.body1, styles.body1]}>
+          Input your profile information below.
+        </Text>
+        <View style={styles.info}>
+          <Icon type="material" name="info-outline" color="#797979" />
+          <Text style={[globalStyles.subtext, styles.subtext]}>
+            This information is only used for outreach efforts, and will not be
+            visible to other users on the app.
+          </Text>
+        </View>
+
+        <View style={styles.datePickerButton}>
+          <Pressable
+            onPress={() => {
+              setShowDatePicker(!showDatePicker);
+            }}
+          >
+            <View pointerEvents="none">
+              <UserStringInput
+                placeholderTextColor={colors.darkGrey}
+                placeholder="Select Date"
+                label="Birthday"
+                value={birthday}
+              >
+                <Icon
+                  name="event"
+                  type="material"
+                  color={colors.darkGrey}
+                  style={styles.icon}
+                ></Icon>
+              </UserStringInput>
+            </View>
+          </Pressable>
+        </View>
+
+        <UserSelectorInput
+          options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
+          label="Gender"
+          value={gender}
+          setValue={setGender}
+        />
+        <UserSelectorInput
+          options={['she/her', 'he/him', 'they/them', 'Other']}
+          label="Pronouns"
+          value={pronouns}
+          setValue={setPronouns}
+        />
+        <UserSelectorInput
+          options={[
+            'American Indian/Alaska Native',
+            'Asian',
+            'Black or African American',
+            'Native Hawaiian or other Pacific Islander',
+            'White',
+            'Prefer Not to Disclose',
+          ]}
+          label="Race/Ethnicity"
+          value={raceEthnicity}
+          setValue={setRaceEthnicity}
+        />
+      </View>
+
       <UserSelectorInput
         options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
         label="Gender"
@@ -171,24 +254,10 @@ function OnboardingScreen() {
         value={raceEthnicity}
         setValue={setRaceEthnicity}
       />
-      {/* Birthday Button Implementation */}
-      {/* {showDatePicker && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={birthday}
-          mode="date"
-          onChange={date => {
-            setShowDatePicker(Platform.OS === 'ios');
-            if (date.nativeEvent.timestamp) {
-              setBirthday(new Date(date.nativeEvent.timestamp));
-            }
-          }}
-        />
-      )} */}
       <View style={styles.bottomContainer}>
         <View style={styles.updateProfileButton}>
           <StyledButton
-            text={loading ? 'Loading ...' : 'Update profile'}
+            text={'Update profile'}
             onPress={updateProfileAndGoHome}
             disabled={
               loading ||

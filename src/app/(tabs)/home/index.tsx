@@ -65,7 +65,6 @@ function HomeScreen() {
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        bounces={false}
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         <View style={styles.headerContainer}>

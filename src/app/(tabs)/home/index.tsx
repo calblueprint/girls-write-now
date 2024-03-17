@@ -17,7 +17,6 @@ import {
 import { StoryCard, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-import TestCard from '../../../components/TestCard/TestCard';
 
 function HomeScreen() {
   const { user } = useSession();
@@ -63,7 +62,6 @@ function HomeScreen() {
           <Text>Loading</Text>
         </View>
       )}
-      <TestCard />
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}

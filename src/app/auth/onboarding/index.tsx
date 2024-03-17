@@ -94,7 +94,7 @@ function OnboardingScreen() {
         ...(gender && { gender }),
         ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
-        ...(birthday && { birthday }),
+        ...(birthday && { birthday: displayDate }),
       };
 
       // Check if user exists
@@ -111,15 +111,22 @@ function OnboardingScreen() {
           .eq('user_id', session?.user.id)
           .select('*');
 
-        if (error && error instanceof Error) throw error;
+        if (error && error instanceof Error) {
+          if (process.env.NODE_ENV !== 'production') {
+            throw error;
+          }
+        }
       } else {
         // Create user if they don't exist
         const { error } = await supabase.from('profiles').insert(updates);
 
-        if (error && error instanceof Error) throw error;
+        if (error && error instanceof Error) {
+          if (process.env.NODE_ENV !== 'production') {
+            throw error;
+          }
+        }
       }
 
-      Alert.alert('Succesfully updated user!');
       router.replace('/home');
     } catch (error) {
       if (error instanceof Error) {
@@ -131,10 +138,10 @@ function OnboardingScreen() {
   };
 
   const onConfirmDate = (date: Date) => {
+    setShowDatePicker(false);
     setBirthday(date.toLocaleDateString());
     setDisplayDate(date);
     setBirthdayExists(true);
-    setShowDatePicker(false);
   };
 
   if (!session) {
@@ -171,7 +178,7 @@ function OnboardingScreen() {
         <View style={styles.datePickerButton}>
           <Pressable
             onPress={() => {
-              setShowDatePicker(!showDatePicker);
+              setShowDatePicker(true);
             }}
           >
             <View pointerEvents="none">

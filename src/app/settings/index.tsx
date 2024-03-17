@@ -137,12 +137,20 @@ function SettingsScreen() {
           .eq('user_id', session?.user.id)
           .select('*');
 
-        if (error && error instanceof Error) throw error;
+        if (error && error instanceof Error) {
+          if (process.env.NODE_ENV !== 'production') {
+            throw error;
+          }
+        }
       } else {
         // Create user if they don't exist
         const { error } = await supabase.from('profiles').insert(updates);
 
-        if (error && error instanceof Error) throw error;
+        if (error && error instanceof Error) {
+          if (process.env.NODE_ENV !== 'production') {
+            throw error;
+          }
+        }
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -157,11 +165,11 @@ function SettingsScreen() {
   };
 
   const onConfirmDate = (date: Date) => {
+    setShowDatePicker(false);
     setBirthday(date.toLocaleDateString());
     setDisplayDate(date);
     setShowSaveEdits(true);
     setBirthdayChanged(true);
-    setShowDatePicker(false);
   };
 
   if (!session) {
@@ -181,7 +189,7 @@ function SettingsScreen() {
               {'<Back'}
             </Text>
           </Link>
-          <Link href="/auth/onboarding">go to onboarding</Link>
+
           <View>
             <DateTimePickerModal
               isVisible={showDatePicker}

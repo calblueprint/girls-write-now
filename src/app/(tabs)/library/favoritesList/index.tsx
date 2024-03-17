@@ -1,10 +1,11 @@
 import { View, ScrollView } from 'react-native';
 import PreviewCard from '../../../../components/PreviewCard/PreviewCard';
 import { router } from 'expo-router';
+import styles from './styles';
 
 export default function FavouritesList() {
   return (
-    <View style={{ marginRight: 24, width: '100%' }}>
+    <View style={styles.container}>
       <PreviewCard
         key={'aaa'}
         title={'aaa'}

@@ -66,6 +66,7 @@ function LibraryScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
+        style={{ width: '100%' }}
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         {favoritesSelected && <FavouritesList />}

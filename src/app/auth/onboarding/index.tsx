@@ -178,7 +178,7 @@ function OnboardingScreen() {
         <View style={styles.datePickerButton}>
           <Pressable
             onPress={() => {
-              setShowDatePicker(true);
+              setShowDatePicker(!showDatePicker);
             }}
           >
             <View pointerEvents="none">

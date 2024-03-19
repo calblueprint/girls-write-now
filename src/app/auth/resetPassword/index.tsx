@@ -1,17 +1,15 @@
-import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
-import supabase from '../../../utils/supabase';
 
 function ResetPasswordScreen() {
   const { updateUser, signOut } = useSession();
@@ -43,6 +41,11 @@ function ResetPasswordScreen() {
       setHasNumber(/[0-9]/.test(text));
       setHasLength(text.length >= 8);
       //need to check that it is different from old password
+    } else {
+      setHasUppercase(false);
+      setHasLowercase(false);
+      setHasNumber(false);
+      setHasLength(false);
     }
   };
 

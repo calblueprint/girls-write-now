@@ -7,7 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
@@ -255,6 +254,8 @@ function SignUpScreen() {
                 loading ||
                 emailError !== '' ||
                 usernameError !== '' ||
+                firstName.length === 0 ||
+                lastName.length === 0 ||
                 email.length === 0 ||
                 username.length === 0
               }

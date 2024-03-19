@@ -18,10 +18,10 @@ function VerificationScreen() {
   const [userInput, setUserInput] = useState('');
   const params = useLocalSearchParams<{
     finalRedirect: string;
-    emailAfterRedirect: string;
+    userEmail: string;
   }>();
-  const { finalRedirect, emailAfterRedirect } = params;
-  const email = user?.email ?? emailAfterRedirect ?? '';
+  const { finalRedirect, userEmail } = params;
+  const email = user?.email ?? userEmail ?? '';
 
   const inputRef = useRef<OTPTextInput>(null);
 

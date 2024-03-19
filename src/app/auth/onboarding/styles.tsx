@@ -4,18 +4,16 @@ import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
     paddingVertical: 66,
     paddingLeft: 43,
-    flex: 1,
     paddingRight: 44,
     backgroundColor: 'white',
   },
-  verticallySpaced: {
+  inputContainer: {
     flex: 1,
-    justifyContent: 'space-between',
-  },
-  datePickerButton: {
-    paddingBottom: 16,
+    gap: 16,
   },
   subtext: {
     color: colors.darkGrey,
@@ -29,11 +27,7 @@ export default StyleSheet.create({
     marginTop: 12,
     width: 250,
   },
-  bottomContainer: {
-    marginTop: 112,
-  },
   updateProfileButton: {
-    marginTop: 30,
     marginBottom: 24,
   },
   skipButton: {

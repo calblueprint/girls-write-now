@@ -8,7 +8,6 @@ export default StyleSheet.create({
   container: {
     paddingRight: 10,
     marginTop: 8,
-    marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

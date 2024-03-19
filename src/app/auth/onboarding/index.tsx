@@ -1,4 +1,3 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Link, Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import {
@@ -10,9 +9,9 @@ import {
   Appearance,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import styles from './styles';
-import colors from '../../../styles/colors';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
@@ -20,8 +19,6 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import UserStringInput from '../../../components/UserStringInput/UserStringInput';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 function OnboardingScreen() {
   const { session, user } = useSession();
@@ -164,7 +161,7 @@ function OnboardingScreen() {
           isDarkModeEnabled={isDark}
           themeVariant={isDark ? 'dark' : 'light'}
         />
-        <Text style={[globalStyles.h1, styles.h1]}>
+        <Text style={globalStyles.h1}>
           Welcome, {user?.user_metadata.username}
         </Text>
         <Text style={[globalStyles.body1, styles.body1]}>
@@ -177,91 +174,69 @@ function OnboardingScreen() {
             visible to other users on the app.
           </Text>
         </View>
-
-        <View style={styles.datePickerButton}>
-          <Pressable
-            onPress={() => {
-              setShowDatePicker(!showDatePicker);
-            }}
-          >
-            <View pointerEvents="none">
-              <UserStringInput
-                placeholderTextColor={colors.darkGrey}
-                placeholder="Select Date"
-                label="Birthday"
-                value={birthday}
-              >
-                <Icon
-                  name="event"
-                  type="material"
-                  color={colors.darkGrey}
-                  style={styles.icon}
-                ></Icon>
-              </UserStringInput>
-            </View>
-          </Pressable>
+        <View style={styles.inputContainer}>
+          <View>
+            <Pressable
+              onPress={() => {
+                setShowDatePicker(!showDatePicker);
+              }}
+            >
+              <View pointerEvents="none">
+                <UserStringInput
+                  placeholderTextColor={colors.darkGrey}
+                  placeholder="Select Date"
+                  label="Birthday"
+                  value={birthday}
+                >
+                  <Icon
+                    name="event"
+                    type="material"
+                    color={colors.darkGrey}
+                    style={styles.icon}
+                  />
+                </UserStringInput>
+              </View>
+            </Pressable>
+          </View>
+          <UserSelectorInput
+            options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
+            label="Gender"
+            value={gender}
+            setValue={setGender}
+          />
+          <UserSelectorInput
+            options={['she/her', 'he/him', 'they/them', 'Other']}
+            label="Pronouns"
+            value={pronouns}
+            setValue={setPronouns}
+          />
+          <UserSelectorInput
+            options={[
+              'American Indian/Alaska Native',
+              'Asian',
+              'Black or African American',
+              'Native Hawaiian or other Pacific Islander',
+              'White',
+              'Prefer Not to Disclose',
+            ]}
+            label="Race/Ethnicity"
+            value={raceEthnicity}
+            setValue={setRaceEthnicity}
+          />
         </View>
-
-        <UserSelectorInput
-          options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
-          label="Gender"
-          value={gender}
-          setValue={setGender}
-        />
-        <UserSelectorInput
-          options={['she/her', 'he/him', 'they/them', 'Other']}
-          label="Pronouns"
-          value={pronouns}
-          setValue={setPronouns}
-        />
-        <UserSelectorInput
-          options={[
-            'American Indian/Alaska Native',
-            'Asian',
-            'Black or African American',
-            'Native Hawaiian or other Pacific Islander',
-            'White',
-            'Prefer Not to Disclose',
-          ]}
-          label="Race/Ethnicity"
-          value={raceEthnicity}
-          setValue={setRaceEthnicity}
-        />
       </View>
 
-      <UserSelectorInput
-        options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
-        label="Gender"
-        value={gender}
-        setValue={setGender}
-      />
-      <UserSelectorInput
-        options={['she/her', 'he/him', 'they/them', 'Other']}
-        label="Pronouns"
-        value={pronouns}
-        setValue={setPronouns}
-      />
-      <UserSelectorInput
-        options={[
-          'American Indian/Alaska Native',
-          'Asian',
-          // 'Black or African American',
-          'Native Hawaiian or other Pacific Islander',
-          'White',
-          'Prefer Not to Disclose',
-        ]}
-        label="Race/Ethnicity"
-        value={raceEthnicity}
-        setValue={setRaceEthnicity}
-      />
-      <View style={styles.bottomContainer}>
+      <View>
         <View style={styles.updateProfileButton}>
           <StyledButton
-            text={'Update profile'}
+            text="Update profile"
             onPress={updateProfileAndGoHome}
             disabled={
               loading ||
-              (gender === '' && pronouns === '' && raceEthnicity === '')
+              (birthday === '' &&
+                gender === '' &&
+                pronouns === '' &&
+                raceEthnicity === '')
             }
           />
         </View>

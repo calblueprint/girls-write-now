@@ -10,11 +10,8 @@ export default StyleSheet.create({
     position: 'relative',
     zIndex: 1,
   },
-  container: {
-    marginBottom: 16,
-  },
   label: {
-    marginBottom: 10,
+    marginBottom: 8,
   },
   dropdown: {
     height: 50,

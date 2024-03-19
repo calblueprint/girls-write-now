@@ -258,9 +258,7 @@ function SignUpScreen() {
             />
           </View>
           <View style={styles.redirectText}>
-            <Text style={globalStyles.body1}>
-              Already have an account?
-            </Text>
+            <Text style={globalStyles.body1}>Already have an account?</Text>
             <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
               Log In
             </Link>

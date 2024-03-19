@@ -40,6 +40,7 @@ export default StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     color: colors.darkGrey,
+  },
   icon: {
     paddingLeft: 8,
   },

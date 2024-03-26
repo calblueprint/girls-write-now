@@ -190,18 +190,19 @@ function SearchScreen() {
             setShowRecents(true);
             setShowGenreCarousals(false);
           }}
-          searchIcon={false}
-          clearIcon
+          searchIcon
+          clearIcon={false}
+          cancelButtonProps={{ color: colors.grey }}
           containerStyle={[
             styles.searchContainer,
             showGenreCarousals && { marginRight: 24 },
           ]}
           inputContainerStyle={styles.inputContainer}
-          inputStyle={{ color: 'black' }}
+          inputStyle={globalStyles.body1} // this is where we put the styling
           leftIconContainerStyle={{}}
           rightIconContainerStyle={{}}
-          placeholder="Search"
-          placeholderTextColor="black"
+          placeholder="What do you want to read?"
+          placeholderTextColor="grey"
           onChangeText={text => searchFunction(text)}
           value={search}
           onSubmitEditing={searchString => {
@@ -222,19 +223,31 @@ function SearchScreen() {
         )}
 
         {showRecents &&
-          (search ? (
+          (search && searchResults.length > 0 ? (
             <View style={styles.default}>
               <Text style={[styles.searchText, styles.numDisplay]}>
                 {searchResults.length}{' '}
                 {searchResults.length === 1 ? 'Story' : 'Stories'}
               </Text>
             </View>
-          ) : (
+          ) : search && searchResults.length === 0 ? (
+            <View style={styles.emptySearch}>
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={globalStyles.h3}>There are no stories</Text>
+                <Text style={globalStyles.h3}>matching your filters.</Text>
+              </View>
+              <Text style={globalStyles.subHeading2}>
+                Try removing some filters.
+              </Text>
+            </View>
+          ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
             <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
               <View style={styles.recentSpacing}>
                 <Text style={styles.searchText}>Recent Searches</Text>
                 <Pressable onPress={clearRecentSearches}>
-                  <Text style={styles.clearAll}>Clear All</Text>
+                  <Text style={[globalStyles.button1, styles.clearAll]}>
+                    Clear All
+                  </Text>
                 </Pressable>
               </View>
               <View style={styles.contentContainerRecents}>
@@ -254,7 +267,9 @@ function SearchScreen() {
               <View style={styles.recentSpacing}>
                 <Text style={styles.searchText}>Recently Viewed</Text>
                 <Pressable onPress={clearRecentlyViewed}>
-                  <Text style={styles.clearAll}>Clear All</Text>
+                  <Text style={[globalStyles.button1, styles.clearAll]}>
+                    Clear All
+                  </Text>
                 </Pressable>
               </View>
               <View style={styles.contentContainerRecents}>
@@ -278,6 +293,17 @@ function SearchScreen() {
                 ))}
               </View>
             </ScrollView>
+          ) : (
+            <View style={styles.emptySearch}>
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={globalStyles.h3}>
+                  Find stories from young creators.
+                </Text>
+              </View>
+              <Text style={globalStyles.subHeading2}>
+                Search for stories, authors, or collections.
+              </Text>
+            </View>
           ))}
 
         {showGenreCarousals ? (

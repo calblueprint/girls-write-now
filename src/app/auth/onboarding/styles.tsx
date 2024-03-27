@@ -4,12 +4,16 @@ import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  flex: {
     flexGrow: 1,
     justifyContent: 'space-between',
-    paddingVertical: 66,
+    paddingTop: 64,
+    paddingBottom: 54,
     paddingLeft: 43,
     paddingRight: 44,
-    backgroundColor: 'white',
   },
   inputContainer: {
     flex: 1,

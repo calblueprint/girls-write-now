@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
-import ContentCard from '../../../components/ContentCard/ContentCard';
 import HorizontalLine from '../../../components/HorizontalLine/HorizontalLine';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import {

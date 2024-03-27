@@ -72,8 +72,6 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          {/* <Image style={styles.image} source={{ uri: story.featured_media }} /> */}
-
           <Text style={styles.title}>{story?.title}</Text>
           <TouchableOpacity
             onPress={() => {

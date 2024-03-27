@@ -14,7 +14,7 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   dropdown: {
-    height: 43,
+    height: 44,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,

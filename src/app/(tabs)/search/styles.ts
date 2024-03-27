@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 10,
     marginBottom: 8,
+    borderColor: 'grey',
   },
   inputContainer: {
     backgroundColor: 'transparent',
@@ -61,11 +62,6 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 8,
   },
-  clearAll: {
-    color: colors.gwnOrange,
-    fontSize: 12,
-    fontWeight: '600',
-  },
   contentContainerRecents: {
     paddingHorizontal: 8,
     marginBottom: 8,
@@ -91,9 +87,12 @@ const styles = StyleSheet.create({
   emptySearch: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
     textAlign: 'center',
+    alignItems: 'center',
     marginTop: '60%',
+  },
+  cancelButton: {
+    color: 'grey',
   },
 });
 

@@ -192,13 +192,15 @@ function SearchScreen() {
           }}
           searchIcon
           clearIcon={false}
-          cancelButtonProps={{ color: colors.grey }}
+          cancelButtonProps={{
+            buttonTextStyle: [globalStyles.body1Bold, styles.cancelButton],
+          }}
           containerStyle={[
             styles.searchContainer,
             showGenreCarousals && { marginRight: 24 },
           ]}
           inputContainerStyle={styles.inputContainer}
-          inputStyle={globalStyles.body1} // this is where we put the styling
+          inputStyle={globalStyles.body1Bold}
           leftIconContainerStyle={{}}
           rightIconContainerStyle={{}}
           placeholder="What do you want to read?"
@@ -233,11 +235,18 @@ function SearchScreen() {
           ) : search && searchResults.length === 0 ? (
             <View style={styles.emptySearch}>
               <View style={{ paddingBottom: 16 }}>
-                <Text style={globalStyles.h3}>There are no stories</Text>
-                <Text style={globalStyles.h3}>matching your filters.</Text>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  There are no stories
+                </Text>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  for "your search".
+                </Text>
               </View>
-              <Text style={globalStyles.subHeading2}>
-                Try removing some filters.
+              <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
+                Try searching by title or author, or
+              </Text>
+              <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
+                check if your spelling is correct.
               </Text>
             </View>
           ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
@@ -245,7 +254,12 @@ function SearchScreen() {
               <View style={styles.recentSpacing}>
                 <Text style={styles.searchText}>Recent Searches</Text>
                 <Pressable onPress={clearRecentSearches}>
-                  <Text style={[globalStyles.button1, styles.clearAll]}>
+                  <Text
+                    style={[
+                      globalStyles.subHeading2Bold,
+                      { color: colors.gwnOrange },
+                    ]}
+                  >
                     Clear All
                   </Text>
                 </Pressable>
@@ -267,7 +281,12 @@ function SearchScreen() {
               <View style={styles.recentSpacing}>
                 <Text style={styles.searchText}>Recently Viewed</Text>
                 <Pressable onPress={clearRecentlyViewed}>
-                  <Text style={[globalStyles.button1, styles.clearAll]}>
+                  <Text
+                    style={[
+                      globalStyles.subHeading2Bold,
+                      { color: colors.gwnOrange },
+                    ]}
+                  >
                     Clear All
                   </Text>
                 </Pressable>

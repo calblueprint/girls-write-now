@@ -65,11 +65,10 @@ function HomeScreen() {
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        bounces={false}
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         <View style={styles.headerContainer}>
-          <Text style={globalStyles.h2}>
+          <Text style={globalStyles.h1}>
             {username ? `Welcome, ${username}` : 'Welcome!'}
           </Text>
           <Pressable onPress={() => router.push('/settings')}>
@@ -87,7 +86,7 @@ function HomeScreen() {
             <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (
                 <PreviewCard
-                  key={story.title}
+                  key={story.id}
                   title={story.title}
                   image={story.featured_media}
                   author={story.author_name}

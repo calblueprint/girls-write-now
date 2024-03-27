@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   searchValueText: {
     color: 'black',
     fontWeight: '400',
-    fontSize: 14,
+    fontSize: 10,
     justifyContent: 'center',
   },
   numResultsText: {

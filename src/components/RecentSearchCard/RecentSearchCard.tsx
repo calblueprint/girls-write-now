@@ -21,10 +21,14 @@ function RecentSearchCard({
       <View style={styles.card}>
         <View style={styles.leftItems}>
           <Icon name="search1" size={16} color="#A7A5A5" />
-          <Text style={styles.searchValueText}>{value}</Text>
+          <Text style={[globalStyles.body1, styles.searchValueText]}>
+            {value}
+          </Text>
         </View>
         <View style={styles.rightItems}>
-          <Text style={styles.numResultsText}>{numResults} Results</Text>
+          <Text style={[globalStyles.body1, styles.numResultsText]}>
+            {numResults} Results
+          </Text>
           <Icon name="caretright" size={12} color="black" />
         </View>
       </View>

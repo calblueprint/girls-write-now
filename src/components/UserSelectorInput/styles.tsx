@@ -14,10 +14,11 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   dropdown: {
-    height: 50,
+    height: 43,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
+    paddingVertical: 10
   },
   dropdownContainer: {
     borderRadius: 5,

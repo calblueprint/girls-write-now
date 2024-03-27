@@ -172,8 +172,8 @@ function OnboardingScreen() {
           <View style={styles.info}>
             <Icon type="material" name="info-outline" color="#797979" />
             <Text style={[globalStyles.subtext, styles.subtext]}>
-              This information is only used for outreach efforts, and will not be
-              visible to other users on the app.
+              This information is only used for outreach efforts, and will not
+              be visible to other users on the app.
             </Text>
           </View>
           <View style={styles.inputContainer}>

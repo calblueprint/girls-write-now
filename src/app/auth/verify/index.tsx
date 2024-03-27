@@ -43,7 +43,7 @@ function VerificationScreen() {
       setShowX(true);
       setErrorMessage('Incorrect code. Please try again.');
     } else {
-      router.push('/auth/' + finalRedirect);
+      router.replace('/auth/' + finalRedirect);
     }
   };
 

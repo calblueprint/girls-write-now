@@ -36,3 +36,4 @@ yarn-error.*
 *.tsbuildinfo
 
 .vscode/
+eas.json

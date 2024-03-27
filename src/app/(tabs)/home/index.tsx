@@ -68,7 +68,7 @@ function HomeScreen() {
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         <View style={styles.headerContainer}>
-          <Text style={globalStyles.h2}>
+          <Text style={globalStyles.h1}>
             {username ? `Welcome, ${username}` : 'Welcome!'}
           </Text>
           <Pressable onPress={() => router.push('/settings')}>

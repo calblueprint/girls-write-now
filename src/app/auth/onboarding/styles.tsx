@@ -4,25 +4,24 @@ import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
+    flex: 1,
+  },
+  flex: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
     paddingTop: 64,
-    paddingLeft: 44,
+    paddingBottom: 54,
+    paddingLeft: 43,
     paddingRight: 44,
   },
-  verticallySpaced: {
+  inputContainer: {
     flex: 1,
-    justifyContent: 'space-between',
-  },
-  datePickerButton: {
-    paddingBottom: 16,
+    gap: 16,
   },
   subtext: {
     color: colors.darkGrey,
     marginLeft: 8,
-  },
-  h1: {
-    marginTop: 66,
   },
   body1: {
     marginTop: 26,
@@ -30,8 +29,15 @@ export default StyleSheet.create({
   info: {
     flexDirection: 'row',
     marginTop: 12,
-    marginBottom: 16,
     width: 250,
+  },
+  updateProfileButton: {
+    marginBottom: 24,
+  },
+  skipButton: {
+    flex: 1,
+    alignSelf: 'center',
+    color: colors.darkGrey,
   },
   icon: {
     paddingLeft: 8,

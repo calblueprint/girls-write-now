@@ -24,7 +24,7 @@ function UserSelectorInput({
   value,
 }: UserSelectorInputProps) {
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={[globalStyles.subtext, styles.label]}>{label}</Text>
       <Dropdown
         mode="default"
@@ -43,7 +43,7 @@ function UserSelectorInput({
         maxHeight={400}
         labelField="label"
         valueField="value"
-        placeholder={'Select Option'}
+        placeholder="Select Option"
         value={value}
         renderItem={(item: Option, selected: boolean | undefined) => (
           <Text style={[globalStyles.body1, styles.itemContainer]}>

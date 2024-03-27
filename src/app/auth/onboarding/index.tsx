@@ -1,4 +1,4 @@
-import { Redirect, router } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import {
   Alert,
@@ -9,16 +9,17 @@ import {
   Appearance,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import styles from './styles';
-import colors from '../../../styles/colors';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import UserStringInput from '../../../components/UserStringInput/UserStringInput';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function OnboardingScreen() {
   const { session, user } = useSession();
@@ -149,95 +150,107 @@ function OnboardingScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View>
-        <DateTimePickerModal
-          isVisible={showDatePicker}
-          mode="date"
-          onConfirm={onConfirmDate}
-          onCancel={() => setShowDatePicker(false)}
-          date={displayDate}
-          display="inline"
-          isDarkModeEnabled={isDark}
-          themeVariant={isDark ? 'dark' : 'light'}
-        />
-        <Text style={[globalStyles.h1, styles.h1]}>
-          Welcome, {user?.user_metadata.username}
-        </Text>
-        <Text style={[globalStyles.body1, styles.body1]}>
-          Input your profile information below.
-        </Text>
-        <View style={styles.info}>
-          <Icon type="material" name="info-outline" color="#797979" />
-          <Text style={[globalStyles.subtext, styles.subtext]}>
-            This information is only used for outreach efforts, and will not be
-            visible to other users on the app.
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.flex}>
+        <View>
+          <DateTimePickerModal
+            isVisible={showDatePicker}
+            mode="date"
+            onConfirm={onConfirmDate}
+            onCancel={() => setShowDatePicker(false)}
+            date={displayDate}
+            display="inline"
+            isDarkModeEnabled={isDark}
+            themeVariant={isDark ? 'dark' : 'light'}
+          />
+          <Text style={globalStyles.h1}>
+            Welcome, {user?.user_metadata.username}
           </Text>
-        </View>
-
-        <View style={styles.datePickerButton}>
-          <Pressable
-            onPress={() => {
-              setShowDatePicker(!showDatePicker);
-            }}
-          >
-            <View pointerEvents="none">
-              <UserStringInput
-                placeholderTextColor={colors.darkGrey}
-                placeholder="Select Date"
-                label="Birthday"
-                value={birthday}
+          <Text style={[globalStyles.body1, styles.body1]}>
+            Input your profile information below.
+          </Text>
+          <View style={styles.info}>
+            <Icon type="material" name="info-outline" color="#797979" />
+            <Text style={[globalStyles.subtext, styles.subtext]}>
+              This information is only used for outreach efforts, and will not
+              be visible to other users on the app.
+            </Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <View>
+              <Pressable
+                onPress={() => {
+                  setShowDatePicker(!showDatePicker);
+                }}
               >
-                <Icon
-                  name="event"
-                  type="material"
-                  color={colors.darkGrey}
-                  style={styles.icon}
-                ></Icon>
-              </UserStringInput>
+                <View pointerEvents="none">
+                  <UserStringInput
+                    placeholderTextColor={colors.darkGrey}
+                    placeholder="Select Date"
+                    label="Birthday"
+                    value={birthday}
+                  >
+                    <Icon
+                      name="event"
+                      type="material"
+                      color={colors.darkGrey}
+                      style={styles.icon}
+                    />
+                  </UserStringInput>
+                </View>
+              </Pressable>
             </View>
-          </Pressable>
+            <UserSelectorInput
+              options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
+              label="Gender"
+              value={gender}
+              setValue={setGender}
+            />
+            <UserSelectorInput
+              options={['she/her', 'he/him', 'they/them', 'Other']}
+              label="Pronouns"
+              value={pronouns}
+              setValue={setPronouns}
+            />
+            <UserSelectorInput
+              options={[
+                'American Indian/Alaska Native',
+                'Asian',
+                'Black or African American',
+                'Native Hawaiian or other Pacific Islander',
+                'White',
+                'Prefer Not to Disclose',
+              ]}
+              label="Race/Ethnicity"
+              value={raceEthnicity}
+              setValue={setRaceEthnicity}
+            />
+          </View>
         </View>
 
-        <UserSelectorInput
-          options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
-          label="Gender"
-          value={gender}
-          setValue={setGender}
-        />
-        <UserSelectorInput
-          options={['she/her', 'he/him', 'they/them', 'Other']}
-          label="Pronouns"
-          value={pronouns}
-          setValue={setPronouns}
-        />
-        <UserSelectorInput
-          options={[
-            'American Indian/Alaska Native',
-            'Asian',
-            'Black or African American',
-            'Native Hawaiian or other Pacific Islander',
-            'White',
-            'Prefer Not to Disclose',
-          ]}
-          label="Race/Ethnicity"
-          value={raceEthnicity}
-          setValue={setRaceEthnicity}
-        />
-      </View>
-      <View>
-        <StyledButton
-          text={'Update Profile'}
-          onPress={updateProfileAndGoHome}
-          disabled={loading}
-        />
-        <StyledButton
-          text="Skip"
-          onPress={() => router.replace('/home')}
-          disabled={false}
-        />
-      </View>
-    </ScrollView>
+        <View>
+          <View style={styles.updateProfileButton}>
+            <StyledButton
+              text="Update profile"
+              onPress={updateProfileAndGoHome}
+              disabled={
+                loading ||
+                (birthday === '' &&
+                  gender === '' &&
+                  pronouns === '' &&
+                  raceEthnicity === '')
+              }
+            />
+          </View>
+          <Link
+            style={[globalStyles.bodyBoldUnderline, styles.skipButton]}
+            href="/(tabs)/home"
+          >
+            Skip For Now
+          </Link>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

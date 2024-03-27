@@ -145,9 +145,9 @@ function OnboardingScreen() {
     setBirthdayExists(true);
   };
 
-  // if (!session) {
-  //   return <Redirect href="/auth/login" />;
-  // }
+  if (!session) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>

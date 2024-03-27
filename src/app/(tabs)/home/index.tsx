@@ -86,7 +86,7 @@ function HomeScreen() {
             <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (
                 <PreviewCard
-                  key={story.title}
+                  key={story.id}
                   title={story.title}
                   image={story.featured_media}
                   author={story.author_name}

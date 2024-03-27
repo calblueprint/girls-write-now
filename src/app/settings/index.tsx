@@ -57,7 +57,7 @@ function SettingsScreen() {
       const { data, error, status } = await supabase
         .from('profiles')
         .select(
-          `first_name, last_name, username, birthday, gender, race_ethnicity`,
+          `first_name, last_name, username, birthday, gender, race_ethnicity, pronouns`,
         )
         .eq('user_id', session?.user.id)
         .single();
@@ -81,7 +81,7 @@ function SettingsScreen() {
         }
 
         setGender(data.gender || gender);
-        // setPronouns(data.pronouns || pronouns);
+        setPronouns(data.pronouns || pronouns);
         setRaceEthnicity(data.race_ethnicity || raceEthnicity);
       }
     } catch (error) {
@@ -115,8 +115,6 @@ function SettingsScreen() {
 
       // Only update values that are not blank
       const updates = {
-        ...(firstName && { first_name: firstName }),
-        ...(lastName && { last_name: lastName }),
         ...(gender && { gender }),
         ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
@@ -131,11 +129,14 @@ function SettingsScreen() {
 
       if (count && count >= 1) {
         // Update user if they exist
-        const { error } = await supabase
+        const { error, data } = await supabase
           .from('profiles')
           .update(updates)
           .eq('user_id', session?.user.id)
           .select('*');
+
+        console.log(data);
+
 
         if (error && error instanceof Error) {
           if (process.env.NODE_ENV !== 'production') {
@@ -189,7 +190,6 @@ function SettingsScreen() {
               {'<Back'}
             </Text>
           </Link>
-
           <View>
             <DateTimePickerModal
               isVisible={showDatePicker}
@@ -242,31 +242,33 @@ function SettingsScreen() {
             />
           </View>
 
-          <UserSelectorInput
-            options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
-            label="Gender"
-            value={gender}
-            setValue={wrapInDetectChange(setGender)}
-          />
-          <UserSelectorInput
-            options={['she/her', 'he/him', 'they/them', 'Other']}
-            label="Pronouns"
-            value={pronouns}
-            setValue={wrapInDetectChange(setPronouns)}
-          />
-          <UserSelectorInput
-            options={[
-              'American Indian/Alaska Native',
-              'Asian',
-              // 'Black or African American',
-              'Native Hawaiian or other Pacific Islander',
-              'White',
-              'Prefer Not to Disclose',
-            ]}
-            label="Race/Ethnicity"
-            value={raceEthnicity}
-            setValue={wrapInDetectChange(setRaceEthnicity)}
-          />
+          <View style={styles.selectors}>
+            <UserSelectorInput
+              options={['Female', 'Male', 'Prefer Not to Disclose', 'Other']}
+              label="Gender"
+              value={gender}
+              setValue={wrapInDetectChange(setGender)}
+            />
+            <UserSelectorInput
+              options={['she/her', 'he/him', 'they/them', 'Other']}
+              label="Pronouns"
+              value={pronouns}
+              setValue={wrapInDetectChange(setPronouns)}
+            />
+            <UserSelectorInput
+              options={[
+                'American Indian/Alaska Native',
+                'Asian',
+                'Black or African American',
+                'Native Hawaiian or other Pacific Islander',
+                'White',
+                'Prefer Not to Disclose',
+              ]}
+              label="Race/Ethnicity"
+              value={raceEthnicity}
+              setValue={wrapInDetectChange(setRaceEthnicity)}
+            />
+          </View>
           {birthdayChanged && (
             <View style={styles.info}>
               <Icon type="material" name="info-outline" color="#797979" />

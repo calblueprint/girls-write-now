@@ -24,7 +24,7 @@ export default function UserStringInput({
   children,
   labelColor = '#000',
   placeholderTextColor = colors.darkGrey,
-  onChange = _ => { },
+  onChange = _ => {},
 }: UserStringInputProps) {
   return (
     <View style={styles.mt16}>

@@ -129,14 +129,11 @@ function SettingsScreen() {
 
       if (count && count >= 1) {
         // Update user if they exist
-        const { error, data } = await supabase
+        const { error } = await supabase
           .from('profiles')
           .update(updates)
           .eq('user_id', session?.user.id)
           .select('*');
-
-        console.log(data);
-
 
         if (error && error instanceof Error) {
           if (process.env.NODE_ENV !== 'production') {

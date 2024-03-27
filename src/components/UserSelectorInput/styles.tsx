@@ -18,7 +18,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   dropdownContainer: {
     borderRadius: 5,

@@ -148,6 +148,7 @@ function GenreScreen() {
     getGenre();
   }, [genreName]);
 
+
   useEffect(() => {
     const showAllStoryPreviews = async () => {
       if (genreStoryIds.length > 0) {
@@ -195,6 +196,159 @@ function GenreScreen() {
     }
   }, [genreStoryIds]);
 
+  const renderGenreScrollSelector = () => {
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        style={styles.scrollViewContainer}
+      >
+        {subgenres.map((subgenre, index) => (
+          <TouchableOpacity
+            onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
+            style={{ marginRight: 40 }}
+          >
+            <Text
+              style={
+                selectedSubgenre === subgenre ? styles.textSelected : null
+              }
+              key={index}
+            >
+              {subgenre}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    )
+  }
+
+  const renderGenreHeading = () => {
+    return (
+      <View>
+        <Text style={[globalStyles.h1, { marginTop: 15 }]}>
+          {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
+        </Text>
+        <Text style={[globalStyles.subHeading1]}>
+          {' '}
+          Subheading about{' '}
+          {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
+          ...Include Later?
+        </Text>
+      </View>
+    )
+  }
+
+  const renderTopicDropdown = () => {
+    return (
+      <Dropdown
+        mode="default"
+        style={[styles.dropdown, styles.secondDropdown]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={globalStyles.body1}
+        inputSearchStyle={globalStyles.body1}
+        itemTextStyle={globalStyles.body1}
+        dropdownPosition="bottom"
+        itemContainerStyle={styles.itemContainer}
+        iconStyle={styles.iconStyle}
+        data={genreTopics.map(topic => {
+          return { label: topic, value: topic };
+        })}
+        maxHeight={400}
+        labelField="label"
+        valueField="value"
+        placeholder="Topic"
+        renderRightIcon={() => (
+          <Icon name="arrow-drop-down" type="material" />
+        )}
+        onChange={item => {
+          if (item) {
+            // Check if item is not null or undefined
+            setCurrTopic(item.label); // Use the label property of the selected item
+          }
+        }}
+      />
+    )
+  }
+
+  const renderToneDropdown = () => {
+    return (
+      <Dropdown
+        mode="default"
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={globalStyles.body1}
+        inputSearchStyle={globalStyles.body1}
+        itemTextStyle={globalStyles.body1}
+        dropdownPosition="bottom"
+        itemContainerStyle={styles.itemContainer}
+        iconStyle={styles.iconStyle}
+        data={genreTones.map(tone => {
+          return { label: tone, value: tone };
+        })}
+        maxHeight={400}
+        labelField="label"
+        valueField="value"
+        placeholder="Tone"
+        renderRightIcon={() => (
+          <Icon name="arrow-drop-down" type="material" />
+        )}
+        onChange={item => {
+          if (item) {
+            // Check if item is not null or undefined
+            setCurrTone(item.label); // Use the label property of the selected item
+          }
+        }}
+      />
+
+
+    )
+  }
+
+  const renderNoStoryText = () => {
+    return (
+      <View>
+        <Text style={styles.noStoriesText}>Sorry!</Text>
+        <Text style={styles.noStoriesText2}>
+          There are no stories under this Genre or Subgenre. Please continue
+          to search for other stories
+        </Text>
+      </View>
+    )
+  }
+
+  const renderStories = () => {
+    return (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={allStoryPreviews}
+        style={styles.flatListStyle}
+        renderItem={({ item }) => (
+          <GenreStoryPreviewCard
+            key={item.title}
+            topic={item.topic}
+            tone={item.tone}
+            genreMedium={item.genre_medium}
+            allTags={item.genre_medium
+              .concat(item.tone)
+              .concat(item.topic)}
+            authorName={item.author_name}
+            storyImage={item.featured_media}
+            authorImage={item.author_image}
+            storyTitle={item.title}
+            excerpt={item.excerpt}
+            pressFunction={() => {
+              router.push({
+                pathname: '/story',
+                params: { storyId: item.id.toString() },
+              });
+            }}
+          />
+        )}
+      />
+    )
+  }
+
   return (
     <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
       <View style={styles.container}>
@@ -206,106 +360,18 @@ function GenreScreen() {
               })
             }
           />
-          <View>
-            <Text style={[globalStyles.h1, { marginTop: 15 }]}>
-              {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
-            </Text>
-            <Text style={[globalStyles.subHeading1]}>
-              {' '}
-              Subheading about{' '}
-              {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
-              ...Include Later?
-            </Text>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            style={styles.scrollViewContainer}
-          >
-            {subgenres.map((subgenre, index) => (
-              <TouchableOpacity
-                onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
-                style={{ marginRight: 40 }}
-              >
-                <Text
-                  style={
-                    selectedSubgenre === subgenre ? styles.textSelected : null
-                  }
-                  key={index}
-                >
-                  {subgenre}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-        <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          <Dropdown
-            mode="default"
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={globalStyles.body1}
-            inputSearchStyle={globalStyles.body1}
-            itemTextStyle={globalStyles.body1}
-            dropdownPosition="bottom"
-            itemContainerStyle={styles.itemContainer}
-            iconStyle={styles.iconStyle}
-            data={genreTones.map(tone => {
-              return { label: tone, value: tone };
-            })}
-            maxHeight={400}
-            labelField="label"
-            valueField="value"
-            placeholder="Tone"
-            renderRightIcon={() => (
-              <Icon name="arrow-drop-down" type="material" />
-            )}
-            onChange={item => {
-              if (item) {
-                // Check if item is not null or undefined
-                setCurrTone(item.label); // Use the label property of the selected item
-              }
-            }}
-          />
 
-          <Dropdown
-            mode="default"
-            style={[styles.dropdown, styles.secondDropdown]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={globalStyles.body1}
-            inputSearchStyle={globalStyles.body1}
-            itemTextStyle={globalStyles.body1}
-            dropdownPosition="bottom"
-            itemContainerStyle={styles.itemContainer}
-            iconStyle={styles.iconStyle}
-            data={genreTopics.map(topic => {
-              return { label: topic, value: topic };
-            })}
-            maxHeight={400}
-            labelField="label"
-            valueField="value"
-            placeholder="Topic"
-            renderRightIcon={() => (
-              <Icon name="arrow-drop-down" type="material" />
-            )}
-            onChange={item => {
-              if (item) {
-                // Check if item is not null or undefined
-                setCurrTone(item.label); // Use the label property of the selected item
-              }
-            }}
-          />
+          {renderGenreHeading()}
+          {renderGenreScrollSelector()}
+        </View>
+
+        <View style={[styles.dropdownContainer, styles.firstDropdown]}>
+          {renderToneDropdown()}
+          {renderTopicDropdown()}
         </View>
 
         {genreStoryIds.length === 0 ? ( // Check if there are no story IDs
-          <View>
-            <Text style={styles.noStoriesText}>Sorry!</Text>
-            <Text style={styles.noStoriesText2}>
-              There are no stories under this Genre or Subgenre. Please continue
-              to search for other stories
-            </Text>
-          </View>
+          renderNoStoryText()
         ) : (
           <>
             <View style={styles.renderStories}>
@@ -313,35 +379,7 @@ function GenreScreen() {
                 <View>
                   <ActivityIndicator />
                 </View>
-              ) : (
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={allStoryPreviews}
-                  style={styles.flatListStyle}
-                  renderItem={({ item }) => (
-                    <GenreStoryPreviewCard
-                      key={item.title}
-                      topic={item.topic}
-                      tone={item.tone}
-                      genreMedium={item.genre_medium}
-                      allTags={item.genre_medium
-                        .concat(item.tone)
-                        .concat(item.topic)}
-                      authorName={item.author_name}
-                      storyImage={item.featured_media}
-                      authorImage={item.author_image}
-                      storyTitle={item.title}
-                      excerpt={item.excerpt}
-                      pressFunction={() => {
-                        router.push({
-                          pathname: '/story',
-                          params: { storyId: item.id.toString() },
-                        });
-                      }}
-                    />
-                  )}
-                />
-              )}
+              ) : renderStories()}
             </View>
           </>
         )}

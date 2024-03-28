@@ -14,9 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
-import GenreStoryPreviewCard from '../../../components/GenreStoryPreviewCard/GenreStoryPreviewCard';
 import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
-import { fetchStoryPreviewById } from '../../../queries/stories';
+import { fetchStoryPreviewById, fetchStoryPreviewByIds } from '../../../queries/stories';
 import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
@@ -36,12 +35,7 @@ function GenreScreen() {
   const [currTone, setCurrTone] = useState<string>('');
   const [currTopic, setCurrTopic] = useState<string>('');
   const [toneTopicFilters, setToneTopicFilters] = useState<string[]>([]);
-  const params = useLocalSearchParams<{ genreId: string }>();
-  const params2 = useLocalSearchParams<{ genreType: string }>();
-  const params3 = useLocalSearchParams<{ genreName: string }>();
-  const { genreId } = params;
-  const { genreType } = params2;
-  const { genreName } = params3;
+  const { genreId, genreType, genreName } = useLocalSearchParams<{ genreId: string, genreType: string, genreName: string }>();
 
   console.log('passing in genreId params:', genreId);
   console.log('testing passing in genreType', genreType);
@@ -77,6 +71,7 @@ function GenreScreen() {
       setLoading(false);
       return [];
     }
+
     console.log('testing find story IDs by Name Function:', filteredStoryIds);
     return filteredStoryIds;
   }
@@ -152,39 +147,51 @@ function GenreScreen() {
 
   useEffect(() => {
     const showAllStoryPreviews = async () => {
+      setLoading(true);
       if (genreStoryIds.length > 0) {
-        setLoading(true);
-        const previews: StoryPreview[] = [];
-        const tones: string[] = [];
-        const topics: string[] = [];
-        for (const idString of genreStoryIds) {
-          const id = parseInt(idString, 10);
-          try {
-            const storyPreview: StoryPreview[] =
-              await fetchStoryPreviewById(id);
-            previews.push(storyPreview[0]);
-            storyPreview[0].tone.forEach(item => {
-              tones.push(item);
-            });
-            storyPreview[0].topic.forEach(item => {
-              topics.push(item);
-            });
-            console.log('testing storyPreview outputs:', storyPreview);
-          } catch (error) {
-            console.log(
-              `There was an error while trying to fetch a story preview by id: ${error}`,
-            );
-          }
-        }
-        const filteredTopics: string[] = topics.filter(
-          (item): item is string => item !== null,
-        );
-        const filteredTones: string[] = tones.filter(
-          (item): item is string => item !== null,
-        );
+        const previews: StoryPreview[] = await fetchStoryPreviewByIds(genreStoryIds);
+
+        const tones: string[] = previews
+          .reduce((acc: string[], current: StoryPreview) => {
+            return acc.concat(current.tone);
+          }, [] as string[])
+          .filter(tone => tone !== null);
+        const topics: string[] = previews
+          .reduce((acc: string[], current: StoryPreview) => {
+            return acc.concat(current.topic);
+          }, [] as string[])
+          .filter(topic => topic !== null);
+
+        // for (const idString of genreStoryIds) {
+        //   const id = parseInt(idString, 10);
+        //   try {
+        //     const storyPreview: StoryPreview[] =
+        //       await fetchStoryPreviewById(id);
+        //     previews.push(storyPreview[0]);
+        //     storyPreview[0].tone.forEach(item => {
+        //       tones.push(item);
+        //     });
+        //     storyPreview[0].topic.forEach(item => {
+        //       topics.push(item);
+        //     });
+        //     console.log('testing storyPreview outputs:', storyPreview);
+        //   } catch (error) {
+        //     console.log(
+        //       `There was an error while trying to fetch a story preview by id: ${error}`,
+        //     );
+        //   }
+        // }
+        // const filteredTopics: string[] = topics.filter(
+        //   (item): item is string => item !== null,
+        // );
+        // const filteredTones: string[] = tones.filter(
+        //   (item): item is string => item !== null,
+        // );
+
+        console.log('testing storyPreview outputs:', previews);
         setAllStoryPreviews(previews.flat());
-        setgenreTopics(filteredTopics);
-        setgenreTones(filteredTones);
+        setgenreTopics(topics);
+        setgenreTones(tones);
         console.log('testing tone usestate');
         setLoading(false);
       } else {

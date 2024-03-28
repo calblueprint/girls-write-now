@@ -101,3 +101,23 @@ export async function fetchStoryPreviewById(
     return data;
   }
 }
+
+export async function fetchStoryPreviewByIds(
+  storyIds: number[],
+): Promise<StoryPreview[]> {
+  const { data, error } = await supabase.rpc(
+    'curr_story_preview_by_ids',
+    {
+      input_ids: storyIds,
+    },
+  );
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch story preview by IDs: ${error}`,
+    );
+  } else {
+    return data;
+  }
+}
+

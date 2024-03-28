@@ -29,7 +29,7 @@ const getRecentSearch = async () => {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -38,7 +38,7 @@ const setRecentSearch = async (searchResult: RecentSearch[]) => {
     const jsonValue = JSON.stringify(searchResult);
     await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -47,7 +47,7 @@ const getRecentStory = async () => {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_STORIES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -56,7 +56,7 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
     const jsonValue = JSON.stringify(recentStories);
     await AsyncStorage.setItem('GWN_RECENT_STORIES_ARRAY', jsonValue);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -91,12 +91,14 @@ function SearchScreen() {
       setSearchResults([]);
       return;
     }
+
     const updatedData = allStories.filter((item: StoryPreview) => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
       return title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1;
     });
+
     setSearch(text);
     setSearchResults(updatedData);
     setShowGenreCarousals(false);

@@ -287,7 +287,7 @@ function SearchScreen() {
             contentContainerStyle={{ paddingHorizontal: 8 }}
           >
             {allGenres.map((genre, index) => (
-              <>
+              <View key={index}>
                 <View style={styles.genreText}>
                   <Text style={styles.parentName}>{genre.parent_name}</Text>
                   <TouchableOpacity
@@ -313,6 +313,7 @@ function SearchScreen() {
                 >
                   {genre.subgenres.map(subgenre => (
                     <GenreCard
+                      key={subgenre.id}
                       subgenres={subgenre.name}
                       subgenre_id={subgenre.id}
                       cardColor={getColor(index)}
@@ -329,7 +330,7 @@ function SearchScreen() {
                     />
                   ))}
                 </ScrollView>
-              </>
+              </View>
             ))}
           </ScrollView>
         ) : (

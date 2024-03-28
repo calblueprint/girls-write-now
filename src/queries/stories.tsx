@@ -87,7 +87,7 @@ export async function fetchStoryPreviewById(
   storyId: number,
 ): Promise<StoryPreview[]> {
   const { data, error } = await supabase.rpc(
-    'current_fetch_story_preview_by_id',
+    'curr_story_preview_by_id',
     {
       input_story_id: storyId,
     },

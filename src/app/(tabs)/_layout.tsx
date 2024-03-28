@@ -45,6 +45,7 @@ function TabNav() {
             Platform.OS === 'ios' ? insets.bottom : insets.bottom + 8,
           height: 68 + insets.bottom,
           backgroundColor: colors.white,
+          position: 'absolute',
         },
       }}
     >

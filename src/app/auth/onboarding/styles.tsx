@@ -1,21 +1,39 @@
 import { StyleSheet } from 'react-native';
 
+import colors from '../../../styles/colors';
+
 export default StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    padding: 5,
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingTop: 64,
+    paddingLeft: 44,
+    paddingRight: 44,
   },
   verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
+    flex: 1,
+    justifyContent: 'space-between',
   },
-  container: {
-    paddingVertical: 63,
-    paddingLeft: 43,
-    paddingRight: 44,
+  datePickerButton: {
+    paddingBottom: 16,
+  },
+  subtext: {
+    color: colors.darkGrey,
+    marginLeft: 8,
+  },
+  h1: {
+    marginTop: 66,
+  },
+  body1: {
+    marginTop: 26,
+  },
+  info: {
+    flexDirection: 'row',
+    marginTop: 12,
+    marginBottom: 16,
+    width: 250,
+  },
+  icon: {
+    paddingLeft: 8,
   },
 });

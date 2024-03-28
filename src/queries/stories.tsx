@@ -25,7 +25,6 @@ export async function fetchStory(storyId: number): Promise<Story[]> {
       `An error occured when trying to fetch story ${storyId}: ${error.code}`,
     );
   } else {
-    console.log(data);
     return data;
   }
 }

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import colors from './colors';
 
 export default StyleSheet.create({
@@ -118,13 +119,18 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
+  subtextBold: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 12,
+    textAlign: 'left',
+    color: 'black',
+  },
   errorMessage: {
     fontFamily: 'Manrope-Semibold',
     fontSize: 12,
     textAlign: 'left',
     color: colors.error,
   },
-
   mt20: {
     marginTop: 20,
   },

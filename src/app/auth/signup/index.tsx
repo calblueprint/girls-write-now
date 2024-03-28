@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,13 +7,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
+import { isEmailTaken } from '../../../queries/profiles';
 
 function SignUpScreen() {
   const { signUp } = useSession();
@@ -96,44 +97,21 @@ function SignUpScreen() {
       return;
     }
 
-    const { count } = await supabase
-      .from('profiles')
-      .select(`*`, { count: 'exact' })
-      .limit(1)
-      .eq('email', newEmail);
-    const emailIsTaken = (count ?? 0) >= 1;
-
+    const emailIsTaken = await isEmailTaken(newEmail);
     if (emailIsTaken) {
       setEmailError('That email is not available. Please try again.');
       return;
     }
-
     setEmailError('');
   };
 
   const checkPassword = (text: string) => {
     setPassword(text);
     if (text !== '') {
-      if (text !== text.toLowerCase()) {
-        setHasUppercase(true);
-      } else {
-        setHasUppercase(false);
-      }
-      if (text !== text.toUpperCase()) {
-        setHasLowercase(true);
-      } else {
-        setHasLowercase(false);
-      }
-      if (/[0-9]/.test(text)) {
-        setHasNumber(true);
-      } else {
-        setHasNumber(false);
-      }
-      if (text.length >= 8) {
-        setHasLength(true);
-      } else {
-        setHasLength(false);
-      }
+      setHasUppercase(text !== text.toLowerCase());
+      setHasLowercase(text !== text.toUpperCase());
+      setHasNumber(/[0-9]/.test(text));
+      setHasLength(text.length >= 8);
     }
   };
 
@@ -151,7 +129,11 @@ function SignUpScreen() {
     });
 
     if (error) Alert.alert(error.message);
-    else router.replace('/auth/verify');
+    else
+      router.push({
+        pathname: '/auth/verify',
+        params: { finalRedirect: 'onboarding' },
+      });
 
     setLoading(false);
   };
@@ -238,73 +220,32 @@ function SignUpScreen() {
             />
           </UserStringInput>
         </View>
-
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasUppercase ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasUppercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 uppercase letter
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasUppercase}
+            message="At least 1 uppercase letter"
+          />
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasLowercase ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasLowercase
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 lowercase letter
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasLowercase}
+            message="At least 1 lowercase letter"
+          />
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasNumber ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasNumber
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 1 number
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasNumber}
+            message="At least 1 number"
+          />
         )}
         {password !== '' && (
-          <View style={styles.passwordComplexity}>
-            <Icon type={hasLength ? 'green_check' : 'grey_dot'} />
-            <Text
-              style={[
-                globalStyles.errorMessage,
-                styles.passwordErrorText,
-                hasLength
-                  ? { color: colors.textGreen }
-                  : { color: colors.textGrey },
-              ]}
-            >
-              At least 8 characters
-            </Text>
-          </View>
+          <PasswordComplexityText
+            condition={hasLength}
+            message="At least 8 characters"
+          />
         )}
 
-        <View style={styles.navigation}>
+        <View>
           <View style={[styles.verticallySpaced, globalStyles.mt20]}>
             <StyledButton
               text="Sign Up"
@@ -313,6 +254,8 @@ function SignUpScreen() {
                 loading ||
                 emailError !== '' ||
                 usernameError !== '' ||
+                firstName.length === 0 ||
+                lastName.length === 0 ||
                 email.length === 0 ||
                 username.length === 0
               }

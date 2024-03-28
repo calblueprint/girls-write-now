@@ -7,7 +7,6 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,
@@ -66,7 +65,6 @@ function HomeScreen() {
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        bounces={false}
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         <View style={styles.headerContainer}>

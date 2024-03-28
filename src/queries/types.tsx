@@ -24,6 +24,7 @@ export interface RecentSearch {
   value: string;
   numResults: number;
 }
+
 export interface Story {
   id: number;
   date: string;

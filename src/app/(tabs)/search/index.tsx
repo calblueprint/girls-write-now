@@ -70,20 +70,18 @@ function SearchScreen() {
   const [showGenreCarousals, setShowGenreCarousals] = useState(true);
   const [showRecents, setShowRecents] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
+  const genreColors = [colors.citrus, colors.lime, colors.lilac];
 
   useEffect(() => {
     (async () => {
-      const data: StoryPreview[] = await fetchAllStoryPreviews();
-      setAllStories(data);
-      const genreData: Genre[] = await fetchGenres();
-      setAllGenres(genreData);
-      setRecentSearches(await getRecentSearch());
-      setRecentlyViewed(await getRecentStory());
+      fetchAllStoryPreviews().then((stories: StoryPreview[]) => setAllStories(stories));
+      fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
+      getRecentSearch().then((searches: RecentSearch[]) => setRecentSearches(searches));
+      getRecentStory().then((viewed: StoryPreview[]) => setRecentlyViewed(viewed));
     })();
   }, []);
 
   const getColor = (index: number) => {
-    const genreColors = [colors.citrus, colors.lime, colors.lilac];
     return genreColors[index % genreColors.length];
   };
 

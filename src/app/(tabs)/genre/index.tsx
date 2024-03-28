@@ -19,6 +19,7 @@ import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
 import { fetchStoryPreviewById } from '../../../queries/stories';
 import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
+import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 
 //TODO figure out the logic for the tone and topic dropdowns, especially when we're dealing with multiselect on both parts
 
@@ -324,18 +325,18 @@ function GenreScreen() {
         data={allStoryPreviews}
         style={styles.flatListStyle}
         renderItem={({ item }) => (
-          <GenreStoryPreviewCard
+          <PreviewCard
             key={item.title}
-            topic={item.topic}
-            tone={item.tone}
-            genreMedium={item.genre_medium}
-            allTags={item.genre_medium
+            // topic={item.topic}
+            // tone={item.tone}
+            // genreMedium={item.genre_medium}
+            tags={item.genre_medium
               .concat(item.tone)
               .concat(item.topic)}
-            authorName={item.author_name}
-            storyImage={item.featured_media}
+            author={item.author_name}
+            image={item.featured_media}
             authorImage={item.author_image}
-            storyTitle={item.title}
+            title={item.title}
             excerpt={item.excerpt}
             pressFunction={() => {
               router.push({

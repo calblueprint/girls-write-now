@@ -135,3 +135,10 @@ export default StyleSheet.create({
     marginTop: 20,
   },
 });
+
+export const fonts = [
+  'Manrope-Bold',
+  'Manrope-Regular',
+  'Manrope-Semibold',
+]
+

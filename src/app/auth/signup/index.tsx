@@ -7,7 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
@@ -130,7 +129,11 @@ function SignUpScreen() {
     });
 
     if (error) Alert.alert(error.message);
-    else router.replace('/auth/verify');
+    else
+      router.push({
+        pathname: '/auth/verify',
+        params: { finalRedirect: 'onboarding' },
+      });
 
     setLoading(false);
   };
@@ -251,18 +254,20 @@ function SignUpScreen() {
                 loading ||
                 emailError !== '' ||
                 usernameError !== '' ||
+                firstName.length === 0 ||
+                lastName.length === 0 ||
                 email.length === 0 ||
                 username.length === 0
               }
               onPress={signUpWithEmail}
             />
           </View>
-          <Text style={[globalStyles.body1, styles.redirectText]}>
-            Already have an account?{' '}
+          <View style={styles.redirectText}>
+            <Text style={globalStyles.body1}>Already have an account?</Text>
             <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
               Log In
             </Link>
-          </Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

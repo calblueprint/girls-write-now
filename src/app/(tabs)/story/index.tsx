@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
@@ -25,6 +26,8 @@ function StoryScreen() {
 
   const params = useLocalSearchParams<{ storyId: string }>();
   const { storyId } = params;
+
+  const { width } = useWindowDimensions();
 
   const scrollUp = () => {
     scrollRef.current?.scrollTo({ x: 0, y: 0 });
@@ -110,9 +113,17 @@ function StoryScreen() {
             </Button>
           </View>
 
-          <RenderHTML source={story.excerpt} baseStyle={styles.excerpt} />
+          <RenderHTML
+            contentWidth={width}
+            source={story.excerpt}
+            baseStyle={styles.excerpt}
+          />
 
-          <RenderHTML source={story.content} baseStyle={styles.story} />
+          <RenderHTML
+            contentWidth={width}
+            source={story.content}
+            baseStyle={styles.story}
+          />
 
           <Button
             textColor="black"
@@ -126,7 +137,11 @@ function StoryScreen() {
 
           <Text style={styles.authorProcess}>Author's Process</Text>
 
-          <RenderHTML source={story.process} baseStyle={styles.process} />
+          <RenderHTML
+            contentWidth={width}
+            source={story.process}
+            baseStyle={styles.process}
+          />
 
           <View style={styles.author}>
             <Image

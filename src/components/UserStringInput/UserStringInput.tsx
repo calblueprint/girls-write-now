@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 import { View, Text, TextInput } from 'react-native';
 
 import styles from './styles';
-import globalStyles from '../../styles/globalStyles';
 import colors from '../../styles/colors';
+import globalStyles from '../../styles/globalStyles';
 
 type UserStringInputProps = {
   placeholder: string;
@@ -23,7 +23,7 @@ export default function UserStringInput({
   label,
   children,
   labelColor = '#000',
-  placeholderTextColor = '#000',
+  placeholderTextColor = colors.darkGrey,
   onChange = _ => {},
 }: UserStringInputProps) {
   return (

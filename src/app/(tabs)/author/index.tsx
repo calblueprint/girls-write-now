@@ -76,12 +76,12 @@ function AuthorScreen() {
                 <Text
                   adjustsFontSizeToFit
                   numberOfLines={2}
-                  style={styles.name}
+                  style={globalStyles.h1}
                 >
                   {authorInfo.name}
                 </Text>
                 {authorInfo?.pronouns && (
-                  <Text style={styles.pronouns}>{authorInfo.pronouns}</Text>
+                  <Text style={[globalStyles.subHeading2, styles.pronouns]}>{authorInfo.pronouns}</Text>
                 )}
               </View>
             )}
@@ -91,17 +91,17 @@ function AuthorScreen() {
 
           {authorInfo?.bio && (
             <>
-              <Text style={styles.bioText}>{decode(authorInfo.bio)}</Text>
+              <Text style={globalStyles.body1}>{decode(authorInfo.bio)}</Text>
               <HorizontalLine />
             </>
           )}
 
           {authorInfo?.artist_statement && (
             <>
-              <Text style={styles.authorStatementTitle}>
+              <Text style={[globalStyles.body2Bold, styles.authorStatementTitle]}>
                 Artist's Statement
               </Text>
-              <Text style={styles.authorStatement}>
+              <Text style={globalStyles.body1}>
                 {decode(authorInfo.artist_statement)}
               </Text>
               <HorizontalLine />

@@ -90,7 +90,9 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
-              <Text style={globalStyles.subHeading1Bold}>By {story.author_name}</Text>
+              <Text style={globalStyles.subHeading1Bold}>
+                By {story.author_name}
+              </Text>
             </View>
           </TouchableOpacity>
 
@@ -101,7 +103,9 @@ function StoryScreen() {
               data={story.genre_medium}
               renderItem={({ item }) => (
                 <View style={styles.genresBorder}>
-                  <Text style={[globalStyles.button1, styles.genresText]}>{item}</Text>
+                  <Text style={[globalStyles.button1, styles.genresText]}>
+                    {item}
+                  </Text>
                 </View>
               )}
             />
@@ -113,7 +117,11 @@ function StoryScreen() {
               onPress={onShare}
               style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
             >
-              <Text style={[globalStyles.bodyUnderline, styles.shareButtonText]}>Share Story</Text>
+              <Text
+                style={[globalStyles.bodyUnderline, styles.shareButtonText]}
+              >
+                Share Story
+              </Text>
             </Button>
           </View>
 
@@ -138,10 +146,14 @@ function StoryScreen() {
             onPress={onShare}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={[globalStyles.bodyUnderline, styles.shareButtonText]}>Share Story</Text>
+            <Text style={[globalStyles.bodyUnderline, styles.shareButtonText]}>
+              Share Story
+            </Text>
           </Button>
 
-          <Text style={[globalStyles.h3, styles.authorProcess]}>Author's Process</Text>
+          <Text style={[globalStyles.h3, styles.authorProcess]}>
+            Author's Process
+          </Text>
 
           <RenderHTML
             contentWidth={width}
@@ -155,7 +167,9 @@ function StoryScreen() {
               style={styles.authorImage}
               source={{ uri: story.author_image }}
             />
-            <Text style={globalStyles.subHeading1Bold}>By {story.author_name}</Text>
+            <Text style={globalStyles.subHeading1Bold}>
+              By {story.author_name}
+            </Text>
           </View>
 
           <Button

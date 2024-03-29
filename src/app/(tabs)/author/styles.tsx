@@ -10,27 +10,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
   },
-  name: {
-    fontWeight: 'bold',
-    fontSize: 24,
-    fontFamily: 'Manrope-Regular',
-  },
   image: {
     height: 68,
     width: 68,
     backgroundColor: colors.darkGrey,
     borderRadius: 4,
-  },
-  bioText: {
-    color: 'black',
-    fontFamily: 'Manrope-Regular',
-    fontSize: 14,
-  },
-  authorStatement: {
-    fontSize: 14,
-    color: 'black',
-    fontWeight: '400',
-    fontFamily: 'Manrope-Regular',
   },
   authorTextContainer: {
     paddingLeft: 20,
@@ -40,9 +24,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 20,
   },
   authorStatementTitle: {
-    fontWeight: 'bold',
-    fontFamily: 'Manrope-Regular',
-    fontSize: 16,
     marginBottom: 8,
   },
   storyCountText: {
@@ -50,7 +31,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   pronouns: {
-    color: '#797979',
+    color: colors.textGrey,
   },
 });
 

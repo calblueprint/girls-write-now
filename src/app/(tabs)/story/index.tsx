@@ -74,7 +74,6 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-
           <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
 
           <TouchableOpacity

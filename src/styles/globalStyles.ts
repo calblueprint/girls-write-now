@@ -79,6 +79,12 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
+  body2Bold: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 16,
+    textAlign: 'left',
+    color: 'black',
+  },
   body3: {
     fontFamily: 'Manrope-Regular',
     fontSize: 18,
@@ -135,3 +141,5 @@ export default StyleSheet.create({
     marginTop: 20,
   },
 });
+
+export const fonts = ['Manrope-Bold', 'Manrope-Regular', 'Manrope-Semibold'];

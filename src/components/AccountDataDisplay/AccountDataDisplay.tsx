@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native';
 
 import styles from './styles';
+import globalStyles from '../../styles/globalStyles';
 
 type AccountDataDisplayProps = {
   label: string;
@@ -10,9 +11,9 @@ type AccountDataDisplayProps = {
 function AccountDataDisplay({ label, value }: AccountDataDisplayProps) {
   return (
     <View style={styles.view}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[globalStyles.subtext, styles.label]}>{label}</Text>
       {typeof value === 'string' ? (
-        <Text style={styles.value}>{value}</Text>
+        <Text style={[globalStyles.body1, styles.value]}>{value}</Text>
       ) : (
         value
       )}

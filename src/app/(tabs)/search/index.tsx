@@ -239,7 +239,7 @@ function SearchScreen() {
                   There are no stories
                 </Text>
                 <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                  for "your search".
+                  for {search}.
                 </Text>
               </View>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>

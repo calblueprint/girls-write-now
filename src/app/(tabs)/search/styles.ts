@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 10,
     marginBottom: 8,
-    borderColor: 'grey',
+    borderColor: colors.grey,
   },
   inputContainer: {
     backgroundColor: 'transparent',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     marginTop: '60%',
   },
   cancelButton: {
-    color: 'grey',
+    color: colors.grey,
   },
 });
 

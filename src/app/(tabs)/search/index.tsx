@@ -74,10 +74,16 @@ function SearchScreen() {
 
   useEffect(() => {
     (async () => {
-      fetchAllStoryPreviews().then((stories: StoryPreview[]) => setAllStories(stories));
+      fetchAllStoryPreviews().then((stories: StoryPreview[]) =>
+        setAllStories(stories),
+      );
       fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
-      getRecentSearch().then((searches: RecentSearch[]) => setRecentSearches(searches));
-      getRecentStory().then((viewed: StoryPreview[]) => setRecentlyViewed(viewed));
+      getRecentSearch().then((searches: RecentSearch[]) =>
+        setRecentSearches(searches),
+      );
+      getRecentStory().then((viewed: StoryPreview[]) =>
+        setRecentlyViewed(viewed),
+      );
     })();
   }, []);
 

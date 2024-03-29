@@ -15,7 +15,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
 import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
-import { fetchStoryPreviewById, fetchStoryPreviewByIds } from '../../../queries/stories';
+import {
+  fetchStoryPreviewById,
+  fetchStoryPreviewByIds,
+} from '../../../queries/stories';
 import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
@@ -35,7 +38,11 @@ function GenreScreen() {
   const [currTone, setCurrTone] = useState<string>('');
   const [currTopic, setCurrTopic] = useState<string>('');
   const [toneTopicFilters, setToneTopicFilters] = useState<string[]>([]);
-  const { genreId, genreType, genreName } = useLocalSearchParams<{ genreId: string, genreType: string, genreName: string }>();
+  const { genreId, genreType, genreName } = useLocalSearchParams<{
+    genreId: string;
+    genreType: string;
+    genreName: string;
+  }>();
 
   console.log('passing in genreId params:', genreId);
   console.log('testing passing in genreType', genreType);
@@ -144,12 +151,12 @@ function GenreScreen() {
     getGenre();
   }, [genreName]);
 
-
   useEffect(() => {
     const showAllStoryPreviews = async () => {
       setLoading(true);
       if (genreStoryIds.length > 0) {
-        const previews: StoryPreview[] = await fetchStoryPreviewByIds(genreStoryIds);
+        const previews: StoryPreview[] =
+          await fetchStoryPreviewByIds(genreStoryIds);
 
         const tones: string[] = previews
           .reduce((acc: string[], current: StoryPreview) => {
@@ -218,9 +225,7 @@ function GenreScreen() {
             style={{ marginRight: 40 }}
           >
             <Text
-              style={
-                selectedSubgenre === subgenre ? styles.textSelected : null
-              }
+              style={selectedSubgenre === subgenre ? styles.textSelected : null}
               key={index}
             >
               {subgenre}
@@ -228,8 +233,8 @@ function GenreScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-    )
-  }
+    );
+  };
 
   const renderGenreHeading = () => {
     return (
@@ -244,8 +249,8 @@ function GenreScreen() {
           ...Include Later?
         </Text>
       </View>
-    )
-  }
+    );
+  };
 
   const renderTopicDropdown = () => {
     return (
@@ -266,9 +271,7 @@ function GenreScreen() {
         labelField="label"
         valueField="value"
         placeholder="Topic"
-        renderRightIcon={() => (
-          <Icon name="arrow-drop-down" type="material" />
-        )}
+        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
         onChange={item => {
           if (item) {
             // Check if item is not null or undefined
@@ -276,8 +279,8 @@ function GenreScreen() {
           }
         }}
       />
-    )
-  }
+    );
+  };
 
   const renderToneDropdown = () => {
     return (
@@ -298,9 +301,7 @@ function GenreScreen() {
         labelField="label"
         valueField="value"
         placeholder="Tone"
-        renderRightIcon={() => (
-          <Icon name="arrow-drop-down" type="material" />
-        )}
+        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
         onChange={item => {
           if (item) {
             // Check if item is not null or undefined
@@ -308,22 +309,20 @@ function GenreScreen() {
           }
         }}
       />
-
-
-    )
-  }
+    );
+  };
 
   const renderNoStoryText = () => {
     return (
       <View>
         <Text style={styles.noStoriesText}>Sorry!</Text>
         <Text style={styles.noStoriesText2}>
-          There are no stories under this Genre or Subgenre. Please continue
-          to search for other stories
+          There are no stories under this Genre or Subgenre. Please continue to
+          search for other stories
         </Text>
       </View>
-    )
-  }
+    );
+  };
 
   const renderStories = () => {
     return (
@@ -337,9 +336,7 @@ function GenreScreen() {
             // topic={item.topic}
             // tone={item.tone}
             // genreMedium={item.genre_medium}
-            tags={item.genre_medium
-              .concat(item.tone)
-              .concat(item.topic)}
+            tags={item.genre_medium.concat(item.tone).concat(item.topic)}
             author={item.author_name}
             image={item.featured_media}
             authorImage={item.author_image}
@@ -354,8 +351,8 @@ function GenreScreen() {
           />
         )}
       />
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
@@ -387,7 +384,9 @@ function GenreScreen() {
                 <View>
                   <ActivityIndicator />
                 </View>
-              ) : renderStories()}
+              ) : (
+                renderStories()
+              )}
             </View>
           </>
         )}

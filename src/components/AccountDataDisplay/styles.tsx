@@ -8,18 +8,11 @@ export default StyleSheet.create({
     marginBottom: 26,
   },
   label: {
-    fontSize: 12,
-    fontFamily: 'Manrope-Regular',
-    fontStyle: 'normal',
-    fontWeight: '400',
     color: colors.textGrey,
   },
   value: {
     paddingTop: 18,
     paddingRight: 20,
     fontSize: 14,
-    fontFamily: 'Manrope-Regular',
-    fontStyle: 'normal',
-    fontWeight: '400',
   },
 });

@@ -81,7 +81,9 @@ function AuthorScreen() {
                   {authorInfo.name}
                 </Text>
                 {authorInfo?.pronouns && (
-                  <Text style={[globalStyles.subHeading2, styles.pronouns]}>{authorInfo.pronouns}</Text>
+                  <Text style={[globalStyles.subHeading2, styles.pronouns]}>
+                    {authorInfo.pronouns}
+                  </Text>
                 )}
               </View>
             )}
@@ -98,7 +100,9 @@ function AuthorScreen() {
 
           {authorInfo?.artist_statement && (
             <>
-              <Text style={[globalStyles.body2Bold, styles.authorStatementTitle]}>
+              <Text
+                style={[globalStyles.body2Bold, styles.authorStatementTitle]}
+              >
                 Artist's Statement
               </Text>
               <Text style={globalStyles.body1}>

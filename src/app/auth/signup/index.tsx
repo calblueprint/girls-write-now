@@ -130,7 +130,7 @@ function SignUpScreen() {
 
     if (error) Alert.alert(error.message);
     else
-      router.push({
+      router.replace({
         pathname: '/auth/verify',
         params: { finalRedirect: 'onboarding' },
       });

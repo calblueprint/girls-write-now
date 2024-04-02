@@ -128,6 +128,9 @@ function OnboardingScreen() {
         }
       }
 
+      while (router.canGoBack()) {
+        router.back();
+      }
       router.replace('/home');
     } catch (error) {
       if (error instanceof Error) {

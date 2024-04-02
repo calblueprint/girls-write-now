@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../styles/colors';
+import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
   selectors: {
@@ -12,7 +12,7 @@ export default StyleSheet.create({
     paddingHorizontal: 24,
   },
   button: {
-    marginBottom: 32,
+    marginBottom: 100,
   },
   main: {
     paddingLeft: 12,

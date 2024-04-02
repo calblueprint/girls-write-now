@@ -88,6 +88,13 @@ function TabNav() {
           tabBarIcon: ({ color }) => LibraryIcon({ color }),
         }}
       />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          headerShown: false,
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

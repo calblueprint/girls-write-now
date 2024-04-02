@@ -13,13 +13,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-elements';
 
 import styles from './styles';
-import colors from '../../styles/colors';
-import AccountDataDisplay from '../../components/AccountDataDisplay/AccountDataDisplay';
-import StyledButton from '../../components/StyledButton/StyledButton';
-import UserSelectorInput from '../../components/UserSelectorInput/UserSelectorInput';
-import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
-import supabase from '../../utils/supabase';
+import colors from '../../../styles/colors';
+import AccountDataDisplay from '../../../components/AccountDataDisplay/AccountDataDisplay';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import globalStyles from '../../../styles/globalStyles';
+import { useSession } from '../../../utils/AuthContext';
+import supabase from '../../../utils/supabase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 function SettingsScreen() {
@@ -175,7 +175,10 @@ function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'left', 'top']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'left', 'top', 'bottom']}
+    >
       <ScrollView
         bounces={true}
         contentContainerStyle={styles.main}

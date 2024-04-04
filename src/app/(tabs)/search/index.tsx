@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
   Button,
   FlatList,
@@ -286,7 +286,7 @@ function SearchScreen() {
             contentContainerStyle={{ paddingHorizontal: 8 }}
           >
             {allGenres.map((genre, index) => (
-              <>
+              <Fragment key={index}>
                 <View style={styles.genreText}>
                   <Text style={styles.parentName}>{genre.parent_name}</Text>
                   <Text style={styles.seeAll}>See All</Text>
@@ -299,13 +299,14 @@ function SearchScreen() {
                 >
                   {genre.subgenres.map(subgenre => (
                     <GenreCard
+                      key={subgenre.id}
                       subgenres={subgenre.name}
                       cardColor={getColor(index)}
                       pressFunction={() => null}
                     />
                   ))}
                 </ScrollView>
-              </>
+              </Fragment>
             ))}
           </ScrollView>
         ) : (

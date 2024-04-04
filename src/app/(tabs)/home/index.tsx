@@ -43,6 +43,7 @@ function HomeScreen() {
         fetchRecommendedStories().catch(() => []),
         fetchNewStories().catch(() => []),
       ]);
+
       setUsername(usernameResponse);
       setFeaturedStories(featuredStoryResponse);
       setFeaturedStoriesDescription(featuredStoryDescriptionResponse);

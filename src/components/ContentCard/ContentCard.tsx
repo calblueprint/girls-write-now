@@ -37,7 +37,7 @@ function ContentCard({
           <Image
             style={styles.authors}
             source={{
-              uri: 'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2023/12/10090438/Angela-Trakoshis-100x100.jpg' /* change image for proper author when we can pull author images properly */,
+              uri: authorImage
             }}
           />
         </View>

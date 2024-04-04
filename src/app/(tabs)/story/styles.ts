@@ -11,11 +11,6 @@ const styles = StyleSheet.create({
     paddingRight: 24,
     paddingTop: 48,
   },
-  image: {
-    width: '100%',
-    height: 153,
-    marginBottom: 16,
-  },
   authorImage: {
     backgroundColor: '#D9D9D9',
     width: 21,

@@ -43,6 +43,7 @@ function HomeScreen() {
         fetchRecommendedStories().catch(() => []),
         fetchNewStories().catch(() => []),
       ]);
+
       setUsername(usernameResponse);
       setFeaturedStories(featuredStoryResponse);
       setFeaturedStoriesDescription(featuredStoryDescriptionResponse);
@@ -115,13 +116,14 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
-              style={styles.scrollView}
+              style={styles.scrollView1}
             >
               {recommendedStories.map(story => (
                 <ContentCard
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
+                  authorImage={story.author_image}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',
@@ -143,13 +145,14 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
-              style={styles.scrollView}
+              style={styles.scrollView2}
             >
               {newStories.map(story => (
                 <ContentCard
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
+                  authorImage={story.author_image}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',

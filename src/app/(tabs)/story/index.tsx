@@ -74,9 +74,8 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          {/* <Image style={styles.image} source={{ uri: story.featured_media }} /> */}
-
           <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
+
           <TouchableOpacity
             onPress={() => {
               router.push({

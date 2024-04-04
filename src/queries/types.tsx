@@ -47,6 +47,7 @@ export interface StoryCard {
   title: string;
   author_name: string;
   featured_media: string;
+  author_image: string;
 }
 
 export interface Subgenre {

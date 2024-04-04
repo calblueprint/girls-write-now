@@ -37,7 +37,7 @@ function ContentCard({
           <Image
             style={styles.authors}
             source={{
-              uri: authorImage
+              uri: authorImage,
             }}
           />
         </View>

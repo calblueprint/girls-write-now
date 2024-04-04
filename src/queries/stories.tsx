@@ -73,7 +73,6 @@ export async function fetchRecommendedStories(): Promise<StoryCard[]> {
 export async function fetchNewStories(): Promise<StoryCard[]> {
   const { data, error } = await supabase.rpc('fetch_new_stories');
 
-
   if (error) {
     console.log(error);
     throw new Error(

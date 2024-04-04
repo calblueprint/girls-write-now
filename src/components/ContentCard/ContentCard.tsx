@@ -76,7 +76,7 @@ function ContentCard({
                   source={require('./savedStoriesIcon.png')}
                 />
                 <View style={styles.reactionNumber}>
-                  <Text style={globalStyles.subtext}>
+                  <Text style={[globalStyles.subtext, styles.reactionText]}>
                     14{/*change number to work*/}
                   </Text>
                 </View>
@@ -84,7 +84,7 @@ function ContentCard({
             </View>
             <TouchableOpacity onPress={() => saveStory()}>
               <Image
-                style={{ width: 40, height: 40 }}
+                style={{ width: 30, height: 30 }}
                 source={require('./savedStoriesIcon.png')}
               />
             </TouchableOpacity>

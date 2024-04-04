@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   authors: {
     width: 30,
     height: 30,
-    borderRadius: 30 / 2,
+    borderRadius: 30,
     borderWidth: 1,
     backgroundColor: '#89CFF0',
     borderColor: 'white',
@@ -45,6 +45,9 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 8,
     padding: 0,
+  },
+  reactionText: {
+    color: colors.grey,
   },
   reactionNumber: {
     marginLeft: 15,
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
   by: {
     fontFamily: 'Manrope-Regular',
     fontSize: 10,
-    color: 'grey',
+    color: colors.grey,
   },
   authorSpacing: {
     flexDirection: 'row',

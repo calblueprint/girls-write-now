@@ -15,20 +15,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
 import { fetchGenreStoryById } from '../../../queries/genres';
-import {
-  fetchStoryPreviewByIds,
-} from '../../../queries/stories';
+import { fetchStoryPreviewByIds } from '../../../queries/stories';
 import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-
 
 function GenreScreen() {
   const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
   const [genreStoryIds, setGenreStoryIds] = useState<string[]>([]);
   const [subgenres, setSubgenres] = useState<string[]>([]);
   const [allStoryPreviews, setAllStoryPreviews] = useState<StoryPreview[]>([]);
-  const [filteredStoryPreviews, setFilteredStoryPreviews] = useState<StoryPreview[]>([]);
+  const [filteredStoryPreviews, setFilteredStoryPreviews] = useState<
+    StoryPreview[]
+  >([]);
   const [selectedSubgenre, setSelectedSubgenre] = useState<string>('');
   const [mainGenre, setMainGenre] = useState<string>('');
   const [isLoading, setLoading] = useState(true);
@@ -51,31 +50,39 @@ function GenreScreen() {
       if (preview == null || preview.topic == null) return false;
       if (currentTopics.length == 0) return true;
       else return currentTopics.every(t => preview.topic.includes(t));
-    }
+    };
     const checkTone = (preview: StoryPreview): boolean => {
       if (preview == null || preview.tone == null) return false;
       if (currentTones.length == 0) return true;
       else return currentTones.every(t => preview.tone.includes(t));
-    }
+    };
 
-    const filteredPreviews = allStoryPreviews.filter(preview => checkTopic(preview) && checkTone(preview));
+    const filteredPreviews = allStoryPreviews.filter(
+      preview => checkTopic(preview) && checkTone(preview),
+    );
     setFilteredStoryPreviews(filteredPreviews);
-  }, [currentTopics, currentTones])
+  }, [currentTopics, currentTones]);
 
   function getAllStoryIds(genreStories: GenreStories[]): string[] {
-    return genreStories.map(story => story.genre_story_previews).flat().filter(story => story !== null);
+    return genreStories
+      .map(story => story.genre_story_previews)
+      .flat()
+      .filter(story => story !== null);
   }
 
-  function filterStoriesBySubgenreName(subgenreName: string, stories: GenreStories[]): string[] {
+  function filterStoriesBySubgenreName(
+    subgenreName: string,
+    stories: GenreStories[],
+  ): string[] {
     const matchingGenreStory = stories.find(
       subgenre => subgenre.subgenre_name === subgenreName,
     );
 
-    return matchingGenreStory?.genre_story_previews ?? []
+    return matchingGenreStory?.genre_story_previews ?? [];
   }
 
   function getSubgenres(stories: GenreStories[]): string[] {
-    const subgenres = stories.map(subgenre => subgenre.subgenre_name)
+    const subgenres = stories.map(subgenre => subgenre.subgenre_name);
     return ['All', ...subgenres];
   }
 
@@ -102,10 +109,11 @@ function GenreScreen() {
 
   useEffect(() => {
     const getGenre = async () => {
-      const genreStoryData: GenreStories[] =
-        await fetchGenreStoryById(parseInt(genreId as string, 10));
+      const genreStoryData: GenreStories[] = await fetchGenreStoryById(
+        parseInt(genreId as string, 10),
+      );
 
-      setSubgenres(getSubgenres(genreStoryData))
+      setSubgenres(getSubgenres(genreStoryData));
       setGenreStoryData(genreStoryData);
       setMainGenre(genreStoryData[0].parent_name);
 
@@ -132,8 +140,9 @@ function GenreScreen() {
     const showAllStoryPreviews = async () => {
       setLoading(true);
 
-      const previews: StoryPreview[] =
-        await fetchStoryPreviewByIds(genreStoryIds as any);
+      const previews: StoryPreview[] = await fetchStoryPreviewByIds(
+        genreStoryIds as any,
+      );
 
       const tones: string[] = previews
         .reduce((acc: string[], current: StoryPreview) => {
@@ -144,13 +153,12 @@ function GenreScreen() {
         .reduce((acc: string[], current: StoryPreview) => {
           return acc.concat(current.topic);
         }, [] as string[])
-        .filter(topic => topic !== null)
-
+        .filter(topic => topic !== null);
 
       setAllStoryPreviews(previews.flat());
       setFilteredStoryPreviews(previews.flat());
       setGenreTopics([...new Set(topics)]);
-      setGenreTones([... new Set(tones)]);
+      setGenreTones([...new Set(tones)]);
 
       setLoading(false);
     };
@@ -202,7 +210,12 @@ function GenreScreen() {
     );
   };
 
-  const renderFilterDropdown = (placeholder: string, value: string[], data: string[], setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+  const renderFilterDropdown = (
+    placeholder: string,
+    value: string[],
+    data: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+  ) => {
     return (
       <MultiSelect
         mode="default"
@@ -218,7 +231,7 @@ function GenreScreen() {
         data={data.map(topic => {
           return { label: topic, value: topic };
         })}
-        renderSelectedItem={() => (< View />)}
+        renderSelectedItem={() => <View />}
         maxHeight={400}
         labelField="label"
         valueField="value"
@@ -231,7 +244,7 @@ function GenreScreen() {
         }}
       />
     );
-  }
+  };
 
   const renderNoStoryText = () => {
     return (
@@ -292,8 +305,18 @@ function GenreScreen() {
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          {renderFilterDropdown("Tone", currentTones, genreTones, setCurrentTones)}
-          {renderFilterDropdown("Topic", currentTopics, genreTopics, setCurrentTopics)}
+          {renderFilterDropdown(
+            'Tone',
+            currentTones,
+            genreTones,
+            setCurrentTones,
+          )}
+          {renderFilterDropdown(
+            'Topic',
+            currentTopics,
+            genreTopics,
+            setCurrentTopics,
+          )}
         </View>
 
         {genreStoryIds.length === 0 && !isLoading ? (
@@ -317,8 +340,8 @@ function GenreScreen() {
 }
 
 export enum GenreType {
-  PARENT = "parent",
-  SUBGENRE = "subgenre"
+  PARENT = 'parent',
+  SUBGENRE = 'subgenre',
 }
 
 export default GenreScreen;

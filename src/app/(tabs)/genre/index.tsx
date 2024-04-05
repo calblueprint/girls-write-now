@@ -42,9 +42,9 @@ function GenreScreen() {
     genreName: string;
   }>();
 
-  // console.log('passing in genreId params:', genreId);
-  // console.log('testing passing in genreType', genreType);
-  // console.log('testing genreName', genreName);
+  console.log('passing in genreId params:', genreId);
+  console.log('testing passing in genreType', genreType);
+  console.log('testing genreName', genreName);
 
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
@@ -172,6 +172,7 @@ function GenreScreen() {
           <TouchableOpacity
             onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
             style={{ marginRight: 40 }}
+            key={index}
           >
             <Text
               style={selectedSubgenre === subgenre ? styles.textSelected : null}
@@ -252,7 +253,7 @@ function GenreScreen() {
         style={styles.flatListStyle}
         renderItem={({ item }) => (
           <PreviewCard
-            key={item.title}
+            key={item.id}
             // topic={item.topic}
             // tone={item.tone}
             // genreMedium={item.genre_medium}
@@ -295,7 +296,7 @@ function GenreScreen() {
           {renderFilterDropdown("Topic", currentTopics, genreTopics, setCurrentTopics)}
         </View>
 
-        {genreStoryIds.length === 0 && !isLoading ? ( // Check if there are no story IDs
+        {genreStoryIds.length === 0 && !isLoading ? (
           renderNoStoryText()
         ) : (
           <>

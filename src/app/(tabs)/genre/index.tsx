@@ -1,5 +1,5 @@
 import { useLocalSearchParams, router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, ReactNode } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -41,9 +41,13 @@ function GenreScreen() {
     genreName: string;
   }>();
 
-  console.log('passing in genreId params:', genreId);
-  console.log('testing passing in genreType', genreType);
-  console.log('testing genreName', genreName);
+  // console.log('passing in genreId params:', genreId);
+  // console.log('testing passing in genreType', genreType);
+  // console.log('testing genreName', genreName);
+  useEffect(() => {
+    console.log(`Rendering: ${genreId}, ${genreType}, ${genreName}`);
+
+  }, [])
 
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
@@ -90,6 +94,7 @@ function GenreScreen() {
     setLoading(true);
     setSelectedSubgenre(subgenre);
     if (!genreStoryData) {
+      setLoading(false);
       return [];
     }
 
@@ -100,22 +105,25 @@ function GenreScreen() {
         subgenre,
         genreStoryData,
       );
+
       setGenreStoryIds(filteredStoryIds);
-      setLoading(false);
       setToneFilterOptions([]);
       setTopicFilterOptions([]);
+      setLoading(false);
     }
   }
 
   useEffect(() => {
     const getGenre = async () => {
+      setLoading(true);
+
       const genreStoryData: GenreStories[] = await fetchGenreStoryById(
         parseInt(genreId as string, 10),
       );
 
-      setSubgenres(getSubgenres(genreStoryData));
       setGenreStoryData(genreStoryData);
       setMainGenre(genreStoryData[0].parent_name);
+      setSubgenres(getSubgenres(genreStoryData));
 
       if (genreType == GenreType.PARENT) {
         console.log(
@@ -131,6 +139,8 @@ function GenreScreen() {
         );
         setGenreStoryIds(filteredStoryIds);
         setSelectedSubgenre(genreName || ''); //if user clicks a specific genre, selected should be genreName
+
+        setLoading(false);
       }
     };
     getGenre();
@@ -195,6 +205,8 @@ function GenreScreen() {
   };
 
   const renderGenreHeading = () => {
+    console.log(`Selected: ${selectedSubgenre}, mainGenre: ${mainGenre}`);
+
     return (
       <View>
         <Text style={[globalStyles.h1, { marginTop: 15 }]}>
@@ -239,7 +251,7 @@ function GenreScreen() {
         renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
         onChange={item => {
           if (item) {
-            setter(item); // Use the label property of the selected item
+            setter(item);
           }
         }}
       />
@@ -267,9 +279,6 @@ function GenreScreen() {
         renderItem={({ item }) => (
           <PreviewCard
             key={item.id}
-            // topic={item.topic}
-            // tone={item.tone}
-            // genreMedium={item.genre_medium}
             tags={item.genre_medium.concat(item.tone).concat(item.topic)}
             author={item.author_name}
             image={item.featured_media}
@@ -289,7 +298,7 @@ function GenreScreen() {
   };
 
   return (
-    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
+    <SafeAreaView style={[globalStyles.container, { paddingHorizontal: 0 }]}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <BackButton
@@ -300,8 +309,8 @@ function GenreScreen() {
             }
           />
 
-          {renderGenreHeading()}
-          {renderGenreScrollSelector()}
+          {useMemo(renderGenreHeading, [selectedSubgenre, mainGenre])}
+          {useMemo(renderGenreScrollSelector, [subgenres])}
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>

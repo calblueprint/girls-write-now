@@ -95,7 +95,7 @@ function TabNav() {
           href: null,
         }}
       />
-           <Tabs.Screen
+      <Tabs.Screen
         name="genre"
         options={{
           headerShown: false,

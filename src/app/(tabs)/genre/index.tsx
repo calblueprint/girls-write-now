@@ -247,42 +247,12 @@ function GenreScreen() {
     );
   };
 
-  const renderTopicDropdown = () => {
-    return (
-      <Dropdown
-        mode="default"
-        style={[styles.dropdown, styles.secondDropdown]}
-        value={currentTopics}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={globalStyles.body1}
-        inputSearchStyle={globalStyles.body1}
-        itemTextStyle={globalStyles.body1}
-        dropdownPosition="bottom"
-        itemContainerStyle={styles.itemContainer}
-        iconStyle={styles.iconStyle}
-        data={genreTopics.map(topic => {
-          return { label: topic, value: topic };
-        })}
-        maxHeight={400}
-        labelField="label"
-        valueField="value"
-        placeholder="Topic"
-        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
-        onChange={item => {
-          if (item) {
-            setCurrentTopics(item.label); // Use the label property of the selected item
-          }
-        }}
-      />
-    );
-  };
-
-  const renderToneDropdown = () => {
+  const renderFilterDropdown = (placeholder: string, value: string[], data: string[], setter: React.Dispatch<React.SetStateAction<string[]>>) => {
     return (
       <MultiSelect
         mode="default"
-        style={styles.dropdown}
-        value={currentTones}
+        style={[styles.dropdown, styles.secondDropdown]}
+        value={value}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={globalStyles.body1}
         inputSearchStyle={globalStyles.body1}
@@ -290,23 +260,23 @@ function GenreScreen() {
         dropdownPosition="bottom"
         itemContainerStyle={styles.itemContainer}
         iconStyle={styles.iconStyle}
-        data={genreTones.map(tone => {
-          return { label: tone, value: tone };
+        data={data.map(topic => {
+          return { label: topic, value: topic };
         })}
+        renderSelectedItem={() => (< View />)}
         maxHeight={400}
         labelField="label"
         valueField="value"
-        placeholder="Tone"
+        placeholder={placeholder}
         renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
         onChange={item => {
           if (item) {
-            // Check if item is not null or undefined
-            setCurrentTones(item); // Use the label property of the selected item
+            setter(item); // Use the label property of the selected item
           }
         }}
       />
     );
-  };
+  }
 
   const renderNoStoryText = () => {
     return (
@@ -367,8 +337,8 @@ function GenreScreen() {
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          {renderToneDropdown()}
-          {renderTopicDropdown()}
+          {renderFilterDropdown("Tone", currentTones, genreTones, setCurrentTones)}
+          {renderFilterDropdown("Topic", currentTopics, genreTopics, setCurrentTopics)}
         </View>
 
         {genreStoryIds.length === 0 ? ( // Check if there are no story IDs

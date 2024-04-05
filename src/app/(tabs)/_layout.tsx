@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Icon from '../../../assets/icons';
@@ -89,6 +89,13 @@ function TabNav() {
         }}
       />
       <Tabs.Screen
+        name="settings"
+        options={{
+          headerShown: false,
+          href: null,
+        }}
+      />
+           <Tabs.Screen
         name="genre"
         options={{
           headerShown: false,

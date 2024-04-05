@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   card: {
@@ -13,10 +14,11 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     paddingBottom: 10,
     paddingTop: 10,
+
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    elevation: 7,
   },
   leftItems: {
     gap: 8,
@@ -29,9 +31,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchValueText: {
-    color: 'black',
-    fontWeight: '400',
-    fontSize: 14,
     justifyContent: 'center',
   },
   numResultsText: {

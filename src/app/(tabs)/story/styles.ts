@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,11 +11,6 @@ const styles = StyleSheet.create({
     paddingRight: 24,
     paddingTop: 48,
   },
-  image: {
-    width: '100%',
-    height: 153,
-    marginBottom: 16,
-  },
   authorImage: {
     backgroundColor: '#D9D9D9',
     width: 21,
@@ -22,11 +18,6 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 2,
   },
   title: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 24,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
     marginBottom: 16,
   },
   author: {
@@ -34,13 +25,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginBottom: 16,
-  },
-  authorText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
   },
   genres: {
     display: 'flex',
@@ -59,60 +43,23 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   genresText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '400',
-    color: 'black',
     backgroundColor: '#D9D9D9',
   },
   shareButtonText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
-    textDecorationLine: 'underline',
-    backgroundColor: '#D9D9D9',
+    color: colors.white,
   },
   excerpt: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 16,
-    fontWeight: '400',
     textAlign: 'left',
-    color: 'black',
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingVertical: 16,
   },
   story: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
     marginBottom: 16,
   },
   authorProcess: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'left',
-    color: 'black',
     marginBottom: 16,
   },
   process: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
     marginBottom: 16,
-  },
-  backToTopButtonText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '800',
-    textAlign: 'left',
-    color: 'black',
   },
 });
 

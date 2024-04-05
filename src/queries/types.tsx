@@ -47,6 +47,7 @@ export interface StoryCard {
   title: string;
   author_name: string;
   featured_media: string;
+  author_image: string;
 }
 
 export interface Subgenre {
@@ -66,4 +67,11 @@ export interface GenreStories {
   subgenre_id: number;
   subgenre_name: string;
   genre_story_previews: string[];
+}
+
+export interface Reactions {
+  profile_id: number;
+  story_id: number;
+  emoji_id: number;
+  emoji: string;
 }

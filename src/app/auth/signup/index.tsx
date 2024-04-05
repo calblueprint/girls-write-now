@@ -130,7 +130,7 @@ function SignUpScreen() {
 
     if (error) Alert.alert(error.message);
     else
-      router.push({
+      router.replace({
         pathname: '/auth/verify',
         params: { finalRedirect: 'onboarding' },
       });
@@ -262,12 +262,12 @@ function SignUpScreen() {
               onPress={signUpWithEmail}
             />
           </View>
-          <Text style={[globalStyles.body1, styles.redirectText]}>
-            Already have an account?{' '}
+          <View style={styles.redirectText}>
+            <Text style={globalStyles.body1}>Already have an account?</Text>
             <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
               Log In
             </Link>
-          </Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

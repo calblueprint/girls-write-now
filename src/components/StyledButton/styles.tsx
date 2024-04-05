@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   titleStyle: {
     paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingVertical: 5,
     color: 'white',
   },
 });

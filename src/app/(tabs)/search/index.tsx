@@ -227,9 +227,8 @@ function SearchScreen() {
         {showRecents &&
           (search && searchResults.length > 0 ? (
             <View style={styles.default}>
-              <Text style={[styles.searchText, styles.numDisplay]}>
-                {searchResults.length}{' '}
-                {searchResults.length === 1 ? 'Story' : 'Stories'}
+              <Text style={[globalStyles.subHeading1Bold, styles.numDisplay]}>
+                Showing results 1-{searchResults.length}
               </Text>
             </View>
           ) : search && searchResults.length === 0 ? (
@@ -239,7 +238,7 @@ function SearchScreen() {
                   There are no stories
                 </Text>
                 <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                  for {search}.
+                  for "{search}".
                 </Text>
               </View>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
@@ -252,7 +251,7 @@ function SearchScreen() {
           ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
             <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
               <View style={styles.recentSpacing}>
-                <Text style={styles.searchText}>Recent Searches</Text>
+                <Text style={globalStyles.subHeading1Bold}>Recent Searches</Text>
                 <Pressable onPress={clearRecentSearches}>
                   <Text
                     style={[
@@ -279,7 +278,7 @@ function SearchScreen() {
               </View>
 
               <View style={styles.recentSpacing}>
-                <Text style={styles.searchText}>Recently Viewed</Text>
+                <Text style={globalStyles.subHeading1Bold}>Recently Viewed</Text>
                 <Pressable onPress={clearRecentlyViewed}>
                   <Text
                     style={[

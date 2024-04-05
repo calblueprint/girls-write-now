@@ -77,6 +77,7 @@ function HomeScreen() {
             </View>
           </Pressable>
         </View>
+
         {featuredStories.length > 0 && (
           <View>
             <Text style={globalStyles.h3}>Featured Stories</Text>

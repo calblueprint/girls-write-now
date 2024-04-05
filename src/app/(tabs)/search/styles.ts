@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
-    borderColor: 'grey',
+    borderColor: colors.grey2,
     borderWidth: 1,
     borderBottomWidth: 1,
   },
@@ -53,10 +53,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     marginHorizontal: 8,
-  },
-  searchText: {
-    fontWeight: '500',
-    fontSize: 14,
   },
   numDisplay: {
     marginTop: 24,

@@ -7,7 +7,7 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,13 +30,14 @@ function GenreScreen() {
   const [genreStoryIds, setGenreStoryIds] = useState<string[]>([]);
   const [subgenres, setSubgenres] = useState<string[]>([]);
   const [allStoryPreviews, setAllStoryPreviews] = useState<StoryPreview[]>([]);
+  const [filteredStoryPreviews, setFilteredStoryPreviews] = useState<StoryPreview[]>([]);
   const [selectedSubgenre, setSelectedSubgenre] = useState<string>('');
   const [mainGenre, setMainGenre] = useState<string>('');
   const [isLoading, setLoading] = useState(true);
-  const [genreTones, setgenreTones] = useState<string[]>([]);
-  const [genreTopics, setgenreTopics] = useState<string[]>([]);
-  const [currTone, setCurrTone] = useState<string>('');
-  const [currTopic, setCurrTopic] = useState<string>('');
+  const [genreTones, setGenreTones] = useState<string[]>([]);
+  const [genreTopics, setGenreTopics] = useState<string[]>([]);
+  const [currentTones, setCurrentTones] = useState<string[]>([]);
+  const [currentTopics, setCurrentTopics] = useState<string[]>([]);
   const [toneTopicFilters, setToneTopicFilters] = useState<string[]>([]);
   const { genreId, genreType, genreName } = useLocalSearchParams<{
     genreId: string;
@@ -44,9 +45,27 @@ function GenreScreen() {
     genreName: string;
   }>();
 
-  console.log('passing in genreId params:', genreId);
-  console.log('testing passing in genreType', genreType);
-  console.log('testing genreName', genreName);
+  // console.log('passing in genreId params:', genreId);
+  // console.log('testing passing in genreType', genreType);
+  // console.log('testing genreName', genreName);
+  //
+  useEffect(() => {
+    const checkTopic = (preview: StoryPreview): boolean => {
+      if (preview == null) return false;
+      if (preview.topic == null) return false;
+      if (currentTopics.length == 0) return true;
+      else return currentTopics.every(t => preview.topic.includes(t));
+    }
+    const checkTone = (preview: StoryPreview): boolean => {
+      if (preview == null) return false;
+      if (preview.tone == null) return false;
+      if (currentTones.length == 0) return true;
+      else return currentTones.every(t => preview.tone.includes(t));
+    }
+
+    const filteredPreviews = allStoryPreviews.filter(preview => checkTopic(preview) && checkTone(preview));
+    setFilteredStoryPreviews(filteredPreviews);
+  }, [currentTopics, currentTones])
 
   async function getAllStoryIds(
     genreStories: GenreStories[],
@@ -108,8 +127,8 @@ function GenreScreen() {
       );
       setGenreStoryIds(filteredStoryIds);
       setLoading(false);
-      setgenreTones([]);
-      setgenreTopics([]);
+      setGenreTones([]);
+      setGenreTopics([]);
     }
   }
 
@@ -156,7 +175,7 @@ function GenreScreen() {
       setLoading(true);
       if (genreStoryIds.length > 0) {
         const previews: StoryPreview[] =
-          await fetchStoryPreviewByIds(genreStoryIds);
+          await fetchStoryPreviewByIds(genreStoryIds as string[]);
 
         const tones: string[] = previews
           .reduce((acc: string[], current: StoryPreview) => {
@@ -167,38 +186,14 @@ function GenreScreen() {
           .reduce((acc: string[], current: StoryPreview) => {
             return acc.concat(current.topic);
           }, [] as string[])
-          .filter(topic => topic !== null);
+          .filter(topic => topic !== null)
 
-        // for (const idString of genreStoryIds) {
-        //   const id = parseInt(idString, 10);
-        //   try {
-        //     const storyPreview: StoryPreview[] =
-        //       await fetchStoryPreviewById(id);
-        //     previews.push(storyPreview[0]);
-        //     storyPreview[0].tone.forEach(item => {
-        //       tones.push(item);
-        //     });
-        //     storyPreview[0].topic.forEach(item => {
-        //       topics.push(item);
-        //     });
-        //     console.log('testing storyPreview outputs:', storyPreview);
-        //   } catch (error) {
-        //     console.log(
-        //       `There was an error while trying to fetch a story preview by id: ${error}`,
-        //     );
-        //   }
-        // }
-        // const filteredTopics: string[] = topics.filter(
-        //   (item): item is string => item !== null,
-        // );
-        // const filteredTones: string[] = tones.filter(
-        //   (item): item is string => item !== null,
-        // );
 
         console.log('testing storyPreview outputs:', previews);
         setAllStoryPreviews(previews.flat());
-        setgenreTopics(topics);
-        setgenreTones(tones);
+        setFilteredStoryPreviews(previews.flat());
+        setGenreTopics([...new Set(topics)]);
+        setGenreTones([... new Set(tones)]);
         console.log('testing tone usestate');
         setLoading(false);
       } else {
@@ -257,6 +252,7 @@ function GenreScreen() {
       <Dropdown
         mode="default"
         style={[styles.dropdown, styles.secondDropdown]}
+        value={currentTopics}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={globalStyles.body1}
         inputSearchStyle={globalStyles.body1}
@@ -274,8 +270,7 @@ function GenreScreen() {
         renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
         onChange={item => {
           if (item) {
-            // Check if item is not null or undefined
-            setCurrTopic(item.label); // Use the label property of the selected item
+            setCurrentTopics(item.label); // Use the label property of the selected item
           }
         }}
       />
@@ -284,9 +279,10 @@ function GenreScreen() {
 
   const renderToneDropdown = () => {
     return (
-      <Dropdown
+      <MultiSelect
         mode="default"
         style={styles.dropdown}
+        value={currentTones}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={globalStyles.body1}
         inputSearchStyle={globalStyles.body1}
@@ -305,7 +301,7 @@ function GenreScreen() {
         onChange={item => {
           if (item) {
             // Check if item is not null or undefined
-            setCurrTone(item.label); // Use the label property of the selected item
+            setCurrentTones(item); // Use the label property of the selected item
           }
         }}
       />
@@ -328,7 +324,7 @@ function GenreScreen() {
     return (
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={allStoryPreviews}
+        data={filteredStoryPreviews}
         style={styles.flatListStyle}
         renderItem={({ item }) => (
           <PreviewCard

@@ -31,10 +31,10 @@ function GenreScreen() {
   const [selectedSubgenre, setSelectedSubgenre] = useState<string>('');
   const [mainGenre, setMainGenre] = useState<string>('');
   const [isLoading, setLoading] = useState(true);
-  const [genreTones, setGenreTones] = useState<string[]>([]);
-  const [genreTopics, setGenreTopics] = useState<string[]>([]);
-  const [currentTones, setCurrentTones] = useState<string[]>([]);
-  const [currentTopics, setCurrentTopics] = useState<string[]>([]);
+  const [toneFilterOptions, setToneFilterOptions] = useState<string[]>([]);
+  const [topicFilterOptions, setTopicFilterOptions] = useState<string[]>([]);
+  const [selectedTonesForFiltering, setSelectedTonesForFiltering] = useState<string[]>([]);
+  const [selectedTopicsForFiltering, setSelectedTopicsForFiltering] = useState<string[]>([]);
   const { genreId, genreType, genreName } = useLocalSearchParams<{
     genreId: string;
     genreType: GenreType;
@@ -48,20 +48,20 @@ function GenreScreen() {
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
       if (preview == null || preview.topic == null) return false;
-      if (currentTopics.length == 0) return true;
-      else return currentTopics.every(t => preview.topic.includes(t));
+      if (selectedTopicsForFiltering.length == 0) return true;
+      else return selectedTopicsForFiltering.every(t => preview.topic.includes(t));
     };
     const checkTone = (preview: StoryPreview): boolean => {
       if (preview == null || preview.tone == null) return false;
-      if (currentTones.length == 0) return true;
-      else return currentTones.every(t => preview.tone.includes(t));
+      if (selectedTonesForFiltering.length == 0) return true;
+      else return selectedTonesForFiltering.every(t => preview.tone.includes(t));
     };
 
     const filteredPreviews = allStoryPreviews.filter(
       preview => checkTopic(preview) && checkTone(preview),
     );
     setFilteredStoryPreviews(filteredPreviews);
-  }, [currentTopics, currentTones]);
+  }, [selectedTopicsForFiltering, selectedTonesForFiltering]);
 
   function getAllStoryIds(genreStories: GenreStories[]): string[] {
     return genreStories
@@ -102,8 +102,8 @@ function GenreScreen() {
       );
       setGenreStoryIds(filteredStoryIds);
       setLoading(false);
-      setGenreTones([]);
-      setGenreTopics([]);
+      setToneFilterOptions([]);
+      setTopicFilterOptions([]);
     }
   }
 
@@ -157,8 +157,8 @@ function GenreScreen() {
 
       setAllStoryPreviews(previews.flat());
       setFilteredStoryPreviews(previews.flat());
-      setGenreTopics([...new Set(topics)]);
-      setGenreTones([...new Set(tones)]);
+      setTopicFilterOptions([...new Set(topics)]);
+      setToneFilterOptions([...new Set(tones)]);
 
       setLoading(false);
     };
@@ -307,15 +307,15 @@ function GenreScreen() {
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
           {renderFilterDropdown(
             'Tone',
-            currentTones,
-            genreTones,
-            setCurrentTones,
+            selectedTonesForFiltering,
+            toneFilterOptions,
+            setSelectedTonesForFiltering,
           )}
           {renderFilterDropdown(
             'Topic',
-            currentTopics,
-            genreTopics,
-            setCurrentTopics,
+            selectedTopicsForFiltering,
+            topicFilterOptions,
+            setSelectedTopicsForFiltering,
           )}
         </View>
 

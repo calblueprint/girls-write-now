@@ -251,7 +251,9 @@ function SearchScreen() {
           ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
             <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
               <View style={styles.recentSpacing}>
-                <Text style={globalStyles.subHeading1Bold}>Recent Searches</Text>
+                <Text style={globalStyles.subHeading1Bold}>
+                  Recent Searches
+                </Text>
                 <Pressable onPress={clearRecentSearches}>
                   <Text
                     style={[
@@ -278,7 +280,9 @@ function SearchScreen() {
               </View>
 
               <View style={styles.recentSpacing}>
-                <Text style={globalStyles.subHeading1Bold}>Recently Viewed</Text>
+                <Text style={globalStyles.subHeading1Bold}>
+                  Recently Viewed
+                </Text>
                 <Pressable onPress={clearRecentlyViewed}>
                   <Text
                     style={[

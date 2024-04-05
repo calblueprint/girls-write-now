@@ -2,6 +2,8 @@ import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthContextProvider } from '../utils/AuthContext';
+import ToastComponent from '../components/Toast/Toast';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 function StackLayout() {
   return (
@@ -10,10 +12,10 @@ function StackLayout() {
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="settings" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
         </Stack>
       </AuthContextProvider>
+      <ToastComponent />
     </SafeAreaProvider>
   );
 }

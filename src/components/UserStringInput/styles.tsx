@@ -3,11 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   mt16: {
     marginTop: 16,
-  },
-  label: {
-    fontSize: 12,
-    fontStyle: 'normal',
-    fontWeight: '400',
+    width: '100%',
   },
   container: {
     paddingRight: 10,
@@ -22,7 +18,6 @@ export default StyleSheet.create({
   inputField: {
     flex: 1,
     fontSize: 14,
-    fontFamily: 'Manrope',
     padding: 10,
     color: '#000000',
   },

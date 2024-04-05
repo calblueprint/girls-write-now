@@ -11,18 +11,9 @@ export default StyleSheet.create({
     borderRadius: 5,
     backgroundColor: colors.gwnOrange,
   },
-  disabledTitleStyle: {
-    fontSize: 21,
-    fontWeight: '400',
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    color: 'white',
-  },
   titleStyle: {
-    fontSize: 21,
-    fontWeight: '400',
     paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingVertical: 5,
     color: 'white',
   },
 });

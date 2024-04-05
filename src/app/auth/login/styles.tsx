@@ -5,18 +5,17 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   forgotPassword: {
-    fontSize: 12,
-    textDecorationLine: 'underline',
     paddingTop: 18,
     paddingBottom: 16,
-    fontWeight: '400',
   },
   link: {
     fontWeight: '700',
     textDecorationLine: 'underline',
   },
   redirectText: {
-    textAlign: 'center',
+    gap: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 16,
     marginBottom: 64,
   },
@@ -24,11 +23,6 @@ export default StyleSheet.create({
     lineHeight: 33,
     paddingTop: 64,
     marginBottom: 28,
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  error: {
-    color: 'red',
   },
   icon: {
     paddingRight: 10,

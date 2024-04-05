@@ -1,116 +1,111 @@
-import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { Alert, TextInput, View } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { router, Link } from 'expo-router';
+import { useState, useRef, useEffect } from 'react';
+import { Alert, Text, View } from 'react-native';
+import validator from 'validator';
+import { useDebounce } from 'use-debounce';
 
 import styles from './styles';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import { isEmailTaken } from '../../../queries/profiles';
+import { queryEmailByUsername } from '../../../queries/auth';
+import colors from '../../../styles/colors';
 
 function ForgotPasswordScreen() {
-  const { updateUser, signOut, resetPassword, verifyOtp } = useSession();
+  const { resetPassword } = useSession();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [verificationCode, setCode] = useState<string>('');
-  const [changingPassword, setChangingPassword] = useState(false);
+  const [emailToReset, setEmailToReset] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [value] = useDebounce(email, 250);
+  const [validEmail, setValidEmail] = useState(false);
 
   const sendResetEmail = async () => {
-    const { error } = await resetPassword(email);
+    const { error } = await resetPassword(emailToReset);
     if (error)
       Alert.alert('Could not send a reset password email. Please try again.');
     else
-      Alert.alert(
-        'Enter the verification code from your email to change your password',
-      );
+      router.push({
+        pathname: '/auth/verify',
+        params: { finalRedirect: 'resetPassword', userEmail: emailToReset },
+      });
   };
-  const verifyCode = async () => {
-    setLoading(true);
 
-    if (email && verificationCode) {
-      const { error } = await verifyOtp(email, verificationCode);
+  useEffect(() => {
+    checkEmailOrUsername(value);
+  }, [value]);
 
-      if (error) {
-        Alert.alert(error.message);
-        setChangingPassword(false);
-      } else {
-        setChangingPassword(true);
+  const checkEmailOrUsername = async (newEmail: string) => {
+    setValidEmail(false);
+    if (validator.isEmail(newEmail)) {
+      if (newEmail.length === 0) {
+        setEmailError('');
+        return;
       }
-    } else if (!verificationCode) {
-      Alert.alert(`Please enter a verification code`);
+      const emailIsTaken = await isEmailTaken(newEmail);
+      if (!emailIsTaken) {
+        setEmailError(
+          'An account with that email does not exist. Please try again.',
+        );
+        setValidEmail(false);
+        return;
+      }
+      setEmailToReset(newEmail);
     } else {
-      Alert.alert(`Please sign up again.`);
+      const { data, error } = await queryEmailByUsername(newEmail);
+
+      if (data && data?.length > 0 && !error) {
+        setValidEmail(true);
+        setEmailToReset(data[0].email);
+      } else {
+        setEmailError(
+          'An account with that username does not exist. Please try again.',
+        );
+        setValidEmail(false);
+        return;
+      }
     }
-
-    setLoading(false);
-  };
-
-  const changePassword = async () => {
-    setLoading(true);
-    const { error } = await updateUser({ password });
-
-    if (error) {
-      Alert.alert('Updating password failed');
-    } else {
-      await signOut();
-      router.replace('/auth/login');
-    }
-
-    setLoading(false);
+    setValidEmail(true);
+    setEmailError('');
   };
 
   return (
     <View style={styles.container}>
-      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-        <Input
-          label="Email"
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={text => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize="none"
-        />
+      <Link href="/auth/login" style={styles.back}>
+        <Text style={[globalStyles.subtext, styles.backText]}>{'<Back'}</Text>
+      </Link>
+      <View style={styles.body}>
+        <View>
+          <Text style={[globalStyles.h1, styles.heading]}>
+            Forgot Password?
+          </Text>
+          <UserStringInput
+            placeholder="Email or account username"
+            placeholderTextColor={colors.darkGrey}
+            value={email}
+            label="Email or account username"
+            onChange={e => {
+              setEmail(e);
+            }}
+          />
+          <Text style={[globalStyles.errorMessage, styles.subtext]}>
+            We'll email you a code to confirm your email.
+          </Text>
+
+          {email !== '' && (
+            <Text style={[globalStyles.errorMessage]}>{emailError}</Text>
+          )}
+        </View>
+
+        <View style={styles.button}>
+          <StyledButton
+            disabled={!validEmail || email !== value}
+            text="Continue"
+            onPress={sendResetEmail}
+          />
+        </View>
       </View>
-      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Send" disabled={loading} onPress={sendResetEmail} />
-      </View>
-
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={setCode}
-        placeholder="Verification Code"
-        value={verificationCode}
-        maxLength={6}
-      />
-
-      <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-        <Button title="Verify" disabled={loading} onPress={verifyCode} />
-      </View>
-
-      {changingPassword && (
-        <>
-          <View style={styles.verticallySpaced}>
-            <Input
-              label="Password"
-              leftIcon={{ type: 'font-awesome', name: 'lock' }}
-              onChangeText={text => setPassword(text)}
-              value={password}
-              secureTextEntry
-              placeholder="Password"
-              autoCapitalize="none"
-            />
-          </View>
-
-          <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-            <Button
-              title="Change Password"
-              disabled={loading}
-              onPress={changePassword}
-            />
-          </View>
-        </>
-      )}
     </View>
   );
 }

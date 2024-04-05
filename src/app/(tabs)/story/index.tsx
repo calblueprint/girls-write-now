@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
@@ -17,6 +18,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
+import colors from '../../../styles/colors';
+import globalStyles, { fonts } from '../../../styles/globalStyles';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -25,6 +28,8 @@ function StoryScreen() {
 
   const params = useLocalSearchParams<{ storyId: string }>();
   const { storyId } = params;
+
+  const { width } = useWindowDimensions();
 
   const scrollUp = () => {
     scrollRef.current?.scrollTo({ x: 0, y: 0 });
@@ -69,9 +74,8 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          {/* <Image style={styles.image} source={{ uri: story.featured_media }} /> */}
+          <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
 
-          <Text style={styles.title}>{story?.title}</Text>
           <TouchableOpacity
             onPress={() => {
               router.push({
@@ -85,7 +89,9 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
-              <Text style={styles.authorText}>By {story.author_name}</Text>
+              <Text style={globalStyles.subHeading1Bold}>
+                By {story.author_name}
+              </Text>
             </View>
           </TouchableOpacity>
 
@@ -96,46 +102,73 @@ function StoryScreen() {
               data={story.genre_medium}
               renderItem={({ item }) => (
                 <View style={styles.genresBorder}>
-                  <Text style={styles.genresText}>{item}</Text>
+                  <Text style={[globalStyles.button1, styles.genresText]}>
+                    {item}
+                  </Text>
                 </View>
               )}
             />
 
             <Button
               textColor="black"
-              buttonColor="#D9D9D9"
+              buttonColor={colors.gwnOrange}
               icon="share"
               onPress={onShare}
               style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
             >
-              <Text style={styles.shareButtonText}>Share Story</Text>
+              <Text
+                style={[globalStyles.bodyUnderline, styles.shareButtonText]}
+              >
+                Share Story
+              </Text>
             </Button>
           </View>
 
-          <RenderHTML source={story.excerpt} baseStyle={styles.excerpt} />
+          <RenderHTML
+            contentWidth={width}
+            source={story.excerpt}
+            baseStyle={{ ...globalStyles.body3, ...styles.excerpt }}
+            systemFonts={fonts}
+          />
 
-          <RenderHTML source={story.content} baseStyle={styles.story} />
+          <RenderHTML
+            contentWidth={width}
+            source={story.content}
+            baseStyle={{ ...globalStyles.body1, ...styles.story }}
+            systemFonts={fonts}
+          />
 
           <Button
             textColor="black"
-            buttonColor="#D9D9D9"
+            buttonColor={colors.gwnOrange}
             icon="share"
             onPress={onShare}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={styles.shareButtonText}>Share Story</Text>
+            <Text style={[globalStyles.bodyUnderline, styles.shareButtonText]}>
+              Share Story
+            </Text>
           </Button>
 
-          <Text style={styles.authorProcess}>Author's Process</Text>
+          <Text style={[globalStyles.h3, styles.authorProcess]}>
+            Author's Process
+          </Text>
 
-          <RenderHTML source={story.process} baseStyle={styles.process} />
+          <RenderHTML
+            contentWidth={width}
+            source={story.process}
+            baseStyle={{ ...globalStyles.body1, ...styles.process }}
+            systemFonts={fonts}
+          />
 
           <View style={styles.author}>
             <Image
               style={styles.authorImage}
               source={{ uri: story.author_image }}
             />
-            <Text style={styles.authorText}>By {story.author_name}</Text>
+            <Text style={globalStyles.subHeading1Bold}>
+              By {story.author_name}
+            </Text>
           </View>
 
           <Button
@@ -144,7 +177,7 @@ function StoryScreen() {
             onPress={scrollUp}
             style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
           >
-            <Text style={styles.backToTopButtonText}>Back To Top</Text>
+            <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
           </Button>
         </ScrollView>
       )}

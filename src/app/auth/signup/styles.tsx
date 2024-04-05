@@ -7,7 +7,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   inputError: {
-    color: 'red',
     marginTop: 8,
   },
   link: {
@@ -15,15 +14,15 @@ export default StyleSheet.create({
     textDecorationLine: 'underline',
   },
   redirectText: {
-    textAlign: 'center',
-    marginBottom: 64,
+    gap: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 16,
+    marginBottom: 64,
   },
   title: {
-    fontSize: 24,
     paddingTop: 64,
     marginBottom: 23,
-    fontWeight: '700',
   },
   icon: {
     marginRight: 10,
@@ -34,7 +33,6 @@ export default StyleSheet.create({
     paddingBottom: 8,
   },
   passwordErrorText: {
-    fontSize: 12,
     marginLeft: 8,
   },
   verticallySpaced: {
@@ -44,8 +42,5 @@ export default StyleSheet.create({
   },
   inputs: {
     paddingBottom: 8,
-  },
-  navigation: {
-    // marginTop: 'auto',
   },
 });

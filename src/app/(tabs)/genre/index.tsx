@@ -7,26 +7,24 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+import { MultiSelect } from 'react-native-element-dropdown';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
-import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
+import { fetchGenreStoryById } from '../../../queries/genres';
 import {
-  fetchStoryPreviewById,
   fetchStoryPreviewByIds,
 } from '../../../queries/stories';
-import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
+import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 
-//TODO figure out the logic for the tone and topic dropdowns, especially when we're dealing with multiselect on both parts
 
 function GenreScreen() {
-  const [genreStoryInfo, setGenreStoryInfo] = useState<GenreStories[]>();
+  const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
   const [genreStoryIds, setGenreStoryIds] = useState<string[]>([]);
   const [subgenres, setSubgenres] = useState<string[]>([]);
   const [allStoryPreviews, setAllStoryPreviews] = useState<StoryPreview[]>([]);
@@ -38,10 +36,9 @@ function GenreScreen() {
   const [genreTopics, setGenreTopics] = useState<string[]>([]);
   const [currentTones, setCurrentTones] = useState<string[]>([]);
   const [currentTopics, setCurrentTopics] = useState<string[]>([]);
-  const [toneTopicFilters, setToneTopicFilters] = useState<string[]>([]);
   const { genreId, genreType, genreName } = useLocalSearchParams<{
     genreId: string;
-    genreType: string;
+    genreType: GenreType;
     genreName: string;
   }>();
 
@@ -69,43 +66,32 @@ function GenreScreen() {
     return genreStories.map(story => story.genre_story_previews).flat().filter(story => story !== null);
   }
 
-  function findStoryIdsByName(subgenreName: string, genreStories: GenreStories[]): string[] {
-    const filteredStoryIds: string[] = [];
-    const matchingGenreStory = genreStories.find(
+  function filterStoriesBySubgenreName(subgenreName: string, stories: GenreStories[]): string[] {
+    const matchingGenreStory = stories.find(
       subgenre => subgenre.subgenre_name === subgenreName,
     );
 
-    if (matchingGenreStory?.genre_story_previews[0] != null) {
-      matchingGenreStory.genre_story_previews.forEach(id => {
-        filteredStoryIds.push(id);
-      });
-    } else {
-      setLoading(false);
-      return [];
-    }
-
-    console.log('testing find story IDs by Name Function:', filteredStoryIds);
-    return filteredStoryIds;
+    return matchingGenreStory?.genre_story_previews ?? []
   }
 
-  async function getSubgenres(genreStories: GenreStories[]): Promise<string[]> {
-    const subgenres = genreStories.map(subgenre => subgenre.subgenre_name)
+  function getSubgenres(stories: GenreStories[]): string[] {
+    const subgenres = stories.map(subgenre => subgenre.subgenre_name)
     return ['All', ...subgenres];
   }
 
-  async function filterBySubgenre(filterName: string) {
+  function filterBySubgenre(subgenre: string) {
     setLoading(true);
-    setSelectedSubgenre(filterName);
-    if (!genreStoryInfo) {
+    setSelectedSubgenre(subgenre);
+    if (!genreStoryData) {
       return [];
     }
-    if (filterName === 'All') {
-      const storyIds = await getAllStoryIds(genreStoryInfo);
-      setGenreStoryIds(storyIds);
+
+    if (subgenre === 'All') {
+      setGenreStoryIds(getAllStoryIds(genreStoryData));
     } else {
-      const filteredStoryIds = await findStoryIdsByName(
-        filterName,
-        genreStoryInfo,
+      const filteredStoryIds = filterStoriesBySubgenreName(
+        subgenre,
+        genreStoryData,
       );
       setGenreStoryIds(filteredStoryIds);
       setLoading(false);
@@ -116,23 +102,24 @@ function GenreScreen() {
 
   useEffect(() => {
     const getGenre = async () => {
-      const genreStoryPreviewData: GenreStories[] =
-        await fetchGenreStoryPreviews(parseInt(genreId as string, 10));
-      const getGenres: string[] = await getSubgenres(genreStoryPreviewData);
-      setSubgenres(getGenres);
-      setGenreStoryInfo(genreStoryPreviewData);
-      setMainGenre(genreStoryPreviewData[0].parent_name);
-      if (genreType === 'parent_genre') {
+      const genreStoryData: GenreStories[] =
+        await fetchGenreStoryById(parseInt(genreId as string, 10));
+
+      setSubgenres(getSubgenres(genreStoryData))
+      setGenreStoryData(genreStoryData);
+      setMainGenre(genreStoryData[0].parent_name);
+
+      if (genreType == GenreType.PARENT) {
         console.log(
           'running if check on genreType, populating usestate with all data',
         );
-        const allStoryIds = await getAllStoryIds(genreStoryPreviewData);
+        const allStoryIds = getAllStoryIds(genreStoryData);
         setGenreStoryIds(allStoryIds);
         setSelectedSubgenre('All'); //if user clicks see all, selected should be 'ALL'
-      } else if (genreType === 'subgenre') {
-        const filteredStoryIds = await findStoryIdsByName(
+      } else if (genreType == GenreType.SUBGENRE) {
+        const filteredStoryIds = filterStoriesBySubgenreName(
           genreName || '',
-          genreStoryPreviewData,
+          genreStoryData,
         );
         setGenreStoryIds(filteredStoryIds);
         setSelectedSubgenre(genreName || ''); //if user clicks a specific genre, selected should be genreName
@@ -144,32 +131,28 @@ function GenreScreen() {
   useEffect(() => {
     const showAllStoryPreviews = async () => {
       setLoading(true);
-      if (genreStoryIds.length > 0) {
-        const previews: StoryPreview[] =
-          await fetchStoryPreviewByIds(genreStoryIds as any);
 
-        const tones: string[] = previews
-          .reduce((acc: string[], current: StoryPreview) => {
-            return acc.concat(current.tone);
-          }, [] as string[])
-          .filter(tone => tone !== null);
-        const topics: string[] = previews
-          .reduce((acc: string[], current: StoryPreview) => {
-            return acc.concat(current.topic);
-          }, [] as string[])
-          .filter(topic => topic !== null)
+      const previews: StoryPreview[] =
+        await fetchStoryPreviewByIds(genreStoryIds as any);
+
+      const tones: string[] = previews
+        .reduce((acc: string[], current: StoryPreview) => {
+          return acc.concat(current.tone);
+        }, [] as string[])
+        .filter(tone => tone !== null);
+      const topics: string[] = previews
+        .reduce((acc: string[], current: StoryPreview) => {
+          return acc.concat(current.topic);
+        }, [] as string[])
+        .filter(topic => topic !== null)
 
 
-        console.log('testing storyPreview outputs:', previews);
-        setAllStoryPreviews(previews.flat());
-        setFilteredStoryPreviews(previews.flat());
-        setGenreTopics([...new Set(topics)]);
-        setGenreTones([... new Set(tones)]);
-        console.log('testing tone usestate');
-        setLoading(false);
-      } else {
-        setLoading(false); //if there are no story IDs, we cannot load anything, there are no results
-      }
+      setAllStoryPreviews(previews.flat());
+      setFilteredStoryPreviews(previews.flat());
+      setGenreTopics([...new Set(topics)]);
+      setGenreTones([... new Set(tones)]);
+
+      setLoading(false);
     };
 
     if (genreStoryIds.length > 0) {
@@ -330,6 +313,11 @@ function GenreScreen() {
       </View>
     </SafeAreaView>
   );
+}
+
+export enum GenreType {
+  PARENT = "parent",
+  SUBGENRE = "subgenre"
 }
 
 export default GenreScreen;

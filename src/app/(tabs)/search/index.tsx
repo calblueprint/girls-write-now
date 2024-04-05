@@ -23,6 +23,7 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
+import { GenreType } from '../genre';
 
 const getRecentSearch = async () => {
   try {
@@ -302,7 +303,7 @@ function SearchScreen() {
                         pathname: '/genre',
                         params: {
                           genreId: genre.parent_id.toString(),
-                          genreType: 'parent_genre',
+                          genreType: GenreType.PARENT,
                           genreName: genre.parent_name,
                         },
                       });
@@ -328,7 +329,7 @@ function SearchScreen() {
                           pathname: '/genre',
                           params: {
                             genreId: genre.parent_id.toString(),
-                            genreType: 'subgenre',
+                            genreType: GenreType.SUBGENRE,
                             genreName: subgenre.name,
                           },
                         });

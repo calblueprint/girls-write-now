@@ -33,8 +33,12 @@ function GenreScreen() {
   const [isLoading, setLoading] = useState(true);
   const [toneFilterOptions, setToneFilterOptions] = useState<string[]>([]);
   const [topicFilterOptions, setTopicFilterOptions] = useState<string[]>([]);
-  const [selectedTonesForFiltering, setSelectedTonesForFiltering] = useState<string[]>([]);
-  const [selectedTopicsForFiltering, setSelectedTopicsForFiltering] = useState<string[]>([]);
+  const [selectedTonesForFiltering, setSelectedTonesForFiltering] = useState<
+    string[]
+  >([]);
+  const [selectedTopicsForFiltering, setSelectedTopicsForFiltering] = useState<
+    string[]
+  >([]);
   const { genreId, genreType, genreName } = useLocalSearchParams<{
     genreId: string;
     genreType: GenreType;
@@ -46,19 +50,20 @@ function GenreScreen() {
   // console.log('testing genreName', genreName);
   useEffect(() => {
     console.log(`Rendering: ${genreId}, ${genreType}, ${genreName}`);
-
-  }, [])
+  }, []);
 
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
       if (preview == null || preview.topic == null) return false;
       if (selectedTopicsForFiltering.length == 0) return true;
-      else return selectedTopicsForFiltering.every(t => preview.topic.includes(t));
+      else
+        return selectedTopicsForFiltering.every(t => preview.topic.includes(t));
     };
     const checkTone = (preview: StoryPreview): boolean => {
       if (preview == null || preview.tone == null) return false;
       if (selectedTonesForFiltering.length == 0) return true;
-      else return selectedTonesForFiltering.every(t => preview.tone.includes(t));
+      else
+        return selectedTonesForFiltering.every(t => preview.tone.includes(t));
     };
 
     const filteredPreviews = allStoryPreviews.filter(

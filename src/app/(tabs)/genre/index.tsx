@@ -48,17 +48,15 @@ function GenreScreen() {
   // console.log('passing in genreId params:', genreId);
   // console.log('testing passing in genreType', genreType);
   // console.log('testing genreName', genreName);
-  //
+
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
-      if (preview == null) return false;
-      if (preview.topic == null) return false;
+      if (preview == null || preview.topic == null) return false;
       if (currentTopics.length == 0) return true;
       else return currentTopics.every(t => preview.topic.includes(t));
     }
     const checkTone = (preview: StoryPreview): boolean => {
-      if (preview == null) return false;
-      if (preview.tone == null) return false;
+      if (preview == null || preview.tone == null) return false;
       if (currentTones.length == 0) return true;
       else return currentTones.every(t => preview.tone.includes(t));
     }
@@ -67,28 +65,16 @@ function GenreScreen() {
     setFilteredStoryPreviews(filteredPreviews);
   }, [currentTopics, currentTones])
 
-  async function getAllStoryIds(
-    genreStories: GenreStories[],
-  ): Promise<string[]> {
-    const allStoryIds: string[] = [];
-    for (const subgenre of genreStories) {
-      if (subgenre.genre_story_previews[0] != null) {
-        subgenre.genre_story_previews.forEach(id => {
-          allStoryIds.push(id);
-        });
-      }
-    }
-    return allStoryIds;
+  function getAllStoryIds(genreStories: GenreStories[]): string[] {
+    return genreStories.map(story => story.genre_story_previews).flat().filter(story => story !== null);
   }
 
-  async function findStoryIdsByName(
-    subgenre_name: string,
-    genreStories: GenreStories[],
-  ): Promise<string[]> {
+  function findStoryIdsByName(subgenreName: string, genreStories: GenreStories[]): string[] {
     const filteredStoryIds: string[] = [];
     const matchingGenreStory = genreStories.find(
-      subgenre => subgenre.subgenre_name === subgenre_name,
+      subgenre => subgenre.subgenre_name === subgenreName,
     );
+
     if (matchingGenreStory?.genre_story_previews[0] != null) {
       matchingGenreStory.genre_story_previews.forEach(id => {
         filteredStoryIds.push(id);
@@ -103,12 +89,8 @@ function GenreScreen() {
   }
 
   async function getSubgenres(genreStories: GenreStories[]): Promise<string[]> {
-    const subGenres: string[] = [];
-    subGenres.push('All');
-    for (const subgenre of genreStories) {
-      subGenres.push(subgenre.subgenre_name);
-    }
-    return subGenres;
+    const subgenres = genreStories.map(subgenre => subgenre.subgenre_name)
+    return ['All', ...subgenres];
   }
 
   async function filterBySubgenre(filterName: string) {

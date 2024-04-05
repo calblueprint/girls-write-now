@@ -190,18 +190,21 @@ function SearchScreen() {
             setShowRecents(true);
             setShowGenreCarousals(false);
           }}
-          searchIcon={false}
-          clearIcon
+          searchIcon
+          clearIcon={false}
+          cancelButtonProps={{
+            buttonTextStyle: [globalStyles.body1Bold, styles.cancelButton],
+          }}
           containerStyle={[
             styles.searchContainer,
             showGenreCarousals && { marginRight: 24 },
           ]}
           inputContainerStyle={styles.inputContainer}
-          inputStyle={{ color: 'black' }}
+          inputStyle={globalStyles.body1Bold}
           leftIconContainerStyle={{}}
           rightIconContainerStyle={{}}
-          placeholder="Search"
-          placeholderTextColor="black"
+          placeholder="What do you want to read?"
+          placeholderTextColor="grey"
           onChangeText={text => searchFunction(text)}
           value={search}
           onSubmitEditing={searchString => {
@@ -222,19 +225,44 @@ function SearchScreen() {
         )}
 
         {showRecents &&
-          (search ? (
+          (search && searchResults.length > 0 ? (
             <View style={styles.default}>
-              <Text style={[styles.searchText, styles.numDisplay]}>
-                {searchResults.length}{' '}
-                {searchResults.length === 1 ? 'Story' : 'Stories'}
+              <Text style={[globalStyles.subHeading1Bold, styles.numDisplay]}>
+                Showing results 1-{searchResults.length}
               </Text>
             </View>
-          ) : (
+          ) : search && searchResults.length === 0 ? (
+            <View style={styles.emptySearch}>
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  There are no stories
+                </Text>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  for "{search}".
+                </Text>
+              </View>
+              <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
+                Try searching by title or author, or
+              </Text>
+              <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
+                check if your spelling is correct.
+              </Text>
+            </View>
+          ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
             <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
               <View style={styles.recentSpacing}>
-                <Text style={styles.searchText}>Recent Searches</Text>
+                <Text style={globalStyles.subHeading1Bold}>
+                  Recent Searches
+                </Text>
                 <Pressable onPress={clearRecentSearches}>
-                  <Text style={styles.clearAll}>Clear All</Text>
+                  <Text
+                    style={[
+                      globalStyles.subHeading2Bold,
+                      { color: colors.gwnOrange },
+                    ]}
+                  >
+                    Clear All
+                  </Text>
                 </Pressable>
               </View>
               <View style={styles.contentContainerRecents}>
@@ -252,9 +280,18 @@ function SearchScreen() {
               </View>
 
               <View style={styles.recentSpacing}>
-                <Text style={styles.searchText}>Recently Viewed</Text>
+                <Text style={globalStyles.subHeading1Bold}>
+                  Recently Viewed
+                </Text>
                 <Pressable onPress={clearRecentlyViewed}>
-                  <Text style={styles.clearAll}>Clear All</Text>
+                  <Text
+                    style={[
+                      globalStyles.subHeading2Bold,
+                      { color: colors.gwnOrange },
+                    ]}
+                  >
+                    Clear All
+                  </Text>
                 </Pressable>
               </View>
               <View style={styles.contentContainerRecents}>
@@ -278,6 +315,17 @@ function SearchScreen() {
                 ))}
               </View>
             </ScrollView>
+          ) : (
+            <View style={styles.emptySearch}>
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={globalStyles.h3}>
+                  Find stories from young creators.
+                </Text>
+              </View>
+              <Text style={globalStyles.subHeading2}>
+                Search for stories, authors, or collections.
+              </Text>
+            </View>
           ))}
 
         {showGenreCarousals ? (

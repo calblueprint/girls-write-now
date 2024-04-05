@@ -12,7 +12,7 @@ export default StyleSheet.create({
     paddingHorizontal: 24,
   },
   button: {
-    marginBottom: 100,
+    marginBottom: 32,
   },
   main: {
     paddingLeft: 12,

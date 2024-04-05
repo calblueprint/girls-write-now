@@ -111,35 +111,24 @@ function GenreScreen() {
     return subGenres;
   }
 
-  async function filterBySubgenre(filter_name: string) {
+  async function filterBySubgenre(filterName: string) {
     setLoading(true);
-    setSelectedSubgenre(filter_name);
+    setSelectedSubgenre(filterName);
     if (!genreStoryInfo) {
       return [];
     }
-    if (filter_name === 'All') {
+    if (filterName === 'All') {
       const storyIds = await getAllStoryIds(genreStoryInfo);
       setGenreStoryIds(storyIds);
     } else {
       const filteredStoryIds = await findStoryIdsByName(
-        filter_name,
+        filterName,
         genreStoryInfo,
       );
       setGenreStoryIds(filteredStoryIds);
       setLoading(false);
       setGenreTones([]);
       setGenreTopics([]);
-    }
-  }
-
-  //will be triggered when users click checkboxes, will concat all of these clicked and added to a usestate?
-  //this concatted array will be passed into filterByToneAndTopic array which will go through, genreStoryInfo, and filter
-  //out each story based on the array that is passed into this fu
-  async function filterByToneAndTopic(filters: string[]) {
-    setLoading(true);
-    setToneTopicFilters(filters);
-    if (!genreStoryInfo) {
-      return [];
     }
   }
 
@@ -175,7 +164,7 @@ function GenreScreen() {
       setLoading(true);
       if (genreStoryIds.length > 0) {
         const previews: StoryPreview[] =
-          await fetchStoryPreviewByIds(genreStoryIds as string[]);
+          await fetchStoryPreviewByIds(genreStoryIds as any);
 
         const tones: string[] = previews
           .reduce((acc: string[], current: StoryPreview) => {

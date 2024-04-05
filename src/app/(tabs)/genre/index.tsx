@@ -295,7 +295,7 @@ function GenreScreen() {
           {renderFilterDropdown("Topic", currentTopics, genreTopics, setCurrentTopics)}
         </View>
 
-        {genreStoryIds.length === 0 ? ( // Check if there are no story IDs
+        {genreStoryIds.length === 0 && !isLoading ? ( // Check if there are no story IDs
           renderNoStoryText()
         ) : (
           <>

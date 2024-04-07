@@ -10,6 +10,15 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 24,
   },
+
+  tabBarContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 24,
+    paddingBottom: 60
+  },
   authContainer: {
     marginHorizontal: 38,
     flex: 1,

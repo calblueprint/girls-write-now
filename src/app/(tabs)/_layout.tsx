@@ -55,7 +55,6 @@ function TabNav() {
           headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => HomeIcon({ color }),
-          // tabBarLabelStyle: { borderTopWidth: 12, paddingTop: 12 },
         }}
       />
       <Tabs.Screen

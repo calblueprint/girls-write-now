@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 15,
     width: '100%',
+    // paddingBottom: 60,
   },
   noStoriesText: {
     fontSize: 20,
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   renderStories: {
+    paddingBottom: 10,
     flex: 1,
   },
   headerContainer: {},

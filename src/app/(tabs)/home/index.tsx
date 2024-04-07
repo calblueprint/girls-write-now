@@ -56,7 +56,7 @@ function HomeScreen() {
 
   return (
     <SafeAreaView
-      style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}
+      style={[globalStyles.tabBarContainer, { marginLeft: -8, marginRight: -32 }]}
     >
       {loading && (
         <View style={styles.loading}>

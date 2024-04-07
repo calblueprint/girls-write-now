@@ -46,13 +46,13 @@ function AuthorScreen() {
   }, [author]);
 
   return (
-    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
+    <SafeAreaView style={[globalStyles.tabBarContainer, { marginHorizontal: -8 }]}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          bounces={false}
+          bounces={true}
           contentContainerStyle={{ paddingHorizontal: 8 }}
         >
           <BackButton pressFunction={() => router.back()} />
@@ -127,6 +127,9 @@ function AuthorScreen() {
               }
             />
           ))}
+
+          {/* View so there's space between the tab bar and the stories */}
+          <View style={{ paddingBottom: 10 }}></View>
         </ScrollView>
       )}
     </SafeAreaView>

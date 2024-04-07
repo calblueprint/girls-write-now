@@ -10,6 +10,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingHorizontal: 24,
+    paddingBottom: 60
   },
   button: {
     marginBottom: 32,

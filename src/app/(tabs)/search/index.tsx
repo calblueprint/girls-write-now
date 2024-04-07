@@ -183,7 +183,7 @@ function SearchScreen() {
   return (
     <SafeAreaView
       style={[
-        globalStyles.container,
+        globalStyles.tabBarContainer,
         showGenreCarousals
           ? { marginLeft: -8, marginRight: -32 }
           : { marginHorizontal: -8 },

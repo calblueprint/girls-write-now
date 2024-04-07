@@ -291,7 +291,9 @@ function GenreScreen() {
   };
 
   return (
-    <SafeAreaView style={[globalStyles.tabBarContainer, { paddingHorizontal: 0 }]}>
+    <SafeAreaView
+      style={[globalStyles.tabBarContainer, { paddingHorizontal: 0 }]}
+    >
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <BackButton

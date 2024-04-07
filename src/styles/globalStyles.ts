@@ -17,7 +17,7 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     paddingHorizontal: 24,
-    paddingBottom: 60
+    paddingBottom: 60,
   },
   authContainer: {
     marginHorizontal: 38,

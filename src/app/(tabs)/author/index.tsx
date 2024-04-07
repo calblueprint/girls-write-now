@@ -47,11 +47,13 @@ function AuthorScreen() {
   }, [author]);
 
   const getTextFromHtml = (text: string) => {
-    return cheerio.load(text).text().trim()
-  }
+    return cheerio.load(text).text().trim();
+  };
 
   return (
-    <SafeAreaView style={[globalStyles.tabBarContainer, { marginHorizontal: -8 }]}>
+    <SafeAreaView
+      style={[globalStyles.tabBarContainer, { marginHorizontal: -8 }]}
+    >
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -89,7 +91,9 @@ function AuthorScreen() {
 
           {authorInfo?.bio && (
             <>
-              <Text style={globalStyles.body1}>{getTextFromHtml(authorInfo.bio)}</Text>
+              <Text style={globalStyles.body1}>
+                {getTextFromHtml(authorInfo.bio)}
+              </Text>
               <HorizontalLine />
             </>
           )}

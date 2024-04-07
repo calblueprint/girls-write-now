@@ -45,13 +45,6 @@ function GenreScreen() {
     genreName: string;
   }>();
 
-  // console.log('passing in genreId params:', genreId);
-  // console.log('testing passing in genreType', genreType);
-  // console.log('testing genreName', genreName);
-  useEffect(() => {
-    console.log(`Rendering: ${genreId}, ${genreType}, ${genreName}`);
-  }, []);
-
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
       if (preview == null || preview.topic == null) return false;
@@ -131,19 +124,16 @@ function GenreScreen() {
       setSubgenres(getSubgenres(genreStoryData));
 
       if (genreType == GenreType.PARENT) {
-        console.log(
-          'running if check on genreType, populating usestate with all data',
-        );
-        const allStoryIds = getAllStoryIds(genreStoryData);
-        setGenreStoryIds(allStoryIds);
         setSelectedSubgenre('All'); //if user clicks see all, selected should be 'ALL'
+        setGenreStoryIds(getAllStoryIds(genreStoryData));
       } else if (genreType == GenreType.SUBGENRE) {
+        setSelectedSubgenre(genreName || ''); //if user clicks a specific genre, selected should be genreName
+
         const filteredStoryIds = filterStoriesBySubgenreName(
           genreName || '',
           genreStoryData,
         );
         setGenreStoryIds(filteredStoryIds);
-        setSelectedSubgenre(genreName || ''); //if user clicks a specific genre, selected should be genreName
 
         setLoading(false);
       }
@@ -194,7 +184,7 @@ function GenreScreen() {
         {subgenres.map((subgenre, index) => (
           <TouchableOpacity
             onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
-            style={{ marginRight: 40 }}
+            style={{ paddingHorizontal: 20, paddingTop: 5 }}
             key={index}
           >
             <Text
@@ -210,19 +200,17 @@ function GenreScreen() {
   };
 
   const renderGenreHeading = () => {
-    console.log(`Selected: ${selectedSubgenre}, mainGenre: ${mainGenre}`);
-
     return (
       <View>
         <Text style={[globalStyles.h1, { marginTop: 15 }]}>
           {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
         </Text>
-        <Text style={[globalStyles.subHeading1]}>
-          {' '}
-          Subheading about{' '}
-          {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
-          ...Include Later?
-        </Text>
+        {/* <Text style={[globalStyles.subHeading1]}> */}
+        {/* {' '} */}
+        {/* Subheading about{' '} */}
+        {/* {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre} */}
+        {/* ...Include Later? */}
+        {/* </Text> */}
       </View>
     );
   };
@@ -315,7 +303,7 @@ function GenreScreen() {
           />
 
           {useMemo(renderGenreHeading, [selectedSubgenre, mainGenre])}
-          {useMemo(renderGenreScrollSelector, [subgenres])}
+          {useMemo(renderGenreScrollSelector, [subgenres, selectedSubgenre])}
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>

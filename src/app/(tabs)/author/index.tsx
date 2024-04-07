@@ -14,6 +14,7 @@ import {
 } from '../../../queries/authors';
 import { Author, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
+import * as cheerio from 'cheerio';
 
 function AuthorScreen() {
   const [authorInfo, setAuthorInfo] = useState<Author>();
@@ -45,6 +46,10 @@ function AuthorScreen() {
     })();
   }, [author]);
 
+  const getTextFromHtml = (text: string) => {
+    return cheerio.load(text).text().trim()
+  }
+
   return (
     <SafeAreaView style={[globalStyles.tabBarContainer, { marginHorizontal: -8 }]}>
       {isLoading ? (
@@ -69,7 +74,7 @@ function AuthorScreen() {
                   numberOfLines={2}
                   style={globalStyles.h1}
                 >
-                  {authorInfo.name}
+                  {getTextFromHtml(authorInfo.name)}
                 </Text>
                 {authorInfo?.pronouns && (
                   <Text style={[globalStyles.subHeading2, styles.pronouns]}>
@@ -84,7 +89,7 @@ function AuthorScreen() {
 
           {authorInfo?.bio && (
             <>
-              <Text style={globalStyles.body1}>{decode(authorInfo.bio)}</Text>
+              <Text style={globalStyles.body1}>{getTextFromHtml(authorInfo.bio)}</Text>
               <HorizontalLine />
             </>
           )}
@@ -97,7 +102,7 @@ function AuthorScreen() {
                 Artist's Statement
               </Text>
               <Text style={globalStyles.body1}>
-                {decode(authorInfo.artist_statement)}
+                {getTextFromHtml(authorInfo.artist_statement)}
               </Text>
               <HorizontalLine />
             </>

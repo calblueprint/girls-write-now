@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     color: '#EB563B',
     textDecorationLine: 'underline',
   },
-
   container: {
     paddingHorizontal: 24,
     width: '100%',
@@ -19,10 +18,8 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   scrollViewContainer: {
-    marginTop: 30,
-    marginBottom: 15,
+    marginVertical: 15,
     width: '100%',
-    // paddingBottom: 60,
   },
   noStoriesText: {
     fontSize: 20,

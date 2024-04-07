@@ -65,7 +65,7 @@ function StoryScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[globalStyles.tabBarContainer, styles.container]}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (

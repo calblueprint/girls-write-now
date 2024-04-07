@@ -1,6 +1,12 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -54,15 +60,16 @@ function HomeScreen() {
     });
   }, [user]);
 
+  if (loading) {
+    return <ActivityIndicator />;
+  }
   return (
     <SafeAreaView
-      style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}
+      style={[
+        globalStyles.tabBarContainer,
+        { marginLeft: -8, marginRight: -32 },
+      ]}
     >
-      {loading && (
-        <View style={styles.loading}>
-          <Text>Loading</Text>
-        </View>
-      )}
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}

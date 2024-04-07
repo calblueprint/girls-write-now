@@ -9,6 +9,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,13 +23,14 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
+import { GenreType } from '../genre';
 
 const getRecentSearch = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -37,7 +39,7 @@ const setRecentSearch = async (searchResult: RecentSearch[]) => {
     const jsonValue = JSON.stringify(searchResult);
     await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -46,7 +48,7 @@ const getRecentStory = async () => {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_STORIES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -55,7 +57,7 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
     const jsonValue = JSON.stringify(recentStories);
     await AsyncStorage.setItem('GWN_RECENT_STORIES_ARRAY', jsonValue);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -69,20 +71,24 @@ function SearchScreen() {
   const [showGenreCarousals, setShowGenreCarousals] = useState(true);
   const [showRecents, setShowRecents] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
+  const genreColors = [colors.citrus, colors.lime, colors.lilac];
 
   useEffect(() => {
     (async () => {
-      const data: StoryPreview[] = await fetchAllStoryPreviews();
-      setAllStories(data);
-      const genreData: Genre[] = await fetchGenres();
-      setAllGenres(genreData);
-      setRecentSearches(await getRecentSearch());
-      setRecentlyViewed(await getRecentStory());
+      fetchAllStoryPreviews().then((stories: StoryPreview[]) =>
+        setAllStories(stories),
+      );
+      fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
+      getRecentSearch().then((searches: RecentSearch[]) =>
+        setRecentSearches(searches),
+      );
+      getRecentStory().then((viewed: StoryPreview[]) =>
+        setRecentlyViewed(viewed),
+      );
     })();
   }, []);
 
   const getColor = (index: number) => {
-    const genreColors = [colors.citrus, colors.lime, colors.lilac];
     return genreColors[index % genreColors.length];
   };
 
@@ -92,12 +98,14 @@ function SearchScreen() {
       setSearchResults([]);
       return;
     }
+
     const updatedData = allStories.filter((item: StoryPreview) => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
       return title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1;
     });
+
     setSearch(text);
     setSearchResults(updatedData);
     setShowGenreCarousals(false);
@@ -175,7 +183,7 @@ function SearchScreen() {
   return (
     <SafeAreaView
       style={[
-        globalStyles.container,
+        globalStyles.tabBarContainer,
         showGenreCarousals
           ? { marginLeft: -8, marginRight: -32 }
           : { marginHorizontal: -8 },
@@ -334,10 +342,23 @@ function SearchScreen() {
             contentContainerStyle={{ paddingHorizontal: 8 }}
           >
             {allGenres.map((genre, index) => (
-              <Fragment key={index}>
+              <View key={index}>
                 <View style={styles.genreText}>
                   <Text style={styles.parentName}>{genre.parent_name}</Text>
-                  <Text style={styles.seeAll}>See All</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.push({
+                        pathname: '/genre',
+                        params: {
+                          genreId: genre.parent_id.toString(),
+                          genreType: GenreType.PARENT,
+                          genreName: genre.parent_name,
+                        },
+                      });
+                    }}
+                  >
+                    <Text style={styles.seeAll}>See All</Text>
+                  </TouchableOpacity>
                 </View>
                 <ScrollView
                   horizontal
@@ -349,12 +370,22 @@ function SearchScreen() {
                     <GenreCard
                       key={subgenre.id}
                       subgenres={subgenre.name}
+                      subgenre_id={subgenre.id}
                       cardColor={getColor(index)}
-                      pressFunction={() => null}
+                      pressFunction={() => {
+                        router.push({
+                          pathname: '/genre',
+                          params: {
+                            genreId: genre.parent_id.toString(),
+                            genreType: GenreType.SUBGENRE,
+                            genreName: subgenre.name,
+                          },
+                        });
+                      }}
                     />
                   ))}
                 </ScrollView>
-              </Fragment>
+              </View>
             ))}
           </ScrollView>
         ) : (

@@ -10,6 +10,9 @@ import {
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
 
+const placeholderImage =
+  'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
+
 type PreviewCardProps = {
   title: string;
   image: string;
@@ -38,7 +41,10 @@ function PreviewCard({
           </Text>
         </View>
         <View style={styles.body}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image
+            style={styles.image}
+            source={{ uri: image == '' ? placeholderImage : image }}
+          />
           <View style={styles.cardTextContainer}>
             <View style={styles.authorContainer}>
               <Image style={styles.authorImage} source={{ uri: authorImage }} />

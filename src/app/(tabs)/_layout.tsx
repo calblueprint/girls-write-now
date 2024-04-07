@@ -55,7 +55,6 @@ function TabNav() {
           headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => HomeIcon({ color }),
-          // tabBarLabelStyle: { borderTopWidth: 12, paddingTop: 12 },
         }}
       />
       <Tabs.Screen
@@ -90,6 +89,13 @@ function TabNav() {
       />
       <Tabs.Screen
         name="settings"
+        options={{
+          headerShown: false,
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="genre"
         options={{
           headerShown: false,
           href: null,

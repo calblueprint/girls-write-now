@@ -132,6 +132,7 @@ function HomeScreen() {
                   title={story.title}
                   author={story.author_name}
                   authorImage={story.author_image}
+                  storyId={story.id}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',
@@ -161,6 +162,7 @@ function HomeScreen() {
                   title={story.title}
                   author={story.author_name}
                   authorImage={story.author_image}
+                  storyId={story.id}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',

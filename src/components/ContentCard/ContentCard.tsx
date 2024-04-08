@@ -8,13 +8,16 @@ import {
 } from 'react-native';
 
 import styles from './styles';
+import { addUserStoryToReadingList } from '../../queries/savedStories';
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
 
 type ContentCardProps = {
   title: string;
   author: string;
   image: string;
   authorImage: string;
+  storyId: number;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -23,10 +26,13 @@ function ContentCard({
   author,
   image,
   authorImage,
+  storyId,
   pressFunction,
 }: ContentCardProps) {
+  const { user } = useSession();
+
   const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
+    addUserStoryToReadingList(user?.id, storyId);
   };
 
   return (
@@ -60,7 +66,7 @@ function ContentCard({
           <View style={styles.buttons}>
             <View>
               <TouchableOpacity
-                onPress={() => null}
+                onPress={() => saveStory()}
                 style={{ flexDirection: 'row' }}
               >
                 <Image

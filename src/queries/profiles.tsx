@@ -26,17 +26,19 @@ export async function isEmailTaken(newEmail: string) {
   return emailIsTaken as boolean;
 }
 
-export async function isPasswordSameAsBefore(new_plain_password: string, user_id: string | undefined): Promise<boolean> {
-  let { data, error } = await supabase
-    .rpc('check_same_as_old_pass', {
-      new_plain_password,
-      user_id
-    })
+export async function isPasswordSameAsBefore(
+  new_plain_password: string,
+  user_id: string | undefined,
+): Promise<boolean> {
+  let { data, error } = await supabase.rpc('check_same_as_old_pass', {
+    new_plain_password,
+    user_id,
+  });
 
   if (error) {
     console.error(error);
     return false;
   } else {
-    return data
+    return data;
   }
 }

@@ -35,9 +35,11 @@ function ResetPasswordScreen() {
     }
   }, [hasUppercase, hasLowercase, hasLength, hasNumber, isDifferent]);
 
-  const checkPassword = async (text: string) => {
+  const checkPassword = (text: string) => {
     if (text !== '') {
-      isPasswordSameAsBefore(text, session?.user?.id).then(isSame => setIsDifferent(!isSame))
+      isPasswordSameAsBefore(text, session?.user?.id).then(isSame =>
+        setIsDifferent(!isSame),
+      );
       setHasUppercase(text !== text.toLowerCase());
       setHasLowercase(text !== text.toUpperCase());
       setHasNumber(/[0-9]/.test(text));
@@ -72,7 +74,7 @@ function ResetPasswordScreen() {
     const { error } = await updateUser({ password });
 
     if (error) {
-      console.error(error)
+      console.error(error);
       Alert.alert('Updating password failed');
     } else {
       await signOut();

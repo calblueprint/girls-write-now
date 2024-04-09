@@ -1,20 +1,19 @@
-import { Link, router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
-import supabase from '../../../utils/supabase';
+import { isPasswordSameAsBefore } from '../../../queries/profiles';
 
 function ResetPasswordScreen() {
-  const { updateUser, signOut } = useSession();
+  const { session, updateUser, signOut } = useSession();
   const [password, setPassword] = useState('');
   const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -38,11 +37,19 @@ function ResetPasswordScreen() {
 
   const checkPassword = (text: string) => {
     if (text !== '') {
+      isPasswordSameAsBefore(text, session?.user?.id).then(isSame =>
+        setIsDifferent(!isSame),
+      );
       setHasUppercase(text !== text.toLowerCase());
       setHasLowercase(text !== text.toUpperCase());
       setHasNumber(/[0-9]/.test(text));
       setHasLength(text.length >= 8);
       //need to check that it is different from old password
+    } else {
+      setHasUppercase(false);
+      setHasLowercase(false);
+      setHasNumber(false);
+      setHasLength(false);
     }
   };
 
@@ -67,6 +74,7 @@ function ResetPasswordScreen() {
     const { error } = await updateUser({ password });
 
     if (error) {
+      console.error(error);
       Alert.alert('Updating password failed');
     } else {
       await signOut();
@@ -105,38 +113,31 @@ function ResetPasswordScreen() {
           </UserStringInput>
         </View>
 
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasUppercase}
-            message="At least 1 uppercase letter"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasLowercase}
-            message="At least 1 lowercase letter"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasNumber}
-            message="At least 1 number"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasLength}
-            message="At least 8 characters"
-          />
-        )}
+        <PasswordComplexityText
+          condition={hasUppercase}
+          message="At least 1 uppercase letter"
+        />
+
+        <PasswordComplexityText
+          condition={hasLowercase}
+          message="At least 1 lowercase letter"
+        />
+
+        <PasswordComplexityText
+          condition={hasNumber}
+          message="At least 1 number"
+        />
+
+        <PasswordComplexityText
+          condition={hasLength}
+          message="At least 8 characters"
+        />
 
         {/* functionality for this has not been implemented */}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={isDifferent}
-            message="Must be different than your old password"
-          />
-        )}
+        <PasswordComplexityText
+          condition={isDifferent}
+          message="Must be different than your old password"
+        />
 
         {passwordIsValid && (
           <View>

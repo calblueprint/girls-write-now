@@ -14,6 +14,7 @@ const colors = {
   fadedBlack: '#2D2D2D',
   white: '#FBFBFB',
   grey: '#A7A5A5',
+  grey2: '#D9D9D9',
   darkGrey: '#797979',
 
   textPrimary: '#000000', // black

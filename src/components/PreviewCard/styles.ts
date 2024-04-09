@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
     elevation: 4,
   },
   image: {
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   moreTags: {
+    paddingVertical: 10,
     paddingRight: 12,
     alignItems: 'center',
     justifyContent: 'center',

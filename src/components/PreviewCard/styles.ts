@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   moreTags: {
+    paddingVertical: 10,
     paddingRight: 12,
     alignItems: 'center',
     justifyContent: 'center',

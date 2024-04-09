@@ -5,10 +5,7 @@ name: Lint
 # Start the job on push #
 #############################
 on:
-  push:
-    branches-ignore: [main]
-  pull_request:
-    branches: [main]
+  push:  
 
 ###############
 # Set the Job #

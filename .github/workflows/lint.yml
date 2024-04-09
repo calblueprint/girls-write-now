@@ -5,7 +5,7 @@ name: Lint
 # Start the job on push #
 #############################
 on:
-  push:  
+  push:
 
 ###############
 # Set the Job #

@@ -59,23 +59,25 @@ function PreviewCard({
               numberOfLines={3}
               style={[globalStyles.subtext, styles.storyDescription]}
             >
-              "{cheerio.load(excerpt.html).text()}"
+              "{cheerio.load(excerpt.html ?? "").text()}"
             </Text>
           </View>
         </View>
         <View style={styles.tagsContainer}>
           <View style={styles.tagsRow}>
-            <View style={styles.tag}>
-              <Text key={tags[0]} style={globalStyles.button1}>
-                {tags[0]}
-              </Text>
-            </View>
+            {(tags?.length ?? 0) > 0 &&
+              <View style={styles.tag}>
+                <Text key={tags[0]} style={globalStyles.button1}>
+                  {tags[0]}
+                </Text>
+              </View>
+            }
           </View>
           <View style={styles.moreTags}>
             <Pressable>
               <Text style={[globalStyles.subtext, styles.moreTagsText]}>
                 {' '}
-                + {tags.length - 1} more tags
+                + {(tags?.length ?? 1) - 1} more tags
               </Text>
             </Pressable>
           </View>

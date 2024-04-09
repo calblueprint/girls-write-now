@@ -35,7 +35,7 @@ function ResetPasswordScreen() {
     }
   }, [hasUppercase, hasLowercase, hasLength, hasNumber, isDifferent]);
 
-  const checkPassword = async (text: string) => {
+  const checkPassword = (text: string) => {
     if (text !== '') {
       isPasswordSameAsBefore(text, session?.user?.id).then(isSame => setIsDifferent(!isSame))
       setHasUppercase(text !== text.toLowerCase());

@@ -5,7 +5,7 @@ import globalStyles from '../../../styles/globalStyles';
 
 function LibraryScreen() {
   return (
-    <SafeAreaView style={globalStyles.container}>
+    <SafeAreaView style={globalStyles.tabBarContainer}>
       <Text style={globalStyles.h1}>Library</Text>
     </SafeAreaView>
   );

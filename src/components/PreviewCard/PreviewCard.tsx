@@ -1,3 +1,4 @@
+import * as cheerio from 'cheerio';
 import {
   GestureResponderEvent,
   Image,
@@ -5,10 +6,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import * as cheerio from 'cheerio';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
+
+const placeholderImage =
+  'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
 
 type PreviewCardProps = {
   title: string;
@@ -38,7 +41,10 @@ function PreviewCard({
           </Text>
         </View>
         <View style={styles.body}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image
+            style={styles.image}
+            source={{ uri: image == '' ? placeholderImage : image }}
+          />
           <View style={styles.cardTextContainer}>
             <View style={styles.authorContainer}>
               <Image style={styles.authorImage} source={{ uri: authorImage }} />
@@ -53,23 +59,25 @@ function PreviewCard({
               numberOfLines={3}
               style={[globalStyles.subtext, styles.storyDescription]}
             >
-              "{cheerio.load(excerpt.html).text()}"
+              "{cheerio.load(excerpt.html ?? '').text()}"
             </Text>
           </View>
         </View>
         <View style={styles.tagsContainer}>
           <View style={styles.tagsRow}>
-            <View style={styles.tag}>
-              <Text key={tags[0]} style={globalStyles.button1}>
-                {tags[0]}
-              </Text>
-            </View>
+            {(tags?.length ?? 0) > 0 && (
+              <View style={styles.tag}>
+                <Text key={tags[0]} style={globalStyles.button1}>
+                  {tags[0]}
+                </Text>
+              </View>
+            )}
           </View>
           <View style={styles.moreTags}>
             <Pressable>
               <Text style={[globalStyles.subtext, styles.moreTagsText]}>
                 {' '}
-                + {tags.length - 1} more tags
+                + {(tags?.length ?? 1) - 1} more tags
               </Text>
             </Pressable>
           </View>

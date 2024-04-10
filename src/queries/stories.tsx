@@ -25,7 +25,6 @@ export async function fetchStory(storyId: number): Promise<Story[]> {
       `An error occured when trying to fetch story ${storyId}: ${error.code}`,
     );
   } else {
-    console.log(data);
     return data;
   }
 }
@@ -78,6 +77,38 @@ export async function fetchNewStories(): Promise<StoryCard[]> {
     console.log(error);
     throw new Error(
       `An error occured when trying to fetch new stories: ${error}`,
+    );
+  } else {
+    return data;
+  }
+}
+
+export async function fetchStoryPreviewById(
+  storyId: number,
+): Promise<StoryPreview[]> {
+  const { data, error } = await supabase.rpc('curr_story_preview_by_id', {
+    input_story_id: storyId,
+  });
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch story preview by ID: ${error}`,
+    );
+  } else {
+    return data;
+  }
+}
+
+export async function fetchStoryPreviewByIds(
+  storyIds: number[],
+): Promise<StoryPreview[]> {
+  const { data, error } = await supabase.rpc('curr_story_preview_by_ids', {
+    input_ids: storyIds,
+  });
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch story preview by IDs: ${error}`,
     );
   } else {
     return data;

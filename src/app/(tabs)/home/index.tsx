@@ -1,13 +1,18 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,
@@ -44,6 +49,7 @@ function HomeScreen() {
         fetchRecommendedStories().catch(() => []),
         fetchNewStories().catch(() => []),
       ]);
+
       setUsername(usernameResponse);
       setFeaturedStories(featuredStoryResponse);
       setFeaturedStoriesDescription(featuredStoryDescriptionResponse);
@@ -54,23 +60,23 @@ function HomeScreen() {
     });
   }, [user]);
 
+  if (loading) {
+    return <ActivityIndicator />;
+  }
   return (
     <SafeAreaView
-      style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}
+      style={[
+        globalStyles.tabBarContainer,
+        { marginLeft: -8, marginRight: -32 },
+      ]}
     >
-      {loading && (
-        <View style={styles.loading}>
-          <Text>Loading</Text>
-        </View>
-      )}
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        bounces={false}
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         <View style={styles.headerContainer}>
-          <Text style={globalStyles.h2}>
+          <Text style={globalStyles.h1}>
             {username ? `Welcome, ${username}` : 'Welcome!'}
           </Text>
           <Pressable onPress={() => router.push('/settings')}>
@@ -79,6 +85,7 @@ function HomeScreen() {
             </View>
           </Pressable>
         </View>
+
         {featuredStories.length > 0 && (
           <View>
             <Text style={globalStyles.h3}>Featured Stories</Text>
@@ -88,7 +95,7 @@ function HomeScreen() {
             <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (
                 <PreviewCard
-                  key={story.title}
+                  key={story.id}
                   title={story.title}
                   image={story.featured_media}
                   author={story.author_name}
@@ -117,13 +124,14 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
-              style={styles.scrollView}
+              style={styles.scrollView1}
             >
               {recommendedStories.map(story => (
                 <ContentCard
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
+                  authorImage={story.author_image}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',
@@ -145,13 +153,14 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
-              style={styles.scrollView}
+              style={styles.scrollView2}
             >
               {newStories.map(story => (
                 <ContentCard
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
+                  authorImage={story.author_image}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',

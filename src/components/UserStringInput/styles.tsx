@@ -14,7 +14,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'black',
-    fontFamily: 'Manrope-Regular',
   },
   inputField: {
     flex: 1,

@@ -13,7 +13,9 @@ export default StyleSheet.create({
     textDecorationLine: 'underline',
   },
   redirectText: {
-    textAlign: 'center',
+    gap: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 16,
     marginBottom: 64,
   },

@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   reactionNumber: {
-    marginLeft: 14,
+    marginLeft: 16,
     marginTop: 16,
   },
   storyDescription: {

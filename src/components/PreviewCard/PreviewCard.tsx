@@ -4,8 +4,10 @@ import {
   Image,
   Pressable,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import Emoji from 'react-native-emoji';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
@@ -32,6 +34,10 @@ function PreviewCard({
   tags,
   pressFunction,
 }: PreviewCardProps) {
+  const saveStory = () => {
+    console.log("testing '+' icon does something for story " + title);
+  };
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -39,11 +45,17 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
+          <TouchableOpacity onPress={() => saveStory()}>
+            <Image
+              style={{ width: 30, height: 30 }}
+              source={require('./savedStoriesIcon.png')}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.body}>
           <Image
             style={styles.image}
-            source={{ uri: image == '' ? placeholderImage : image }}
+            source={{ uri: image === '' ? placeholderImage : image }}
           />
           <View style={styles.cardTextContainer}>
             <View style={styles.authorContainer}>
@@ -64,6 +76,23 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
+          <View style={{ flexDirection: 'row', gap: -7 }}>
+            <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
+              <Emoji name="heart" />
+            </View>
+            <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
+              <Emoji name="clap" />
+            </View>
+            <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
+              <Emoji name="muscle" />
+            </View>
+            {/* heart, clap, muscle, cry, ??? */}
+            <View style={styles.reactionNumber}>
+              <Text style={[globalStyles.subtext, styles.reactionText]}>
+                14{/*change number to work*/}
+              </Text>
+            </View>
+          </View>
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>
@@ -72,12 +101,10 @@ function PreviewCard({
                 </Text>
               </View>
             )}
-          </View>
-          <View style={styles.moreTags}>
-            <Pressable>
+            <Pressable style={styles.moreTags}>
               <Text style={[globalStyles.subtext, styles.moreTagsText]}>
                 {' '}
-                + {(tags?.length ?? 1) - 1} more tags
+                + {(tags?.length ?? 1) - 1}
               </Text>
             </Pressable>
           </View>

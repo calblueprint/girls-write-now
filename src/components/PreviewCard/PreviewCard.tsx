@@ -76,27 +76,22 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
-          <View>
-            <TouchableOpacity
-              onPress={() => null}
-              style={{ flexDirection: 'row' }}
-            >
-              <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
-                <Emoji name="heart" />
-              </View>
-              <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
-                <Emoji name="clap" />
-              </View>
-              <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
-                <Emoji name="muscle" />
-              </View>
-              {/* heart, clap, muscle, cry, ??? */}
-              <View style={styles.reactionNumber}>
-                <Text style={[globalStyles.subtext, styles.reactionText]}>
-                  14{/*change number to work*/}
-                </Text>
-              </View>
-            </TouchableOpacity>
+          <View style={{ flexDirection: 'row', gap: -7 }}>
+            <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
+              <Emoji name="heart" />
+            </View>
+            <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
+              <Emoji name="clap" />
+            </View>
+            <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
+              <Emoji name="muscle" />
+            </View>
+            {/* heart, clap, muscle, cry, ??? */}
+            <View style={styles.reactionNumber}>
+              <Text style={[globalStyles.subtext, styles.reactionText]}>
+                14{/*change number to work*/}
+              </Text>
+            </View>
           </View>
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (

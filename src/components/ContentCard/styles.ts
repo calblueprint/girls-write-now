@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   reactionNumber: {
-    marginLeft: 10,
+    marginLeft: 14,
     marginTop: 16,
   },
   reactions: {

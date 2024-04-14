@@ -85,7 +85,7 @@ function ContentCard({
             <TouchableOpacity onPress={() => saveStory()}>
               <Image
                 style={styles.saveStoryImage}
-                source={require('./savedStoriesIcon.png')}
+                source={require('../../../assets/save_story.png')}
               />
             </TouchableOpacity>
           </View>

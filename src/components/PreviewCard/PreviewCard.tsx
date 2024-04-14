@@ -48,7 +48,7 @@ function PreviewCard({
           <TouchableOpacity onPress={() => saveStory()}>
             <Image
               style={{ width: 30, height: 30 }}
-              source={require('./savedStoriesIcon.png')}
+              source={require('../../../assets/save_story.png')}
             />
           </TouchableOpacity>
         </View>

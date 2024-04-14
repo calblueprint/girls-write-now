@@ -50,18 +50,26 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   reactionNumber: {
-    marginLeft: 15,
-    marginTop: 10,
+    marginLeft: 14,
+    marginTop: 16,
   },
   reactions: {
-    width: 20,
-    height: 20,
-    borderRadius: 20 / 2,
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
     borderWidth: 1,
-    backgroundColor: '#89CFF0', //different per emoji reaction
+    backgroundColor: 'transparent', //different per emoji reaction
     borderColor: 'white',
     marginTop: 10,
-    marginRight: -10,
+    marginRight: -5, // -10
+    overflow: 'hidden',
+    justifyContent: 'center',
+    paddingLeft: 3,
+  },
+  saveStoryImage: {
+    width: 30,
+    height: 30,
+    marginTop: 10,
   },
   buttons: {
     flexDirection: 'row',

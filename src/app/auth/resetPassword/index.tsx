@@ -10,9 +10,10 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
+import { isPasswordSameAsBefore } from '../../../queries/profiles';
 
 function ResetPasswordScreen() {
-  const { updateUser, signOut } = useSession();
+  const { session, updateUser, signOut } = useSession();
   const [password, setPassword] = useState('');
   const [passwordTextHidden, setPasswordTextHidden] = useState(true);
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -36,6 +37,9 @@ function ResetPasswordScreen() {
 
   const checkPassword = (text: string) => {
     if (text !== '') {
+      isPasswordSameAsBefore(text, session?.user?.id).then(isSame =>
+        setIsDifferent(!isSame),
+      );
       setHasUppercase(text !== text.toLowerCase());
       setHasLowercase(text !== text.toUpperCase());
       setHasNumber(/[0-9]/.test(text));
@@ -70,6 +74,7 @@ function ResetPasswordScreen() {
     const { error } = await updateUser({ password });
 
     if (error) {
+      console.error(error);
       Alert.alert('Updating password failed');
     } else {
       await signOut();

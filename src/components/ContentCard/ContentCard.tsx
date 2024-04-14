@@ -11,6 +11,7 @@ import styles from './styles';
 import { addUserStoryToReadingList } from '../../queries/savedStories';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
+import Emoji from 'react-native-emoji';
 
 type ContentCardProps = {
   title: string;
@@ -64,33 +65,26 @@ function ContentCard({
             </Text>
           </View>
           <View style={styles.buttons}>
-            <View>
-              <TouchableOpacity
-                onPress={() => saveStory()}
-                style={{ flexDirection: 'row' }}
-              >
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <View style={styles.reactionNumber}>
-                  <Text style={[globalStyles.subtext, styles.reactionText]}>
-                    14{/*change number to work*/}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: -7 }}>
+              <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
+                <Emoji name="heart" />
+              </View>
+              <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
+                <Emoji name="clap" />
+              </View>
+              <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
+                <Emoji name="muscle" />
+              </View>
+              {/* heart, clap, muscle, cry, ??? */}
+              <View style={styles.reactionNumber}>
+                <Text style={[globalStyles.subtext, styles.reactionText]}>
+                  14{/*change number to work*/}
+                </Text>
+              </View>
             </View>
             <TouchableOpacity onPress={() => saveStory()}>
               <Image
-                style={{ width: 30, height: 30 }}
+                style={styles.saveStoryImage}
                 source={require('./savedStoriesIcon.png')}
               />
             </TouchableOpacity>

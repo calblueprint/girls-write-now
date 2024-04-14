@@ -259,9 +259,12 @@ function SettingsScreen() {
               options={[
                 'American Indian/Alaska Native',
                 'Asian',
+                'Hispanic/Latinx',
+                'Middle Eastern',
                 'Black or African American',
                 'Native Hawaiian or other Pacific Islander',
                 'White',
+                'Not Listed Here',
                 'Prefer Not to Disclose',
               ]}
               label="Race/Ethnicity"

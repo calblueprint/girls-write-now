@@ -1,5 +1,7 @@
 import { Story, StoryPreview, StoryCard } from './types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from '../utils/supabase';
+import { useState } from 'react';
 
 export async function fetchAllStoryPreviews(): Promise<StoryPreview[]> {
   const { data, error } = await supabase.rpc('fetch_all_story_previews');
@@ -57,8 +59,37 @@ export async function fetchFeaturedStoriesDescription(): Promise<string> {
   }
 }
 
-export async function fetchRecommendedStories(): Promise<StoryCard[]> {
-  const { data, error } = await supabase.rpc('fetch_recommended_stories');
+export async function fetchRecommendedStories(
+  recentlyViewed: StoryCard[],
+): Promise<StoryCard[]> {
+  const recentlyViewedID = recentlyViewed[0].id; //change to take in multiple stories
+
+  const getStoryEmbedding = async () => {
+    const { data } = await supabase
+      .from('stories')
+      .select('embedding')
+      .eq('id', recentlyViewedID);
+
+    if (error) {
+      console.log(error);
+      throw new Error(
+        `An error occured when trying to fetch embeddings: ${error.details}`,
+      );
+    } else {
+      if (data) return data[0].embedding as number;
+    }
+  };
+
+  const embedding = await getStoryEmbedding();
+
+  const { data, error } = await supabase.rpc(
+    'fetch_users_recommended_stories',
+    {
+      query_embedding: embedding,
+      match_threshold: 0.0,
+      match_count: 5,
+    },
+  );
 
   if (error) {
     console.log(error);

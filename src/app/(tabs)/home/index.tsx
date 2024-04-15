@@ -7,6 +7,7 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,
@@ -14,7 +15,7 @@ import {
   fetchNewStories,
   fetchRecommendedStories,
 } from '../../../queries/stories';
-import { StoryCard, StoryPreview } from '../../../queries/types';
+import { StoryCard, StoryPreview, Story } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
@@ -23,12 +24,33 @@ function HomeScreen() {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(true);
   const [featuredStories, setFeaturedStories] = useState<StoryPreview[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
   const [featuredStoriesDescription, setFeaturedStoriesDescription] =
     useState<string>('');
   const [recommendedStories, setRecommendedStories] = useState<StoryCard[]>([]);
   const [newStories, setNewStories] = useState<StoryCard[]>([]);
 
+  const setRecentStory = async (recentStories: StoryPreview[]) => {
+    try {
+      const jsonValue = JSON.stringify(recentStories);
+      await AsyncStorage.setItem('GWN_RECENT_STORIES_ARRAY', jsonValue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    const getRecentStory = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(
+          'GWN_RECENT_STORIES_ARRAY',
+        );
+        return jsonValue != null ? JSON.parse(jsonValue) : [];
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     (async () => {
       const [
         usernameResponse,
@@ -36,23 +58,37 @@ function HomeScreen() {
         featuredStoryDescriptionResponse,
         recommendedStoriesResponse,
         newStoriesResponse,
+        recentStoryResponse,
       ] = await Promise.all([
         fetchUsername(user?.id).catch(() => ''),
         fetchFeaturedStoryPreviews().catch(() => []),
         fetchFeaturedStoriesDescription().catch(() => ''),
-        fetchRecommendedStories().catch(() => []),
+        fetchRecommendedStories(recentlyViewed).catch(() => []),
         fetchNewStories().catch(() => []),
+        getRecentStory(),
       ]);
-
       setUsername(usernameResponse);
       setFeaturedStories(featuredStoryResponse);
       setFeaturedStoriesDescription(featuredStoryDescriptionResponse);
       setRecommendedStories(recommendedStoriesResponse);
       setNewStories(newStoriesResponse);
+      setRecentlyViewed(recentStoryResponse);
     })().finally(() => {
       setLoading(false);
+      async () => {
+        const recommendedStoriesResponse = await fetchRecommendedStories(
+          recentlyViewed,
+        ).catch(() => []);
+        setRecommendedStories(recommendedStoriesResponse);
+      };
     });
   }, [user]);
+
+  // useEffect(() => {
+  //   (async () => {
+
+  //   })
+  // }, [recentlyViewed])
 
   return (
     <SafeAreaView

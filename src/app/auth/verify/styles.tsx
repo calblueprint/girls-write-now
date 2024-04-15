@@ -4,16 +4,12 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 
 export default StyleSheet.create({
-  marginHorizontal: {
-    marginHorizontal: 38,
-  },
   errorContainer: {
     paddingTop: 12,
     flexDirection: 'row',
   },
   title: {
     lineHeight: 32,
-    paddingTop: 16,
   },
   sent: {
     paddingTop: 20,
@@ -40,14 +36,7 @@ export default StyleSheet.create({
   },
   container: {
     justifyContent: 'flex-start',
-    marginHorizontal: 0,
-  },
-  back: {
-    paddingTop: 30,
-    paddingLeft: 22,
-    color: '#797979',
-    fontSize: 12,
-    fontWeight: '400',
+    marginHorizontal: 42,
   },
   resendButton: {
     marginLeft: 8,

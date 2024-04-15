@@ -1,16 +1,16 @@
 import { Link, Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 import { View, Text } from 'react-native';
+import { Icon } from 'react-native-elements';
 import OTPTextInput from 'react-native-otp-textinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
 
 import styles from './styles';
+import BackButton from '../../../components/BackButton/BackButton';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
-import { Icon } from 'react-native-elements';
-import AuthBackButton from '../../../components/AuthBackButton/AuthBackButton';
 
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();
@@ -87,50 +87,48 @@ function VerificationScreen() {
 
   return (
     <SafeAreaView style={[globalStyles.authContainer, styles.container]}>
-      <AuthBackButton pressFunction={() => router.back()} />
+      <BackButton pressFunction={() => router.back()} />
 
-      <View style={styles.marginHorizontal}>
-        <Text style={[globalStyles.h1, styles.title]}>
-          Enter Verification Code{' '}
+      <Text style={[globalStyles.h1, styles.title]}>
+        Enter Verification Code{' '}
+      </Text>
+
+      <Text style={[globalStyles.subtext, styles.sent]}>
+        We have sent the verification code to {renderBlurredEmail()}
+      </Text>
+
+      <OTPTextInput
+        ref={inputRef}
+        inputCount={6}
+        defaultValue={userInput}
+        inputCellLength={1}
+        handleTextChange={setUserInput}
+        containerStyle={styles.otpContainerStyle}
+        textInputStyle={styles.otpTextInputStyle}
+        // isValid={!showErrorMessage}
+        keyboardType="number-pad"
+        autoFocus
+        tintColor={colors.black}
+        offTintColor={colors.black}
+      />
+
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={globalStyles.subtext}>Didn't receive a code?</Text>
+        <Text
+          style={[globalStyles.subtextBold, styles.resendButton]}
+          onPress={resendCode}
+        >
+          Resend Code
         </Text>
-
-        <Text style={[globalStyles.subtext, styles.sent]}>
-          We have sent the verification code to {renderBlurredEmail()}
-        </Text>
-
-        <OTPTextInput
-          ref={inputRef}
-          inputCount={6}
-          defaultValue={userInput}
-          inputCellLength={1}
-          handleTextChange={setUserInput}
-          containerStyle={styles.otpContainerStyle}
-          textInputStyle={styles.otpTextInputStyle}
-          // isValid={!showErrorMessage}
-          keyboardType="number-pad"
-          autoFocus={true}
-          tintColor={colors.black}
-          offTintColor={colors.black}
-        />
-
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={globalStyles.subtext}>Didn't receive a code?</Text>
-          <Text
-            style={[globalStyles.subtextBold, styles.resendButton]}
-            onPress={resendCode}
-          >
-            Resend Code
+      </View>
+      {errorMessage && (
+        <View style={styles.errorContainer}>
+          {showX && <Text style={styles.x}>x</Text>}
+          <Text style={[globalStyles.errorMessage, styles.errorMessage]}>
+            {errorMessage}
           </Text>
         </View>
-        {errorMessage && (
-          <View style={styles.errorContainer}>
-            {showX && <Text style={styles.x}>x</Text>}
-            <Text style={[globalStyles.errorMessage, styles.errorMessage]}>
-              {errorMessage}
-            </Text>
-          </View>
-        )}
-      </View>
+      )}
     </SafeAreaView>
   );
 }

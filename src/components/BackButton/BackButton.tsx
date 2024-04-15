@@ -16,7 +16,7 @@ function BackButton({ pressFunction }: BackButtonProps) {
   return (
     <TouchableOpacity onPress={pressFunction}>
       <View style={styles.backButton}>
-        <Text style={[globalStyles.button1, styles.text]}>&lt; Back</Text>
+        <Text style={[globalStyles.button1, styles.text]}>&lt;Back</Text>
       </View>
     </TouchableOpacity>
   );

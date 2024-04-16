@@ -96,6 +96,7 @@ function HomeScreen() {
               {featuredStories.map(story => (
                 <PreviewCard
                   key={story.id}
+                  storyId={story.id}
                   title={story.title}
                   image={story.featured_media}
                   author={story.author_name}

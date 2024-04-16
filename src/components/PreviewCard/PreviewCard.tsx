@@ -11,13 +11,20 @@ import Emoji from 'react-native-emoji';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
+import { useEffect, useState } from 'react';
+import { addUserStoryToReadingList, deleteUserStoryToReadingList, isStoryInReadingList } from '../../queries/savedStories';
+import { useSession } from '../../utils/AuthContext';
+import { useIsFocused } from '@react-navigation/native';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
+const saveStoryImage = require('../../../assets/save_story.png');
+const savedStoryImage = require('../../../assets/saved_story.png');
 
 type PreviewCardProps = {
   title: string;
   image: string;
+  storyId: number;
   author: string;
   authorImage: string;
   excerpt: { html: string };
@@ -28,14 +35,29 @@ type PreviewCardProps = {
 function PreviewCard({
   title,
   image,
+  storyId,
   author,
   authorImage,
   excerpt,
   tags,
   pressFunction,
 }: PreviewCardProps) {
+  const { user } = useSession();
+  const isFocused = useIsFocused();
+  const [storyIsSaved, setStoryIsSaved] = useState(false);
+
+  useEffect(() => {
+    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => setStoryIsSaved(storyInReadingList))
+  }, [storyId, isFocused])
+
+
   const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
+    if (storyIsSaved) {
+      deleteUserStoryToReadingList(user?.id, storyId);
+    } else {
+      addUserStoryToReadingList(user?.id, storyId);
+    }
+    setStoryIsSaved(!storyIsSaved);
   };
 
   return (
@@ -48,7 +70,7 @@ function PreviewCard({
           <TouchableOpacity onPress={() => saveStory()}>
             <Image
               style={{ width: 30, height: 30 }}
-              source={require('../../../assets/save_story.png')}
+              source={storyIsSaved ? savedStoryImage : saveStoryImage}
             />
           </TouchableOpacity>
         </View>

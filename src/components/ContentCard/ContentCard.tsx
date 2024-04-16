@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 
 import styles from './styles';
-import { addUserStoryToReadingList } from '../../queries/savedStories';
+import { addUserStoryToReadingList, deleteUserStoryToReadingList, isStoryInReadingList } from '../../queries/savedStories';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import Emoji from 'react-native-emoji';
+import { useEffect, useMemo, useState } from 'react';
+
 
 type ContentCardProps = {
   title: string;
@@ -22,6 +24,9 @@ type ContentCardProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+const saveStoryImage = require('../../../assets/save_story.png');
+const savedStoryImage = require('../../../assets/saved_story.png');
+
 function ContentCard({
   title,
   author,
@@ -31,9 +36,20 @@ function ContentCard({
   pressFunction,
 }: ContentCardProps) {
   const { user } = useSession();
+  const [storyIsSaved, setStoryIsSaved] = useState(false);
+
+  useEffect(() => {
+    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => setStoryIsSaved(storyInReadingList))
+  }, [storyId])
+
 
   const saveStory = () => {
-    addUserStoryToReadingList(user?.id, storyId);
+    if (storyIsSaved) {
+      deleteUserStoryToReadingList(user?.id, storyId);
+    } else {
+      addUserStoryToReadingList(user?.id, storyId);
+    }
+    setStoryIsSaved(!storyIsSaved);
   };
 
   return (
@@ -85,7 +101,7 @@ function ContentCard({
             <TouchableOpacity onPress={() => saveStory()}>
               <Image
                 style={styles.saveStoryImage}
-                source={require('../../../assets/save_story.png')}
+                source={storyIsSaved ? savedStoryImage : saveStoryImage}
               />
             </TouchableOpacity>
           </View>

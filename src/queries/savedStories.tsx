@@ -1,7 +1,10 @@
 import supabase from '../utils/supabase';
 
-const favorites = 'favorites';
-const readingList = 'reading list';
+enum SavedList {
+  FAVORITES = 'favorites',
+  READING_LIST = 'reading list'
+}
+
 
 async function fetchUserStories(
   user_id: string | undefined,
@@ -48,11 +51,11 @@ async function fetchUserStories(
 }
 
 export async function fetchUserStoriesFavorites(user_id: string | undefined) {
-  return await fetchUserStories(user_id, favorites);
+  return await fetchUserStories(user_id, SavedList.FAVORITES);
 }
 
 export async function fetchUserStoriesReadingList(user_id: string | undefined) {
-  return await fetchUserStories(user_id, readingList);
+  return await fetchUserStories(user_id, SavedList.READING_LIST);
 }
 
 async function addUserStory(
@@ -78,17 +81,32 @@ export async function addUserStoryToFavorites(
   user_id: string | undefined,
   story_id: number,
 ) {
-  addUserStory(user_id, story_id, favorites);
+  addUserStory(user_id, story_id, SavedList.FAVORITES);
 }
 
 export async function addUserStoryToReadingList(
   user_id: string | undefined,
   story_id: number,
 ) {
-  addUserStory(user_id, story_id, readingList);
+  addUserStory(user_id, story_id, SavedList.READING_LIST);
 }
 
-export async function deleteUserStories(
+export async function deleteUserStoryToFavorites(
+  user_id: string | undefined,
+  story_id: number,
+) {
+  deleteUserStory(user_id, story_id, SavedList.FAVORITES);
+}
+
+export async function deleteUserStoryToReadingList(
+  user_id: string | undefined,
+  story_id: number,
+) {
+  deleteUserStory(user_id, story_id, SavedList.READING_LIST);
+}
+
+
+export async function deleteUserStory(
   user_id: string | undefined,
   story_id: number,
   name: string,
@@ -107,4 +125,20 @@ export async function deleteUserStories(
       );
     }
   }
+}
+
+export async function isStoryInReadingList(storyId: number, userId: string | undefined): Promise<boolean> {
+  let { data, error } = await supabase
+    .rpc('is_story_saved_for_user', {
+      list_name: "reading list",
+      story_db_id: storyId,
+      user_uuid: userId,
+    })
+
+  if (error) {
+    console.error(error)
+    return false;
+  }
+
+  return data;
 }

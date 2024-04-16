@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -7,7 +8,6 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,
@@ -51,28 +51,40 @@ function HomeScreen() {
       }
     };
 
+    const getRecommendedStories = async () => {
+      const recentStoryResponse = await getRecentStory();
+      // console.log('recentStoryResponse', recentStoryResponse);
+      // setRecentlyViewed(recentStoryResponse);
+      // console.log('state: recentlyViewed', recentlyViewed);
+      const recommendedStoriesResponse =
+        await fetchRecommendedStories(recentStoryResponse);
+      setRecommendedStories(recommendedStoriesResponse);
+      // return recommendedStoriesResponse;
+    };
+
     (async () => {
       const [
         usernameResponse,
         featuredStoryResponse,
         featuredStoryDescriptionResponse,
-        recommendedStoriesResponse,
+        // recommendedStoriesResponse,
         newStoriesResponse,
-        recentStoryResponse,
+        // recentStoryResponse,
       ] = await Promise.all([
         fetchUsername(user?.id).catch(() => ''),
         fetchFeaturedStoryPreviews().catch(() => []),
         fetchFeaturedStoriesDescription().catch(() => ''),
-        fetchRecommendedStories(recentlyViewed).catch(() => []),
+        // fetchRecommendedStories(recentlyViewed).catch(() => []), // need to set recentlyViewed before
         fetchNewStories().catch(() => []),
-        getRecentStory(),
+        // getRecentStory(),
       ]);
       setUsername(usernameResponse);
       setFeaturedStories(featuredStoryResponse);
       setFeaturedStoriesDescription(featuredStoryDescriptionResponse);
-      setRecommendedStories(recommendedStoriesResponse);
+      // setRecommendedStories(recommendedStoriesResponse);
       setNewStories(newStoriesResponse);
-      setRecentlyViewed(recentStoryResponse);
+      // setRecentlyViewed(recentStoryResponse);
+      await getRecommendedStories();
     })().finally(() => {
       setLoading(false);
     });
@@ -80,7 +92,7 @@ function HomeScreen() {
 
   useEffect(() => {}, []);
 
-  console.log(recommendedStories);
+  // console.log(recommendedStories);
   return (
     <SafeAreaView
       style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}

@@ -75,21 +75,12 @@ function HomeScreen() {
       setRecentlyViewed(recentStoryResponse);
     })().finally(() => {
       setLoading(false);
-      async () => {
-        const recommendedStoriesResponse = await fetchRecommendedStories(
-          recentlyViewed,
-        ).catch(() => []);
-        setRecommendedStories(recommendedStoriesResponse);
-      };
     });
   }, [user]);
 
-  // useEffect(() => {
-  //   (async () => {
+  useEffect(() => {}, []);
 
-  //   })
-  // }, [recentlyViewed])
-
+  console.log(recommendedStories);
   return (
     <SafeAreaView
       style={[globalStyles.container, { marginLeft: -8, marginRight: -32 }]}

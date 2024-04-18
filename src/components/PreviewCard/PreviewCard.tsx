@@ -11,21 +11,10 @@ import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
-import { useEffect, useState } from 'react';
-import {
-  addUserStoryToReadingList,
-  deleteUserStoryToReadingList,
-  isStoryInReadingList,
-} from '../../queries/savedStories';
-import { useSession } from '../../utils/AuthContext';
-import { useIsFocused } from '@react-navigation/native';
-import { usePubSub } from '../../utils/PubSubContext';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
-const saveStoryImage = require('../../../assets/save_story.png');
-const savedStoryImage = require('../../../assets/saved_story.png');
 
 type PreviewCardProps = {
   title: string;

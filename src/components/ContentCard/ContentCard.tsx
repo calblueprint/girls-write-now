@@ -8,16 +8,8 @@ import {
 import { Image } from 'expo-image';
 
 import styles from './styles';
-import {
-  addUserStoryToReadingList,
-  deleteUserStoryToReadingList,
-  isStoryInReadingList,
-} from '../../queries/savedStories';
 import globalStyles from '../../styles/globalStyles';
-import { useSession } from '../../utils/AuthContext';
 import Emoji from 'react-native-emoji';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { usePubSub } from '../../utils/PubSubContext';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {

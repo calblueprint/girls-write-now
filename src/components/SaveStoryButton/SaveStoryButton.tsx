@@ -31,7 +31,7 @@ export default function SaveStoryButton({ storyId }: SaveStoryButtonProps) {
   useEffect(() => {
     // if another card updates this story, update it here also
     if (typeof channels[storyId] !== 'undefined') {
-      setStoryIsSaved(channels[storyId]);
+      setStoryIsSaved(channels[storyId] ?? false);
     }
   }, [channels[storyId]]);
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
 export interface PubSubState {
-  channels: Record<number, boolean>;
+  channels: Record<number, boolean | undefined>;
   initializeChannel: (id: number) => void;
   publish: (id: number, message: boolean) => void;
 }

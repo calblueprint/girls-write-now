@@ -18,6 +18,7 @@ import { useSession } from '../../utils/AuthContext';
 import Emoji from 'react-native-emoji';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePubSub } from '../../utils/PubSubContext';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {
   title: string;
@@ -28,9 +29,6 @@ type ContentCardProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
-const saveStoryImage = require('../../../assets/save_story.png');
-const savedStoryImage = require('../../../assets/saved_story.png');
-
 function ContentCard({
   title,
   author,
@@ -39,34 +37,6 @@ function ContentCard({
   storyId,
   pressFunction,
 }: ContentCardProps) {
-  const { user } = useSession();
-  const [storyIsSaved, setStoryIsSaved] = useState(false);
-  const { channels, initializeChannel, publish } = usePubSub();
-
-  useEffect(() => {
-    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
-      setStoryIsSaved(storyInReadingList);
-      initializeChannel(storyId);
-    });
-  }, [storyId]);
-
-  useEffect(() => {
-    // if another card updates this story, update it here also
-    if (typeof channels[storyId] !== 'undefined') {
-      setStoryIsSaved(channels[storyId]);
-    }
-  }, [channels[storyId]]);
-
-  const saveStory = async (saved: boolean) => {
-    setStoryIsSaved(saved);
-    publish(storyId, saved);
-    if (saved) {
-      await addUserStoryToReadingList(user?.id, storyId);
-    } else {
-      await deleteUserStoryToReadingList(user?.id, storyId);
-    }
-  };
-
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.contentCard}>
@@ -113,18 +83,8 @@ function ContentCard({
                 </Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
-              {storyIsSaved ? (
-                <Image
-                  style={{ width: 30, height: 30 }}
-                  source={savedStoryImage}
-                />
-              ) : (
-                <Image
-                  style={{ width: 30, height: 30 }}
-                  source={saveStoryImage}
-                />
-              )}
+            <TouchableOpacity>
+              <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>
           </View>
         </View>

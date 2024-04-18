@@ -11,7 +11,7 @@ import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   addUserStoryToReadingList,
   deleteUserStoryToReadingList,
@@ -20,6 +20,7 @@ import {
 import { useSession } from '../../utils/AuthContext';
 import { useIsFocused } from '@react-navigation/native';
 import { usePubSub } from '../../utils/PubSubContext';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -47,42 +48,6 @@ function PreviewCard({
   tags,
   pressFunction,
 }: PreviewCardProps) {
-  const { user } = useSession();
-  const isFocused = useIsFocused();
-  const [storyIsSaved, setStoryIsSaved] = useState(false);
-  const { channels, initializeChannel, publish } = usePubSub();
-
-  useEffect(() => {
-    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
-      setStoryIsSaved(storyInReadingList);
-      initializeChannel(storyId);
-    });
-  }, [storyId]);
-
-  useEffect(() => {
-    // if another card updates this story, update it here also
-    if (typeof channels[storyId] !== 'undefined') {
-      setStoryIsSaved(channels[storyId]);
-    }
-  }, [channels[storyId]]);
-
-  useEffect(() => {
-    isStoryInReadingList(storyId, user?.id).then(storyInReadingList =>
-      setStoryIsSaved(storyInReadingList),
-    );
-  }, [storyId, isFocused]);
-
-  const saveStory = async (saved: boolean) => {
-    setStoryIsSaved(saved);
-    publish(storyId, saved); // update other cards with this story
-
-    if (saved) {
-      await addUserStoryToReadingList(user?.id, storyId);
-    } else {
-      await deleteUserStoryToReadingList(user?.id, storyId);
-    }
-  };
-
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -90,18 +55,8 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
-          <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
-            {storyIsSaved ? (
-              <Image
-                style={{ width: 30, height: 30 }}
-                source={savedStoryImage}
-              />
-            ) : (
-              <Image
-                style={{ width: 30, height: 30 }}
-                source={saveStoryImage}
-              />
-            )}
+          <TouchableOpacity>
+            <SaveStoryButton storyId={storyId} />
           </TouchableOpacity>
         </View>
         <View style={styles.body}>

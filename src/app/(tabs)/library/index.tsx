@@ -12,6 +12,7 @@ import {
   fetchUserStoriesFavorites,
   fetchUserStoriesReadingList,
 } from '../../../queries/savedStories';
+import { FlatList } from 'react-native-gesture-handler';
 
 function LibraryScreen() {
   const { user } = useSession();
@@ -83,61 +84,64 @@ function LibraryScreen() {
         </View>
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        bounces={true}
-        style={styles.scrollView}
-        contentContainerStyle={{ paddingHorizontal: 24 }}
-      >
-        <View>
-          {useMemo(() => {
-            return (
-              favoriteStories.map(story => (
-                <PreviewCard
-                  key={story.title}
-                  storyId={story.id}
-                  title={story.title}
-                  image={story.featured_media}
-                  author={story.author_name}
-                  authorImage={story.author_image}
-                  excerpt={story.excerpt}
-                  tags={story.genre_medium.concat(story.tone).concat(story.topic)}
-                  pressFunction={() =>
-                    router.push({
-                      pathname: '/story',
-                      params: { storyId: story.id.toString() },
-                    })
-                  }
-                />
-              )))
-          }, [favoriteStories])}
-        </View>
+      <View style={{ width: "100%" }}>
+        {favoritesSelected &&
+          <FlatList
+            data={favoriteStories}
+            renderItem={({ item }) => {
+              return (
+                <View style={{ paddingHorizontal: 24 }}>
+                  <PreviewCard
+                    key={item.title}
+                    storyId={item.id}
+                    title={item.title}
+                    image={item.featured_media}
+                    author={item.author_name}
+                    authorImage={item.author_image}
+                    excerpt={item.excerpt}
+                    tags={item.genre_medium.concat(item.tone).concat(item.topic)}
+                    pressFunction={() =>
+                      router.push({
+                        pathname: '/story',
+                        params: { storyId: item.id.toString() },
+                      })
+                    }
+                  />
+                </View>
+              )
+            }}
+          />
+        }
 
-        <View>
-          {useMemo(() => {
-            return (
-              readingListStories.map(story => (
-                <PreviewCard
-                  key={story.title}
-                  storyId={story.id}
-                  title={story.title}
-                  image={story.featured_media}
-                  author={story.author_name}
-                  authorImage={story.author_image}
-                  excerpt={story.excerpt}
-                  tags={story.genre_medium.concat(story.tone).concat(story.topic)}
-                  pressFunction={() =>
-                    router.push({
-                      pathname: '/story',
-                      params: { storyId: story.id.toString() },
-                    })
-                  }
-                />
-              )))
-          }, [favoriteStories])}
-        </View>
-      </ScrollView>
-    </View>
+        {readingSelected &&
+          <FlatList
+            data={readingListStories}
+            renderItem={({ item }) => {
+              return (
+                <View style={{ paddingHorizontal: 24 }}>
+                  <PreviewCard
+                    key={item.title}
+                    storyId={item.id}
+                    title={item.title}
+                    image={item.featured_media}
+                    author={item.author_name}
+                    authorImage={item.author_image}
+                    excerpt={item.excerpt}
+                    tags={item.genre_medium.concat(item.tone).concat(item.topic)}
+                    pressFunction={() =>
+                      router.push({
+                        pathname: '/story',
+                        params: { storyId: item.id.toString() },
+                      })
+                    }
+                  />
+                </View>
+              )
+            }}
+          />
+        }
+      </View>
+    </View >
   );
 }
 

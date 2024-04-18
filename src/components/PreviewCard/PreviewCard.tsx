@@ -52,13 +52,6 @@ function PreviewCard({
   const [storyIsSaved, setStoryIsSaved] = useState(false);
   const { channels, initializeChannel, publish } = usePubSub();
 
-  const savedStoryImageComponent = useMemo(() => {
-    return <Image style={{ width: 30, height: 30 }} source={savedStoryImage} />;
-  }, []);
-  const saveStoryImageComponent = useMemo(() => {
-    return <Image style={{ width: 30, height: 30 }} source={saveStoryImage} />;
-  }, []);
-
   useEffect(() => {
     isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
       setStoryIsSaved(storyInReadingList);
@@ -81,7 +74,8 @@ function PreviewCard({
 
   const saveStory = async (saved: boolean) => {
     setStoryIsSaved(saved);
-    publish(storyId, saved);
+    publish(storyId, saved); // update other cards with this story
+
     if (saved) {
       await addUserStoryToReadingList(user?.id, storyId);
     } else {
@@ -97,7 +91,17 @@ function PreviewCard({
             {title}
           </Text>
           <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
-            {storyIsSaved ? savedStoryImageComponent : saveStoryImageComponent}
+            {storyIsSaved ? (
+              <Image
+                style={{ width: 30, height: 30 }}
+                source={savedStoryImage}
+              />
+            ) : (
+              <Image
+                style={{ width: 30, height: 30 }}
+                source={saveStoryImage}
+              />
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.body}>

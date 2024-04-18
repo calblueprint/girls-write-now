@@ -44,32 +44,22 @@ function ContentCard({
   const { channels, initializeChannel, publish } = usePubSub();
 
   const savedStoryImageComponent = useMemo(() => {
-    return (
-      <Image
-        style={{ width: 30, height: 30 }}
-        source={savedStoryImage}
-      />
-    )
-  }, [])
+    return <Image style={{ width: 30, height: 30 }} source={savedStoryImage} />;
+  }, []);
   const saveStoryImageComponent = useMemo(() => {
-    return (
-      <Image
-        style={{ width: 30, height: 30 }}
-        source={saveStoryImage}
-      />
-    )
-  }, [])
+    return <Image style={{ width: 30, height: 30 }} source={saveStoryImage} />;
+  }, []);
 
   useEffect(() => {
     isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
-      setStoryIsSaved(storyInReadingList)
+      setStoryIsSaved(storyInReadingList);
       initializeChannel(storyId);
     });
   }, [storyId]);
 
   useEffect(() => {
     // if another card updates this story, update it here also
-    if (typeof channels[storyId] !== "undefined") {
+    if (typeof channels[storyId] !== 'undefined') {
       setStoryIsSaved(channels[storyId]);
     }
   }, [channels[storyId]]);
@@ -131,9 +121,9 @@ function ContentCard({
               </View>
             </View>
             <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
-              {storyIsSaved ?
-                savedStoryImageComponent : saveStoryImageComponent
-              }
+              {storyIsSaved
+                ? savedStoryImageComponent
+                : saveStoryImageComponent}
             </TouchableOpacity>
           </View>
         </View>

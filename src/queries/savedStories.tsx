@@ -70,7 +70,9 @@ async function addUserStory(
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(
-        `An error occured when trying to set user saved stories: ${JSON.stringify(error)}`,
+        `An error occured when trying to set user saved stories: ${JSON.stringify(
+          error,
+        )}`,
       );
     }
   }

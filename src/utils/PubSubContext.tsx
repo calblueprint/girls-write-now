@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 
 export interface PubSubState {
   channels: Record<number, boolean>;
@@ -31,17 +26,19 @@ export function BooleanPubSubProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [channels, setChannels] = useState<Record<number, boolean | undefined>>({})
+  const [channels, setChannels] = useState<Record<number, boolean | undefined>>(
+    {},
+  );
 
   const initializeChannel = (id: number) => {
     if (!(id in channels)) {
-      setChannels({ ...channels, [id]: undefined })
+      setChannels({ ...channels, [id]: undefined });
     }
-  }
+  };
 
   const publish = (id: number, message: boolean) => {
-    setChannels({ ...channels, [id]: message })
-  }
+    setChannels({ ...channels, [id]: message });
+  };
 
   const authContextValue = useMemo(
     () => ({

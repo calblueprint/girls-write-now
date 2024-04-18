@@ -84,7 +84,7 @@ function LibraryScreen() {
         </View>
       </View>
 
-      <View style={{ width: "100%" }}>
+      <View style={{ width: "100%", flex: 1, marginBottom: 100 }}>
         {favoritesSelected &&
           <FlatList
             data={favoriteStories}
@@ -122,6 +122,7 @@ function LibraryScreen() {
                   <PreviewCard
                     key={item.title}
                     storyId={item.id}
+                    defaultSavedStoriesState={true}
                     title={item.title}
                     image={item.featured_media}
                     author={item.author_name}

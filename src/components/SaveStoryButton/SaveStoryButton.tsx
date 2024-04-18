@@ -11,14 +11,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type SaveStoryButtonProps = {
   storyId: number;
+  defaultState?: boolean
 };
 
 const saveStoryImage = require('../../../assets/save_story.png');
 const savedStoryImage = require('../../../assets/saved_story.png');
 
-export default function SaveStoryButton({ storyId }: SaveStoryButtonProps) {
+export default function SaveStoryButton({ storyId, defaultState = false }: SaveStoryButtonProps) {
   const { user } = useSession();
-  const [storyIsSaved, setStoryIsSaved] = useState(false);
+  const [storyIsSaved, setStoryIsSaved] = useState(defaultState);
   const { channels, initializeChannel, publish } = usePubSub();
 
   useEffect(() => {

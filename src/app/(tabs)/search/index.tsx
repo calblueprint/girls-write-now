@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
   Button,
   FlatList,
@@ -9,6 +9,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,13 +23,14 @@ import { fetchAllStoryPreviews } from '../../../queries/stories';
 import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
+import { GenreType } from '../genre';
 
 const getRecentSearch = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_SEARCHES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -37,7 +39,7 @@ const setRecentSearch = async (searchResult: RecentSearch[]) => {
     const jsonValue = JSON.stringify(searchResult);
     await AsyncStorage.setItem('GWN_RECENT_SEARCHES_ARRAY', jsonValue);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -46,7 +48,7 @@ const getRecentStory = async () => {
     const jsonValue = await AsyncStorage.getItem('GWN_RECENT_STORIES_ARRAY');
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -55,7 +57,7 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
     const jsonValue = JSON.stringify(recentStories);
     await AsyncStorage.setItem('GWN_RECENT_STORIES_ARRAY', jsonValue);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -69,20 +71,24 @@ function SearchScreen() {
   const [showGenreCarousals, setShowGenreCarousals] = useState(true);
   const [showRecents, setShowRecents] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
+  const genreColors = [colors.citrus, colors.lime, colors.lilac];
 
   useEffect(() => {
     (async () => {
-      const data: StoryPreview[] = await fetchAllStoryPreviews();
-      setAllStories(data);
-      const genreData: Genre[] = await fetchGenres();
-      setAllGenres(genreData);
-      setRecentSearches(await getRecentSearch());
-      setRecentlyViewed(await getRecentStory());
+      fetchAllStoryPreviews().then((stories: StoryPreview[]) =>
+        setAllStories(stories),
+      );
+      fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
+      getRecentSearch().then((searches: RecentSearch[]) =>
+        setRecentSearches(searches),
+      );
+      getRecentStory().then((viewed: StoryPreview[]) =>
+        setRecentlyViewed(viewed),
+      );
     })();
   }, []);
 
   const getColor = (index: number) => {
-    const genreColors = [colors.citrus, colors.lime, colors.lilac];
     return genreColors[index % genreColors.length];
   };
 
@@ -92,12 +98,14 @@ function SearchScreen() {
       setSearchResults([]);
       return;
     }
+
     const updatedData = allStories.filter((item: StoryPreview) => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
       return title.indexOf(text_data) > -1 || author.indexOf(text_data) > -1;
     });
+
     setSearch(text);
     setSearchResults(updatedData);
     setShowGenreCarousals(false);
@@ -175,7 +183,7 @@ function SearchScreen() {
   return (
     <SafeAreaView
       style={[
-        globalStyles.container,
+        globalStyles.tabBarContainer,
         showGenreCarousals
           ? { marginLeft: -8, marginRight: -32 }
           : { marginHorizontal: -8 },
@@ -190,18 +198,21 @@ function SearchScreen() {
             setShowRecents(true);
             setShowGenreCarousals(false);
           }}
-          searchIcon={false}
-          clearIcon
+          searchIcon
+          clearIcon={false}
+          cancelButtonProps={{
+            buttonTextStyle: [globalStyles.body1Bold, styles.cancelButton],
+          }}
           containerStyle={[
             styles.searchContainer,
             showGenreCarousals && { marginRight: 24 },
           ]}
           inputContainerStyle={styles.inputContainer}
-          inputStyle={{ color: 'black' }}
+          inputStyle={globalStyles.body1Bold}
           leftIconContainerStyle={{}}
           rightIconContainerStyle={{}}
-          placeholder="Search"
-          placeholderTextColor="black"
+          placeholder="What do you want to read?"
+          placeholderTextColor="grey"
           onChangeText={text => searchFunction(text)}
           value={search}
           onSubmitEditing={searchString => {
@@ -222,19 +233,44 @@ function SearchScreen() {
         )}
 
         {showRecents &&
-          (search ? (
+          (search && searchResults.length > 0 ? (
             <View style={styles.default}>
-              <Text style={[styles.searchText, styles.numDisplay]}>
-                {searchResults.length}{' '}
-                {searchResults.length === 1 ? 'Story' : 'Stories'}
+              <Text style={[globalStyles.subHeading1Bold, styles.numDisplay]}>
+                Showing results 1-{searchResults.length}
               </Text>
             </View>
-          ) : (
+          ) : search && searchResults.length === 0 ? (
+            <View style={styles.emptySearch}>
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  There are no stories
+                </Text>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  for "{search}".
+                </Text>
+              </View>
+              <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
+                Try searching by title or author, or
+              </Text>
+              <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
+                check if your spelling is correct.
+              </Text>
+            </View>
+          ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
             <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
               <View style={styles.recentSpacing}>
-                <Text style={styles.searchText}>Recent Searches</Text>
+                <Text style={globalStyles.subHeading1Bold}>
+                  Recent Searches
+                </Text>
                 <Pressable onPress={clearRecentSearches}>
-                  <Text style={styles.clearAll}>Clear All</Text>
+                  <Text
+                    style={[
+                      globalStyles.subHeading2Bold,
+                      { color: colors.gwnOrange },
+                    ]}
+                  >
+                    Clear All
+                  </Text>
                 </Pressable>
               </View>
               <View style={styles.contentContainerRecents}>
@@ -252,15 +288,25 @@ function SearchScreen() {
               </View>
 
               <View style={styles.recentSpacing}>
-                <Text style={styles.searchText}>Recently Viewed</Text>
+                <Text style={globalStyles.subHeading1Bold}>
+                  Recently Viewed
+                </Text>
                 <Pressable onPress={clearRecentlyViewed}>
-                  <Text style={styles.clearAll}>Clear All</Text>
+                  <Text
+                    style={[
+                      globalStyles.subHeading2Bold,
+                      { color: colors.gwnOrange },
+                    ]}
+                  >
+                    Clear All
+                  </Text>
                 </Pressable>
               </View>
               <View style={styles.contentContainerRecents}>
                 {recentlyViewed.map(item => (
                   <PreviewCard
                     key={item.title}
+                    storyId={item.id}
                     title={item.title}
                     image={item.featured_media}
                     author={item.author_name}
@@ -278,6 +324,17 @@ function SearchScreen() {
                 ))}
               </View>
             </ScrollView>
+          ) : (
+            <View style={styles.emptySearch}>
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={globalStyles.h3}>
+                  Find stories from young creators.
+                </Text>
+              </View>
+              <Text style={globalStyles.subHeading2}>
+                Search for stories, authors, or collections.
+              </Text>
+            </View>
           ))}
 
         {showGenreCarousals ? (
@@ -286,10 +343,23 @@ function SearchScreen() {
             contentContainerStyle={{ paddingHorizontal: 8 }}
           >
             {allGenres.map((genre, index) => (
-              <>
+              <View key={index}>
                 <View style={styles.genreText}>
                   <Text style={styles.parentName}>{genre.parent_name}</Text>
-                  <Text style={styles.seeAll}>See All</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.push({
+                        pathname: '/genre',
+                        params: {
+                          genreId: genre.parent_id.toString(),
+                          genreType: GenreType.PARENT,
+                          genreName: genre.parent_name,
+                        },
+                      });
+                    }}
+                  >
+                    <Text style={styles.seeAll}>See All</Text>
+                  </TouchableOpacity>
                 </View>
                 <ScrollView
                   horizontal
@@ -299,13 +369,24 @@ function SearchScreen() {
                 >
                   {genre.subgenres.map(subgenre => (
                     <GenreCard
+                      key={subgenre.id}
                       subgenres={subgenre.name}
+                      subgenre_id={subgenre.id}
                       cardColor={getColor(index)}
-                      pressFunction={() => null}
+                      pressFunction={() => {
+                        router.push({
+                          pathname: '/genre',
+                          params: {
+                            genreId: genre.parent_id.toString(),
+                            genreType: GenreType.SUBGENRE,
+                            genreName: subgenre.name,
+                          },
+                        });
+                      }}
                     />
                   ))}
                 </ScrollView>
-              </>
+              </View>
             ))}
           </ScrollView>
         ) : (
@@ -315,7 +396,8 @@ function SearchScreen() {
             contentContainerStyle={styles.contentCotainerStories}
             renderItem={({ item }) => (
               <PreviewCard
-                key={item.title}
+                key={item.id}
+                storyId={item.id}
                 title={item.title}
                 image={item.featured_media}
                 author={item.author_name}

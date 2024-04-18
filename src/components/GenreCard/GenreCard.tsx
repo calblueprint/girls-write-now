@@ -9,6 +9,7 @@ import styles from './styles';
 
 type GenreCardProps = {
   subgenres: string;
+  subgenre_id: number;
   cardColor: string;
   pressFunction: (event: GestureResponderEvent) => void;
 };

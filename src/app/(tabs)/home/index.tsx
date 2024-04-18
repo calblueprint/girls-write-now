@@ -10,7 +10,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchUsername } from '../../../queries/profiles';

@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingHorizontal: 24,
   },
 });
 

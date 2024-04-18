@@ -25,7 +25,11 @@ async function fetchUserStories(
     }
   }
 
-  console.log(data[0]);
+  // console.log(data[0]);
+  // console.log("As preview:");
+  // console.log(data[0] as StoryPreview)
+  // console.log(data as StoryPreview[]);
+
   return data as StoryPreview[];
 }
 

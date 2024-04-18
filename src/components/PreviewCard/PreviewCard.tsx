@@ -1,16 +1,17 @@
 import * as cheerio from 'cheerio';
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
+import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -18,6 +19,7 @@ const placeholderImage =
 type PreviewCardProps = {
   title: string;
   image: string;
+  storyId: number;
   author: string;
   authorImage: string;
   excerpt: { html: string };
@@ -28,16 +30,13 @@ type PreviewCardProps = {
 function PreviewCard({
   title,
   image,
+  storyId,
   author,
   authorImage,
   excerpt,
   tags,
   pressFunction,
 }: PreviewCardProps) {
-  const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
-  };
-
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -45,11 +44,8 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
-          <TouchableOpacity onPress={() => saveStory()}>
-            <Image
-              style={{ width: 30, height: 30 }}
-              source={require('./savedStoriesIcon.png')}
-            />
+          <TouchableOpacity>
+            <SaveStoryButton storyId={storyId} />
           </TouchableOpacity>
         </View>
         <View style={styles.body}>

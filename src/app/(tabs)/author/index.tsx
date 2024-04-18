@@ -122,6 +122,7 @@ function AuthorScreen() {
           {authorStoryPreview?.map(story => (
             <PreviewCard
               key={story.title}
+              storyId={story.id}
               title={story.title}
               image={story.featured_media}
               author={story.author_name}

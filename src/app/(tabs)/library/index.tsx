@@ -13,6 +13,7 @@ import {
   fetchUserStoriesFavorites,
   fetchUserStoriesReadingList,
 } from '../../../queries/savedStories';
+import { FlatList } from 'react-native-gesture-handler';
 
 function LibraryScreen() {
   const { user } = useSession();
@@ -26,22 +27,25 @@ function LibraryScreen() {
   const favoritesPressed = () => {
     setFavoritesSelected(true);
     setReadingSelected(false);
+    console.log(favoriteStories);
   };
 
   const readingPressed = () => {
     setFavoritesSelected(false);
     setReadingSelected(true);
+    console.log(readingListStories);
   };
 
   useEffect(() => {
     (async () => {
-      const [favoriteStoriesResponse, readingListStoriesResponse] =
-        await Promise.all([
-          fetchUserStoriesFavorites(user?.id).catch(() => []),
-          fetchUserStoriesReadingList(user?.id).catch(() => []),
-        ]);
-      setFavoriteStories(favoriteStoriesResponse);
-      setReadingListStories(readingListStoriesResponse);
+      await Promise.all([
+        fetchUserStoriesFavorites(user?.id).catch(favorites =>
+          setFavoriteStories(favorites),
+        ),
+        fetchUserStoriesReadingList(user?.id).catch(readingList =>
+          setReadingListStories(readingList),
+        ),
+      ]);
     })().finally(() => {});
   }, [user]);
 
@@ -88,45 +92,61 @@ function LibraryScreen() {
       >
         {favoritesSelected && favoriteStories.length > 0 && (
           <View>
-            {favoriteStories.map(story => (
-              <PreviewCard
-                key={story.title}
-                title={story.title}
-                image={story.featured_media}
-                author={story.author_name}
-                authorImage={story.author_image}
-                excerpt={story.excerpt}
-                tags={story.genre_medium.concat(story.tone).concat(story.topic)}
-                pressFunction={() =>
-                  router.push({
-                    pathname: '/story',
-                    params: { storyId: story.id.toString() },
-                  })
-                }
-              />
-            ))}
+            <FlatList
+              data={favoriteStories}
+              renderItem={({ item }) => {
+                return (
+                  <PreviewCard
+                    key={item.title}
+                    title={item.title}
+                    storyId={item.id}
+                    image={item.featured_media}
+                    author={item.author_name}
+                    authorImage={item.author_image}
+                    excerpt={item.excerpt}
+                    tags={item.genre_medium
+                      .concat(item.tone)
+                      .concat(item.topic)}
+                    pressFunction={() =>
+                      router.push({
+                        pathname: '/story',
+                        params: { storyId: item.id.toString() },
+                      })
+                    }
+                  />
+                );
+              }}
+            />
           </View>
         )}
 
         {readingSelected && readingListStories.length > 0 && (
           <View>
-            {readingListStories.map(story => (
-              <PreviewCard
-                key={story.title}
-                title={story.title}
-                image={story.featured_media}
-                author={story.author_name}
-                authorImage={story.author_image}
-                excerpt={story.excerpt}
-                tags={story.genre_medium.concat(story.tone).concat(story.topic)}
-                pressFunction={() =>
-                  router.push({
-                    pathname: '/story',
-                    params: { storyId: story.id.toString() },
-                  })
-                }
-              />
-            ))}
+            <FlatList
+              data={readingListStories}
+              renderItem={({ item }) => {
+                return (
+                  <PreviewCard
+                    key={item.title}
+                    title={item.title}
+                    storyId={item.id}
+                    image={item.featured_media}
+                    author={item.author_name}
+                    authorImage={item.author_image}
+                    excerpt={item.excerpt}
+                    tags={item.genre_medium
+                      .concat(item.tone)
+                      .concat(item.topic)}
+                    pressFunction={() =>
+                      router.push({
+                        pathname: '/story',
+                        params: { storyId: item.id.toString() },
+                      })
+                    }
+                  />
+                );
+              }}
+            />
           </View>
         )}
       </ScrollView>

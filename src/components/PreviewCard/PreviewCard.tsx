@@ -44,8 +44,10 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
-          <TouchableOpacity>
-            <SaveStoryButton storyId={storyId} />
+          <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+            <View>
+              <SaveStoryButton storyId={storyId} />
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.body}>

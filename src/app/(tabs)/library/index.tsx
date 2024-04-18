@@ -84,8 +84,8 @@ function LibraryScreen() {
         </View>
       </View>
 
-      <View style={{ width: "100%", flex: 1, marginBottom: 100 }}>
-        {favoritesSelected &&
+      <View style={{ width: '100%', flex: 1, marginBottom: 100 }}>
+        {favoritesSelected && (
           <FlatList
             data={favoriteStories}
             renderItem={({ item }) => {
@@ -99,7 +99,9 @@ function LibraryScreen() {
                     author={item.author_name}
                     authorImage={item.author_image}
                     excerpt={item.excerpt}
-                    tags={item.genre_medium.concat(item.tone).concat(item.topic)}
+                    tags={item.genre_medium
+                      .concat(item.tone)
+                      .concat(item.topic)}
                     pressFunction={() =>
                       router.push({
                         pathname: '/story',
@@ -108,12 +110,12 @@ function LibraryScreen() {
                     }
                   />
                 </View>
-              )
+              );
             }}
           />
-        }
+        )}
 
-        {readingSelected &&
+        {readingSelected && (
           <FlatList
             data={readingListStories}
             renderItem={({ item }) => {
@@ -128,7 +130,9 @@ function LibraryScreen() {
                     author={item.author_name}
                     authorImage={item.author_image}
                     excerpt={item.excerpt}
-                    tags={item.genre_medium.concat(item.tone).concat(item.topic)}
+                    tags={item.genre_medium
+                      .concat(item.tone)
+                      .concat(item.topic)}
                     pressFunction={() =>
                       router.push({
                         pathname: '/story',
@@ -137,12 +141,12 @@ function LibraryScreen() {
                     }
                   />
                 </View>
-              )
+              );
             }}
           />
-        }
+        )}
       </View>
-    </View >
+    </View>
   );
 }
 

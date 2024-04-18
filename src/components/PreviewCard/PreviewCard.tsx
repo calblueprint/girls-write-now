@@ -22,7 +22,7 @@ type PreviewCardProps = {
   storyId: number;
   author: string;
   authorImage: string;
-  defaultSavedStoriesState?: boolean
+  defaultSavedStoriesState?: boolean;
   excerpt: { html: string };
   tags: string[];
   pressFunction: (event: GestureResponderEvent) => void;
@@ -48,7 +48,10 @@ function PreviewCard({
           </Text>
           <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
             <View>
-              <SaveStoryButton storyId={storyId} defaultState={defaultSavedStoriesState} />
+              <SaveStoryButton
+                storyId={storyId}
+                defaultState={defaultSavedStoriesState}
+              />
             </View>
           </TouchableOpacity>
         </View>

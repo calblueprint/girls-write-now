@@ -1,20 +1,25 @@
 import * as cheerio from 'cheerio';
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
+import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
-import { useEffect, useState } from 'react';
-import { addUserStoryToReadingList, deleteUserStoryToReadingList, isStoryInReadingList } from '../../queries/savedStories';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  addUserStoryToReadingList,
+  deleteUserStoryToReadingList,
+  isStoryInReadingList,
+} from '../../queries/savedStories';
 import { useSession } from '../../utils/AuthContext';
 import { useIsFocused } from '@react-navigation/native';
+import { usePubSub } from '../../utils/PubSubContext';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -45,19 +50,54 @@ function PreviewCard({
   const { user } = useSession();
   const isFocused = useIsFocused();
   const [storyIsSaved, setStoryIsSaved] = useState(false);
+  const { channels, initializeChannel, publish } = usePubSub();
+
+  const savedStoryImageComponent = useMemo(() => {
+    return (
+      <Image
+        style={{ width: 30, height: 30 }}
+        source={savedStoryImage}
+      />
+    )
+  }, [])
+  const saveStoryImageComponent = useMemo(() => {
+    return (
+      <Image
+        style={{ width: 30, height: 30 }}
+        source={saveStoryImage}
+      />
+    )
+  }, [])
 
   useEffect(() => {
-    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => setStoryIsSaved(storyInReadingList))
-  }, [storyId, isFocused])
+    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
+      setStoryIsSaved(storyInReadingList)
+      initializeChannel(storyId);
+    });
+  }, [storyId]);
 
-
-  const saveStory = () => {
-    if (storyIsSaved) {
-      deleteUserStoryToReadingList(user?.id, storyId);
-    } else {
-      addUserStoryToReadingList(user?.id, storyId);
+  useEffect(() => {
+    // if another card updates this story, update it here also
+    if (typeof channels[storyId] !== "undefined") {
+      setStoryIsSaved(channels[storyId])
     }
-    setStoryIsSaved(!storyIsSaved);
+  }, [channels[storyId]]);
+
+
+  useEffect(() => {
+    isStoryInReadingList(storyId, user?.id).then(storyInReadingList =>
+      setStoryIsSaved(storyInReadingList),
+    );
+  }, [storyId, isFocused]);
+
+  const saveStory = async (saved: boolean) => {
+    setStoryIsSaved(saved);
+    publish(storyId, saved);
+    if (saved) {
+      await addUserStoryToReadingList(user?.id, storyId);
+    } else {
+      await deleteUserStoryToReadingList(user?.id, storyId);
+    }
   };
 
   return (
@@ -67,11 +107,10 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
-          <TouchableOpacity onPress={() => saveStory()}>
-            <Image
-              style={{ width: 30, height: 30 }}
-              source={storyIsSaved ? savedStoryImage : saveStoryImage}
-            />
+          <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
+            {storyIsSaved ?
+              savedStoryImageComponent : saveStoryImageComponent
+            }
           </TouchableOpacity>
         </View>
         <View style={styles.body}>

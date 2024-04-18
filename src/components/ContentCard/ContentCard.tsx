@@ -1,19 +1,23 @@
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
+import { Image } from 'expo-image';
 
 import styles from './styles';
-import { addUserStoryToReadingList, deleteUserStoryToReadingList, isStoryInReadingList } from '../../queries/savedStories';
+import {
+  addUserStoryToReadingList,
+  deleteUserStoryToReadingList,
+  isStoryInReadingList,
+} from '../../queries/savedStories';
 import globalStyles from '../../styles/globalStyles';
 import { useSession } from '../../utils/AuthContext';
 import Emoji from 'react-native-emoji';
-import { useEffect, useMemo, useState } from 'react';
-
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePubSub } from '../../utils/PubSubContext';
 
 type ContentCardProps = {
   title: string;
@@ -37,19 +41,47 @@ function ContentCard({
 }: ContentCardProps) {
   const { user } = useSession();
   const [storyIsSaved, setStoryIsSaved] = useState(false);
+  const { channels, initializeChannel, publish } = usePubSub();
+
+  const savedStoryImageComponent = useMemo(() => {
+    return (
+      <Image
+        style={{ width: 30, height: 30 }}
+        source={savedStoryImage}
+      />
+    )
+  }, [])
+  const saveStoryImageComponent = useMemo(() => {
+    return (
+      <Image
+        style={{ width: 30, height: 30 }}
+        source={saveStoryImage}
+      />
+    )
+  }, [])
 
   useEffect(() => {
-    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => setStoryIsSaved(storyInReadingList))
-  }, [storyId])
+    isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
+      setStoryIsSaved(storyInReadingList)
+      initializeChannel(storyId);
+    });
+  }, [storyId]);
 
-
-  const saveStory = () => {
-    if (storyIsSaved) {
-      deleteUserStoryToReadingList(user?.id, storyId);
-    } else {
-      addUserStoryToReadingList(user?.id, storyId);
+  useEffect(() => {
+    // if another card updates this story, update it here also
+    if (typeof channels[storyId] !== "undefined") {
+      setStoryIsSaved(channels[storyId]);
     }
-    setStoryIsSaved(!storyIsSaved);
+  }, [channels[storyId]]);
+
+  const saveStory = async (saved: boolean) => {
+    setStoryIsSaved(saved);
+    publish(storyId, saved);
+    if (saved) {
+      await addUserStoryToReadingList(user?.id, storyId);
+    } else {
+      await deleteUserStoryToReadingList(user?.id, storyId);
+    }
   };
 
   return (
@@ -98,11 +130,10 @@ function ContentCard({
                 </Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => saveStory()}>
-              <Image
-                style={styles.saveStoryImage}
-                source={storyIsSaved ? savedStoryImage : saveStoryImage}
-              />
+            <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
+              {storyIsSaved ?
+                savedStoryImageComponent : saveStoryImageComponent
+              }
             </TouchableOpacity>
           </View>
         </View>

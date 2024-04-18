@@ -2,9 +2,8 @@ import supabase from '../utils/supabase';
 
 enum SavedList {
   FAVORITES = 'favorites',
-  READING_LIST = 'reading list'
+  READING_LIST = 'reading list',
 }
-
 
 async function fetchUserStories(
   user_id: string | undefined,
@@ -65,13 +64,13 @@ async function addUserStory(
 ) {
   const { error } = await supabase
     .from('saved_stories')
-    .insert([{ user_id: user_id, story_id: story_id, name: name }])
+    .upsert([{ user_id: user_id, story_id: story_id, name: name }])
     .select();
 
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(
-        `An error occured when trying to set user saved stories: ${error.details}`,
+        `An error occured when trying to set user saved stories: ${JSON.stringify(error)}`,
       );
     }
   }
@@ -105,7 +104,6 @@ export async function deleteUserStoryToReadingList(
   deleteUserStory(user_id, story_id, SavedList.READING_LIST);
 }
 
-
 export async function deleteUserStory(
   user_id: string | undefined,
   story_id: number,
@@ -127,16 +125,18 @@ export async function deleteUserStory(
   }
 }
 
-export async function isStoryInReadingList(storyId: number, userId: string | undefined): Promise<boolean> {
-  let { data, error } = await supabase
-    .rpc('is_story_saved_for_user', {
-      list_name: "reading list",
-      story_db_id: storyId,
-      user_uuid: userId,
-    })
+export async function isStoryInReadingList(
+  storyId: number,
+  userId: string | undefined,
+): Promise<boolean> {
+  let { data, error } = await supabase.rpc('is_story_saved_for_user', {
+    list_name: 'reading list',
+    story_db_id: storyId,
+    user_uuid: userId,
+  });
 
   if (error) {
-    console.error(error)
+    console.error(error);
     return false;
   }
 

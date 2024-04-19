@@ -30,6 +30,7 @@ function OnboardingScreen() {
   const [pronouns, setPronouns] = useState('');
   const [birthday, setBirthday] = useState('');
   const [birthdayExists, setBirthdayExists] = useState(false);
+  const [birthdayChanged, setBirthdayChanged] = useState(false);
   const [gender, setGender] = useState('');
   const [raceEthnicity, setRaceEthnicity] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -142,6 +143,7 @@ function OnboardingScreen() {
   };
 
   const onConfirmDate = (date: Date) => {
+    setBirthdayChanged(true);
     setShowDatePicker(false);
     setBirthday(date.toLocaleDateString());
     setDisplayDate(date);
@@ -235,6 +237,16 @@ function OnboardingScreen() {
         </View>
 
         <View>
+          {birthdayChanged && (
+            <View style={[styles.info, styles.warning]}>
+              <Icon type="material" name="info-outline" color="#797979" />
+              <Text style={[globalStyles.subtext, styles.subtext]}>
+                You can only input your birthday once. Please make sure the date
+                is correct before saving as you will not be able to change your
+                birthday in the future.
+              </Text>
+            </View>
+          )}
           <View style={styles.updateProfileButton}>
             <StyledButton
               text="Update profile"
@@ -248,6 +260,7 @@ function OnboardingScreen() {
               }
             />
           </View>
+
           <Link
             style={[globalStyles.bodyBoldUnderline, styles.skipButton]}
             href="/(tabs)/home"

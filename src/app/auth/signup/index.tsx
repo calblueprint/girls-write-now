@@ -171,14 +171,14 @@ function SignUpScreen() {
             placeholder="First Name"
             label="First Name"
             placeholderTextColor={colors.darkGrey}
-            onChange={setFirstName}
+            onChange={text => setFirstName(text.replaceAll(/[^a-zA-Z]/g, ''))}
             value={firstName}
           />
           <UserStringInput
             placeholder="Last Name"
             label="Last Name"
             placeholderTextColor={colors.darkGrey}
-            onChange={setLastName}
+            onChange={text => setLastName(text.replaceAll(/[^a-zA-Z]/g, ''))}
             value={lastName}
           />
           <UserStringInput

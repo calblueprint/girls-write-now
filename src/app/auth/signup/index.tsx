@@ -171,14 +171,14 @@ function SignUpScreen() {
             placeholder="First Name"
             label="First Name"
             placeholderTextColor={colors.darkGrey}
-            onChange={setFirstName}
+            onChange={text => setFirstName(text.replaceAll(/[^a-zA-Z]/g, ""))}
             value={firstName}
           />
           <UserStringInput
             placeholder="Last Name"
             label="Last Name"
             placeholderTextColor={colors.darkGrey}
-            onChange={setLastName}
+            onChange={text => setLastName(text.replaceAll(/[^a-zA-Z]/g, ""))}
             value={lastName}
           />
           <UserStringInput
@@ -264,7 +264,7 @@ function SignUpScreen() {
           </View>
           <View style={styles.redirectText}>
             <Text style={globalStyles.body1}>Already have an account?</Text>
-            <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
+            <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
               Log In
             </Link>
           </View>

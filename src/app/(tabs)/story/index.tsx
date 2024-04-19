@@ -89,7 +89,7 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
-              <Text style={globalStyles.subHeading1Bold}>
+              <Text style={[globalStyles.subHeading1Bold, { textDecorationLine: 'underline' }]}>
                 By {story.author_name}
               </Text>
             </View>
@@ -161,15 +161,24 @@ function StoryScreen() {
             systemFonts={fonts}
           />
 
-          <View style={styles.author}>
-            <Image
-              style={styles.authorImage}
-              source={{ uri: story.author_image }}
-            />
-            <Text style={globalStyles.subHeading1Bold}>
-              By {story.author_name}
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              router.push({
+                pathname: '/author',
+                params: { author: story.author_id.toString() },
+              });
+            }}
+          >
+            <View style={styles.author}>
+              <Image
+                style={styles.authorImage}
+                source={{ uri: story.author_image ? story.author_image : '' }}
+              />
+              <Text style={[globalStyles.subHeading1Bold, { textDecorationLine: 'underline' }]}>
+                By {story.author_name}
+              </Text>
+            </View>
+          </TouchableOpacity>
 
           <Button
             textColor="black"
@@ -180,8 +189,9 @@ function StoryScreen() {
             <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
           </Button>
         </ScrollView>
-      )}
-    </SafeAreaView>
+      )
+      }
+    </SafeAreaView >
   );
 }
 

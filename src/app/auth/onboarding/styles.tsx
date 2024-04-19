@@ -26,6 +26,10 @@ export default StyleSheet.create({
   body1: {
     marginTop: 26,
   },
+  warning: {
+    marginTop: 40,
+    marginBottom: 24,
+  },
   info: {
     flexDirection: 'row',
     marginTop: 12,

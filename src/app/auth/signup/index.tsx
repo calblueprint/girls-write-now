@@ -1,20 +1,20 @@
 import { Link, router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Text, View } from 'react-native';
 import { Icon as RNEIcon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import validator from 'validator';
 
 import styles from './styles';
+import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserStringInput from '../../../components/UserStringInput/UserStringInput';
-import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
+import { isEmailTaken } from '../../../queries/profiles';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import { isEmailTaken } from '../../../queries/profiles';
 
 function SignUpScreen() {
   const { signUp } = useSession();
@@ -143,133 +143,134 @@ function SignUpScreen() {
       style={[globalStyles.authContainer]}
       edges={['right', 'left', 'top']}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        automaticallyAdjustKeyboardInsets={true}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.flex}
-      >
-        <View style={styles.inputs}>
-          <Text style={[globalStyles.h1, styles.title]}>
-            {'Read stories from \nyoung creators'}
-          </Text>
-
-          <UserStringInput
-            placeholder="Username"
-            label="Username"
-            placeholderTextColor={colors.darkGrey}
-            onChange={setAndCheckUsername}
-            value={username}
-          />
-          {usernameError && (
-            <Text style={[globalStyles.errorMessage, styles.inputError]}>
-              {usernameError}
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.flex}
+        >
+          <View style={styles.inputs}>
+            <Text style={[globalStyles.h1, styles.title]}>
+              {'Read stories from \nyoung creators'}
             </Text>
+
+            <UserStringInput
+              placeholder="Username"
+              label="Username"
+              placeholderTextColor={colors.darkGrey}
+              onChange={setAndCheckUsername}
+              value={username}
+            />
+            {usernameError && (
+              <Text style={[globalStyles.errorMessage, styles.inputError]}>
+                {usernameError}
+              </Text>
+            )}
+
+            <UserStringInput
+              placeholder="First Name"
+              label="First Name"
+              placeholderTextColor={colors.darkGrey}
+              onChange={setFirstName}
+              value={firstName}
+            />
+            <UserStringInput
+              placeholder="Last Name"
+              label="Last Name"
+              placeholderTextColor={colors.darkGrey}
+              onChange={setLastName}
+              value={lastName}
+            />
+            <UserStringInput
+              placeholder="Email"
+              label="Email"
+              placeholderTextColor={colors.darkGrey}
+              onChange={setAndCheckEmail}
+              value={email}
+              attributes={{
+                textContentType: 'emailAddress',
+                secureTextEntry: false,
+              }}
+            />
+            {emailError && (
+              <Text style={[globalStyles.errorMessage, styles.inputError]}>
+                {emailError}
+              </Text>
+            )}
+
+            <UserStringInput
+              placeholder="Password"
+              label="Password"
+              placeholderTextColor={colors.darkGrey}
+              onChange={text => {
+                setPassword(text);
+                checkPassword(text);
+              }}
+              value={password}
+              attributes={{
+                textContentType: 'password',
+                secureTextEntry: passwordTextHidden,
+              }}
+            >
+              <RNEIcon
+                name={passwordTextHidden ? 'visibility-off' : 'visibility'}
+                type="material"
+                style={styles.icon}
+                onPress={() => setPasswordTextHidden(!passwordTextHidden)}
+              />
+            </UserStringInput>
+          </View>
+          {password !== '' && (
+            <PasswordComplexityText
+              condition={hasUppercase}
+              message="At least 1 uppercase letter"
+            />
+          )}
+          {password !== '' && (
+            <PasswordComplexityText
+              condition={hasLowercase}
+              message="At least 1 lowercase letter"
+            />
+          )}
+          {password !== '' && (
+            <PasswordComplexityText
+              condition={hasNumber}
+              message="At least 1 number"
+            />
+          )}
+          {password !== '' && (
+            <PasswordComplexityText
+              condition={hasLength}
+              message="At least 8 characters"
+            />
           )}
 
-          <UserStringInput
-            placeholder="First Name"
-            label="First Name"
-            placeholderTextColor={colors.darkGrey}
-            onChange={setFirstName}
-            value={firstName}
-          />
-          <UserStringInput
-            placeholder="Last Name"
-            label="Last Name"
-            placeholderTextColor={colors.darkGrey}
-            onChange={setLastName}
-            value={lastName}
-          />
-          <UserStringInput
-            placeholder="Email"
-            label="Email"
-            placeholderTextColor={colors.darkGrey}
-            onChange={setAndCheckEmail}
-            value={email}
-            attributes={{
-              textContentType: 'emailAddress',
-              secureTextEntry: false,
-            }}
-          />
-          {emailError && (
-            <Text style={[globalStyles.errorMessage, styles.inputError]}>
-              {emailError}
-            </Text>
-          )}
-
-          <UserStringInput
-            placeholder="Password"
-            label="Password"
-            placeholderTextColor={colors.darkGrey}
-            onChange={text => {
-              setPassword(text);
-              checkPassword(text);
-            }}
-            value={password}
-            attributes={{
-              textContentType: 'password',
-              secureTextEntry: passwordTextHidden,
-            }}
-          >
-            <RNEIcon
-              name={passwordTextHidden ? 'visibility-off' : 'visibility'}
-              type="material"
-              style={styles.icon}
-              onPress={() => setPasswordTextHidden(!passwordTextHidden)}
-            />
-          </UserStringInput>
-        </View>
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasUppercase}
-            message="At least 1 uppercase letter"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasLowercase}
-            message="At least 1 lowercase letter"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasNumber}
-            message="At least 1 number"
-          />
-        )}
-        {password !== '' && (
-          <PasswordComplexityText
-            condition={hasLength}
-            message="At least 8 characters"
-          />
-        )}
-
-        <View>
-          <View style={[styles.verticallySpaced, globalStyles.mt20]}>
-            <StyledButton
-              text="Sign Up"
-              disabled={
-                !passwordComplexity ||
-                loading ||
-                emailError !== '' ||
-                usernameError !== '' ||
-                firstName.length === 0 ||
-                lastName.length === 0 ||
-                email.length === 0 ||
-                username.length === 0
-              }
-              onPress={signUpWithEmail}
-            />
+          <View>
+            <View style={[styles.verticallySpaced, globalStyles.mt20]}>
+              <StyledButton
+                text="Sign Up"
+                disabled={
+                  !passwordComplexity ||
+                  loading ||
+                  emailError !== '' ||
+                  usernameError !== '' ||
+                  firstName.length === 0 ||
+                  lastName.length === 0 ||
+                  email.length === 0 ||
+                  username.length === 0
+                }
+                onPress={signUpWithEmail}
+              />
+            </View>
+            <View style={styles.redirectText}>
+              <Text style={globalStyles.body1}>Already have an account?</Text>
+              <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
+                Log In
+              </Link>
+            </View>
           </View>
-          <View style={styles.redirectText}>
-            <Text style={globalStyles.body1}>Already have an account?</Text>
-            <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
-              Log In
-            </Link>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

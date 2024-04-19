@@ -306,6 +306,7 @@ function SearchScreen() {
                 {recentlyViewed.map(item => (
                   <PreviewCard
                     key={item.title}
+                    storyId={item.id}
                     title={item.title}
                     image={item.featured_media}
                     author={item.author_name}
@@ -395,7 +396,8 @@ function SearchScreen() {
             contentContainerStyle={styles.contentCotainerStories}
             renderItem={({ item }) => (
               <PreviewCard
-                key={item.title}
+                key={item.id}
+                storyId={item.id}
                 title={item.title}
                 image={item.featured_media}
                 author={item.author_name}

@@ -241,7 +241,9 @@ function OnboardingScreen() {
             <View style={[styles.info, styles.warning]}>
               <Icon type="material" name="info-outline" color="#797979" />
               <Text style={[globalStyles.subtext, styles.subtext]}>
-                You can only input your birthday once. Please make sure the date is correct before saving as you will not be able to change your birthday in the future.
+                You can only input your birthday once. Please make sure the date
+                is correct before saving as you will not be able to change your
+                birthday in the future.
               </Text>
             </View>
           )}

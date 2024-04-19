@@ -89,7 +89,12 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
-              <Text style={[globalStyles.subHeading1Bold, { textDecorationLine: 'underline' }]}>
+              <Text
+                style={[
+                  globalStyles.subHeading1Bold,
+                  { textDecorationLine: 'underline' },
+                ]}
+              >
                 By {story.author_name}
               </Text>
             </View>
@@ -174,7 +179,12 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
-              <Text style={[globalStyles.subHeading1Bold, { textDecorationLine: 'underline' }]}>
+              <Text
+                style={[
+                  globalStyles.subHeading1Bold,
+                  { textDecorationLine: 'underline' },
+                ]}
+              >
                 By {story.author_name}
               </Text>
             </View>
@@ -189,9 +199,8 @@ function StoryScreen() {
             <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
           </Button>
         </ScrollView>
-      )
-      }
-    </SafeAreaView >
+      )}
+    </SafeAreaView>
   );
 }
 

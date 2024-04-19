@@ -154,12 +154,56 @@ function SignUpScreen() {
               {'Read stories from \nyoung creators'}
             </Text>
 
-            <UserStringInput
-              placeholder="Username"
-              label="Username"
-              placeholderTextColor={colors.darkGrey}
-              onChange={setAndCheckUsername}
-              value={username}
+          <UserStringInput
+            placeholder="First Name"
+            label="First Name"
+            placeholderTextColor={colors.darkGrey}
+            onChange={text => setFirstName(text.replaceAll(/[^a-zA-Z]/g, ''))}
+            value={firstName}
+          />
+          <UserStringInput
+            placeholder="Last Name"
+            label="Last Name"
+            placeholderTextColor={colors.darkGrey}
+            onChange={text => setLastName(text.replaceAll(/[^a-zA-Z]/g, ''))}
+            value={lastName}
+          />
+          <UserStringInput
+            placeholder="Email"
+            label="Email"
+            placeholderTextColor={colors.darkGrey}
+            onChange={setAndCheckEmail}
+            value={email}
+            attributes={{
+              textContentType: 'emailAddress',
+              secureTextEntry: false,
+            }}
+          />
+          {emailError && (
+            <Text style={[globalStyles.errorMessage, styles.inputError]}>
+              {emailError}
+            </Text>
+          )}
+
+          <UserStringInput
+            placeholder="Password"
+            label="Password"
+            placeholderTextColor={colors.darkGrey}
+            onChange={text => {
+              setPassword(text);
+              checkPassword(text);
+            }}
+            value={password}
+            attributes={{
+              textContentType: 'password',
+              secureTextEntry: passwordTextHidden,
+            }}
+          >
+            <RNEIcon
+              name={passwordTextHidden ? 'visibility-off' : 'visibility'}
+              type="material"
+              style={styles.icon}
+              onPress={() => setPasswordTextHidden(!passwordTextHidden)}
             />
             {usernameError && (
               <Text style={[globalStyles.errorMessage, styles.inputError]}>

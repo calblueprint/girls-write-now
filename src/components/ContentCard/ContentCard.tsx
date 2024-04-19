@@ -11,6 +11,7 @@ import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
 
 type ContentCardProps = {
+  id: number;
   title: string;
   author: string;
   image: string;
@@ -19,6 +20,7 @@ type ContentCardProps = {
 };
 
 function ContentCard({
+  id,
   title,
   author,
   image,

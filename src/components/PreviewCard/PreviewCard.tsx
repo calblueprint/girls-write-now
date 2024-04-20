@@ -20,7 +20,6 @@ const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
 
 type PreviewCardProps = {
-  id: number;
   title: string;
   image: string;
   storyId: number;
@@ -32,7 +31,6 @@ type PreviewCardProps = {
 };
 
 function PreviewCard({
-  id,
   title,
   image,
   storyId,
@@ -45,7 +43,7 @@ function PreviewCard({
   const [reactions, setReactions] = useState<Reactions[]>();
   useEffect(() => {
     (async () => {
-      const temp = await fetchAllReactionsToStory(id);
+      const temp = await fetchAllReactionsToStory(storyId);
       if (temp != null) {
         setReactions(temp);
         return;

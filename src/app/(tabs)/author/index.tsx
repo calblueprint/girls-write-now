@@ -1,5 +1,5 @@
+import * as cheerio from 'cheerio';
 import { useLocalSearchParams, router } from 'expo-router';
-import { decode } from 'html-entities';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,7 +14,6 @@ import {
 } from '../../../queries/authors';
 import { Author, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
-import * as cheerio from 'cheerio';
 
 function AuthorScreen() {
   const [authorInfo, setAuthorInfo] = useState<Author>();
@@ -59,7 +58,7 @@ function AuthorScreen() {
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          bounces={true}
+          bounces
           contentContainerStyle={{ paddingHorizontal: 8 }}
         >
           <BackButton pressFunction={() => router.back()} />

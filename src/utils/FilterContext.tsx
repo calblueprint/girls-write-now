@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
+
 import supabase from './supabase';
 
 type FilterAction =

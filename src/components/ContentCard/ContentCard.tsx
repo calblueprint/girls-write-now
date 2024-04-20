@@ -1,3 +1,5 @@
+import { Image } from 'expo-image';
+import { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -5,11 +7,12 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { Image } from 'expo-image';
+import Emoji from 'react-native-emoji';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
+import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
-import Emoji from 'react-native-emoji';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {
@@ -31,6 +34,19 @@ function ContentCard({
   storyId,
   pressFunction,
 }: ContentCardProps) {
+  const [reactions, setReactions] = useState<Reactions[]>();
+
+  useEffect(() => {
+    (async () => {
+      const temp = await fetchAllReactionsToStory(id);
+      if (temp != null) {
+        setReactions(temp);
+        return;
+      }
+      setReactions([]);
+    })();
+  });
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.contentCard}>
@@ -73,7 +89,7 @@ function ContentCard({
               {/* heart, clap, muscle, cry, ??? */}
               <View style={styles.reactionNumber}>
                 <Text style={[globalStyles.subtext, styles.reactionText]}>
-                  14{/*change number to work*/}
+                  {reactions?.length}
                 </Text>
               </View>
             </View>

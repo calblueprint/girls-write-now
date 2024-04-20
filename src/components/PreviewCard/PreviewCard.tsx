@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import { Image } from 'expo-image';
 import {
   GestureResponderEvent,
   Pressable,
@@ -7,16 +8,19 @@ import {
   View,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
-import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import { useEffect, useState } from 'react';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
+import { Reactions } from '../../queries/types';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
 
 type PreviewCardProps = {
+  id: number;
   title: string;
   image: string;
   storyId: number;
@@ -28,6 +32,7 @@ type PreviewCardProps = {
 };
 
 function PreviewCard({
+  id,
   title,
   image,
   storyId,
@@ -37,6 +42,18 @@ function PreviewCard({
   tags,
   pressFunction,
 }: PreviewCardProps) {
+  const [reactions, setReactions] = useState<Reactions[]>();
+  useEffect(() => {
+    (async () => {
+      const temp = await fetchAllReactionsToStory(id);
+      if (temp != null) {
+        setReactions(temp);
+        return;
+      }
+      setReactions([]);
+    })();
+  });
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -85,7 +102,7 @@ function PreviewCard({
             {/* heart, clap, muscle, cry, ??? */}
             <View style={styles.reactionNumber}>
               <Text style={[globalStyles.subtext, styles.reactionText]}>
-                14{/*change number to work*/}
+                {reactions?.length}
               </Text>
             </View>
           </View>

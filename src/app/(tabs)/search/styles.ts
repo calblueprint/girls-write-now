@@ -90,6 +90,37 @@ const styles = StyleSheet.create({
   cancelButton: {
     color: colors.grey,
   },
+  dropdown: {
+    borderColor: '#797979',
+    flexGrow: 0,
+    flexShrink: 0,
+    borderWidth: 1.5,
+    borderRadius: 7,
+    width: 140,
+    height: 30,
+    color: '#797979',
+  },
+  dropdownContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  firstDropdown: {
+    marginRight: 10,
+  },
+  secondDropdown: {
+    marginLeft: 10,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  itemContainer: {},
+  placeholderStyle: {
+    color: colors.darkGrey,
+    marginLeft: 45,
+  },
 });
 
 export default styles;

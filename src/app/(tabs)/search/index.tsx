@@ -12,6 +12,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { MultiSelect, Dropdown } from 'react-native-element-dropdown';
 
 import styles from './styles';
 import FilterModal from '../../../components/FilterModal/FilterModal';
@@ -72,21 +74,175 @@ function SearchScreen() {
   const [showRecents, setShowRecents] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
   const genreColors = [colors.citrus, colors.lime, colors.lilac];
+  const [toneFilterOptions, setToneFilterOptions] = useState<string[]>([]);
+  const [topicFilterOptions, setTopicFilterOptions] = useState<string[]>([]);
+  const [genreFilterOptions, setGenreFilterOptions] = useState<string[]>([]);
+  const [selectedTonesForFiltering, setSelectedTonesForFiltering] = useState<
+    string[]
+  >([]);
+  const [selectedTopicsForFiltering, setSelectedTopicsForFiltering] = useState<
+    string[]
+  >([]);
+  const [selectedGenreForFiltering, setSelectedGenreForFiltering] =
+    useState<string>('');
+
+  const renderFilterDropdown = (
+    placeholder: string,
+    value: string[],
+    data: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+  ) => {
+    return (
+      <MultiSelect
+        mode="default"
+        style={[styles.dropdown, styles.secondDropdown]}
+        value={value}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={globalStyles.body1}
+        inputSearchStyle={globalStyles.body1}
+        itemTextStyle={globalStyles.body1}
+        dropdownPosition="bottom"
+        itemContainerStyle={styles.itemContainer}
+        iconStyle={styles.iconStyle}
+        data={data.map(topic => {
+          return { label: topic, value: topic };
+        })}
+        renderSelectedItem={() => <View />}
+        maxHeight={400}
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
+        onChange={item => {
+          if (item) {
+            setter(item);
+          }
+        }}
+      />
+    );
+  };
+
+  const renderGenreDropdown = (
+    placeholder: string,
+    value: string,
+    data: string[],
+  ) => {
+    return (
+      <Dropdown
+        mode="default"
+        style={[styles.dropdown, styles.secondDropdown]}
+        value={value}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={globalStyles.body1}
+        inputSearchStyle={globalStyles.body1}
+        itemTextStyle={globalStyles.body1}
+        dropdownPosition="bottom"
+        itemContainerStyle={styles.itemContainer}
+        iconStyle={styles.iconStyle}
+        data={data.map(topic => {
+          return { label: topic, value: topic };
+        })}
+        maxHeight={400}
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
+        onChange={item => {
+          if (item) {
+            setSelectedGenreForFiltering(item.value);
+          }
+        }}
+      />
+    );
+  };
 
   useEffect(() => {
     (async () => {
-      fetchAllStoryPreviews().then((stories: StoryPreview[]) =>
-        setAllStories(stories),
-      );
-      fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
-      getRecentSearch().then((searches: RecentSearch[]) =>
-        setRecentSearches(searches),
-      );
-      getRecentStory().then((viewed: StoryPreview[]) =>
-        setRecentlyViewed(viewed),
-      );
+      try {
+        fetchAllStoryPreviews().then((stories: StoryPreview[]) =>
+          setAllStories(stories),
+        );
+        fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
+        getRecentSearch().then((searches: RecentSearch[]) =>
+          setRecentSearches(searches),
+        );
+        getRecentStory().then((viewed: StoryPreview[]) =>
+          setRecentlyViewed(viewed),
+        );
+      } finally {
+        const genres: string[] = allGenres
+          .reduce((acc: string[], current: Genre) => {
+            return acc.concat(
+              current.parent_name,
+              current.subgenres.map(subgenre => subgenre.name),
+            );
+          }, [] as string[])
+          .filter(genre => genre !== null);
+
+        setGenreFilterOptions([...new Set(genres)]);
+      }
     })();
   }, []);
+
+  useEffect(() => {
+    const populateToneAndTopicDropdowns = (stories: StoryPreview[]) => {
+      const tones: string[] = stories
+        .reduce((acc: string[], current: StoryPreview) => {
+          return acc.concat(current.tone);
+        }, [] as string[])
+        .filter(tone => tone !== null);
+      const topics: string[] = stories
+        .reduce((acc: string[], current: StoryPreview) => {
+          return acc.concat(current.topic);
+        }, [] as string[])
+        .filter(topic => topic !== null);
+
+      setTopicFilterOptions([...new Set(topics)]);
+      setToneFilterOptions([...new Set(tones)]);
+    };
+
+    search.length > 0
+      ? populateToneAndTopicDropdowns(searchResults)
+      : populateToneAndTopicDropdowns(allStories);
+  }, [search]);
+
+  useEffect(() => {
+    if (selectedGenreForFiltering) {
+      const subgenreNames = allGenres
+        .reduce((acc: string[], current: Genre) => {
+          return acc.concat(current.subgenres.map(subgenre => subgenre.name));
+        }, [] as string[])
+        .filter(genre => genre !== null);
+
+      if (subgenreNames.includes(selectedGenreForFiltering)) {
+        const genre = allGenres.filter(genre =>
+          genre.subgenres
+            .map(subgenre => subgenre.name)
+            .includes(selectedGenreForFiltering),
+        )[0];
+        router.push({
+          pathname: '/genre',
+          params: {
+            genreId: genre.parent_id.toString(),
+            genreType: GenreType.SUBGENRE,
+            genreName: selectedGenreForFiltering,
+          },
+        });
+      } else {
+        const genre = allGenres.filter(
+          genre => genre.parent_name === selectedGenreForFiltering,
+        )[0];
+        router.push({
+          pathname: '/genre',
+          params: {
+            genreId: genre.parent_id.toString(),
+            genreType: GenreType.PARENT,
+            genreName: genre.parent_name,
+          },
+        });
+      }
+    }
+  }, [selectedGenreForFiltering]);
 
   const getColor = (index: number) => {
     return genreColors[index % genreColors.length];
@@ -336,6 +492,26 @@ function SearchScreen() {
               </Text>
             </View>
           ))}
+
+        <View style={[styles.dropdownContainer, styles.firstDropdown]}>
+          {renderGenreDropdown(
+            'Genre',
+            selectedGenreForFiltering,
+            genreFilterOptions,
+          )}
+          {renderFilterDropdown(
+            'Topic',
+            selectedTopicsForFiltering,
+            topicFilterOptions,
+            setSelectedTopicsForFiltering,
+          )}
+          {renderFilterDropdown(
+            'Tone',
+            selectedTonesForFiltering,
+            toneFilterOptions,
+            setSelectedTonesForFiltering,
+          )}
+        </View>
 
         {showGenreCarousals ? (
           <ScrollView

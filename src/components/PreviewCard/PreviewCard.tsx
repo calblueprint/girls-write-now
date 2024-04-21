@@ -50,7 +50,7 @@ function PreviewCard({
       }
       setReactions([]);
     })();
-  });
+  }, []);
 
   return (
     <Pressable onPress={pressFunction}>

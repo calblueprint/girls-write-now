@@ -1,10 +1,10 @@
 import {
   GestureResponderEvent,
   Text,
-  Image,
   View,
   TouchableOpacity,
 } from 'react-native';
+import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';

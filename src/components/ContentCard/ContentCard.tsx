@@ -45,7 +45,7 @@ function ContentCard({
       }
       setReactions([]);
     })();
-  });
+  }, []);
 
   return (
     <Pressable onPress={pressFunction}>

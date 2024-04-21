@@ -1,7 +1,8 @@
 import * as cheerio from 'cheerio';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, View, Text, Image } from 'react-native';
+import { ActivityIndicator, ScrollView, View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';

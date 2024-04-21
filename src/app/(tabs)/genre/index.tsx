@@ -19,6 +19,7 @@ import { fetchStoryPreviewByIds } from '../../../queries/stories';
 import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
+import React from 'react';
 
 function GenreScreen() {
   const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();

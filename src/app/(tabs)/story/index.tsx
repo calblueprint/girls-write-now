@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   ScrollView,
   Share,
   Text,
@@ -11,6 +10,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';

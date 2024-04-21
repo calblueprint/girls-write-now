@@ -1,4 +1,6 @@
 import * as cheerio from 'cheerio';
+import { Image } from 'expo-image';
+import { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -7,11 +9,13 @@ import {
   View,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
-import { Image } from 'expo-image';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
+import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -24,6 +28,7 @@ type PreviewCardProps = {
   authorImage: string;
   excerpt: { html: string };
   tags: string[];
+  reactions?: string[] | null;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -36,10 +41,25 @@ function PreviewCard({
   excerpt,
   tags,
   pressFunction,
+  reactions: preloadedReactions = null,
 }: PreviewCardProps) {
-  const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
-  };
+  const [reactions, setReactions] = useState<string[] | null>(
+    preloadedReactions,
+  );
+  useEffect(() => {
+    if (preloadedReactions != null) {
+      return;
+    }
+
+    (async () => {
+      const temp = await fetchAllReactionsToStory(storyId);
+      if (temp != null) {
+        setReactions(temp.map(r => r.reaction));
+        return;
+      }
+      setReactions([]);
+    })();
+  }, []);
 
   return (
     <Pressable onPress={pressFunction}>
@@ -76,23 +96,7 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
-          <View style={{ flexDirection: 'row', gap: -7 }}>
-            <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
-              <Emoji name="heart" />
-            </View>
-            <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
-              <Emoji name="clap" />
-            </View>
-            <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
-              <Emoji name="muscle" />
-            </View>
-            {/* heart, clap, muscle, cry, ??? */}
-            <View style={styles.reactionNumber}>
-              <Text style={[globalStyles.subtext, styles.reactionText]}>
-                14{/*change number to work*/}
-              </Text>
-            </View>
-          </View>
+          <ReactionDisplay reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>

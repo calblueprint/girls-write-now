@@ -129,6 +129,7 @@ function HomeScreen() {
             >
               {recommendedStories.map(story => (
                 <ContentCard
+                  id={story.id}
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
@@ -159,6 +160,7 @@ function HomeScreen() {
             >
               {newStories.map(story => (
                 <ContentCard
+                  id={story.id}
                   key={story.title}
                   title={story.title}
                   author={story.author_name}

@@ -14,6 +14,7 @@ import { fetchAllReactionsToStory } from '../../queries/reactions';
 import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
 
 type ContentCardProps = {
   id: number;
@@ -77,23 +78,7 @@ function ContentCard({
             </Text>
           </View>
           <View style={styles.buttons}>
-            <View style={{ flexDirection: 'row', gap: -7 }}>
-              <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
-                <Emoji name="heart" />
-              </View>
-              <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
-                <Emoji name="clap" />
-              </View>
-              <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
-                <Emoji name="muscle" />
-              </View>
-
-              <View style={styles.reactionNumber}>
-                <Text style={[globalStyles.subtext, styles.reactionText]}>
-                  {reactions?.length ?? 0}
-                </Text>
-              </View>
-            </View>
+            <ReactionDisplay reactions={reactions ?? []} />
             <TouchableOpacity>
               <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>

@@ -15,6 +15,7 @@ import { fetchAllReactionsToStory } from '../../queries/reactions';
 import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -95,23 +96,7 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
-          <View style={{ flexDirection: 'row', gap: -7 }}>
-            <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
-              <Emoji name="heart" />
-            </View>
-            <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
-              <Emoji name="clap" />
-            </View>
-            <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
-              <Emoji name="muscle" />
-            </View>
-            {/* heart, clap, muscle, cry, ??? */}
-            <View style={styles.reactionNumber}>
-              <Text style={[globalStyles.subtext, styles.reactionText]}>
-                {reactions?.length ?? 0}
-              </Text>
-            </View>
-          </View>
+          <ReactionDisplay reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>

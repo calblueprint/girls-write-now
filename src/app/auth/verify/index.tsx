@@ -10,6 +10,7 @@ import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
 import { Icon } from 'react-native-elements';
+import { text } from 'cheerio/lib/api/manipulation';
 
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();

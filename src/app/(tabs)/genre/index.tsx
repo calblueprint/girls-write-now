@@ -272,6 +272,7 @@ function GenreScreen() {
         renderItem={({ item }) => (
           <PreviewCard
             key={item.id}
+            storyId={item.id}
             tags={item.genre_medium.concat(item.tone).concat(item.topic)}
             author={item.author_name}
             image={item.featured_media}

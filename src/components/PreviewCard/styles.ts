@@ -50,9 +50,11 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingLeft: 12,
     paddingRight: 12,
+    paddingBottom: 8,
     borderBottomColor: '#EBEBEB',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
+    flexGrow: 1,
     justifyContent: 'space-between',
   },
   tag: {

@@ -1,21 +1,23 @@
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
+import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
 import Emoji from 'react-native-emoji';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {
   title: string;
   author: string;
   image: string;
   authorImage: string;
+  storyId: number;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -24,12 +26,9 @@ function ContentCard({
   author,
   image,
   authorImage,
+  storyId,
   pressFunction,
 }: ContentCardProps) {
-  const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
-  };
-
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.contentCard}>
@@ -76,11 +75,8 @@ function ContentCard({
                 </Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => saveStory()}>
-              <Image
-                style={styles.saveStoryImage}
-                source={require('./savedStoriesIcon.png')}
-              />
+            <TouchableOpacity>
+              <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>
           </View>
         </View>

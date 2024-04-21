@@ -20,7 +20,12 @@ import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
+import {
+  StoryPreview,
+  RecentSearch,
+  Genre,
+  StoryPreviewWithPreloadedReactions,
+} from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { GenreType } from '../genre';
@@ -62,9 +67,13 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
 };
 
 function SearchScreen() {
-  const [allStories, setAllStories] = useState<StoryPreview[]>([]);
+  const [allStories, setAllStories] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
-  const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
@@ -75,9 +84,7 @@ function SearchScreen() {
 
   useEffect(() => {
     (async () => {
-      fetchAllStoryPreviews().then((stories: StoryPreview[]) =>
-        setAllStories(stories),
-      );
+      fetchAllStoryPreviews().then(stories => setAllStories(stories));
       fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
       getRecentSearch().then((searches: RecentSearch[]) =>
         setRecentSearches(searches),
@@ -99,7 +106,7 @@ function SearchScreen() {
       return;
     }
 
-    const updatedData = allStories.filter((item: StoryPreview) => {
+    const updatedData = allStories.filter(item => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
@@ -400,6 +407,7 @@ function SearchScreen() {
                 storyId={item.id}
                 title={item.title}
                 image={item.featured_media}
+                reactions={item.reactions}
                 author={item.author_name}
                 authorImage={item.author_image}
                 excerpt={item.excerpt}

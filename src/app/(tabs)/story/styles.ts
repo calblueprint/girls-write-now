@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 24,
     paddingRight: 24,
-    paddingTop: 48,
   },
   authorImage: {
     backgroundColor: '#D9D9D9',

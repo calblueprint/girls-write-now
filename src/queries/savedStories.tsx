@@ -1,4 +1,5 @@
 import supabase from '../utils/supabase';
+import { StoryPreview } from './types';
 
 enum SavedList {
   FAVORITES = 'favorites',
@@ -9,21 +10,19 @@ async function fetchUserStories(
   user_id: string | undefined,
   name: string | undefined,
 ) {
-  const { data: storyObjects, error } = await supabase
-    .from('saved_stories')
-    .select('story_id')
-    .eq('user_id', user_id)
-    .eq('name', name);
+  let { data, error } = await supabase.rpc('get_saved_stories_for_user', {
+    user_id_string: user_id,
+    saved_list_name: name,
+  });
 
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(
-        `An error occured when trying to fetch user saved stories: ${JSON.stringify(
+        `An error occured when trying to get user saved stories: ${JSON.stringify(
           error,
         )}`,
       );
     }
-    return [];
   }
 
   const storyData = [];
@@ -46,7 +45,7 @@ async function fetchUserStories(
     }
   }
 
-  return storyData;
+  return data as StoryPreview[];
 }
 
 export async function fetchUserStoriesFavorites(user_id: string | undefined) {
@@ -131,8 +130,8 @@ export async function isStoryInReadingList(
   storyId: number,
   userId: string | undefined,
 ): Promise<boolean> {
-  const { data, error } = await supabase.rpc('is_story_saved_for_user', {
-    list_name: 'reading list',
+  let { data, error } = await supabase.rpc('is_story_saved_for_user', {
+    list_name: SavedList.READING_LIST,
     story_db_id: storyId,
     user_uuid: userId,
   });

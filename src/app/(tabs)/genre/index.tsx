@@ -14,11 +14,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
+import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchGenreStoryById } from '../../../queries/genres';
 import { fetchStoryPreviewByIds } from '../../../queries/stories';
 import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
-import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 
 function GenreScreen() {
   const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
@@ -47,13 +47,13 @@ function GenreScreen() {
 
   useEffect(() => {
     const checkTopic = (preview: StoryPreview): boolean => {
-      if (preview == null || preview.topic == null) return false;
+      if (preview?.topic == null) return false;
       if (selectedTopicsForFiltering.length == 0) return true;
       else
         return selectedTopicsForFiltering.every(t => preview.topic.includes(t));
     };
     const checkTone = (preview: StoryPreview): boolean => {
-      if (preview == null || preview.tone == null) return false;
+      if (preview?.tone == null) return false;
       if (selectedTonesForFiltering.length == 0) return true;
       else
         return selectedTonesForFiltering.every(t => preview.tone.includes(t));
@@ -202,7 +202,7 @@ function GenreScreen() {
   const renderGenreHeading = () => {
     return (
       <View>
-        <Text style={[globalStyles.h1, { marginTop: 15 }]}>
+        <Text style={globalStyles.h1}>
           {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
         </Text>
         {/* <Text style={[globalStyles.subHeading1]}> */}
@@ -297,13 +297,7 @@ function GenreScreen() {
     >
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <BackButton
-            pressFunction={() =>
-              router.push({
-                pathname: '/search',
-              })
-            }
-          />
+          <BackButton pressFunction={() => router.back()} />
 
           {useMemo(renderGenreHeading, [selectedSubgenre, mainGenre])}
           {useMemo(renderGenreScrollSelector, [subgenres, selectedSubgenre])}

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   ScrollView,
   Share,
   Text,
@@ -11,6 +10,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import FavoriteStoryButton from '../../../components/FavoriteStoryButton/FavoriteStoryButton';
 import SaveStoryButton from '../../../components/SaveStoryButton/SaveStoryButton';
+import BackButton from '../../../components/BackButton/BackButton';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 import colors from '../../../styles/colors';
@@ -76,6 +77,8 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
+          <BackButton pressFunction={() => router.back()} />
+
           <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
 
           <TouchableOpacity

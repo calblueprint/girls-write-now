@@ -20,7 +20,12 @@ import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview, RecentSearch, Genre, StoryPreviewWithPreloadedReactions } from '../../../queries/types';
+import {
+  StoryPreview,
+  RecentSearch,
+  Genre,
+  StoryPreviewWithPreloadedReactions,
+} from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { GenreType } from '../genre';
@@ -62,9 +67,13 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
 };
 
 function SearchScreen() {
-  const [allStories, setAllStories] = useState<StoryPreviewWithPreloadedReactions[]>([]);
+  const [allStories, setAllStories] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
-  const [searchResults, setSearchResults] = useState<StoryPreviewWithPreloadedReactions[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
@@ -75,9 +84,7 @@ function SearchScreen() {
 
   useEffect(() => {
     (async () => {
-      fetchAllStoryPreviews().then((stories) =>
-        setAllStories(stories),
-      );
+      fetchAllStoryPreviews().then(stories => setAllStories(stories));
       fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
       getRecentSearch().then((searches: RecentSearch[]) =>
         setRecentSearches(searches),

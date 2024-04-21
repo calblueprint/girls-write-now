@@ -1,7 +1,14 @@
-import { Story, StoryPreview, StoryCard, StoryPreviewWithPreloadedReactions } from './types';
+import {
+  Story,
+  StoryPreview,
+  StoryCard,
+  StoryPreviewWithPreloadedReactions,
+} from './types';
 import supabase from '../utils/supabase';
 
-export async function fetchAllStoryPreviews(): Promise<StoryPreviewWithPreloadedReactions[]> {
+export async function fetchAllStoryPreviews(): Promise<
+  StoryPreviewWithPreloadedReactions[]
+> {
   const { data, error } = await supabase.rpc('fetch_all_story_previews');
 
   if (error) {

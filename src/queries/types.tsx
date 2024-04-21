@@ -25,7 +25,6 @@ export interface StoryPreviewWithPreloadedReactions {
   reactions: string[];
 }
 
-
 export interface Author {
   id: number;
   name: string;

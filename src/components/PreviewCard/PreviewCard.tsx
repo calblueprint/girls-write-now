@@ -40,17 +40,17 @@ function PreviewCard({
   excerpt,
   tags,
   pressFunction,
-  reactions: preloadedReactions = null
+  reactions: preloadedReactions = null,
 }: PreviewCardProps) {
-  const [reactions, setReactions] = useState<string[] | null>(preloadedReactions);
+  const [reactions, setReactions] = useState<string[] | null>(
+    preloadedReactions,
+  );
   useEffect(() => {
     if (preloadedReactions != null) {
       return;
     }
 
     (async () => {
-      console.log("fetching reactions");
-
       const temp = await fetchAllReactionsToStory(storyId);
       if (temp != null) {
         setReactions(temp.map(r => r.reaction));

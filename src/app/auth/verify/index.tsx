@@ -1,20 +1,15 @@
-import { Link, Redirect, router, useLocalSearchParams } from 'expo-router';
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import { Icon } from 'react-native-elements';
 import OTPTextInput from 'react-native-otp-textinput';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-
-import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
-import { Icon } from 'react-native-elements';
-
 
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();

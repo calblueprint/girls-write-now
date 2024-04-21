@@ -150,7 +150,7 @@ function HomeScreen() {
         {featuredStories.length > 0 && (
           <View>
             <Text style={globalStyles.h3}>Featured Stories</Text>
-            {featuredStoriesDescription.length > 0 && (
+            {featuredStoriesDescription != null && featuredStoriesDescription.length > 0 && (
               <Text style={[globalStyles.body1, styles.featuredDescription]}>
                 {featuredStoriesDescription}
               </Text>

@@ -11,14 +11,14 @@ async function fetchUserStories(
   name: string | undefined,
 ) {
   let { data, error } = await supabase.rpc('get_saved_stories_for_user', {
-    user_id,
-    saved_list_name: name,
+    user_id_string: user_id,
+    saved_list_name: name
   });
 
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(
-        `An error occured when trying to set user saved stories: ${JSON.stringify(
+        `An error occured when trying to get user saved stories: ${JSON.stringify(
           error,
         )}`,
       );

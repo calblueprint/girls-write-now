@@ -13,6 +13,7 @@ import {
   fetchUserStoriesReadingList,
 } from '../../../queries/savedStories';
 import { FlatList } from 'react-native-gesture-handler';
+import { usePubSub } from '../../../utils/PubSubContext';
 
 function LibraryScreen() {
   const { user } = useSession();
@@ -22,18 +23,49 @@ function LibraryScreen() {
   const [readingListStories, setReadingListStories] = useState<StoryPreview[]>(
     [],
   );
+  const { channels } = usePubSub();
 
   const favoritesPressed = () => {
     setFavoritesSelected(true);
     setReadingSelected(false);
-    console.log(favoriteStories);
   };
 
   const readingPressed = () => {
     setFavoritesSelected(false);
     setReadingSelected(true);
-    console.log(readingListStories);
   };
+
+  const renderItem = ({ item }: { item: StoryPreview }) => {
+    return (
+      <View style={{ paddingHorizontal: 24 }}>
+        <PreviewCard
+          key={item.title}
+          storyId={item.id}
+          defaultSavedStoriesState={true}
+          title={item.title}
+          image={item.featured_media}
+          author={item.author_name}
+          authorImage={item.author_image}
+          excerpt={item.excerpt}
+          tags={item.genre_medium
+            .concat(item.tone)
+            .concat(item.topic)}
+          pressFunction={() =>
+            router.push({
+              pathname: '/story',
+              params: { storyId: item.id.toString() },
+            })
+          }
+        />
+      </View>
+    );
+  }
+
+  useEffect(() => {
+    setTimeout(() => fetchUserStoriesReadingList(user?.id).then(readingList => {
+      setReadingListStories(readingList);
+    }), 3000)
+  }, [channels])
 
   useEffect(() => {
     (async () => {
@@ -42,7 +74,6 @@ function LibraryScreen() {
           setFavoriteStories(favorites),
         ),
         fetchUserStoriesReadingList(user?.id).then(readingList => {
-          console.log(readingList);
           setReadingListStories(readingList);
         }),
       ]);
@@ -85,66 +116,41 @@ function LibraryScreen() {
       </View>
 
       <View style={{ width: '100%', flex: 1, marginBottom: 100 }}>
-        {favoritesSelected && (
-          <FlatList
-            data={favoriteStories}
-            renderItem={({ item }) => {
-              return (
-                <View style={{ paddingHorizontal: 24 }}>
-                  <PreviewCard
-                    key={item.title}
-                    storyId={item.id}
-                    title={item.title}
-                    image={item.featured_media}
-                    author={item.author_name}
-                    authorImage={item.author_image}
-                    excerpt={item.excerpt}
-                    tags={item.genre_medium
-                      .concat(item.tone)
-                      .concat(item.topic)}
-                    pressFunction={() =>
-                      router.push({
-                        pathname: '/story',
-                        params: { storyId: item.id.toString() },
-                      })
-                    }
-                  />
-                </View>
-              );
-            }}
-          />
-        )}
+        {favoritesSelected &&
+          (
+            favoriteStories.length > 0 ? (
+              <FlatList
+                data={favoriteStories}
+                renderItem={renderItem}
+              />
+            ) : (
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  Favorited stories
+                </Text>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  will appear here.
+                </Text>
+              </View>)
+          )}
 
-        {readingSelected && (
-          <FlatList
-            data={readingListStories}
-            renderItem={({ item }) => {
-              return (
-                <View style={{ paddingHorizontal: 24 }}>
-                  <PreviewCard
-                    key={item.title}
-                    storyId={item.id}
-                    defaultSavedStoriesState={true}
-                    title={item.title}
-                    image={item.featured_media}
-                    author={item.author_name}
-                    authorImage={item.author_image}
-                    excerpt={item.excerpt}
-                    tags={item.genre_medium
-                      .concat(item.tone)
-                      .concat(item.topic)}
-                    pressFunction={() =>
-                      router.push({
-                        pathname: '/story',
-                        params: { storyId: item.id.toString() },
-                      })
-                    }
-                  />
-                </View>
-              );
-            }}
-          />
-        )}
+        {readingSelected &&
+          (
+            readingListStories.length > 0 ? (
+              <FlatList
+                data={readingListStories}
+                renderItem={renderItem}
+              />
+            ) : (
+              <View style={{ paddingBottom: 16 }}>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  Saved stories
+                </Text>
+                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                  will appear here.
+                </Text>
+              </View>)
+          )}
       </View>
     </View>
   );

@@ -43,6 +43,7 @@ function PreviewCard({
   pressFunction,
   reactions: preloadedReactions = null,
 }: PreviewCardProps) {
+
   const [reactions, setReactions] = useState<string[] | null>(
     preloadedReactions,
   );

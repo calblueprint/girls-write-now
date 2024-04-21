@@ -1,17 +1,19 @@
 import { router, Link } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 import { Alert, Text, View } from 'react-native';
-import validator from 'validator';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDebounce } from 'use-debounce';
+import validator from 'validator';
 
 import styles from './styles';
+import BackButton from '../../../components/BackButton/BackButton';
+import StyledButton from '../../../components/StyledButton/StyledButton';
+import UserStringInput from '../../../components/UserStringInput/UserStringInput';
+import { queryEmailByUsername } from '../../../queries/auth';
+import { isEmailTaken } from '../../../queries/profiles';
+import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
-import UserStringInput from '../../../components/UserStringInput/UserStringInput';
-import StyledButton from '../../../components/StyledButton/StyledButton';
-import { isEmailTaken } from '../../../queries/profiles';
-import { queryEmailByUsername } from '../../../queries/auth';
-import colors from '../../../styles/colors';
 
 function ForgotPasswordScreen() {
   const { resetPassword } = useSession();
@@ -71,10 +73,8 @@ function ForgotPasswordScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Link href="/auth/login" style={styles.back}>
-        <Text style={[globalStyles.subtext, styles.backText]}>{'<Back'}</Text>
-      </Link>
+    <SafeAreaView style={styles.container}>
+      <BackButton pressFunction={() => router.back()} />
       <View style={styles.body}>
         <View>
           <Text style={[globalStyles.h1, styles.heading]}>
@@ -106,7 +106,7 @@ function ForgotPasswordScreen() {
           />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

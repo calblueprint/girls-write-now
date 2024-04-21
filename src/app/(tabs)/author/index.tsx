@@ -52,7 +52,7 @@ function AuthorScreen() {
 
   return (
     <SafeAreaView
-      style={[globalStyles.tabBarContainer, { marginHorizontal: -8 }]}
+      style={[globalStyles.tabBarContainer, { paddingHorizontal: 22 }]}
     >
       {isLoading ? (
         <ActivityIndicator />
@@ -139,7 +139,7 @@ function AuthorScreen() {
           ))}
 
           {/* View so there's space between the tab bar and the stories */}
-          <View style={{ paddingBottom: 10 }}></View>
+          <View style={{ paddingBottom: 10 }} />
         </ScrollView>
       )}
     </SafeAreaView>

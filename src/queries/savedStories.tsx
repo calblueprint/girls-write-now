@@ -12,7 +12,7 @@ async function fetchUserStories(
 ) {
   let { data, error } = await supabase.rpc('get_saved_stories_for_user', {
     user_id_string: user_id,
-    saved_list_name: name
+    saved_list_name: name,
   });
 
   if (error) {

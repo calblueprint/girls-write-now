@@ -24,6 +24,7 @@ function LibraryScreen() {
     [],
   );
   const { channels } = usePubSub();
+  let updateReadingListTimeout: NodeJS.Timeout | null = null;
 
   const favoritesPressed = () => {
     setFavoritesSelected(true);
@@ -47,9 +48,7 @@ function LibraryScreen() {
           author={item.author_name}
           authorImage={item.author_image}
           excerpt={item.excerpt}
-          tags={item.genre_medium
-            .concat(item.tone)
-            .concat(item.topic)}
+          tags={item.genre_medium.concat(item.tone).concat(item.topic)}
           pressFunction={() =>
             router.push({
               pathname: '/story',
@@ -59,13 +58,21 @@ function LibraryScreen() {
         />
       </View>
     );
-  }
+  };
 
   useEffect(() => {
-    setTimeout(() => fetchUserStoriesReadingList(user?.id).then(readingList => {
-      setReadingListStories(readingList);
-    }), 3000)
-  }, [channels])
+    if (updateReadingListTimeout) {
+      clearTimeout(updateReadingListTimeout);
+    }
+
+    updateReadingListTimeout = setTimeout(
+      () =>
+        fetchUserStoriesReadingList(user?.id).then(readingList => {
+          setReadingListStories(readingList);
+        }),
+      5000,
+    );
+  }, [channels]);
 
   useEffect(() => {
     (async () => {
@@ -117,40 +124,32 @@ function LibraryScreen() {
 
       <View style={{ width: '100%', flex: 1, marginBottom: 100 }}>
         {favoritesSelected &&
-          (
-            favoriteStories.length > 0 ? (
-              <FlatList
-                data={favoriteStories}
-                renderItem={renderItem}
-              />
-            ) : (
-              <View style={{ paddingBottom: 16 }}>
-                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                  Favorited stories
-                </Text>
-                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                  will appear here.
-                </Text>
-              </View>)
-          )}
+          (favoriteStories.length > 0 ? (
+            <FlatList data={favoriteStories} renderItem={renderItem} />
+          ) : (
+            <View style={{ paddingBottom: 16 }}>
+              <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                Favorited stories
+              </Text>
+              <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                will appear here.
+              </Text>
+            </View>
+          ))}
 
         {readingSelected &&
-          (
-            readingListStories.length > 0 ? (
-              <FlatList
-                data={readingListStories}
-                renderItem={renderItem}
-              />
-            ) : (
-              <View style={{ paddingBottom: 16 }}>
-                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                  Saved stories
-                </Text>
-                <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                  will appear here.
-                </Text>
-              </View>)
-          )}
+          (readingListStories.length > 0 ? (
+            <FlatList data={readingListStories} renderItem={renderItem} />
+          ) : (
+            <View style={{ paddingBottom: 16 }}>
+              <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                Saved stories
+              </Text>
+              <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
+                will appear here.
+              </Text>
+            </View>
+          ))}
       </View>
     </View>
   );

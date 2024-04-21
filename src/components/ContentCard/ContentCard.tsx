@@ -34,15 +34,16 @@ function ContentCard({
   storyId,
   pressFunction,
 }: ContentCardProps) {
-  const [reactions, setReactions] = useState<Reactions[]>();
+  const [reactions, setReactions] = useState<string[]>();
 
   useEffect(() => {
     (async () => {
       const temp = await fetchAllReactionsToStory(id);
       if (temp != null) {
-        setReactions(temp);
+        setReactions(temp.map(r => r.reaction));
         return;
       }
+
       setReactions([]);
     })();
   }, []);

@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Svg, { Path } from 'react-native-svg';
+
 import {
   addUserStoryToReadingList,
   deleteUserStoryToReadingList,
   isStoryInReadingList,
 } from '../../queries/savedStories';
-import { usePubSub } from '../../utils/PubSubContext';
 import { useSession } from '../../utils/AuthContext';
-import { Image } from 'expo-image';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { usePubSub } from '../../utils/PubSubContext';
 
 type SaveStoryButtonProps = {
   storyId: number;
 };
-
-const saveStoryImage = require('../../../assets/save_story.png');
-const savedStoryImage = require('../../../assets/saved_story.png');
 
 export default function SaveStoryButton({ storyId }: SaveStoryButtonProps) {
   const { user } = useSession();
@@ -55,9 +53,19 @@ export default function SaveStoryButton({ storyId }: SaveStoryButtonProps) {
   return (
     <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
       {storyIsSaved ? (
-        <Image style={{ width: 30, height: 30 }} source={savedStoryImage} />
+        <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <Path
+            d="M4.375 19.375V18.125H13.125V19.375H4.375ZM4.375 14.375V13.125H18.125V14.375H4.375ZM4.375 9.375V8.125H18.125V9.375H4.375ZM20.4375 22.885L16.865 19.3125L17.75 18.4275L20.4375 21.1013L25.75 15.7887L26.635 16.6875L20.4375 22.885Z"
+            fill="#703929"
+          />
+        </Svg>
       ) : (
-        <Image style={{ width: 30, height: 30 }} source={saveStoryImage} />
+        <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <Path
+            d="M4.375 19.375V18.125H13.125V19.375H4.375ZM4.375 14.375V13.125H18.125V14.375H4.375ZM4.375 9.375V8.125H18.125V9.375H4.375ZM20.625 24.375V19.375H15.625V18.125H20.625V13.125H21.875V18.125H26.875V19.375H21.875V24.375H20.625Z"
+            fill="black"
+          />
+        </Svg>
       )}
     </TouchableOpacity>
   );

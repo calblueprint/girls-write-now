@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
@@ -56,6 +57,11 @@ const styles = StyleSheet.create({
   },
   process: {
     marginBottom: 16,
+  },
+  options: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 });
 

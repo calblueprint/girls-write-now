@@ -16,6 +16,8 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
+import FavoriteStoryButton from '../../../components/FavoriteStoryButton/FavoriteStoryButton';
+import SaveStoryButton from '../../../components/SaveStoryButton/SaveStoryButton';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 import colors from '../../../styles/colors';
@@ -113,20 +115,23 @@ function StoryScreen() {
                 </View>
               )}
             />
-
-            <Button
-              textColor="black"
-              buttonColor={colors.gwnOrange}
-              icon="share"
-              onPress={onShare}
-              style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-            >
-              <Text
-                style={[globalStyles.bodyUnderline, styles.shareButtonText]}
+            <View style={styles.options}>
+              <SaveStoryButton storyId={parseInt(storyId as string, 10)} />
+              <FavoriteStoryButton storyId={parseInt(storyId as string, 10)} />
+              <Button
+                textColor="black"
+                buttonColor={colors.gwnOrange}
+                icon="share"
+                onPress={onShare}
+                style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
               >
-                Share Story
-              </Text>
-            </Button>
+                <Text
+                  style={[globalStyles.bodyUnderline, styles.shareButtonText]}
+                >
+                  Share Story
+                </Text>
+              </Button>
+            </View>
           </View>
 
           <RenderHTML

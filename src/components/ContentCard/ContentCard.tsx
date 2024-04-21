@@ -87,10 +87,10 @@ function ContentCard({
               <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
                 <Emoji name="muscle" />
               </View>
-              {/* heart, clap, muscle, cry, ??? */}
+
               <View style={styles.reactionNumber}>
                 <Text style={[globalStyles.subtext, styles.reactionText]}>
-                  {reactions?.length}
+                  {reactions?.length ?? 0}
                 </Text>
               </View>
             </View>

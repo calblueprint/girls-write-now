@@ -22,7 +22,12 @@ import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchGenres } from '../../../queries/genres';
 import { fetchAllStoryPreviews } from '../../../queries/stories';
-import { StoryPreview, RecentSearch, Genre } from '../../../queries/types';
+import {
+  StoryPreview,
+  RecentSearch,
+  Genre,
+  StoryPreviewWithPreloadedReactions,
+} from '../../../queries/types';
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { GenreType } from '../genre';
@@ -64,11 +69,15 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
 };
 
 function SearchScreen() {
-  const [allStories, setAllStories] = useState<StoryPreview[]>([]);
+  const [allStories, setAllStories] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
-  const [searchResults, setSearchResults] = useState<StoryPreview[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [unfilteredSearchResults, setUnfilteredSearchResults] = useState<
-    StoryPreview[]
+    StoryPreviewWithPreloadedReactions[]
   >([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
@@ -186,22 +195,24 @@ function SearchScreen() {
 
   useEffect(() => {
     (async () => {
-      fetchAllStoryPreviews().then((stories: StoryPreview[]) => {
-        setAllStories(stories);
-        const tones: string[] = stories
-          .reduce((acc: string[], current: StoryPreview) => {
-            return acc.concat(current.tone);
-          }, [] as string[])
-          .filter(tone => tone !== null);
-        const topics: string[] = stories
-          .reduce((acc: string[], current: StoryPreview) => {
-            return acc.concat(current.topic);
-          }, [] as string[])
-          .filter(topic => topic !== null);
+      fetchAllStoryPreviews().then(
+        (stories: StoryPreviewWithPreloadedReactions[]) => {
+          setAllStories(stories);
+          const tones: string[] = stories
+            .reduce((acc: string[], current: StoryPreview) => {
+              return acc.concat(current.tone);
+            }, [] as string[])
+            .filter(tone => tone !== null);
+          const topics: string[] = stories
+            .reduce((acc: string[], current: StoryPreview) => {
+              return acc.concat(current.topic);
+            }, [] as string[])
+            .filter(topic => topic !== null);
 
-        setTopicFilterOptions([...new Set(topics)]);
-        setToneFilterOptions([...new Set(tones)]);
-      });
+          setTopicFilterOptions([...new Set(topics)]);
+          setToneFilterOptions([...new Set(tones)]);
+        },
+      );
 
       fetchGenres().then((genres: Genre[]) => {
         setAllGenres(genres);
@@ -315,7 +326,7 @@ function SearchScreen() {
       return;
     }
 
-    const updatedData = allStories.filter((item: StoryPreview) => {
+    const updatedData = allStories.filter(item => {
       const title = `${item.title.toUpperCase()})`;
       const author = `${item.author_name.toUpperCase()})`;
       const text_data = text.toUpperCase();
@@ -655,6 +666,7 @@ function SearchScreen() {
                 storyId={item.id}
                 title={item.title}
                 image={item.featured_media}
+                reactions={item.reactions}
                 author={item.author_name}
                 authorImage={item.author_image}
                 excerpt={item.excerpt}

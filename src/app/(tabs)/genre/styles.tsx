@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
     width: '100%',
-    marginTop: 24,
     flex: 1,
   },
 

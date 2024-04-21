@@ -132,7 +132,7 @@ export async function isStoryInReadingList(
   userId: string | undefined,
 ): Promise<boolean> {
   let { data, error } = await supabase.rpc('is_story_saved_for_user', {
-    list_name: 'reading list',
+    list_name: SavedList.READING_LIST,
     story_db_id: storyId,
     user_uuid: userId,
   });

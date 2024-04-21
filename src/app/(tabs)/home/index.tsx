@@ -22,7 +22,7 @@ import {
   fetchRecommendedStories,
   fetchStoryPreviewById,
 } from '../../../queries/stories';
-import { StoryCard, StoryPreview, Story } from '../../../queries/types';
+import { StoryCard, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
@@ -96,6 +96,7 @@ function HomeScreen() {
   useEffect(() => {
     const getRecommendedStories = async () => {
       const recentStoryResponse = await getRecentStory();
+
       const recommendedStoriesResponse =
         await fetchRecommendedStories(recentStoryResponse);
       setRecommendedStories(recommendedStoriesResponse);
@@ -191,6 +192,7 @@ function HomeScreen() {
               {recommendedStories.map(story => (
                 <ContentCard
                   id={story.id}
+                  storyId={story.id}
                   key={story.title}
                   title={story.title}
                   author={story.author_name}
@@ -216,6 +218,7 @@ function HomeScreen() {
               {newStories.map(story => (
                 <ContentCard
                   id={story.id}
+                  storyId={story.id}
                   key={story.title}
                   title={story.title}
                   author={story.author_name}

@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    marginBottom: 8,
+    flex: 1,
+    alignSelf: 'flex-start',
+    // marginBottom: 8,
   },
   titleContainer: {
     paddingTop: 16,
@@ -54,8 +56,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#EBEBEB',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
-    flexGrow: 1,
-    justifyContent: 'space-between',
+    flex: 1,
   },
   tag: {
     paddingHorizontal: 8,

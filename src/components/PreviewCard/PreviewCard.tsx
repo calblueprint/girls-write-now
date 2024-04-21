@@ -26,6 +26,7 @@ type PreviewCardProps = {
   storyId: number;
   author: string;
   authorImage: string;
+  defaultSavedStoriesState?: boolean;
   excerpt: { html: string };
   tags: string[];
   reactions?: string[] | null;
@@ -40,6 +41,7 @@ function PreviewCard({
   authorImage,
   excerpt,
   tags,
+  defaultSavedStoriesState = false,
   pressFunction,
   reactions: preloadedReactions = null,
 }: PreviewCardProps) {
@@ -68,8 +70,13 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
-          <TouchableOpacity>
-            <SaveStoryButton storyId={storyId} />
+          <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+            <View>
+              <SaveStoryButton
+                storyId={storyId}
+                defaultState={defaultSavedStoriesState}
+              />
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.body}>

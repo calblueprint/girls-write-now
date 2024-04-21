@@ -11,7 +11,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchUsername } from '../../../queries/profiles';
@@ -146,20 +145,18 @@ function HomeScreen() {
           <Text style={globalStyles.h1}>
             {username ? `Welcome, ${username}` : 'Welcome!'}
           </Text>
-          <Pressable onPress={() => router.push('/settings')}>
-            <View>
-              <Icon type="settings_gear" />
-            </View>
-          </Pressable>
         </View>
 
         {featuredStories.length > 0 && (
           <View>
             <Text style={globalStyles.h3}>Featured Stories</Text>
-            <Text style={[globalStyles.body1, styles.featuredDescription]}>
-              {featuredStoriesDescription}
-            </Text>
-            <View style={{ marginRight: 24 }}>
+            {featuredStoriesDescription != null &&
+              featuredStoriesDescription.length > 0 && (
+                <Text style={[globalStyles.body1, styles.featuredDescription]}>
+                  {featuredStoriesDescription}
+                </Text>
+              )}
+            <View style={{ marginRight: 24, marginTop: 16 }}>
               {featuredStories.map(story => (
                 <PreviewCard
                   key={story.id}

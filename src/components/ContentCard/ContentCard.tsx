@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import {
   GestureResponderEvent,
   Pressable,
@@ -5,11 +6,10 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { Image } from 'expo-image';
+import Emoji from 'react-native-emoji';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
-import Emoji from 'react-native-emoji';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {

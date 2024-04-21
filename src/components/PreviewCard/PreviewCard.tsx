@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import { Image } from 'expo-image';
 import {
   GestureResponderEvent,
   Pressable,
@@ -7,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import Emoji from 'react-native-emoji';
-import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';

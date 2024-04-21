@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Story,
   StoryPreview,
@@ -5,6 +6,7 @@ import {
   StoryPreviewWithPreloadedReactions,
 } from './types';
 import supabase from '../utils/supabase';
+import { useState } from 'react';
 
 export async function fetchAllStoryPreviews(): Promise<
   StoryPreviewWithPreloadedReactions[]
@@ -64,8 +66,84 @@ export async function fetchFeaturedStoriesDescription(): Promise<string> {
   }
 }
 
-export async function fetchRecommendedStories(): Promise<StoryCard[]> {
-  const { data, error } = await supabase.rpc('fetch_recommended_stories');
+export async function fetchRecommendedStories(
+  inputStories: StoryPreview[],
+): Promise<StoryPreview[]> {
+  if (inputStories.length == 0) {
+    return [];
+  }
+  const storyIDs = inputStories.map(story => story.id);
+
+  //fill storyIDs with 0's if less than 5 ids
+  for (let n = storyIDs.length; n < 5; n++) {
+    storyIDs[n] = 0;
+  }
+
+  //get embedding vectors for each of the inputs
+  const getStoryEmbeddings = async () => {
+    const embeddings = inputStories.map(async story => {
+      const { data, error } = await supabase
+        .from('stories')
+        .select('embedding')
+        .eq('id', story.id);
+
+      if (error) {
+        console.log(error);
+        throw new Error(
+          `An error occured when trying to fetch embeddings: ${error.details}`,
+        );
+      } else {
+        if (data) {
+          return data[0].embedding as string;
+        }
+      }
+    });
+
+    return await Promise.all(embeddings);
+  };
+
+  //get embeddings of every story in inputStory
+  const embeddingsArray = await getStoryEmbeddings();
+  const newEmbeddingsArray = [];
+  for (let k = 0; k < embeddingsArray.length; k++) {
+    const stringLength = embeddingsArray[k]?.length;
+    if (stringLength) {
+      const embedding = embeddingsArray[k]?.substring(1, stringLength - 1);
+      const formattedEmbedding = embedding?.split(',');
+      newEmbeddingsArray[k] = formattedEmbedding;
+    }
+  }
+  const embeddingsLength =
+    newEmbeddingsArray.length > 5 ? 5 : newEmbeddingsArray.length;
+
+  //calculate average embedding vector
+  const averageEmbedding: number[] = [];
+  for (let m = 0; m < 384; m++) {
+    averageEmbedding[m] = 0;
+  }
+  for (let i = 0; i < embeddingsLength; i++) {
+    const vector = newEmbeddingsArray[i];
+    if (vector) {
+      for (let j = 0; j < vector.length; j++) {
+        const element = parseFloat(vector[j]);
+        averageEmbedding[j] += element / embeddingsLength;
+      }
+    }
+  }
+
+  const { data, error } = await supabase.rpc(
+    'fetch_users_recommended_stories',
+    {
+      query_embedding: averageEmbedding,
+      match_threshold: 0.0,
+      match_count: 5,
+      storyid1: storyIDs[0],
+      storyid2: storyIDs[1],
+      storyid3: storyIDs[2],
+      storyid4: storyIDs[3],
+      storyid5: storyIDs[4],
+    },
+  );
 
   if (error) {
     console.log(error);

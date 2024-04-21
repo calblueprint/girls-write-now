@@ -1,34 +1,66 @@
 import * as cheerio from 'cheerio';
+import { Image } from 'expo-image';
+import { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import Emoji from 'react-native-emoji';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
+import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
+
+const placeholderImage =
+  'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
 
 type PreviewCardProps = {
   title: string;
   image: string;
+  storyId: number;
   author: string;
   authorImage: string;
   excerpt: { html: string };
   tags: string[];
+  reactions?: string[] | null;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
 function PreviewCard({
   title,
   image,
+  storyId,
   author,
   authorImage,
   excerpt,
   tags,
   pressFunction,
+  reactions: preloadedReactions = null,
 }: PreviewCardProps) {
+  const [reactions, setReactions] = useState<string[] | null>(
+    preloadedReactions,
+  );
+  useEffect(() => {
+    if (preloadedReactions != null) {
+      return;
+    }
+
+    (async () => {
+      const temp = await fetchAllReactionsToStory(storyId);
+      if (temp != null) {
+        setReactions(temp.map(r => r.reaction));
+        return;
+      }
+      setReactions([]);
+    })();
+  }, []);
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -36,9 +68,15 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
+          <TouchableOpacity>
+            <SaveStoryButton storyId={storyId} />
+          </TouchableOpacity>
         </View>
         <View style={styles.body}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image
+            style={styles.image}
+            source={{ uri: image === '' ? placeholderImage : image }}
+          />
           <View style={styles.cardTextContainer}>
             <View style={styles.authorContainer}>
               <Image style={styles.authorImage} source={{ uri: authorImage }} />
@@ -53,23 +91,24 @@ function PreviewCard({
               numberOfLines={3}
               style={[globalStyles.subtext, styles.storyDescription]}
             >
-              "{cheerio.load(excerpt.html).text()}"
+              "{cheerio.load(excerpt.html ?? '').text()}"
             </Text>
           </View>
         </View>
         <View style={styles.tagsContainer}>
+          <ReactionDisplay reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
-            <View style={styles.tag}>
-              <Text key={tags[0]} style={globalStyles.button1}>
-                {tags[0]}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.moreTags}>
-            <Pressable>
+            {(tags?.length ?? 0) > 0 && (
+              <View style={styles.tag}>
+                <Text key={tags[0]} style={globalStyles.button1}>
+                  {tags[0]}
+                </Text>
+              </View>
+            )}
+            <Pressable style={styles.moreTags}>
               <Text style={[globalStyles.subtext, styles.moreTagsText]}>
                 {' '}
-                + {tags.length - 1} more tags
+                + {(tags?.length ?? 1) - 1}
               </Text>
             </Pressable>
           </View>

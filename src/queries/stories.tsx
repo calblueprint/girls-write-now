@@ -1,9 +1,16 @@
-import { Story, StoryPreview, StoryCard } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Story,
+  StoryPreview,
+  StoryCard,
+  StoryPreviewWithPreloadedReactions,
+} from './types';
 import supabase from '../utils/supabase';
 import { useState } from 'react';
 
-export async function fetchAllStoryPreviews(): Promise<StoryPreview[]> {
+export async function fetchAllStoryPreviews(): Promise<
+  StoryPreviewWithPreloadedReactions[]
+> {
   const { data, error } = await supabase.rpc('fetch_all_story_previews');
 
   if (error) {
@@ -27,7 +34,7 @@ export async function fetchStory(storyId: number): Promise<Story[]> {
       `An error occured when trying to fetch story ${storyId}: ${error.code}`,
     );
   } else {
-    return data;
+    return data as Story[];
   }
 }
 
@@ -171,6 +178,22 @@ export async function fetchStoryPreviewById(
     console.log(error);
     throw new Error(
       `An error occured when trying to fetch story preview by ID: ${error}`,
+    );
+  } else {
+    return data;
+  }
+}
+
+export async function fetchStoryPreviewByIds(
+  storyIds: number[],
+): Promise<StoryPreview[]> {
+  const { data, error } = await supabase.rpc('curr_story_preview_by_ids', {
+    input_ids: storyIds,
+  });
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch story preview by IDs: ${error}`,
     );
   } else {
     return data;

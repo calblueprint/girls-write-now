@@ -8,19 +8,20 @@ import {
   Pressable,
   Appearance,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import colors from '../../../styles/colors';
 import AccountDataDisplay from '../../../components/AccountDataDisplay/AccountDataDisplay';
+import BackButton from '../../../components/BackButton/BackButton';
 import StyledButton from '../../../components/StyledButton/StyledButton';
 import UserSelectorInput from '../../../components/UserSelectorInput/UserSelectorInput';
+import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 function SettingsScreen() {
   const { session, signOut } = useSession();
@@ -180,16 +181,12 @@ function SettingsScreen() {
       edges={['right', 'left', 'top', 'bottom']}
     >
       <ScrollView
-        bounces={true}
+        bounces
         contentContainerStyle={styles.main}
         showsVerticalScrollIndicator={false}
       >
         <View>
-          <Link href="/home" style={styles.back}>
-            <Text style={[globalStyles.subtext, styles.backText]}>
-              {'<Back'}
-            </Text>
-          </Link>
+          <BackButton pressFunction={() => router.back()} />
           <View>
             <DateTimePickerModal
               isVisible={showDatePicker}
@@ -229,7 +226,7 @@ function SettingsScreen() {
                           type="material"
                           color={colors.darkGrey}
                           style={styles.icon}
-                        ></Icon>
+                        />
                       </View>
                     </Pressable>
                   </View>
@@ -259,9 +256,12 @@ function SettingsScreen() {
               options={[
                 'American Indian/Alaska Native',
                 'Asian',
+                'Hispanic/Latinx',
+                'Middle Eastern',
                 'Black or African American',
                 'Native Hawaiian or other Pacific Islander',
                 'White',
+                'Not Listed Here',
                 'Prefer Not to Disclose',
               ]}
               label="Race/Ethnicity"

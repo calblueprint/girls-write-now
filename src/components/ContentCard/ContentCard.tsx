@@ -1,33 +1,53 @@
+import { Image } from 'expo-image';
+import { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
+import Emoji from 'react-native-emoji';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
+import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
 
 type ContentCardProps = {
+  id: number;
   title: string;
   author: string;
   image: string;
   authorImage: string;
+  storyId: number;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
 function ContentCard({
+  id,
   title,
   author,
   image,
   authorImage,
+  storyId,
   pressFunction,
 }: ContentCardProps) {
-  const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
-  };
+  const [reactions, setReactions] = useState<string[]>();
+
+  useEffect(() => {
+    (async () => {
+      const temp = await fetchAllReactionsToStory(id);
+      if (temp != null) {
+        setReactions(temp.map(r => r.reaction));
+        return;
+      }
+
+      setReactions([]);
+    })();
+  }, []);
 
   return (
     <Pressable onPress={pressFunction}>
@@ -58,35 +78,9 @@ function ContentCard({
             </Text>
           </View>
           <View style={styles.buttons}>
-            <View>
-              <TouchableOpacity
-                onPress={() => null}
-                style={{ flexDirection: 'row' }}
-              >
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <View style={styles.reactionNumber}>
-                  <Text style={[globalStyles.subtext, styles.reactionText]}>
-                    14{/*change number to work*/}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity onPress={() => saveStory()}>
-              <Image
-                style={{ width: 30, height: 30 }}
-                source={require('./savedStoriesIcon.png')}
-              />
+            <ReactionDisplay reactions={reactions ?? []} />
+            <TouchableOpacity>
+              <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>
           </View>
         </View>

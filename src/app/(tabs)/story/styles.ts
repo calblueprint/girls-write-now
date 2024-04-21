@@ -1,15 +1,11 @@
 import { StyleSheet } from 'react-native';
+
 import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
     paddingLeft: 24,
     paddingRight: 24,
-    paddingTop: 48,
   },
   authorImage: {
     backgroundColor: '#D9D9D9',

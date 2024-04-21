@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   ScrollView,
   Share,
   Text,
@@ -11,11 +10,13 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
+import BackButton from '../../../components/BackButton/BackButton';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 import colors from '../../../styles/colors';
@@ -65,7 +66,7 @@ function StoryScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[globalStyles.tabBarContainer, styles.container]}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -74,6 +75,8 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
+          <BackButton pressFunction={() => router.back()} />
+
           <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
 
           <TouchableOpacity
@@ -89,7 +92,12 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image ? story.author_image : '' }}
               />
-              <Text style={globalStyles.subHeading1Bold}>
+              <Text
+                style={[
+                  globalStyles.subHeading1Bold,
+                  { textDecorationLine: 'underline' },
+                ]}
+              >
                 By {story.author_name}
               </Text>
             </View>
@@ -161,15 +169,29 @@ function StoryScreen() {
             systemFonts={fonts}
           />
 
-          <View style={styles.author}>
-            <Image
-              style={styles.authorImage}
-              source={{ uri: story.author_image }}
-            />
-            <Text style={globalStyles.subHeading1Bold}>
-              By {story.author_name}
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              router.push({
+                pathname: '/author',
+                params: { author: story.author_id.toString() },
+              });
+            }}
+          >
+            <View style={styles.author}>
+              <Image
+                style={styles.authorImage}
+                source={{ uri: story.author_image ? story.author_image : '' }}
+              />
+              <Text
+                style={[
+                  globalStyles.subHeading1Bold,
+                  { textDecorationLine: 'underline' },
+                ]}
+              >
+                By {story.author_name}
+              </Text>
+            </View>
+          </TouchableOpacity>
 
           <Button
             textColor="black"

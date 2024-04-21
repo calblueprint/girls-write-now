@@ -1,7 +1,6 @@
-import { Image, Pressable, Text, View } from 'react-native';
-
+import { Image } from 'expo-image';
+import { Text, View } from 'react-native';
 import styles from './styles';
-import globalStyles from '../../styles/globalStyles';
 
 type AuthorCardProps = {
   name: string;

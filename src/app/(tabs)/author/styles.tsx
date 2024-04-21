@@ -4,7 +4,6 @@ import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   authorCardContainer: {
-    marginTop: 16,
     marginBottom: 8,
     flexDirection: 'row',
     justifyContent: 'flex-start',

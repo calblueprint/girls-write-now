@@ -1,3 +1,4 @@
+import * as cheerio from 'cheerio';
 import { useLocalSearchParams, router } from 'expo-router';
 import { decode } from 'html-entities';
 import { useEffect, useState } from 'react';
@@ -14,7 +15,6 @@ import {
 } from '../../../queries/authors';
 import { Author, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
-import * as cheerio from 'cheerio';
 
 function AuthorScreen() {
   const [authorInfo, setAuthorInfo] = useState<Author>();
@@ -52,14 +52,14 @@ function AuthorScreen() {
 
   return (
     <SafeAreaView
-      style={[globalStyles.tabBarContainer, { marginHorizontal: -8 }]}
+      style={[globalStyles.tabBarContainer, { paddingHorizontal: 22 }]}
     >
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          bounces={true}
+          bounces
           contentContainerStyle={{ paddingHorizontal: 8 }}
         >
           <BackButton pressFunction={() => router.back()} />
@@ -139,7 +139,7 @@ function AuthorScreen() {
           ))}
 
           {/* View so there's space between the tab bar and the stories */}
-          <View style={{ paddingBottom: 10 }}></View>
+          <View style={{ paddingBottom: 10 }} />
         </ScrollView>
       )}
     </SafeAreaView>

@@ -37,6 +37,10 @@ function PreviewCard({
   tags,
   pressFunction,
 }: PreviewCardProps) {
+  const saveStory = () => {
+    console.log("testing '+' icon does something for story " + title);
+  };
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>

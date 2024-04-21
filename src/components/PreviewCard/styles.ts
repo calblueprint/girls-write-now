@@ -49,8 +49,13 @@ const styles = StyleSheet.create({
   titleContainer: {
     paddingTop: 16,
     paddingLeft: 12,
+    paddingRight: 12,
+    paddingBottom: 8,
     borderBottomColor: '#EBEBEB',
     borderBottomWidth: StyleSheet.hairlineWidth,
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
   tag: {
     paddingHorizontal: 8,
@@ -62,7 +67,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   tagsContainer: {
-    // backgroundColor: colors.darkGrey,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -75,19 +79,39 @@ const styles = StyleSheet.create({
   },
   tagsRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-end',
     alignItems: 'center',
     flexWrap: 'wrap',
-    paddingTop: 4,
   },
   moreTags: {
     paddingVertical: 10,
     paddingRight: 12,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   moreTagsText: {
     color: colors.darkGrey,
+  },
+  reactions: {
+    width: 32,
+    height: 32,
+    borderRadius: 32 / 2,
+    borderWidth: 1,
+    backgroundColor: '#89CFF0', //different per emoji reaction
+    borderColor: 'white',
+    marginTop: 10,
+    marginRight: -5, // -10
+    overflow: 'hidden',
+    justifyContent: 'center',
+    paddingLeft: 4,
+  },
+  reactionText: {
+    color: colors.grey,
+  },
+  reactionNumber: {
+    marginLeft: 16,
+    marginTop: 16,
   },
   storyDescription: {
     color: colors.darkGrey,

@@ -96,6 +96,7 @@ function HomeScreen() {
               {featuredStories.map(story => (
                 <PreviewCard
                   key={story.id}
+                  storyId={story.id}
                   title={story.title}
                   image={story.featured_media}
                   author={story.author_name}
@@ -132,6 +133,7 @@ function HomeScreen() {
                   title={story.title}
                   author={story.author_name}
                   authorImage={story.author_image}
+                  storyId={story.id}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',
@@ -161,6 +163,7 @@ function HomeScreen() {
                   title={story.title}
                   author={story.author_name}
                   authorImage={story.author_image}
+                  storyId={story.id}
                   pressFunction={() =>
                     router.push({
                       pathname: '/story',

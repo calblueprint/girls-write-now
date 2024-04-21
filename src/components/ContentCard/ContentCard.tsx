@@ -1,20 +1,23 @@
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
+import { Image } from 'expo-image';
 
 import styles from './styles';
 import globalStyles from '../../styles/globalStyles';
+import Emoji from 'react-native-emoji';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {
   title: string;
   author: string;
   image: string;
   authorImage: string;
+  storyId: number;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -23,12 +26,9 @@ function ContentCard({
   author,
   image,
   authorImage,
+  storyId,
   pressFunction,
 }: ContentCardProps) {
-  const saveStory = () => {
-    console.log("testing '+' icon does something for story " + title);
-  };
-
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.contentCard}>
@@ -58,35 +58,25 @@ function ContentCard({
             </Text>
           </View>
           <View style={styles.buttons}>
-            <View>
-              <TouchableOpacity
-                onPress={() => null}
-                style={{ flexDirection: 'row' }}
-              >
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <Image
-                  style={styles.reactions}
-                  source={require('./savedStoriesIcon.png')}
-                />
-                <View style={styles.reactionNumber}>
-                  <Text style={[globalStyles.subtext, styles.reactionText]}>
-                    14{/*change number to work*/}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: -7 }}>
+              <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
+                <Emoji name="heart" />
+              </View>
+              <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
+                <Emoji name="clap" />
+              </View>
+              <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
+                <Emoji name="muscle" />
+              </View>
+              {/* heart, clap, muscle, cry, ??? */}
+              <View style={styles.reactionNumber}>
+                <Text style={[globalStyles.subtext, styles.reactionText]}>
+                  14{/*change number to work*/}
+                </Text>
+              </View>
             </View>
-            <TouchableOpacity onPress={() => saveStory()}>
-              <Image
-                style={{ width: 30, height: 30 }}
-                source={require('./savedStoriesIcon.png')}
-              />
+            <TouchableOpacity>
+              <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>
           </View>
         </View>

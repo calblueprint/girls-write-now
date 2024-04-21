@@ -27,6 +27,7 @@ type PreviewCardProps = {
   authorImage: string;
   excerpt: { html: string };
   tags: string[];
+  reactions?: string[] | null;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -39,13 +40,20 @@ function PreviewCard({
   excerpt,
   tags,
   pressFunction,
+  reactions: preloadedReactions = null
 }: PreviewCardProps) {
-  const [reactions, setReactions] = useState<Reactions[]>();
+  const [reactions, setReactions] = useState<string[] | null>(preloadedReactions);
   useEffect(() => {
+    if (preloadedReactions != null) {
+      return;
+    }
+
     (async () => {
+      console.log("fetching reactions");
+
       const temp = await fetchAllReactionsToStory(storyId);
       if (temp != null) {
-        setReactions(temp);
+        setReactions(temp.map(r => r.reaction));
         return;
       }
       setReactions([]);

@@ -11,6 +11,21 @@ export interface StoryPreview {
   genre_medium: string[];
 }
 
+export interface StoryPreviewWithPreloadedReactions {
+  id: number;
+  date: string;
+  title: string;
+  excerpt: { html: string };
+  featured_media: string;
+  author_name: string;
+  author_image: string;
+  topic: string[];
+  tone: string[];
+  genre_medium: string[];
+  reactions: string[];
+}
+
+
 export interface Author {
   id: number;
   name: string;
@@ -70,8 +85,6 @@ export interface GenreStories {
 }
 
 export interface Reactions {
-  profile_id: number;
-  story_id: number;
-  emoji_id: number;
-  emoji: string;
+  reaction_id: number;
+  reaction: string;
 }

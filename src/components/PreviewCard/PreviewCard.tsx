@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import { Image } from 'expo-image';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -8,14 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Emoji from 'react-native-emoji';
 
 import styles from './styles';
 import { fetchAllReactionsToStory } from '../../queries/reactions';
-import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
-import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';

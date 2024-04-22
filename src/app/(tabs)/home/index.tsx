@@ -1,13 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -16,6 +10,7 @@ import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchUsername } from '../../../queries/profiles';
 import {
   fetchFeaturedStoriesDescription,
+  fetchFeaturedStoriesHeader,
   fetchFeaturedStoryPreviews,
   fetchNewStories,
   fetchRecommendedStories,
@@ -33,6 +28,7 @@ function HomeScreen() {
   const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
   const [featuredStoriesDescription, setFeaturedStoriesDescription] =
     useState<string>('');
+  const [featuredStoriesHeader, setFeaturedStoriesHeader] = useState('');
   const [recommendedStories, setRecommendedStories] = useState<StoryCard[]>([]);
   const [newStories, setNewStories] = useState<StoryCard[]>([]);
 
@@ -93,7 +89,7 @@ function HomeScreen() {
   };
 
   useEffect(() => {
-    const getRecommendedStories = async () => {
+    const updateRecommendedStories = async () => {
       const recentStoryResponse = await getRecentStory();
 
       const recommendedStoriesResponse =
@@ -105,22 +101,27 @@ function HomeScreen() {
       const [
         usernameResponse,
         featuredStoryResponse,
+        featuredStoryHeaderResponse,
         featuredStoryDescriptionResponse,
         newStoriesResponse,
         recentStoryResponse,
+        _,
       ] = await Promise.all([
         fetchUsername(user?.id).catch(() => ''),
         fetchFeaturedStoryPreviews().catch(() => []),
+        fetchFeaturedStoriesHeader().catch(() => ''),
         fetchFeaturedStoriesDescription().catch(() => ''),
         fetchNewStories().catch(() => []),
         getRecentStory(),
+        updateRecommendedStories(),
       ]);
+
       setUsername(usernameResponse);
       setFeaturedStories(featuredStoryResponse);
+      setFeaturedStoriesHeader(featuredStoryHeaderResponse);
       setFeaturedStoriesDescription(featuredStoryDescriptionResponse);
       setNewStories(newStoriesResponse);
       setRecentlyViewed(recentStoryResponse);
-      await getRecommendedStories();
     })().finally(() => {
       setLoading(false);
     });
@@ -142,21 +143,29 @@ function HomeScreen() {
         contentContainerStyle={{ paddingHorizontal: 8 }}
       >
         <View style={styles.headerContainer}>
-          <Text style={globalStyles.h1}>
+          <Text style={[globalStyles.h1, { paddingBottom: 24 }]}>
             {username ? `Welcome, ${username}` : 'Welcome!'}
           </Text>
         </View>
 
         {featuredStories.length > 0 && (
           <View>
-            <Text style={globalStyles.h3}>Featured Stories</Text>
-            {featuredStoriesDescription != null &&
-              featuredStoriesDescription.length > 0 && (
+            <Text style={[globalStyles.h2, { paddingBottom: 16 }]}>
+              Featured Stories
+            </Text>
+            {featuredStoriesHeader != null && featuredStoriesHeader != '' && (
+              <Text style={[globalStyles.h3, { paddingBottom: 16 }]}>
+                {featuredStoriesHeader}
+              </Text>
+            )}
+            {featuredStoriesHeader != '' &&
+              featuredStoriesDescription != null &&
+              featuredStoriesDescription != '' && (
                 <Text style={[globalStyles.body1, styles.featuredDescription]}>
                   {featuredStoriesDescription}
                 </Text>
               )}
-            <View style={{ marginRight: 24, marginTop: 16 }}>
+            <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (
                 <PreviewCard
                   key={story.id}

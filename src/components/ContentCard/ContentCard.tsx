@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -7,14 +7,12 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import Emoji from 'react-native-emoji';
 
 import styles from './styles';
 import { fetchAllReactionsToStory } from '../../queries/reactions';
-import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
-import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {
   id: number;

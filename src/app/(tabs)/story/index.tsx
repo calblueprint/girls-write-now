@@ -72,7 +72,16 @@ function StoryScreen() {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
         >
-          {/* <Image style={styles.image} source={{ uri: story.featured_media }} /> */}
+          <View style={styles.container}>
+            {story.featured_media ? (
+              <Image
+                style={styles.image}
+                source={{ uri: story.featured_media }}
+              />
+            ) : (
+              <Text>No image available</Text>
+            )}
+          </View>
 
           <Text style={styles.title}>{story?.title}</Text>
           <TouchableOpacity

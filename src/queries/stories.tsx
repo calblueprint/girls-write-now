@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Story,
   StoryPreview,
@@ -6,7 +5,6 @@ import {
   StoryPreviewWithPreloadedReactions,
 } from './types';
 import supabase from '../utils/supabase';
-import { useState } from 'react';
 
 export async function fetchAllStoryPreviews(): Promise<
   StoryPreviewWithPreloadedReactions[]
@@ -51,25 +49,10 @@ export async function fetchFeaturedStoryPreviews(): Promise<StoryPreview[]> {
   }
 }
 
-export async function fetchFeaturedStoriesDescription(): Promise<string> {
-  const { data, error } = await supabase
-    .from('featured_stories')
-    .select('description');
-
-  if (error) {
-    console.log(error);
-    throw new Error(
-      `An error occured when trying to fetch featured story description: ${error}`,
-    );
-  } else {
-    return data[0].description;
-  }
-}
-
 export async function fetchRecommendedStories(
   inputStories: StoryPreview[],
 ): Promise<StoryPreview[]> {
-  if (inputStories.length == 0) {
+  if (inputStories.length === 0) {
     return [];
   }
   const storyIDs = inputStories.map(story => story.id);
@@ -197,5 +180,35 @@ export async function fetchStoryPreviewByIds(
     );
   } else {
     return data;
+  }
+}
+
+export async function fetchFeaturedStoriesHeader(): Promise<string> {
+  const { data, error } = await supabase
+    .from('featured_stories_description')
+    .select('header');
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch featured story description: ${error}`,
+    );
+  } else {
+    return data[0].header;
+  }
+}
+
+export async function fetchFeaturedStoriesDescription(): Promise<string> {
+  const { data, error } = await supabase
+    .from('featured_stories_description')
+    .select('description');
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch featured story description: ${error}`,
+    );
+  } else {
+    return data[0].description;
   }
 }

@@ -114,3 +114,33 @@ export async function fetchStoryPreviewByIds(
     return data;
   }
 }
+
+export async function fetchFeaturedStoriesDescriptionHeader(): Promise<string> {
+  const { data, error } = await supabase
+    .from('featured_stories_description')
+    .select('header');
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch featured story description: ${error}`,
+    );
+  } else {
+    return data[0].header;
+  }
+}
+
+export async function fetchFeaturedStoriesDescriptionDescription(): Promise<string> {
+  const { data, error } = await supabase
+    .from('featured_stories_description')
+    .select('description');
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      `An error occured when trying to fetch featured story description: ${error}`,
+    );
+  } else {
+    return data[0].description;
+  }
+}

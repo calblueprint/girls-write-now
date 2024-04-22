@@ -23,6 +23,7 @@ import {
 import { StoryCard, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
+import React from 'react';
 
 function HomeScreen() {
   const { user } = useSession();

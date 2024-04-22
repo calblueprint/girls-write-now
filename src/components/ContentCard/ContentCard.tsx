@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import React from 'react';
 import {
   GestureResponderEvent,
   Pressable,

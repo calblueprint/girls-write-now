@@ -572,7 +572,14 @@ function SearchScreen() {
             </View>
           ))}
 
-        <View style={[styles.dropdownContainer, styles.firstDropdown]}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[
+            styles.dropdownContainer,
+            styles.firstDropdown,
+          ]}
+        >
           {search
             ? renderFilterDropdown(
                 'Genre',
@@ -593,7 +600,7 @@ function SearchScreen() {
             toneFilterOptions,
             setSelectedTonesForFiltering,
           )}
-        </View>
+        </ScrollView>
 
         {search && (
           <View>

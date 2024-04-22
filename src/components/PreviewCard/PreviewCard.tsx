@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import { Image } from 'expo-image';
+import React, { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -7,10 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Emoji from 'react-native-emoji';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
 import globalStyles from '../../styles/globalStyles';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
@@ -22,8 +24,10 @@ type PreviewCardProps = {
   storyId: number;
   author: string;
   authorImage: string;
+  defaultSavedStoriesState?: boolean;
   excerpt: { html: string };
   tags: string[];
+  reactions?: string[] | null;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
@@ -35,8 +39,28 @@ function PreviewCard({
   authorImage,
   excerpt,
   tags,
+  defaultSavedStoriesState = false,
   pressFunction,
+  reactions: preloadedReactions = null,
 }: PreviewCardProps) {
+  const [reactions, setReactions] = useState<string[] | null>(
+    preloadedReactions,
+  );
+  useEffect(() => {
+    if (preloadedReactions != null) {
+      return;
+    }
+
+    (async () => {
+      const temp = await fetchAllReactionsToStory(storyId);
+      if (temp != null) {
+        setReactions(temp.map(r => r.reaction));
+        return;
+      }
+      setReactions([]);
+    })();
+  }, []);
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -44,8 +68,13 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
-          <TouchableOpacity>
-            <SaveStoryButton storyId={storyId} />
+          <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+            <View>
+              <SaveStoryButton
+                storyId={storyId}
+                defaultState={defaultSavedStoriesState}
+              />
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.body}>
@@ -72,23 +101,7 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
-          <View style={{ flexDirection: 'row', gap: -7 }}>
-            <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
-              <Emoji name="heart" />
-            </View>
-            <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
-              <Emoji name="clap" />
-            </View>
-            <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
-              <Emoji name="muscle" />
-            </View>
-            {/* heart, clap, muscle, cry, ??? */}
-            <View style={styles.reactionNumber}>
-              <Text style={[globalStyles.subtext, styles.reactionText]}>
-                14{/*change number to work*/}
-              </Text>
-            </View>
-          </View>
+          <ReactionDisplay reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import colors from '../../../styles/colors';
 
 export default StyleSheet.create({
@@ -26,16 +27,6 @@ export default StyleSheet.create({
   },
   heading: {
     paddingBottom: 20,
-  },
-  back: {
-    paddingTop: 30,
-    paddingBottom: 16,
-    color: '#797979',
-    fontSize: 12,
-    fontWeight: '400',
-  },
-  backText: {
-    color: colors.darkGrey,
   },
   staticData: {
     flexDirection: 'row',

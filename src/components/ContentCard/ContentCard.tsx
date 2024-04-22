@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -7,13 +7,15 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import Emoji from 'react-native-emoji';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
 import globalStyles from '../../styles/globalStyles';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 type ContentCardProps = {
+  id: number;
   title: string;
   author: string;
   image: string;
@@ -23,6 +25,7 @@ type ContentCardProps = {
 };
 
 function ContentCard({
+  id,
   title,
   author,
   image,
@@ -30,6 +33,20 @@ function ContentCard({
   storyId,
   pressFunction,
 }: ContentCardProps) {
+  const [reactions, setReactions] = useState<string[]>();
+
+  useEffect(() => {
+    (async () => {
+      const temp = await fetchAllReactionsToStory(id);
+      if (temp != null) {
+        setReactions(temp.map(r => r.reaction));
+        return;
+      }
+
+      setReactions([]);
+    })();
+  }, []);
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.contentCard}>
@@ -59,23 +76,7 @@ function ContentCard({
             </Text>
           </View>
           <View style={styles.buttons}>
-            <View style={{ flexDirection: 'row', gap: -7 }}>
-              <View style={[styles.reactions, { backgroundColor: '#FFCCCB' }]}>
-                <Emoji name="heart" />
-              </View>
-              <View style={[styles.reactions, { backgroundColor: '#FFD580' }]}>
-                <Emoji name="clap" />
-              </View>
-              <View style={[styles.reactions, { backgroundColor: '#89CFF0' }]}>
-                <Emoji name="muscle" />
-              </View>
-              {/* heart, clap, muscle, cry, ??? */}
-              <View style={styles.reactionNumber}>
-                <Text style={[globalStyles.subtext, styles.reactionText]}>
-                  14{/*change number to work*/}
-                </Text>
-              </View>
-            </View>
+            <ReactionDisplay reactions={reactions ?? []} />
             <TouchableOpacity>
               <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>

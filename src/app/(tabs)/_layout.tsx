@@ -34,6 +34,7 @@ function TabNav() {
 
   return (
     <Tabs
+      backBehavior="history"
       screenOptions={{
         tabBarLabelStyle: { fontSize: 14 },
         tabBarHideOnKeyboard: true,

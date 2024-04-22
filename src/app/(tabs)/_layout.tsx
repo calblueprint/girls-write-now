@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Icon from '../../../assets/icons';
@@ -34,6 +34,7 @@ function TabNav() {
 
   return (
     <Tabs
+      backBehavior="history"
       screenOptions={{
         tabBarLabelStyle: { fontSize: 14 },
         tabBarHideOnKeyboard: true,
@@ -45,6 +46,7 @@ function TabNav() {
             Platform.OS === 'ios' ? insets.bottom : insets.bottom + 8,
           height: 68 + insets.bottom,
           backgroundColor: colors.white,
+          position: 'absolute',
         },
       }}
     >
@@ -54,7 +56,6 @@ function TabNav() {
           headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => HomeIcon({ color }),
-          // tabBarLabelStyle: { borderTopWidth: 12, paddingTop: 12 },
         }}
       />
       <Tabs.Screen
@@ -85,6 +86,13 @@ function TabNav() {
           headerShown: false,
           tabBarLabel: 'Library',
           tabBarIcon: ({ color }) => LibraryIcon({ color }),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          headerShown: false,
+          href: null,
         }}
       />
       <Tabs.Screen

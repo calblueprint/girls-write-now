@@ -16,12 +16,15 @@ const styles = StyleSheet.create({
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
-    borderColor: 'transparent',
     marginBottom: 8,
+    borderColor: colors.grey,
   },
   inputContainer: {
-    backgroundColor: '#D9D9D9',
+    backgroundColor: 'transparent',
     borderRadius: 10,
+    borderColor: colors.grey2,
+    borderWidth: 1,
+    borderBottomWidth: 1,
   },
   greyOverlay: {
     flex: 1,
@@ -51,18 +54,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginHorizontal: 8,
   },
-  searchText: {
-    fontWeight: '500',
-    fontSize: 14,
-  },
   numDisplay: {
     marginTop: 24,
     marginBottom: 8,
-  },
-  clearAll: {
-    color: colors.gwnOrange,
-    fontSize: 12,
-    fontWeight: '400',
   },
   contentContainerRecents: {
     paddingHorizontal: 8,
@@ -85,6 +79,16 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 12,
     textDecorationLine: 'underline',
+  },
+  emptySearch: {
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
+    alignItems: 'center',
+    marginTop: '60%',
+  },
+  cancelButton: {
+    color: colors.grey,
   },
 });
 

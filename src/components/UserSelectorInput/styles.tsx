@@ -10,17 +10,15 @@ export default StyleSheet.create({
     position: 'relative',
     zIndex: 1,
   },
-  container: {
-    marginBottom: 16,
-  },
   label: {
-    marginBottom: 10,
+    marginBottom: 8,
   },
   dropdown: {
-    height: 50,
+    height: 44,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
+    paddingVertical: 10,
   },
   dropdownContainer: {
     borderRadius: 5,

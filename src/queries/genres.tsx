@@ -12,7 +12,8 @@ export async function fetchGenres(): Promise<Genre[]> {
   }
 }
 
-export async function fetchGenreStoryPreviews(
+
+export async function fetchGenreStoryById(
   parent_id: number,
 ): Promise<GenreStories[]> {
   const { data, error } = await supabase.rpc(

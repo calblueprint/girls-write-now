@@ -1,12 +1,12 @@
+import * as cheerio from 'cheerio';
 import { useLocalSearchParams, router } from 'expo-router';
-import { decode } from 'html-entities';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, View, Text, Image } from 'react-native';
+import { ActivityIndicator, ScrollView, View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
-import ContentCard from '../../../components/ContentCard/ContentCard';
 import HorizontalLine from '../../../components/HorizontalLine/HorizontalLine';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import {
@@ -46,14 +46,20 @@ function AuthorScreen() {
     })();
   }, [author]);
 
+  const getTextFromHtml = (text: string) => {
+    return cheerio.load(text).text().trim();
+  };
+
   return (
-    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
+    <SafeAreaView
+      style={[globalStyles.tabBarContainer, { paddingHorizontal: 22 }]}
+    >
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          bounces={false}
+          bounces
           contentContainerStyle={{ paddingHorizontal: 8 }}
         >
           <BackButton pressFunction={() => router.back()} />
@@ -68,12 +74,14 @@ function AuthorScreen() {
                 <Text
                   adjustsFontSizeToFit
                   numberOfLines={2}
-                  style={styles.name}
+                  style={globalStyles.h1}
                 >
-                  {authorInfo.name}
+                  {getTextFromHtml(authorInfo.name)}
                 </Text>
                 {authorInfo?.pronouns && (
-                  <Text style={styles.pronouns}>{authorInfo.pronouns}</Text>
+                  <Text style={[globalStyles.subHeading2, styles.pronouns]}>
+                    {authorInfo.pronouns}
+                  </Text>
                 )}
               </View>
             )}
@@ -83,18 +91,22 @@ function AuthorScreen() {
 
           {authorInfo?.bio && (
             <>
-              <Text style={styles.bioText}>{decode(authorInfo.bio)}</Text>
+              <Text style={globalStyles.body1}>
+                {getTextFromHtml(authorInfo.bio)}
+              </Text>
               <HorizontalLine />
             </>
           )}
 
           {authorInfo?.artist_statement && (
             <>
-              <Text style={styles.authorStatementTitle}>
+              <Text
+                style={[globalStyles.body2Bold, styles.authorStatementTitle]}
+              >
                 Artist's Statement
               </Text>
-              <Text style={styles.authorStatement}>
-                {decode(authorInfo.artist_statement)}
+              <Text style={globalStyles.body1}>
+                {getTextFromHtml(authorInfo.artist_statement)}
               </Text>
               <HorizontalLine />
             </>
@@ -110,6 +122,7 @@ function AuthorScreen() {
           {authorStoryPreview?.map(story => (
             <PreviewCard
               key={story.title}
+              storyId={story.id}
               title={story.title}
               image={story.featured_media}
               author={story.author_name}
@@ -124,6 +137,9 @@ function AuthorScreen() {
               }
             />
           ))}
+
+          {/* View so there's space between the tab bar and the stories */}
+          <View style={{ paddingBottom: 10 }} />
         </ScrollView>
       )}
     </SafeAreaView>

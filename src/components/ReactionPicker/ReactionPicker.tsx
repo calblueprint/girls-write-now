@@ -1,11 +1,10 @@
 import { faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { Icon } from 'react-native-elements';
 
 import styles from './styles';
-import globalStyles from '../../styles/globalStyles';
+import Emoji from 'react-native-emoji';
 
 const ReactionPicker = () => {
   const [showReactions, setShowReactions] = useState(false);
@@ -13,34 +12,40 @@ const ReactionPicker = () => {
   const toggleReactions = () => setShowReactions(!showReactions);
 
   // Dummy onPress functions
-  const onSmilePress = () => console.log('Smile pressed');
+  const onClapPress = () => console.log('Smile pressed');
   const onHeartPress = () => console.log('Heart pressed');
-  const onThumbsUpPress = () => console.log('Thumbs up pressed');
-  const onLaughPress = () => console.log('Laugh pressed');
+  const onMusclePress = () => console.log('Thumbs up pressed');
+  const onCryPress = () => console.log('Laugh pressed');
+  const onHuggingFacePress = () => console.log('Laugh pressed');
 
+  // <View style={styles.container}>
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.reactionView} onPress={toggleReactions}>
+    <TouchableOpacity style={styles.reactionView} onPress={toggleReactions}>
+      <View style={styles.reactionsContainer}>
         <FontAwesomeIcon icon={faFaceSmile} size={15} color="#ffffff" />
 
         {showReactions && (
-          <View style={styles.reactionsContainer}>
+          <>
+            <View style={{ marginLeft: 12 }} />
             <TouchableOpacity onPress={onHeartPress}>
-              <Text>❤️</Text>
+              <Emoji name="heart" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onSmilePress}>
-              <Text>🙂</Text>
+            <TouchableOpacity onPress={onClapPress}>
+              <Emoji name="clap" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onThumbsUpPress}>
-              <Text>👍</Text>
+            <TouchableOpacity onPress={onMusclePress}>
+              <Emoji name="muscle" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onLaughPress}>
-              <Text>😂</Text>
+            <TouchableOpacity onPress={onCryPress}>
+              <Emoji name="cry" />
             </TouchableOpacity>
-          </View>
+            <TouchableOpacity onPress={onHuggingFacePress}>
+              <Emoji name="hugging_face" />
+            </TouchableOpacity>
+          </>
         )}
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 

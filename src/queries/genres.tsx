@@ -12,7 +12,6 @@ export async function fetchGenres(): Promise<Genre[]> {
   }
 }
 
-
 export async function fetchGenreStoryById(
   parent_id: number,
 ): Promise<GenreStories[]> {

@@ -2,7 +2,7 @@ import { Reactions } from './types';
 import supabase from '../utils/supabase';
 
 export async function addReactionToStory(
-  input_profile_id: number,
+  input_profile_id: string | undefined,
   input_story_id: number,
   input_reaction_id: number,
 ): Promise<void> {
@@ -22,7 +22,7 @@ export async function addReactionToStory(
 }
 
 export async function deleteReactionToStory(
-  input_profile_id: number,
+  input_profile_id: string | undefined,
   input_story_id: number,
   input_reaction_id: number,
 ): Promise<void> {
@@ -43,17 +43,18 @@ export async function deleteReactionToStory(
 
 export async function fetchAllReactionsToStory(
   storyId: number,
-): Promise<Reactions[]> {
+): Promise<string[]> {
   const { data, error } = await supabase.rpc('curr_get_reactions_for_story', {
-    input_story_id: storyId,
+    story_id: storyId,
   });
+
   if (error) {
     console.log(error);
     throw new Error(
       `An error occured when trying to fetch reactions to a story', ${error}`,
     );
   } else {
-    return data as Reactions[];
+    return data;
   }
 }
 

@@ -1,5 +1,3 @@
-import { faHeart as farHeart } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useLocalSearchParams, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -205,7 +203,7 @@ function StoryScreen() {
             <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
           </Button>
           <View style={styles.bottomReactionContainer}>
-            <ReactionPicker />
+            <ReactionPicker storyId={parseInt(storyId as string, 10)} />
           </View>
         </ScrollView>
       )}

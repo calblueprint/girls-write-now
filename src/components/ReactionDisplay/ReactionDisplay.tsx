@@ -8,7 +8,7 @@ type ReactionDisplayProps = {
 };
 
 function ReactionDisplay({ reactions }: ReactionDisplayProps) {
-  const cleanedReactions = reactions.filter(reaction => reaction !== null);
+  const cleanedReactions = reactions.filter(reaction => reaction != null);
   const reactionColors: Record<string, string> = {
     heart: '#FFCCCB',
     clap: '#FFD580',
@@ -32,7 +32,7 @@ function ReactionDisplay({ reactions }: ReactionDisplayProps) {
       }}
     >
       {reactionDisplay.map(reaction => {
-        if (reaction === null) return;
+        if (reaction == null) return;
 
         return (
           <View

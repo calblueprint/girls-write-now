@@ -1,24 +1,28 @@
 import { faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 
 import styles from './styles';
 import Emoji from 'react-native-emoji';
+import { addReactionToStory } from '../../queries/reactions';
+import { useSession } from '../../utils/AuthContext';
 
-const ReactionPicker = () => {
+type ReactionPickerProps = {
+  storyId: number
+}
+
+const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
+  const { user } = useSession();
   const [showReactions, setShowReactions] = useState(false);
-
   const toggleReactions = () => setShowReactions(!showReactions);
+  const reactionMapping: Record<string, number> = { "heart": 2, "clap": 3, "muscle": 4, "cry": 5, "hugging_face": 6 };
 
-  // Dummy onPress functions
-  const onClapPress = () => console.log('Smile pressed');
-  const onHeartPress = () => console.log('Heart pressed');
-  const onMusclePress = () => console.log('Thumbs up pressed');
-  const onCryPress = () => console.log('Laugh pressed');
-  const onHuggingFacePress = () => console.log('Laugh pressed');
+  const addReaction = (reactionName: string) => {
+    const reactionId = reactionMapping[reactionName];
+    addReactionToStory(user?.id, storyId, reactionId);
+  }
 
-  // <View style={styles.container}>
   return (
     <TouchableOpacity style={styles.reactionView} onPress={toggleReactions}>
       <View style={styles.reactionsContainer}>
@@ -27,21 +31,12 @@ const ReactionPicker = () => {
         {showReactions && (
           <>
             <View style={{ marginLeft: 12 }} />
-            <TouchableOpacity onPress={onHeartPress}>
-              <Emoji name="heart" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onClapPress}>
-              <Emoji name="clap" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onMusclePress}>
-              <Emoji name="muscle" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onCryPress}>
-              <Emoji name="cry" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onHuggingFacePress}>
-              <Emoji name="hugging_face" />
-            </TouchableOpacity>
+            {Object.keys(reactionMapping).map((reaction, i) => (
+              <TouchableOpacity key={i} onPress={() => addReaction(reaction)}>
+                <Emoji name={reaction} />
+              </TouchableOpacity>
+            )
+            )}
           </>
         )}
       </View>

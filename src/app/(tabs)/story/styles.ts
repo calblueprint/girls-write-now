@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import globalStyles from '../../../styles/globalStyles';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,7 +14,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 153,
+    height: 200,
     marginBottom: 16,
   },
   authorImage: {
@@ -48,6 +50,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     borderRadius: 10,
     marginBottom: 16,
+    marginTop: 15,
   },
   genresBorder: {
     backgroundColor: '#D9D9D9',
@@ -62,30 +65,25 @@ const styles = StyleSheet.create({
     fontFamily: 'Manrope-Regular',
     fontSize: 12,
     fontWeight: '400',
-    color: 'black',
-    backgroundColor: '#D9D9D9',
+    color: 'white',
   },
   shareButtonText: {
     fontFamily: 'Manrope-Regular',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
+    color: 'white',
+    marginLeft: -5,
     textDecorationLine: 'underline',
-    backgroundColor: '#D9D9D9',
   },
   excerpt: {
     fontFamily: 'Manrope-Regular',
     fontSize: 16,
-    fontWeight: '400',
     textAlign: 'left',
     color: 'black',
-    paddingTop: 16,
-    paddingBottom: 16,
   },
   story: {
     fontFamily: 'Manrope-Regular',
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
@@ -93,11 +91,12 @@ const styles = StyleSheet.create({
   },
   authorProcess: {
     fontFamily: 'Manrope-Regular',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '900',
     textAlign: 'left',
     color: 'black',
-    marginBottom: 16,
+    marginBottom: 5,
+    marginTop: 10,
   },
   process: {
     fontFamily: 'Manrope-Regular',
@@ -117,6 +116,17 @@ const styles = StyleSheet.create({
   bottomReactionContainer: {
     flex: 1,
     justifyContent: 'space-around',
+  },
+  button_style: {
+    width: 125,
+    marginBottom: 16,
+    borderRadius: 8,
+    height: 35,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#EB563B',
   },
 });
 

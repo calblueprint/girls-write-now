@@ -1,5 +1,4 @@
-import { faHeart as farHeart } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -17,9 +16,12 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
+import Icon from '../../../../assets/icons';
+import AuthorImage from '../../../components/AuthorImage/AuthorImage';
 import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
+import globalStyles from '../../../styles/globalStyles';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -61,7 +63,15 @@ function StoryScreen() {
       console.log(error);
     }
   };
+  const htmlContent = story?.excerpt?.html ? story.excerpt.html : '';
 
+  // Add the quotation marks after the start of the <p> tag and before the end of the </p> tag
+  const modifiedExcerpt = htmlContent
+    .replace(/<p [^>]*>/, match => `${match}&ldquo;`)
+    .replace('</p>', '&rdquo;</p>');
+  console.log(typeof htmlContent);
+
+  console.log('TESTING CONTENT', htmlContent);
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
@@ -73,7 +83,7 @@ function StoryScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.container}>
-            {story.featured_media ? (
+            {story?.featured_media ? (
               <Image
                 style={styles.image}
                 source={{ uri: story.featured_media }}
@@ -84,60 +94,52 @@ function StoryScreen() {
           </View>
 
           <Text style={styles.title}>{story?.title}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              router.push({
-                pathname: '/author',
-                params: { author: story.author_id.toString() },
-              });
-            }}
-          >
-            <View style={styles.author}>
-              <Image
-                style={styles.authorImage}
-                source={{ uri: story.author_image ? story.author_image : '' }}
-              />
-              <Text style={styles.authorText}>By {story.author_name}</Text>
-            </View>
-          </TouchableOpacity>
+
+          <AuthorImage
+            author_name={story.author_name}
+            author_Uri={story.author_image}
+            author_id={story.author_id.toString()}
+          />
 
           <View>
             <FlatList
               style={styles.genres}
               horizontal
               data={story.genre_medium}
-              renderItem={({ item }) => (
-                <View style={styles.genresBorder}>
+              keyExtractor={(item, index) => index.toString()} // Add a key extractor for performance optimization
+              renderItem={({ item, index }) => (
+                <View
+                  style={[
+                    styles.genresBorder,
+                    {
+                      backgroundColor: index % 2 === 0 ? '#E66E3F' : '#B49BC6',
+                    },
+                  ]}
+                >
                   <Text style={styles.genresText}>{item}</Text>
                 </View>
               )}
             />
 
-            <Button
-              textColor="black"
-              buttonColor="#D9D9D9"
-              icon="share"
-              onPress={onShare}
-              style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-            >
+            <View style={styles.button_style}>
+              <Icon type="share_outline" />
               <Text style={styles.shareButtonText}>Share Story</Text>
-            </Button>
+            </View>
           </View>
 
-          <RenderHTML source={story.excerpt} baseStyle={styles.excerpt} />
+          <RenderHTML
+            source={{ html: modifiedExcerpt }}
+            baseStyle={globalStyles.h2}
+            tagsStyles={{ p: globalStyles.h2 }}
+            ignoredStyles={['color', 'fontSize', 'fontWeight']} // Ignore these inline styles
+          />
 
           <RenderHTML source={story.content} baseStyle={styles.story} />
 
-          <Button
-            textColor="black"
-            buttonColor="#D9D9D9"
-            icon="share"
-            onPress={onShare}
-            style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-          >
+          <View style={styles.button_style}>
+            <Icon type="share_outline" />
             <Text style={styles.shareButtonText}>Share Story</Text>
-          </Button>
-
+          </View>
           <Text style={styles.authorProcess}>Author's Process</Text>
 
           <RenderHTML source={story.process} baseStyle={styles.process} />

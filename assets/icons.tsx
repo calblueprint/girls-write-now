@@ -4,6 +4,7 @@ import { SvgXml } from 'react-native-svg';
 
 export type IconType =
   | 'home_outline'
+  | 'share_outline'
   | 'document_outline'
   | 'search_outline'
   | 'close_modal_button'
@@ -21,6 +22,7 @@ export type IconType =
 
 const IconSvgs: Record<IconType, React.ReactElement> = {
   home_outline: <Ionicons name="home-outline" size={23} />,
+  share_outline: <Ionicons name="share-outline" size={23} color="white" />,
   search_outline: <Ionicons name="search-outline" size={23} />,
   document_outline: <Ionicons name="document-outline" size={23} />,
   settings_gear: <Ionicons name="settings-outline" size={32} />,

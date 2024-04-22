@@ -230,14 +230,14 @@ function SearchScreen() {
           }}
         />
 
-        {search && (
-          <View style={styles.default}>
-            <Button
-              title="Show Filter Modal"
-              onPress={() => setFilterVisible(true)}
-            />
-          </View>
-        )}
+        {/* {search && ( */}
+        {/*   <View style={styles.default}> */}
+        {/*     <Button */}
+        {/*       title="Show Filter Modal" */}
+        {/*       onPress={() => setFilterVisible(true)} */}
+        {/*     /> */}
+        {/*   </View> */}
+        {/* )} */}
 
         {showRecents &&
           (search && searchResults.length > 0 ? (
@@ -424,11 +424,11 @@ function SearchScreen() {
           />
         )}
 
-        <FilterModal
-          isVisible={filterVisible}
-          setIsVisible={setFilterVisible}
-          title="Genre"
-        />
+        {/* <FilterModal */}
+        {/*   isVisible={filterVisible} */}
+        {/*   setIsVisible={setFilterVisible} */}
+        {/*   title="Genre" */}
+        {/* /> */}
       </View>
     </SafeAreaView>
   );

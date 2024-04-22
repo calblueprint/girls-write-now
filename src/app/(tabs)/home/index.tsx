@@ -3,7 +3,6 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   Text,
   View,
@@ -13,8 +12,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
-import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
-import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 
 import { fetchUsername } from '../../../queries/profiles';
 import {
@@ -183,7 +180,6 @@ function HomeScreen() {
             <Text style={[globalStyles.h3, styles.subheading]}>
               Recommended For You
             </Text>
-            <ReactionPicker />
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}

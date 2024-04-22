@@ -25,25 +25,10 @@ async function fetchUserStories(
     }
   }
 
-  const storyData = [];
-  for (const storyObject of storyObjects) {
-    const storyId = storyObject['story_id'];
-    const { data, error } = await supabase.rpc('fetch_story', {
-      input_id: storyId,
-    });
-
-    if (error || data.length == 0) {
-      if (process.env.NODE_ENV !== 'production') {
-        throw new Error(
-          `An error occured when trying to use rpc to get story data: ${JSON.stringify(
-            error,
-          )}`,
-        );
-      }
-    } else {
-      storyData.push(data[0]);
-    }
-  }
+  // console.log(data[0]);
+  // console.log("As preview:");
+  // console.log(data[0] as StoryPreview)
+  // console.log(data as StoryPreview[]);
 
   return data as StoryPreview[];
 }

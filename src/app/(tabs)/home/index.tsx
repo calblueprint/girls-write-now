@@ -150,15 +150,20 @@ function HomeScreen() {
 
         {featuredStories.length > 0 && (
           <View>
-            <Text style={[globalStyles.h2]}>Featured Stories</Text>
-            {featuredStoriesDescription != null &&
-              featuredStoriesDescription.length > 0 && (
-                <>
-                  <Text style={[globalStyles.h3, { paddingVertical: 16 }]}>{featuredStoriesHeader}</Text>
-                  <Text style={[globalStyles.body1, styles.featuredDescription]}>
-                    {featuredStoriesDescription}
-                  </Text>
-                </>
+            <Text style={[globalStyles.h2, { paddingBottom: 16 }]}>
+              Featured Stories
+            </Text>
+            {featuredStoriesHeader != null && featuredStoriesHeader != '' && (
+              <Text style={[globalStyles.h3, { paddingBottom: 16 }]}>
+                {featuredStoriesHeader}
+              </Text>
+            )}
+            {featuredStoriesHeader != '' &&
+              featuredStoriesDescription != null &&
+              featuredStoriesDescription != '' && (
+                <Text style={[globalStyles.body1, styles.featuredDescription]}>
+                  {featuredStoriesDescription}
+                </Text>
               )}
             <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (

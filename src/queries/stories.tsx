@@ -49,21 +49,6 @@ export async function fetchFeaturedStoryPreviews(): Promise<StoryPreview[]> {
   }
 }
 
-export async function fetchFeaturedStoriesDescription(): Promise<string> {
-  const { data, error } = await supabase
-    .from('featured_stories')
-    .select('description');
-
-  if (error) {
-    console.log(error);
-    throw new Error(
-      `An error occured when trying to fetch featured story description: ${error}`,
-    );
-  } else {
-    return data[0].description;
-  }
-}
-
 export async function fetchRecommendedStories(
   inputStories: StoryPreview[],
 ): Promise<StoryPreview[]> {
@@ -198,7 +183,7 @@ export async function fetchStoryPreviewByIds(
   }
 }
 
-export async function fetchFeaturedStoriesDescriptionHeader(): Promise<string> {
+export async function fetchFeaturedStoriesHeader(): Promise<string> {
   const { data, error } = await supabase
     .from('featured_stories_description')
     .select('header');
@@ -213,7 +198,7 @@ export async function fetchFeaturedStoriesDescriptionHeader(): Promise<string> {
   }
 }
 
-export async function fetchFeaturedStoriesDescriptionDescription(): Promise<string> {
+export async function fetchFeaturedStoriesDescription(): Promise<string> {
   const { data, error } = await supabase
     .from('featured_stories_description')
     .select('description');

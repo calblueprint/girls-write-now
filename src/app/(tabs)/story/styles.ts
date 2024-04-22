@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   authorProcess: {
     fontFamily: 'Manrope-Regular',
     fontSize: 20,
-    fontWeight: '900',
+    fontWeight: 'bold',
     textAlign: 'left',
     color: 'black',
     marginBottom: 5,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   process: {
     fontFamily: 'Manrope-Regular',
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: '400',
     textAlign: 'left',
     color: 'black',
@@ -108,10 +108,11 @@ const styles = StyleSheet.create({
   },
   backToTopButtonText: {
     fontFamily: 'Manrope-Regular',
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: '800',
     textAlign: 'left',
     color: 'black',
+    textDecorationLine: 'underline',
   },
   bottomReactionContainer: {
     flex: 1,

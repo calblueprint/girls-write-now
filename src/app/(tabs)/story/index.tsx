@@ -77,93 +77,95 @@ function StoryScreen() {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <ScrollView
-          bounces
-          ref={scrollRef}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.container}>
-            {story?.featured_media ? (
-              <Image
-                style={styles.image}
-                source={{ uri: story.featured_media }}
-              />
-            ) : (
-              <Text>No image available</Text>
-            )}
-          </View>
-
-          <Text style={styles.title}>{story?.title}</Text>
-
-          <AuthorImage
-            author_name={story.author_name}
-            author_Uri={story.author_image}
-            author_id={story.author_id.toString()}
-          />
-
-          <View>
-            <FlatList
-              style={styles.genres}
-              horizontal
-              data={story.genre_medium}
-              keyExtractor={(item, index) => index.toString()} // Add a key extractor for performance optimization
-              renderItem={({ item, index }) => (
-                <View
-                  style={[
-                    styles.genresBorder,
-                    {
-                      backgroundColor: index % 2 === 0 ? '#E66E3F' : '#B49BC6',
-                    },
-                  ]}
-                >
-                  <Text style={styles.genresText}>{item}</Text>
-                </View>
+        <View>
+          <ScrollView
+            bounces
+            ref={scrollRef}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.container}>
+              {story?.featured_media ? (
+                <Image
+                  style={styles.image}
+                  source={{ uri: story.featured_media }}
+                />
+              ) : (
+                <Text>No image available</Text>
               )}
+            </View>
+
+            <Text style={styles.title}>{story?.title}</Text>
+
+            <AuthorImage
+              author_name={story.author_name}
+              author_Uri={story.author_image}
+              author_id={story.author_id.toString()}
             />
+
+            <View>
+              <FlatList
+                style={styles.genres}
+                horizontal
+                data={story.genre_medium}
+                keyExtractor={(item, index) => index.toString()} // Add a key extractor for performance optimization
+                renderItem={({ item, index }) => (
+                  <View
+                    style={[
+                      styles.genresBorder,
+                      {
+                        backgroundColor:
+                          index % 2 === 0 ? '#E66E3F' : '#B49BC6',
+                      },
+                    ]}
+                  >
+                    <Text style={styles.genresText}>{item}</Text>
+                  </View>
+                )}
+              />
+
+              <View style={styles.button_style}>
+                <Icon type="share_outline" />
+                <Text style={styles.shareButtonText}>Share Story</Text>
+              </View>
+            </View>
+
+            <RenderHTML
+              source={{ html: modifiedExcerpt }}
+              baseStyle={globalStyles.h2}
+              tagsStyles={{ p: globalStyles.h2 }}
+              ignoredStyles={['color', 'fontSize', 'fontWeight']} // Ignore these inline styles
+            />
+
+            <RenderHTML source={story.content} baseStyle={styles.story} />
 
             <View style={styles.button_style}>
               <Icon type="share_outline" />
               <Text style={styles.shareButtonText}>Share Story</Text>
             </View>
-          </View>
+            <Text style={styles.authorProcess}>Author's Process</Text>
 
-          <RenderHTML
-            source={{ html: modifiedExcerpt }}
-            baseStyle={globalStyles.h2}
-            tagsStyles={{ p: globalStyles.h2 }}
-            ignoredStyles={['color', 'fontSize', 'fontWeight']} // Ignore these inline styles
-          />
+            <RenderHTML source={story.process} baseStyle={styles.process} />
 
-          <RenderHTML source={story.content} baseStyle={styles.story} />
+            <View style={styles.author}>
+              <Image
+                style={styles.authorImage}
+                source={{ uri: story.author_image }}
+              />
+              <Text style={styles.authorText}>By {story.author_name}</Text>
+            </View>
 
-          <View style={styles.button_style}>
-            <Icon type="share_outline" />
-            <Text style={styles.shareButtonText}>Share Story</Text>
-          </View>
-          <Text style={styles.authorProcess}>Author's Process</Text>
-
-          <RenderHTML source={story.process} baseStyle={styles.process} />
-
-          <View style={styles.author}>
-            <Image
-              style={styles.authorImage}
-              source={{ uri: story.author_image }}
-            />
-            <Text style={styles.authorText}>By {story.author_name}</Text>
-          </View>
-
-          <Button
-            textColor="black"
-            icon="arrow-up"
-            onPress={scrollUp}
-            style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-          >
-            <Text style={styles.backToTopButtonText}>Back To Top</Text>
-          </Button>
-          <View style={styles.bottomReactionContainer}>
-            <ReactionPicker />
-          </View>
-        </ScrollView>
+            <Button
+              textColor="black"
+              icon="arrow-up"
+              onPress={scrollUp}
+              style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
+            >
+              <Text style={styles.backToTopButtonText}>Back To Top</Text>
+            </Button>
+            <View style={styles.bottomReactionContainer} />
+          </ScrollView>
+          <ReactionPicker />
+        </View>
       )}
     </SafeAreaView>
   );

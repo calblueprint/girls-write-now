@@ -14,15 +14,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
+import FilterModal, {
+  CATEGORIES as FilterCategories,
+} from '../../../components/FilterModal/FilterModal';
 import GenreStoryPreviewCard from '../../../components/GenreStoryPreviewCard/GenreStoryPreviewCard';
 import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
 import { fetchStoryPreviewById } from '../../../queries/stories';
 import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
-
-//TODO figure out the logic for the tone and topic dropdowns, especially when we're dealing with multiselect on both parts
+import { TagFilter, useFilter } from '../../../utils/FilterContext';
 
 function GenreScreen() {
+  const { filters } = useFilter();
   const [genreStoryInfo, setGenreStoryInfo] = useState<GenreStories[]>();
   const [genreStoryIds, setGenreStoryIds] = useState<string[]>([]);
   const [subgenres, setSubgenres] = useState<string[]>([]);
@@ -147,6 +150,21 @@ function GenreScreen() {
     };
     getGenre();
   }, [genreName]);
+
+  const flattenenedFilters = Array.from(filters)
+    .map(([id, parent]) => [...parent.children, parent as TagFilter])
+    .flat();
+  const activeFilterNames = flattenenedFilters.filter(({ active }) => active);
+
+  const activeGenreNames = activeFilterNames
+    .filter(({ category }) => category == FilterCategories.GENRE)
+    .map(({ name }) => name);
+  const activeToneNames = activeFilterNames
+    .filter(({ category }) => category == FilterCategories.TONE)
+    .map(({ name }) => name);
+  const activeTopicNames = activeFilterNames
+    .filter(({ category }) => category == FilterCategories.TOPIC)
+    .map(({ name }) => name);
 
   useEffect(() => {
     const showAllStoryPreviews = async () => {

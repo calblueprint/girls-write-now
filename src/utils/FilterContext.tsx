@@ -156,7 +156,6 @@ export function FilterContextProvider({
       } as TagFilter;
     });
   };
-
   useEffect(() => {
     getTags().then(tags => dispatch({ type: 'SET_TAGS', tags: tags ?? [] }));
   }, []);

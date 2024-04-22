@@ -114,6 +114,10 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
+  bottomReactionContainer: {
+    flex: 1,
+    justifyContent: 'space-around',
+  },
 });
 
 export default styles;

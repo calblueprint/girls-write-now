@@ -7,6 +7,7 @@ import styles from './styles';
 import Icon from '../../../../assets/icons';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
+import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
 import { fetchUsername } from '../../../queries/profiles';
 import {
@@ -113,6 +114,7 @@ function HomeScreen() {
             <Text style={[globalStyles.h3, styles.subheading]}>
               Recommended For You
             </Text>
+            <ReactionPicker />
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}

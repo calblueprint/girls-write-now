@@ -17,9 +17,6 @@ export async function fetchAllStoryPreviews(): Promise<
       `An error occured when trying to fetch all story previews: ${error}`,
     );
   } else {
-    console.log(data[0]);
-    console.log(data.length);
-
     return data;
   }
 }

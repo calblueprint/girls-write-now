@@ -4,10 +4,11 @@ import Emoji from 'react-native-emoji';
 import globalStyles from '../../styles/globalStyles';
 
 type ReactionDisplayProps = {
-  reactions: string[];
+  reactions: (string | null)[];
 };
 
 function ReactionDisplay({ reactions }: ReactionDisplayProps) {
+  const cleanedReactions = reactions.filter(reaction => reaction !== null);
   const reactionColors: Record<string, string> = {
     heart: '#FFCCCB',
     clap: '#FFD580',
@@ -16,7 +17,7 @@ function ReactionDisplay({ reactions }: ReactionDisplayProps) {
     muscle: '#eddcf7',
   };
   const defaultColor = reactionColors['heart'];
-  const setOfReactions = [...reactions];
+  const setOfReactions = [...cleanedReactions];
   setOfReactions.push('heart');
   setOfReactions.push('clap');
   setOfReactions.push('muscle');
@@ -31,6 +32,8 @@ function ReactionDisplay({ reactions }: ReactionDisplayProps) {
       }}
     >
       {reactionDisplay.map(reaction => {
+        if (reaction === null) return;
+
         return (
           <View
             key={reaction}
@@ -50,7 +53,7 @@ function ReactionDisplay({ reactions }: ReactionDisplayProps) {
       })}
       <View style={styles.reactionNumber}>
         <Text style={[globalStyles.subtext, styles.reactionText]}>
-          {reactions?.length ?? 0}
+          {cleanedReactions?.length ?? 0}
         </Text>
       </View>
     </View>

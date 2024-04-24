@@ -10,6 +10,7 @@ type FilterDropdownProps = {
   placeholder: string;
   value: string[];
   data: string[];
+  selectedBorderColor?: string;
   setter: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
@@ -18,11 +19,12 @@ function FilterDropdown({
   value,
   data,
   setter,
+  selectedBorderColor = colors.darkGrey,
 }: FilterDropdownProps) {
   return (
     <MultiSelect
       mode="default"
-      style={styles.dropdown}
+      style={[styles.dropdown, value.length > 0 ? { borderColor: selectedBorderColor } : {}]}
       value={value}
       placeholderStyle={[globalStyles.body1, styles.placeholderStyle]}
       selectedTextStyle={globalStyles.body1}
@@ -40,7 +42,7 @@ function FilterDropdown({
       valueField="value"
       placeholder={placeholder}
       renderRightIcon={() => (
-        <Icon color={colors.darkGrey} name="arrow-drop-down" type="material" />
+        <Icon color={value.length > 0 ? selectedBorderColor : colors.darkGrey} name="arrow-drop-down" type="material" />
       )}
       onChange={item => {
         if (item) {

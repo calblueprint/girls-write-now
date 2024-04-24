@@ -15,14 +15,11 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import Icon from '../../../../assets/icons';
 import AuthorImage from '../../../components/AuthorImage/AuthorImage';
-import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 import globalStyles, { fonts } from '../../../styles/globalStyles';
 import BackButton from '../../../components/BackButton/BackButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import OptionBar from '../../../components/OptionBar/OptionBar';
 
 function StoryScreen() {
@@ -86,7 +83,7 @@ function StoryScreen() {
                 style={styles.genres}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={story.genre_medium}
+                data={[...story.genre_medium, ...story.tone, ...story.topic].filter(tag => tag != null)}
                 keyExtractor={(_, index) => index.toString()} // Add a key extractor for performance optimization
                 renderItem={({ item, index }) => (
                   <View

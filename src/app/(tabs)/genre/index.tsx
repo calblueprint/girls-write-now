@@ -8,8 +8,6 @@ import {
   FlatList,
 } from 'react-native';
 
-import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -215,42 +213,6 @@ function GenreScreen() {
         {/* ...Include Later? */}
         {/* </Text> */}
       </View>
-    );
-  };
-
-  const renderFilterDropdown = (
-    placeholder: string,
-    value: string[],
-    data: string[],
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    return (
-      <MultiSelect
-        mode="default"
-        style={[styles.dropdown, styles.secondDropdown]}
-        value={value}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={globalStyles.body1}
-        inputSearchStyle={globalStyles.body1}
-        itemTextStyle={globalStyles.body1}
-        dropdownPosition="bottom"
-        itemContainerStyle={styles.itemContainer}
-        iconStyle={styles.iconStyle}
-        data={data.map(topic => {
-          return { label: topic, value: topic };
-        })}
-        renderSelectedItem={() => <View />}
-        maxHeight={400}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
-        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
-        onChange={item => {
-          if (item) {
-            setter(item);
-          }
-        }}
-      />
     );
   };
 

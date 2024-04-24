@@ -11,8 +11,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Icon } from 'react-native-elements';
-import { Dropdown } from 'react-native-element-dropdown';
 
 import styles from './styles';
 import GenreCard from '../../../components/GenreCard/GenreCard';
@@ -103,40 +101,6 @@ function SearchScreen() {
   ] = useState<string[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string>('');
 
-  const renderGenreDropdown = (
-    placeholder: string,
-    value: string,
-    data: string[],
-  ) => {
-    return (
-      <Dropdown
-        mode="default"
-        style={[styles.dropdown, styles.secondDropdown]}
-        value={value}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={globalStyles.body1}
-        inputSearchStyle={globalStyles.body1}
-        itemTextStyle={globalStyles.body1}
-        dropdownPosition="bottom"
-        itemContainerStyle={styles.itemContainer}
-        iconStyle={styles.iconStyle}
-        data={data.map(topic => {
-          return { label: topic, value: topic };
-        })}
-        maxHeight={400}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
-        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
-        onChange={item => {
-          if (item) {
-            setSelectedGenre(item.value);
-          }
-        }}
-      />
-    );
-  };
-
   const populateFilterDropdowns = (stories: StoryPreview[]) => {
     const tones: string[] = stories
       .reduce((acc: string[], current: StoryPreview) => {
@@ -198,7 +162,7 @@ function SearchScreen() {
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })().then(() => {});
+    })().then(() => { });
   }, []);
 
   useEffect(() => {
@@ -436,6 +400,7 @@ function SearchScreen() {
                 value={selectedMultipleGenresForFiltering}
                 data={genreFilterOptions}
                 setter={setSelectedMultipleGenresForFiltering}
+                selectedBorderColor={colors.gwnOrange}
               />
             ) : (
               <FilterSingleDropdown
@@ -451,12 +416,14 @@ function SearchScreen() {
               value={selectedTopicsForFiltering}
               data={topicFilterOptions}
               setter={setSelectedTopicsForFiltering}
+              selectedBorderColor={colors.lime}
             />
             <FilterDropdown
               placeholder="Tone"
               value={selectedTonesForFiltering}
               data={toneFilterOptions}
               setter={setSelectedTonesForFiltering}
+              selectedBorderColor={colors.lilac}
             />
           </ScrollView>
         )}

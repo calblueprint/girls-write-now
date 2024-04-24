@@ -19,6 +19,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import Icon from '../../../../assets/icons';
 import AuthorImage from '../../../components/AuthorImage/AuthorImage';
+import FavoriteStoryButton from '../../../components/FavoriteStoryButton/FavoriteStoryButton';
+import SaveStoryButton from '../../../components/SaveStoryButton/SaveStoryButton';
 import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
@@ -165,7 +167,23 @@ function StoryScreen() {
                 By {story.author_name}
               </Text>
             </View>
-
+            <View style={styles.options}>
+              <SaveStoryButton storyId={parseInt(storyId as string, 10)} />
+              <FavoriteStoryButton storyId={parseInt(storyId as string, 10)} />
+              <Button
+                textColor="black"
+                buttonColor={colors.gwnOrange}
+                icon="share"
+                onPress={onShare}
+                style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
+              >
+                <Text
+                  style={[globalStyles.bodyUnderline, styles.shareButtonText]}
+                >
+                  Share Story
+                </Text>
+              </Button>
+            </View>
             <Button
               textColor="black"
               icon="arrow-up"

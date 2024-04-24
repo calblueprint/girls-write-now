@@ -48,7 +48,7 @@ async function addUserStory(
 ) {
   const { error } = await supabase
     .from('saved_stories')
-    .upsert([{ user_id: user_id, story_id: story_id, name: name }])
+    .upsert([{ user_id, story_id, name }])
     .select();
 
   if (error) {
@@ -117,6 +117,24 @@ export async function isStoryInReadingList(
 ): Promise<boolean> {
   let { data, error } = await supabase.rpc('is_story_saved_for_user', {
     list_name: SavedList.READING_LIST,
+    story_db_id: storyId,
+    user_uuid: userId,
+  });
+
+  if (error) {
+    console.error(error);
+    return false;
+  }
+
+  return data;
+}
+
+export async function isStoryInFavorites(
+  storyId: number,
+  userId: string | undefined,
+): Promise<boolean> {
+  const { data, error } = await supabase.rpc('is_story_saved_for_user', {
+    list_name: 'favorites',
     story_db_id: storyId,
     user_uuid: userId,
   });

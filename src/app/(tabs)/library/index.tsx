@@ -13,7 +13,7 @@ import {
   fetchUserStoriesReadingList,
 } from '../../../queries/savedStories';
 import { FlatList } from 'react-native-gesture-handler';
-import { usePubSub } from '../../../utils/PubSubContext';
+import { Channel, usePubSub } from '../../../utils/PubSubContext';
 
 function LibraryScreen() {
   const { user } = useSession();
@@ -25,6 +25,7 @@ function LibraryScreen() {
   );
   const { channels } = usePubSub();
   let updateReadingListTimeout: NodeJS.Timeout | null = null;
+  let updateFavoritesListTimeout: NodeJS.Timeout | null = null;
 
   const favoritesPressed = () => {
     setFavoritesSelected(true);
@@ -61,6 +62,20 @@ function LibraryScreen() {
   };
 
   useEffect(() => {
+    if (updateFavoritesListTimeout) {
+      clearTimeout(updateFavoritesListTimeout);
+    }
+
+    updateFavoritesListTimeout = setTimeout(
+      () =>
+        fetchUserStoriesFavorites(user?.id).then(favoriteStories => {
+          setFavoriteStories(favoriteStories);
+        }),
+      4000,
+    );
+  }, [channels[Channel.FAVORITES]]);
+
+  useEffect(() => {
     if (updateReadingListTimeout) {
       clearTimeout(updateReadingListTimeout);
     }
@@ -70,9 +85,9 @@ function LibraryScreen() {
         fetchUserStoriesReadingList(user?.id).then(readingList => {
           setReadingListStories(readingList);
         }),
-      5000,
+      4000,
     );
-  }, [channels]);
+  }, [channels[Channel.SAVED_STORIES]]);
 
   useEffect(() => {
     (async () => {

@@ -54,7 +54,8 @@ function PreviewCard({
     (async () => {
       const temp = await fetchAllReactionsToStory(storyId);
       if (temp != null) {
-        setReactions(temp.map(r => r.reaction));
+        console.log(temp);
+        setReactions(temp.filter(r => r != null));
         return;
       }
       setReactions([]);
@@ -101,7 +102,7 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
-          <ReactionDisplay reactions={reactions ?? []} />
+          <ReactionDisplay storyId={storyId} reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>

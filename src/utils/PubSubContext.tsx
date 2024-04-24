@@ -1,9 +1,18 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
+export enum Channel {
+  REACTIONS = "reactions",
+  SAVED_STORIES = "saved_stories",
+  FAVORITES = "favorites"
+}
+
+type channel = Record<number, boolean | undefined>;
+
 export interface PubSubState {
-  channels: Record<number, boolean | undefined>;
-  initializeChannel: (id: number) => void;
-  publish: (id: number, message: boolean) => void;
+  channels: Record<Channel, channel>;
+  publish: (channel: Channel, id: number, message: boolean) => void;
+  subscribe: (channel: Channel, id: number) => ReturnType<typeof useMemo>;
+  getPubSubValue: (channel: Channel, id: number) => boolean | undefined;
 }
 
 const BooleanPubSubContext = createContext({} as PubSubState);
@@ -26,28 +35,29 @@ export function BooleanPubSubProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [channels, setChannels] = useState<Record<number, boolean | undefined>>(
-    {},
+  const [channels, setChannels] = useState<Record<Channel, channel>>(
+    { [Channel.FAVORITES]: {}, [Channel.REACTIONS]: {}, [Channel.SAVED_STORIES]: {} },
   );
 
-  const initializeChannel = (id: number) => {
-    if (!(id in channels)) {
-      setChannels({ ...channels, [id]: undefined });
-    }
+  const publish = (channel: Channel, id: number, message: boolean) => {
+    let thisChannel = { ...channels[channel], [id]: message }
+    setChannels({ ...channels, [channel]: thisChannel });
   };
 
-  const publish = (id: number, message: boolean) => {
-    setChannels({ ...channels, [id]: message });
-  };
+  const subscribe = (channel: Channel, id: number) => {
+    return useMemo(() => channels[channel][id], [channels[channel][id]]);
+  }
 
-  const authContextValue = useMemo(
-    () => ({
-      channels,
-      initializeChannel,
-      publish,
-    }),
-    [channels],
-  );
+  const getPubSubValue = (channel: Channel, id: number) => {
+    return channels[channel][id];
+  }
+
+  const authContextValue = {
+    channels,
+    publish,
+    subscribe,
+    getPubSubValue,
+  }
 
   return (
     <BooleanPubSubContext.Provider value={authContextValue}>

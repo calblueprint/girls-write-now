@@ -1,6 +1,5 @@
-import { Share } from 'react-native';
+import { Share, View } from 'react-native';
 import Icon from '../../../assets/icons';
-import { View } from 'react-native';
 import ReactionPicker from '../ReactionPicker/ReactionPicker';
 import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 import FavoriteStoryButton from '../FavoriteStoryButton/FavoriteStoryButton';

@@ -10,13 +10,15 @@ const styles = StyleSheet.create({
     marginTop: 24,
     flex: 1,
   },
-  default: {
+  resultCounter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 8,
+    // padding: 20
   },
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
-    marginBottom: 8,
     borderColor: colors.grey,
   },
   inputContainer: {
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   numDisplay: {
-    marginTop: 24,
+    marginTop: 20,
     marginBottom: 8,
   },
   contentContainerRecents: {
@@ -89,6 +91,45 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     color: colors.grey,
+  },
+  dropdown: {
+    borderColor: '#797979',
+    flexGrow: 0,
+    flexShrink: 0,
+    borderWidth: 1.5,
+    borderRadius: 7,
+    width: 140,
+    height: 30,
+    color: '#797979',
+  },
+  dropdownContainer: {
+    marginLeft: 10,
+    marginTop: 13,
+    marginBottom: 30,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  firstDropdown: {
+    marginRight: 10,
+  },
+  secondDropdown: {
+    marginLeft: 10,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  itemContainer: {},
+  placeholderStyle: {
+    color: colors.darkGrey,
+    marginLeft: 45,
+  },
+  clearFilters: {
+    color: colors.fadedBlack,
+  },
+  clearFiltersButton: {
+    marginBottom: 8,
+    marginTop: 'auto',
   },
 });
 

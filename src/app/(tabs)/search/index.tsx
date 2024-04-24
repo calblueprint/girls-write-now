@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { router } from 'expo-router';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Button,
   FlatList,
   View,
   Text,
@@ -14,7 +13,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import FilterModal from '../../../components/FilterModal/FilterModal';
 import GenreCard from '../../../components/GenreCard/GenreCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
@@ -29,6 +27,10 @@ import {
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { GenreType } from '../genre';
+import {
+  FilterDropdown,
+  FilterSingleDropdown,
+} from '../../../components/FilterDropdown/FilterDropdown';
 
 const getRecentSearch = async () => {
   try {
@@ -74,6 +76,9 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState<
     StoryPreviewWithPreloadedReactions[]
   >([]);
+  const [unfilteredSearchResults, setUnfilteredSearchResults] = useState<
+    StoryPreviewWithPreloadedReactions[]
+  >([]);
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
@@ -81,19 +86,163 @@ function SearchScreen() {
   const [showRecents, setShowRecents] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<StoryPreview[]>([]);
   const genreColors = [colors.citrus, colors.lime, colors.lilac];
+  const [toneFilterOptions, setToneFilterOptions] = useState<string[]>([]);
+  const [topicFilterOptions, setTopicFilterOptions] = useState<string[]>([]);
+  const [genreFilterOptions, setGenreFilterOptions] = useState<string[]>([]);
+  const [selectedTonesForFiltering, setSelectedTonesForFiltering] = useState<
+    string[]
+  >([]);
+  const [selectedTopicsForFiltering, setSelectedTopicsForFiltering] = useState<
+    string[]
+  >([]);
+  const [
+    selectedMultipleGenresForFiltering,
+    setSelectedMultipleGenresForFiltering,
+  ] = useState<string[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<string>('');
+
+  const populateFilterDropdowns = (stories: StoryPreview[]) => {
+    const tones: string[] = stories
+      .reduce((acc: string[], current: StoryPreview) => {
+        return acc.concat(current.tone);
+      }, [] as string[])
+      .filter(tone => tone !== null);
+    const topics: string[] = stories
+      .reduce((acc: string[], current: StoryPreview) => {
+        return acc.concat(current.topic);
+      }, [] as string[])
+      .filter(topic => topic !== null);
+    const genres: string[] = stories
+      .reduce((acc: string[], current: StoryPreview) => {
+        return acc.concat(current.genre_medium);
+      }, [] as string[])
+      .filter(genre => genre !== null);
+
+    setGenreFilterOptions([...new Set(genres)]);
+    setTopicFilterOptions([...new Set(topics)]);
+    setToneFilterOptions([...new Set(tones)]);
+  };
 
   useEffect(() => {
     (async () => {
-      fetchAllStoryPreviews().then(stories => setAllStories(stories));
-      fetchGenres().then((genres: Genre[]) => setAllGenres(genres));
+      fetchAllStoryPreviews().then(
+        (stories: StoryPreviewWithPreloadedReactions[]) => {
+          setAllStories(stories);
+          const tones: string[] = stories
+            .reduce((acc: string[], current: StoryPreview) => {
+              return acc.concat(current.tone);
+            }, [] as string[])
+            .filter(tone => tone !== null);
+          const topics: string[] = stories
+            .reduce((acc: string[], current: StoryPreview) => {
+              return acc.concat(current.topic);
+            }, [] as string[])
+            .filter(topic => topic !== null);
+
+          setTopicFilterOptions([...new Set(topics)]);
+          setToneFilterOptions([...new Set(tones)]);
+        },
+      );
+
+      fetchGenres().then((genres: Genre[]) => {
+        setAllGenres(genres);
+        const genreOptions: string[] = genres
+          .reduce((acc: string[], current: Genre) => {
+            return acc.concat(
+              current.parent_name,
+              current.subgenres.map(subgenre => subgenre.name),
+            );
+          }, [] as string[])
+          .filter(genre => genre !== null);
+        setGenreFilterOptions([...new Set(genreOptions)]);
+      });
       getRecentSearch().then((searches: RecentSearch[]) =>
         setRecentSearches(searches),
       );
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })();
+    })().then(() => {});
   }, []);
+
+  useEffect(() => {
+    search.length > 0
+      ? populateFilterDropdowns(searchResults)
+      : populateFilterDropdowns(allStories);
+  }, [search]);
+
+  useEffect(() => {
+    if (selectedGenre) {
+      if (search.length === 0) {
+        const subgenreNames = allGenres
+          .reduce((acc: string[], current: Genre) => {
+            return acc.concat(current.subgenres.map(subgenre => subgenre.name));
+          }, [] as string[])
+          .filter(genre => genre !== null);
+
+        if (subgenreNames.includes(selectedGenre)) {
+          const genre = allGenres.filter(genre =>
+            genre.subgenres
+              .map(subgenre => subgenre.name)
+              .includes(selectedGenre),
+          )[0];
+          router.push({
+            pathname: '/genre',
+            params: {
+              genreId: genre.parent_id.toString(),
+              genreType: GenreType.SUBGENRE,
+              genreName: selectedGenre,
+            },
+          });
+        } else {
+          const genre = allGenres.filter(
+            genre => genre.parent_name === selectedGenre,
+          )[0];
+          router.push({
+            pathname: '/genre',
+            params: {
+              genreId: genre.parent_id.toString(),
+              genreType: GenreType.PARENT,
+              genreName: genre.parent_name,
+            },
+          });
+        }
+      }
+    }
+  }, [selectedGenre]);
+
+  useEffect(() => {
+    const checkTopic = (preview: StoryPreview): boolean => {
+      if (preview == null || preview.topic == null) return false;
+      if (selectedTopicsForFiltering.length == 0) return true;
+      else
+        return selectedTopicsForFiltering.every(t => preview.topic.includes(t));
+    };
+    const checkTone = (preview: StoryPreview): boolean => {
+      if (preview == null || preview.tone == null) return false;
+      if (selectedTonesForFiltering.length == 0) return true;
+      else
+        return selectedTonesForFiltering.every(t => preview.tone.includes(t));
+    };
+    const checkGenre = (preview: StoryPreview): boolean => {
+      if (preview == null || preview.genre_medium == null) return false;
+      if (selectedMultipleGenresForFiltering.length == 0) return true;
+      else
+        return selectedMultipleGenresForFiltering.every(t =>
+          preview.genre_medium.includes(t),
+        );
+    };
+
+    const filteredPreviews = unfilteredSearchResults.filter(
+      preview =>
+        checkTopic(preview) && checkTone(preview) && checkGenre(preview),
+    );
+    setSearchResults(filteredPreviews);
+  }, [
+    selectedTopicsForFiltering,
+    selectedTonesForFiltering,
+    selectedMultipleGenresForFiltering,
+  ]);
 
   const getColor = (index: number) => {
     return genreColors[index % genreColors.length];
@@ -103,6 +252,7 @@ function SearchScreen() {
     if (text === '') {
       setSearch(text);
       setSearchResults([]);
+      setUnfilteredSearchResults([]);
       return;
     }
 
@@ -115,11 +265,13 @@ function SearchScreen() {
 
     setSearch(text);
     setSearchResults(updatedData);
+    setUnfilteredSearchResults(updatedData);
     setShowGenreCarousals(false);
   };
 
   const handleCancelButtonPress = () => {
     setSearchResults([]);
+    setUnfilteredSearchResults([]);
     setShowGenreCarousals(true);
     setShowRecents(false);
   };
@@ -132,6 +284,12 @@ function SearchScreen() {
   const clearRecentlyViewed = () => {
     setRecentlyViewed([]);
     setRecentStory([]);
+  };
+
+  const clearFilters = () => {
+    setSelectedMultipleGenresForFiltering([]);
+    setSelectedTonesForFiltering([]);
+    setSelectedTopicsForFiltering([]);
   };
 
   const searchResultStacking = (
@@ -230,6 +388,46 @@ function SearchScreen() {
           }}
         />
 
+        {((search && searchResults.length > 0) || showGenreCarousals) && (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.dropdownContainer]}
+          >
+            {search ? (
+              <FilterDropdown
+                placeholder="Genre"
+                value={selectedMultipleGenresForFiltering}
+                data={genreFilterOptions}
+                setter={setSelectedMultipleGenresForFiltering}
+                selectedBorderColor={colors.gwnOrange}
+              />
+            ) : (
+              <FilterSingleDropdown
+                placeholder="Genre"
+                value={selectedGenre}
+                data={genreFilterOptions}
+                setter={setSelectedGenre}
+              />
+            )}
+
+            <FilterDropdown
+              placeholder="Topic"
+              value={selectedTopicsForFiltering}
+              data={topicFilterOptions}
+              setter={setSelectedTopicsForFiltering}
+              selectedBorderColor={colors.lime}
+            />
+            <FilterDropdown
+              placeholder="Tone"
+              value={selectedTonesForFiltering}
+              data={toneFilterOptions}
+              setter={setSelectedTonesForFiltering}
+              selectedBorderColor={colors.lilac}
+            />
+          </ScrollView>
+        )}
+
         {/* {search && ( */}
         {/*   <View style={styles.default}> */}
         {/*     <Button */}
@@ -241,10 +439,19 @@ function SearchScreen() {
 
         {showRecents &&
           (search && searchResults.length > 0 ? (
-            <View style={styles.default}>
+            <View style={styles.resultCounter}>
               <Text style={[globalStyles.subHeading1Bold, styles.numDisplay]}>
                 Showing results 1-{searchResults.length}
               </Text>
+
+              <TouchableOpacity
+                style={styles.clearFiltersButton}
+                onPress={() => clearFilters()}
+              >
+                <Text style={[globalStyles.bodyUnderline, styles.clearFilters]}>
+                  Clear Filters
+                </Text>
+              </TouchableOpacity>
             </View>
           ) : search && searchResults.length === 0 ? (
             <View style={styles.emptySearch}>
@@ -257,10 +464,17 @@ function SearchScreen() {
                 </Text>
               </View>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
-                Try searching by title or author, or
+                Try searching by title or author,{' '}
+                <Text
+                  onPress={clearFilters}
+                  style={[globalStyles.bodyUnderline, styles.clearFilters]}
+                >
+                  clearing filters
+                </Text>
+                ,
               </Text>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
-                check if your spelling is correct.
+                or check if your spelling is correct.
               </Text>
             </View>
           ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
@@ -352,7 +566,7 @@ function SearchScreen() {
             {allGenres.map((genre, index) => (
               <View key={index}>
                 <View style={styles.genreText}>
-                  <Text style={styles.parentName}>{genre.parent_name}</Text>
+                  <Text style={globalStyles.h3}>{genre.parent_name}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       router.push({
@@ -365,7 +579,7 @@ function SearchScreen() {
                       });
                     }}
                   >
-                    <Text style={styles.seeAll}>See All</Text>
+                    <Text style={globalStyles.bodyUnderline}>See All</Text>
                   </TouchableOpacity>
                 </View>
                 <ScrollView

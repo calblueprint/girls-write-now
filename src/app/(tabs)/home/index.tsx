@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Hyperlink from 'react-native-hyperlink';
 
 import styles from './styles';
 import ContentCard from '../../../components/ContentCard/ContentCard';
@@ -162,9 +163,19 @@ function HomeScreen() {
             {featuredStoriesHeader != '' &&
               featuredStoriesDescription != null &&
               featuredStoriesDescription != '' && (
-                <Text style={[globalStyles.body1, styles.featuredDescription]}>
-                  {featuredStoriesDescription}
-                </Text>
+                <Hyperlink
+                  linkStyle={[
+                    globalStyles.body1,
+                    styles.featuredDescriptionLink,
+                  ]}
+                  linkDefault={true}
+                >
+                  <Text
+                    style={[globalStyles.body1, styles.featuredDescription]}
+                  >
+                    {featuredStoriesDescription}
+                  </Text>
+                </Hyperlink>
               )}
             <View style={{ marginRight: 24 }}>
               {featuredStories.map(story => (

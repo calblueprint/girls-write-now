@@ -41,6 +41,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginRight: 24,
   },
+  featuredDescriptionLink: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
 });
 
 export default styles;

@@ -56,6 +56,7 @@
     "react-native-emojicon": "^1.0.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-htmlview": "^0.16.0",
+    "react-native-hyperlink": "^0.0.22",
     "react-native-ionicons": "^4.6.5",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-neat-date-picker": "^1.4.12",

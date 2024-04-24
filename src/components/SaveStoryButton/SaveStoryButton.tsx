@@ -25,7 +25,7 @@ export default function SaveStoryButton({
   const [storyIsSaved, setStoryIsSaved] = useState<boolean | null>(
     defaultState,
   );
-  const { publish, subscribe, getPubSubValue } = usePubSub();
+  const { publish, channels, getPubSubValue } = usePubSub();
 
   useEffect(() => {
     if (defaultState != null) {
@@ -41,7 +41,7 @@ export default function SaveStoryButton({
     if (getPubSubValue(Channel.SAVED_STORIES, storyId) != null) {
       setStoryIsSaved(getPubSubValue(Channel.SAVED_STORIES, storyId) ?? false);
     }
-  }, [subscribe(Channel.SAVED_STORIES, storyId)]);
+  }, [channels[Channel.SAVED_STORIES][storyId]]);
 
   const saveStory = async (saved: boolean) => {
     setStoryIsSaved(saved);

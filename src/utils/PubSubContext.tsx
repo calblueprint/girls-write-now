@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 export enum Channel {
   REACTIONS = 'reactions',
@@ -11,7 +11,6 @@ type channel = Record<number, boolean | undefined>;
 export interface PubSubState {
   channels: Record<Channel, channel>;
   publish: (channel: Channel, id: number, message: boolean) => void;
-  subscribe: (channel: Channel, id: number) => ReturnType<typeof useMemo>;
   getPubSubValue: (channel: Channel, id: number) => boolean | undefined;
 }
 
@@ -46,10 +45,6 @@ export function BooleanPubSubProvider({
     setChannels({ ...channels, [channel]: thisChannel });
   };
 
-  const subscribe = (channel: Channel, id: number) => {
-    return useMemo(() => channels[channel][id], [channels[channel][id]]);
-  };
-
   const getPubSubValue = (channel: Channel, id: number) => {
     return channels[channel][id];
   };
@@ -57,7 +52,6 @@ export function BooleanPubSubProvider({
   const authContextValue = {
     channels,
     publish,
-    subscribe,
     getPubSubValue,
   };
 

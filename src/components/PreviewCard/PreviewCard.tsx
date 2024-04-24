@@ -54,7 +54,6 @@ function PreviewCard({
     (async () => {
       const temp = await fetchAllReactionsToStory(storyId);
       if (temp != null) {
-        console.log(temp);
         setReactions(temp.filter(r => r != null));
         return;
       }

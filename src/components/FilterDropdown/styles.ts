@@ -20,8 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  firstDropdown: {
-  },
+  firstDropdown: {},
   iconStyle: {
     width: 20,
     height: 20,
@@ -34,7 +33,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.darkGrey,
   },
-
 });
 
 export default styles;

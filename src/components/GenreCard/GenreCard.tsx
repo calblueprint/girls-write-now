@@ -19,7 +19,9 @@ function GenreCard({ subgenres, pressFunction, cardColor }: GenreCardProps) {
   return (
     <TouchableOpacity onPress={pressFunction}>
       <View style={[styles.card, { backgroundColor: cardColor }]}>
-        <Text style={[globalStyles.subHeading1, styles.overlayText]}>{subgenres}</Text>
+        <Text style={[globalStyles.subHeading1, styles.overlayText]}>
+          {subgenres}
+        </Text>
       </View>
     </TouchableOpacity>
   );

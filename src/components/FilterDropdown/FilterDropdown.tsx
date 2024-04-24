@@ -1,7 +1,7 @@
-import { Dropdown, MultiSelect } from "react-native-element-dropdown";
-import globalStyles from "../../styles/globalStyles";
-import styles from "./styles"
-import { View } from "react-native";
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+import globalStyles from '../../styles/globalStyles';
+import styles from './styles';
+import { View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import colors from '../../styles/colors';
@@ -13,7 +13,12 @@ type FilterDropdownProps = {
   setter: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-function FilterDropdown({ placeholder, value, data, setter }: FilterDropdownProps) {
+function FilterDropdown({
+  placeholder,
+  value,
+  data,
+  setter,
+}: FilterDropdownProps) {
   return (
     <MultiSelect
       mode="default"
@@ -34,7 +39,9 @@ function FilterDropdown({ placeholder, value, data, setter }: FilterDropdownProp
       labelField="label"
       valueField="value"
       placeholder={placeholder}
-      renderRightIcon={() => <Icon color={colors.darkGrey} name="arrow-drop-down" type="material" />}
+      renderRightIcon={() => (
+        <Icon color={colors.darkGrey} name="arrow-drop-down" type="material" />
+      )}
       onChange={item => {
         if (item) {
           setter(item);
@@ -47,11 +54,16 @@ function FilterDropdown({ placeholder, value, data, setter }: FilterDropdownProp
 type FilterSingleDropdownProps = {
   placeholder: string;
   value: string;
-  data: string[]
+  data: string[];
   setter: React.Dispatch<React.SetStateAction<string>>;
-}
+};
 
-function FilterSingleDropdown({ placeholder, value, data, setter }: FilterSingleDropdownProps) {
+function FilterSingleDropdown({
+  placeholder,
+  value,
+  data,
+  setter,
+}: FilterSingleDropdownProps) {
   return (
     <Dropdown
       mode="default"
@@ -71,7 +83,9 @@ function FilterSingleDropdown({ placeholder, value, data, setter }: FilterSingle
       labelField="label"
       valueField="value"
       placeholder={placeholder}
-      renderRightIcon={() => <Icon color={colors.darkGrey} name="arrow-drop-down" type="material" />}
+      renderRightIcon={() => (
+        <Icon color={colors.darkGrey} name="arrow-drop-down" type="material" />
+      )}
       onChange={item => {
         if (item) {
           setter(item.value);
@@ -82,5 +96,3 @@ function FilterSingleDropdown({ placeholder, value, data, setter }: FilterSingle
 }
 
 export { FilterDropdown, FilterSingleDropdown };
-
-

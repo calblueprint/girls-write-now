@@ -307,8 +307,18 @@ function GenreScreen() {
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          <FilterDropdown placeholder='Topic' value={selectedTopicsForFiltering} data={topicFilterOptions} setter={setSelectedTopicsForFiltering} />
-          <FilterDropdown placeholder='Tone' value={selectedTonesForFiltering} data={toneFilterOptions} setter={setSelectedTonesForFiltering} />
+          <FilterDropdown
+            placeholder="Topic"
+            value={selectedTopicsForFiltering}
+            data={topicFilterOptions}
+            setter={setSelectedTopicsForFiltering}
+          />
+          <FilterDropdown
+            placeholder="Tone"
+            value={selectedTonesForFiltering}
+            data={toneFilterOptions}
+            setter={setSelectedTonesForFiltering}
+          />
         </View>
 
         {genreStoryIds.length === 0 && !isLoading ? (

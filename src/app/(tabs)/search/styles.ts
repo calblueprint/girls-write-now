@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   numDisplay: {
-    marginTop: 24,
+    marginTop: 20,
     marginBottom: 8,
   },
   contentContainerRecents: {
@@ -125,12 +125,12 @@ const styles = StyleSheet.create({
     marginLeft: 45,
   },
   clearFilters: {
-    color: colors.fadedBlack
+    color: colors.fadedBlack,
   },
   clearFiltersButton: {
     marginBottom: 8,
-    marginTop: 'auto'
-  }
+    marginTop: 'auto',
+  },
 });
 
 export default styles;

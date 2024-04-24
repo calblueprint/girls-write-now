@@ -29,7 +29,10 @@ import {
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { GenreType } from '../genre';
-import { FilterDropdown, FilterSingleDropdown } from '../../../components/FilterDropdown/FilterDropdown';
+import {
+  FilterDropdown,
+  FilterSingleDropdown,
+} from '../../../components/FilterDropdown/FilterDropdown';
 
 const getRecentSearch = async () => {
   try {
@@ -195,7 +198,7 @@ function SearchScreen() {
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })().then(() => { });
+    })().then(() => {});
   }, []);
 
   useEffect(() => {
@@ -425,23 +428,38 @@ function SearchScreen() {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[
-              styles.dropdownContainer,
-            ]}
+            contentContainerStyle={[styles.dropdownContainer]}
           >
-            {search
-              ?
-              <FilterDropdown placeholder='Genre' value={selectedMultipleGenresForFiltering} data={genreFilterOptions} setter={setSelectedMultipleGenresForFiltering} />
-              :
-              <FilterSingleDropdown placeholder='Genre' value={selectedGenre} data={genreFilterOptions} setter={setSelectedGenre} />
-            }
+            {search ? (
+              <FilterDropdown
+                placeholder="Genre"
+                value={selectedMultipleGenresForFiltering}
+                data={genreFilterOptions}
+                setter={setSelectedMultipleGenresForFiltering}
+              />
+            ) : (
+              <FilterSingleDropdown
+                placeholder="Genre"
+                value={selectedGenre}
+                data={genreFilterOptions}
+                setter={setSelectedGenre}
+              />
+            )}
 
-            <FilterDropdown placeholder='Topic' value={selectedTopicsForFiltering} data={topicFilterOptions} setter={setSelectedTopicsForFiltering} />
-            <FilterDropdown placeholder='Tone' value={selectedTonesForFiltering} data={toneFilterOptions} setter={setSelectedTonesForFiltering} />
-
+            <FilterDropdown
+              placeholder="Topic"
+              value={selectedTopicsForFiltering}
+              data={topicFilterOptions}
+              setter={setSelectedTopicsForFiltering}
+            />
+            <FilterDropdown
+              placeholder="Tone"
+              value={selectedTonesForFiltering}
+              data={toneFilterOptions}
+              setter={setSelectedTonesForFiltering}
+            />
           </ScrollView>
         )}
-
 
         {/* {search && ( */}
         {/*   <View style={styles.default}> */}
@@ -459,8 +477,13 @@ function SearchScreen() {
                 Showing results 1-{searchResults.length}
               </Text>
 
-              <TouchableOpacity style={styles.clearFiltersButton} onPress={() => clearFilters()}>
-                <Text style={[globalStyles.bodyUnderline, styles.clearFilters]}>Clear Filters</Text>
+              <TouchableOpacity
+                style={styles.clearFiltersButton}
+                onPress={() => clearFilters()}
+              >
+                <Text style={[globalStyles.bodyUnderline, styles.clearFilters]}>
+                  Clear Filters
+                </Text>
               </TouchableOpacity>
             </View>
           ) : search && searchResults.length === 0 ? (
@@ -475,7 +498,13 @@ function SearchScreen() {
               </View>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
                 Try searching by title or author,{' '}
-                <Text onPress={clearFilters} style={[globalStyles.bodyUnderline, styles.clearFilters]}>clearing filters</Text>,
+                <Text
+                  onPress={clearFilters}
+                  style={[globalStyles.bodyUnderline, styles.clearFilters]}
+                >
+                  clearing filters
+                </Text>
+                ,
               </Text>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
                 or check if your spelling is correct.
@@ -648,7 +677,7 @@ function SearchScreen() {
         {/*   title="Genre" */}
         {/* /> */}
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }
 

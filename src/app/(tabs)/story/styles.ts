@@ -57,6 +57,17 @@ const styles = StyleSheet.create({
   process: {
     marginBottom: 16,
   },
+  backToTopButtonText: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    fontWeight: '800',
+    textAlign: 'left',
+    color: 'black',
+  },
+  bottomReactionContainer: {
+    flex: 1,
+    justifyContent: 'space-around',
+  },
 });
 
 export default styles;

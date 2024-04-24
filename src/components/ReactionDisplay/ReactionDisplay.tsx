@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 import Emoji from 'react-native-emoji';
 import globalStyles from '../../styles/globalStyles';
-import { Channel, REACTION_CHANNEL_OFFSET, usePubSub } from '../../utils/PubSubContext';
+import { Channel, usePubSub } from '../../utils/PubSubContext';
 import { useEffect, useState } from 'react';
 
 type ReactionDisplayProps = {
@@ -41,7 +41,6 @@ function ReactionDisplay({ reactions, storyId }: ReactionDisplayProps) {
     if (value == undefined) {
       return;
     }
-    console.log("channel update");
 
     if (value) {
       setReactionCount(serverReactionCount + 1)

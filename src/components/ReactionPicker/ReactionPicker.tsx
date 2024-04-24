@@ -7,7 +7,7 @@ import styles from './styles';
 import Emoji from 'react-native-emoji';
 import { addReactionToStory, deleteReactionToStory } from '../../queries/reactions';
 import { useSession } from '../../utils/AuthContext';
-import { Channel, REACTION_CHANNEL_OFFSET, usePubSub } from '../../utils/PubSubContext';
+import { Channel, usePubSub } from '../../utils/PubSubContext';
 
 type ReactionPickerProps = {
   storyId: number

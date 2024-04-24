@@ -38,7 +38,6 @@ export default function SaveStoryButton({
   }, [storyId]);
 
   useEffect(() => {
-    // if another card updates this story, update it here also
     if (getPubSubValue(Channel.SAVED_STORIES, storyId) != null) {
       setStoryIsSaved(getPubSubValue(Channel.SAVED_STORIES, storyId) ?? false);
     }

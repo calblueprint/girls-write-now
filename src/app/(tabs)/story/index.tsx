@@ -85,6 +85,7 @@ function StoryScreen() {
               <FlatList
                 style={styles.genres}
                 horizontal
+                showsHorizontalScrollIndicator={false}
                 data={story.genre_medium}
                 keyExtractor={(_, index) => index.toString()} // Add a key extractor for performance optimization
                 renderItem={({ item, index }) => (
@@ -126,10 +127,6 @@ function StoryScreen() {
               contentWidth={width}
               baseStyle={styles.story}
             />
-
-            <TouchableOpacity>
-              <Icon type="share_outline" />
-            </TouchableOpacity>
 
             <Text style={styles.authorProcess}>Author's Process</Text>
 

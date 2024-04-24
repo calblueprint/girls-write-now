@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
 
@@ -55,7 +55,7 @@ export default function FavoriteStoryButton({
     }
   };
 
-  const renderFavoritedIcon = () => {
+  const renderFavoritedIcon = useMemo(() => {
     return (
       <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
         <Path
@@ -64,9 +64,9 @@ export default function FavoriteStoryButton({
         />
       </Svg>
     );
-  };
+  }, []);
 
-  const renderNotFavoritedIcon = () => {
+  const renderNotFavoritedIcon = useMemo(() => {
     return (
       <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
         <Path
@@ -75,11 +75,11 @@ export default function FavoriteStoryButton({
         />
       </Svg>
     );
-  };
+  }, []);
 
   return (
     <TouchableOpacity onPress={() => favoriteStory(!storyIsFavorited)}>
-      {storyIsFavorited ? renderFavoritedIcon() : renderNotFavoritedIcon()}
+      {storyIsFavorited ? renderFavoritedIcon : renderNotFavoritedIcon}
     </TouchableOpacity>
   );
 }

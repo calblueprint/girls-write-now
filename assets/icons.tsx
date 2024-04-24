@@ -110,7 +110,6 @@ const IconSvgs: Record<IconType, React.ReactElement> = {
           </svg>`}
     />
   ),
-
   home_inactive: (
     <SvgXml
       xml={`<svg

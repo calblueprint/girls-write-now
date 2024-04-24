@@ -57,6 +57,11 @@ const styles = StyleSheet.create({
   process: {
     marginBottom: 16,
   },
+  options: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   backToTopButtonText: {
     fontFamily: 'Manrope-Regular',
     fontSize: 12,

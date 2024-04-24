@@ -54,7 +54,7 @@ export async function fetchAllReactionsToStory(
       `An error occured when trying to fetch reactions to a story', ${error}`,
     );
   } else {
-    return data.reactions;
+    return data[0].reactions;
   }
 }
 

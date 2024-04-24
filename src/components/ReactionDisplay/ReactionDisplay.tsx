@@ -19,7 +19,7 @@ const reactionColors: Record<string, string> = {
 };
 
 function ReactionDisplay({ reactions, storyId }: ReactionDisplayProps) {
-  const { subscribe, getPubSubValue } = usePubSub();
+  const { channels, getPubSubValue } = usePubSub();
   const [reactionCount, setReactionCount] = useState(0);
 
   const cleanedReactions = reactions.filter(reaction => reaction != null);
@@ -34,7 +34,7 @@ function ReactionDisplay({ reactions, storyId }: ReactionDisplayProps) {
 
   useEffect(() => {
     setReactionCount(serverReactionCount);
-  }, []);
+  }, [reactions]);
 
   useEffect(() => {
     const value = getPubSubValue(Channel.REACTIONS, storyId);
@@ -47,7 +47,7 @@ function ReactionDisplay({ reactions, storyId }: ReactionDisplayProps) {
     } else {
       setReactionCount(serverReactionCount);
     }
-  }, [subscribe(Channel.REACTIONS, storyId)]);
+  }, [channels[Channel.REACTIONS][storyId]]);
 
   return (
     <View

@@ -1,17 +1,17 @@
 import { Share } from 'react-native';
 import Icon from '../../../assets/icons';
-import { View } from "react-native";
-import ReactionPicker from "../ReactionPicker/ReactionPicker";
-import SaveStoryButton from "../SaveStoryButton/SaveStoryButton";
-import FavoriteStoryButton from "../FavoriteStoryButton/FavoriteStoryButton";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import styles from "./styles";
+import { View } from 'react-native';
+import ReactionPicker from '../ReactionPicker/ReactionPicker';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
+import FavoriteStoryButton from '../FavoriteStoryButton/FavoriteStoryButton';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import styles from './styles';
 import { Story } from '../../queries/types';
 
 type OptionBarProps = {
-  storyId: number
-  story: Story
-}
+  storyId: number;
+  story: Story;
+};
 
 function OptionBar({ storyId, story }: OptionBarProps) {
   const onShare = async () => {
@@ -45,8 +45,7 @@ function OptionBar({ storyId, story }: OptionBarProps) {
         </TouchableOpacity>
       </View>
     </View>
-
-  )
+  );
 }
 
 export default OptionBar;

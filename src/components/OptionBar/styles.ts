@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -14,7 +13,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     gap: 8,
     flexDirection: 'row',
-  }
+  },
 });
 
 export default styles;

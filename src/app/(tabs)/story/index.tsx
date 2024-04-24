@@ -101,12 +101,16 @@ function StoryScreen() {
                   </View>
                 )}
               />
-
             </View>
-            <OptionBar story={story} storyId={parseInt(storyId as string, 10)} />
+            <OptionBar
+              story={story}
+              storyId={parseInt(storyId as string, 10)}
+            />
 
             <RenderHTML
-              source={{ html: `"${cheerio.load(story.excerpt.html ?? "").text()}"` }}
+              source={{
+                html: `"${cheerio.load(story.excerpt.html ?? '').text()}"`,
+              }}
               baseStyle={globalStyles.h2}
               contentWidth={width}
               systemFonts={fonts}
@@ -120,7 +124,8 @@ function StoryScreen() {
               systemFonts={fonts}
               source={story.content}
               contentWidth={width}
-              baseStyle={styles.story} />
+              baseStyle={styles.story}
+            />
 
             <TouchableOpacity>
               <Icon type="share_outline" />
@@ -150,7 +155,10 @@ function StoryScreen() {
               </Text>
             </View>
 
-            <OptionBar story={story} storyId={parseInt(storyId as string, 10)} />
+            <OptionBar
+              story={story}
+              storyId={parseInt(storyId as string, 10)}
+            />
 
             <Button
               textColor="black"

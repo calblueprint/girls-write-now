@@ -1,9 +1,5 @@
 import { router } from 'expo-router';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 
 import styles from './styles';

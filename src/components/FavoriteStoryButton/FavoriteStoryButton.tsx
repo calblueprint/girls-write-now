@@ -41,7 +41,7 @@ export default function FavoriteStoryButton({
     }
 
     setStoryIsFavorited(value);
-  }, [channels[Channel.FAVORITES][storyId]])
+  }, [channels[Channel.FAVORITES][storyId]]);
 
   const favoriteStory = async (favorited: boolean) => {
     setStoryIsFavorited(favorited);

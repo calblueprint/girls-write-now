@@ -1,11 +1,17 @@
 import { StyleSheet } from 'react-native';
 
+import globalStyles from '../../../styles/globalStyles';
 import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 24,
     paddingRight: 24,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    marginBottom: 16,
   },
   authorImage: {
     backgroundColor: '#D9D9D9',
@@ -28,9 +34,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     borderRadius: 10,
     marginBottom: 16,
+    marginTop: 15,
   },
   genresBorder: {
     backgroundColor: '#D9D9D9',
+    padding: 10,
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 10,
@@ -39,34 +47,66 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   genresText: {
-    backgroundColor: '#D9D9D9',
+    fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    color: 'white',
   },
   shareButtonText: {
-    color: colors.white,
+    fontFamily: 'Manrope-Regular',
+    fontSize: 14,
+    color: 'white',
+    marginLeft: -5,
+    textDecorationLine: 'underline',
   },
   excerpt: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 16,
     textAlign: 'left',
-    paddingVertical: 16,
+    color: 'black',
   },
   story: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 16,
+    textAlign: 'left',
+    color: 'black',
     marginBottom: 16,
   },
   authorProcess: {
-    marginBottom: 16,
+    fontFamily: 'Manrope-Bold',
+    fontSize: 20,
+    textAlign: 'left',
+    color: 'black',
+    marginBottom: 5,
+    marginTop: 10,
   },
   process: {
+    fontFamily: 'Manrope-Regular',
+    fontSize: 16,
+    textAlign: 'left',
+    color: 'black',
     marginBottom: 16,
   },
   backToTopButtonText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '800',
+    fontFamily: 'Manrope-Bold',
+    fontSize: 15,
     textAlign: 'left',
     color: 'black',
+    textDecorationLine: 'underline',
   },
   bottomReactionContainer: {
     flex: 1,
     justifyContent: 'space-around',
+  },
+  button_style: {
+    width: 125,
+    marginBottom: 16,
+    borderRadius: 8,
+    height: 35,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#EB563B',
   },
 });
 

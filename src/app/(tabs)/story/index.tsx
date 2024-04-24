@@ -83,7 +83,11 @@ function StoryScreen() {
                 style={styles.genres}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={[...story.genre_medium, ...story.tone, ...story.topic].filter(tag => tag != null)}
+                data={[
+                  ...story.genre_medium,
+                  ...story.tone,
+                  ...story.topic,
+                ].filter(tag => tag != null)}
                 keyExtractor={(_, index) => index.toString()} // Add a key extractor for performance optimization
                 renderItem={({ item, index }) => (
                   <View

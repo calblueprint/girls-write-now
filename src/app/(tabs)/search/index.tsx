@@ -162,7 +162,7 @@ function SearchScreen() {
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })().then(() => { });
+    })().then(() => {});
   }, []);
 
   useEffect(() => {

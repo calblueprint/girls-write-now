@@ -24,7 +24,10 @@ function FilterDropdown({
   return (
     <MultiSelect
       mode="default"
-      style={[styles.dropdown, value.length > 0 ? { borderColor: selectedBorderColor } : {}]}
+      style={[
+        styles.dropdown,
+        value.length > 0 ? { borderColor: selectedBorderColor } : {},
+      ]}
       value={value}
       placeholderStyle={[globalStyles.body1, styles.placeholderStyle]}
       selectedTextStyle={globalStyles.body1}
@@ -42,7 +45,11 @@ function FilterDropdown({
       valueField="value"
       placeholder={placeholder}
       renderRightIcon={() => (
-        <Icon color={value.length > 0 ? selectedBorderColor : colors.darkGrey} name="arrow-drop-down" type="material" />
+        <Icon
+          color={value.length > 0 ? selectedBorderColor : colors.darkGrey}
+          name="arrow-drop-down"
+          type="material"
+        />
       )}
       onChange={item => {
         if (item) {

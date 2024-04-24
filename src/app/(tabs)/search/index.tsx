@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
 import { router } from 'expo-router';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Button,
   FlatList,
   View,
   Text,
@@ -13,10 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-elements';
-import { MultiSelect, Dropdown } from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 
 import styles from './styles';
-import FilterModal from '../../../components/FilterModal/FilterModal';
 import GenreCard from '../../../components/GenreCard/GenreCard';
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import RecentSearchCard from '../../../components/RecentSearchCard/RecentSearchCard';
@@ -31,6 +29,7 @@ import {
 import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { GenreType } from '../genre';
+import { FilterDropdown, FilterSingleDropdown } from '../../../components/FilterDropdown/FilterDropdown';
 
 const getRecentSearch = async () => {
   try {
@@ -100,42 +99,6 @@ function SearchScreen() {
     setSelectedMultipleGenresForFiltering,
   ] = useState<string[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string>('');
-
-  const renderFilterDropdown = (
-    placeholder: string,
-    value: string[],
-    data: string[],
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    return (
-      <MultiSelect
-        mode="default"
-        style={[styles.dropdown, styles.secondDropdown]}
-        value={value}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={globalStyles.body1}
-        inputSearchStyle={globalStyles.body1}
-        itemTextStyle={globalStyles.body1}
-        dropdownPosition="bottom"
-        itemContainerStyle={styles.itemContainer}
-        iconStyle={styles.iconStyle}
-        data={data.map(topic => {
-          return { label: topic, value: topic };
-        })}
-        renderSelectedItem={() => <View />}
-        maxHeight={400}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
-        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
-        onChange={item => {
-          if (item) {
-            setter(item);
-          }
-        }}
-      />
-    );
-  };
 
   const renderGenreDropdown = (
     placeholder: string,
@@ -232,7 +195,7 @@ function SearchScreen() {
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })().then(() => {});
+    })().then(() => { });
   }, []);
 
   useEffect(() => {
@@ -458,45 +421,27 @@ function SearchScreen() {
           }}
         />
 
-        {searchResults && searchResults.length > 0 && (
+        {((search && searchResults.length > 0) || showGenreCarousals) && (
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={[
               styles.dropdownContainer,
-              styles.firstDropdown,
             ]}
           >
             {search
-              ? renderFilterDropdown(
-                  'Genre',
-                  selectedMultipleGenresForFiltering,
-                  genreFilterOptions,
-                  setSelectedMultipleGenresForFiltering,
-                )
-              : renderGenreDropdown('Genre', selectedGenre, genreFilterOptions)}
-            {renderFilterDropdown(
-              'Topic',
-              selectedTopicsForFiltering,
-              topicFilterOptions,
-              setSelectedTopicsForFiltering,
-            )}
-            {renderFilterDropdown(
-              'Tone',
-              selectedTonesForFiltering,
-              toneFilterOptions,
-              setSelectedTonesForFiltering,
-            )}
+              ?
+              <FilterDropdown placeholder='Genre' value={selectedMultipleGenresForFiltering} data={genreFilterOptions} setter={setSelectedMultipleGenresForFiltering} />
+              :
+              <FilterSingleDropdown placeholder='Genre' value={selectedGenre} data={genreFilterOptions} setter={setSelectedGenre} />
+            }
+
+            <FilterDropdown placeholder='Topic' value={selectedTopicsForFiltering} data={topicFilterOptions} setter={setSelectedTopicsForFiltering} />
+            <FilterDropdown placeholder='Tone' value={selectedTonesForFiltering} data={toneFilterOptions} setter={setSelectedTonesForFiltering} />
+
           </ScrollView>
         )}
 
-        {search && (
-          <View>
-            <TouchableOpacity onPress={() => clearFilters()}>
-              <Text>Clear Filters</Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {/* {search && ( */}
         {/*   <View style={styles.default}> */}
@@ -509,10 +454,14 @@ function SearchScreen() {
 
         {showRecents &&
           (search && searchResults.length > 0 ? (
-            <View style={styles.default}>
+            <View style={styles.resultCounter}>
               <Text style={[globalStyles.subHeading1Bold, styles.numDisplay]}>
                 Showing results 1-{searchResults.length}
               </Text>
+
+              <TouchableOpacity style={styles.clearFiltersButton} onPress={() => clearFilters()}>
+                <Text style={[globalStyles.bodyUnderline, styles.clearFilters]}>Clear Filters</Text>
+              </TouchableOpacity>
             </View>
           ) : search && searchResults.length === 0 ? (
             <View style={styles.emptySearch}>
@@ -525,10 +474,11 @@ function SearchScreen() {
                 </Text>
               </View>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
-                Try searching by title or author, or
+                Try searching by title or author,{' '}
+                <Text onPress={clearFilters} style={[globalStyles.bodyUnderline, styles.clearFilters]}>clearing filters</Text>,
               </Text>
               <Text style={[globalStyles.subHeading2, { textAlign: 'center' }]}>
-                check if your spelling is correct.
+                or check if your spelling is correct.
               </Text>
             </View>
           ) : recentSearches.length > 0 || recentlyViewed.length > 0 ? (
@@ -620,7 +570,7 @@ function SearchScreen() {
             {allGenres.map((genre, index) => (
               <View key={index}>
                 <View style={styles.genreText}>
-                  <Text style={styles.parentName}>{genre.parent_name}</Text>
+                  <Text style={globalStyles.h3}>{genre.parent_name}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       router.push({
@@ -633,7 +583,7 @@ function SearchScreen() {
                       });
                     }}
                   >
-                    <Text style={styles.seeAll}>See All</Text>
+                    <Text style={globalStyles.bodyUnderline}>See All</Text>
                   </TouchableOpacity>
                 </View>
                 <ScrollView
@@ -698,7 +648,7 @@ function SearchScreen() {
         {/*   title="Genre" */}
         {/* /> */}
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 

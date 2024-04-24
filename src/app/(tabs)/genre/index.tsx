@@ -21,6 +21,7 @@ import { fetchGenreStoryById } from '../../../queries/genres';
 import { fetchStoryPreviewByIds } from '../../../queries/stories';
 import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
+import { FilterDropdown } from '../../../components/FilterDropdown/FilterDropdown';
 
 function GenreScreen() {
   const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
@@ -306,18 +307,8 @@ function GenreScreen() {
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          {renderFilterDropdown(
-            'Tone',
-            selectedTonesForFiltering,
-            toneFilterOptions,
-            setSelectedTonesForFiltering,
-          )}
-          {renderFilterDropdown(
-            'Topic',
-            selectedTopicsForFiltering,
-            topicFilterOptions,
-            setSelectedTopicsForFiltering,
-          )}
+          <FilterDropdown placeholder='Topic' value={selectedTopicsForFiltering} data={topicFilterOptions} setter={setSelectedTopicsForFiltering} />
+          <FilterDropdown placeholder='Tone' value={selectedTonesForFiltering} data={toneFilterOptions} setter={setSelectedTonesForFiltering} />
         </View>
 
         {genreStoryIds.length === 0 && !isLoading ? (

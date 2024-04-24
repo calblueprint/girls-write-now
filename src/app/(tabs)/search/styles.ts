@@ -10,13 +10,15 @@ const styles = StyleSheet.create({
     marginTop: 24,
     flex: 1,
   },
-  default: {
+  resultCounter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 8,
+    // padding: 20
   },
   searchContainer: {
     backgroundColor: 'transparent',
     borderRadius: 10,
-    marginBottom: 8,
     borderColor: colors.grey,
   },
   inputContainer: {
@@ -101,8 +103,9 @@ const styles = StyleSheet.create({
     color: '#797979',
   },
   dropdownContainer: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginLeft: 10,
+    marginTop: 13,
+    marginBottom: 30,
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
@@ -121,6 +124,13 @@ const styles = StyleSheet.create({
     color: colors.darkGrey,
     marginLeft: 45,
   },
+  clearFilters: {
+    color: colors.fadedBlack
+  },
+  clearFiltersButton: {
+    marginBottom: 8,
+    marginTop: 'auto'
+  }
 });
 
 export default styles;

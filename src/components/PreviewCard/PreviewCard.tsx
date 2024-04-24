@@ -1,14 +1,19 @@
 import * as cheerio from 'cheerio';
+import { Image } from 'expo-image';
+import React, { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
-  Image,
   Pressable,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
 import styles from './styles';
+import { fetchAllReactionsToStory } from '../../queries/reactions';
 import globalStyles from '../../styles/globalStyles';
+import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -16,22 +21,46 @@ const placeholderImage =
 type PreviewCardProps = {
   title: string;
   image: string;
+  storyId: number;
   author: string;
   authorImage: string;
+  defaultSavedStoriesState?: boolean;
   excerpt: { html: string };
   tags: string[];
+  reactions?: string[] | null;
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
 function PreviewCard({
   title,
   image,
+  storyId,
   author,
   authorImage,
   excerpt,
   tags,
+  defaultSavedStoriesState = false,
   pressFunction,
+  reactions: preloadedReactions = null,
 }: PreviewCardProps) {
+  const [reactions, setReactions] = useState<string[] | null>(
+    preloadedReactions,
+  );
+  useEffect(() => {
+    if (preloadedReactions != null) {
+      return;
+    }
+
+    (async () => {
+      const temp = await fetchAllReactionsToStory(storyId);
+      if (temp != null) {
+        setReactions(temp.map(r => r.reaction));
+        return;
+      }
+      setReactions([]);
+    })();
+  }, []);
+
   return (
     <Pressable onPress={pressFunction}>
       <View style={styles.card}>
@@ -39,11 +68,19 @@ function PreviewCard({
           <Text numberOfLines={1} style={[globalStyles.h3, styles.title]}>
             {title}
           </Text>
+          <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+            <View>
+              <SaveStoryButton
+                storyId={storyId}
+                defaultState={defaultSavedStoriesState}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.body}>
           <Image
             style={styles.image}
-            source={{ uri: image == '' ? placeholderImage : image }}
+            source={{ uri: image === '' ? placeholderImage : image }}
           />
           <View style={styles.cardTextContainer}>
             <View style={styles.authorContainer}>
@@ -64,6 +101,7 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
+          <ReactionDisplay reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>
@@ -72,12 +110,10 @@ function PreviewCard({
                 </Text>
               </View>
             )}
-          </View>
-          <View style={styles.moreTags}>
-            <Pressable>
+            <Pressable style={styles.moreTags}>
               <Text style={[globalStyles.subtext, styles.moreTagsText]}>
                 {' '}
-                + {(tags?.length ?? 1) - 1} more tags
+                + {(tags?.length ?? 1) - 1}
               </Text>
             </Pressable>
           </View>

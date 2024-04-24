@@ -127,7 +127,6 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
-
   subtext: {
     fontFamily: 'Manrope-Regular',
     fontSize: 12,

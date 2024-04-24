@@ -232,7 +232,7 @@ function SearchScreen() {
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })().then(() => { });
+    })().then(() => {});
   }, []);
 
   useEffect(() => {
@@ -458,38 +458,37 @@ function SearchScreen() {
           }}
         />
 
-        {
-          searchResults && searchResults.length > 0 && (
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={[
-                styles.dropdownContainer,
-                styles.firstDropdown,
-              ]}
-            >
-              {search
-                ? renderFilterDropdown(
+        {searchResults && searchResults.length > 0 && (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              styles.dropdownContainer,
+              styles.firstDropdown,
+            ]}
+          >
+            {search
+              ? renderFilterDropdown(
                   'Genre',
                   selectedMultipleGenresForFiltering,
                   genreFilterOptions,
                   setSelectedMultipleGenresForFiltering,
                 )
-                : renderGenreDropdown('Genre', selectedGenre, genreFilterOptions)}
-              {renderFilterDropdown(
-                'Topic',
-                selectedTopicsForFiltering,
-                topicFilterOptions,
-                setSelectedTopicsForFiltering,
-              )}
-              {renderFilterDropdown(
-                'Tone',
-                selectedTonesForFiltering,
-                toneFilterOptions,
-                setSelectedTonesForFiltering,
-              )}
-            </ScrollView>
-          )}
+              : renderGenreDropdown('Genre', selectedGenre, genreFilterOptions)}
+            {renderFilterDropdown(
+              'Topic',
+              selectedTopicsForFiltering,
+              topicFilterOptions,
+              setSelectedTopicsForFiltering,
+            )}
+            {renderFilterDropdown(
+              'Tone',
+              selectedTonesForFiltering,
+              toneFilterOptions,
+              setSelectedTonesForFiltering,
+            )}
+          </ScrollView>
+        )}
 
         {search && (
           <View>
@@ -498,7 +497,6 @@ function SearchScreen() {
             </TouchableOpacity>
           </View>
         )}
-
 
         {/* {search && ( */}
         {/*   <View style={styles.default}> */}
@@ -614,7 +612,6 @@ function SearchScreen() {
             </View>
           ))}
 
-
         {showGenreCarousals ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -701,7 +698,7 @@ function SearchScreen() {
         {/*   title="Genre" */}
         {/* /> */}
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }
 

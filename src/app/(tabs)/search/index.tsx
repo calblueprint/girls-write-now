@@ -232,7 +232,7 @@ function SearchScreen() {
       getRecentStory().then((viewed: StoryPreview[]) =>
         setRecentlyViewed(viewed),
       );
-    })().then(() => {});
+    })().then(() => { });
   }, []);
 
   useEffect(() => {
@@ -458,6 +458,48 @@ function SearchScreen() {
           }}
         />
 
+        {
+          searchResults && searchResults.length > 0 && (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.dropdownContainer,
+                styles.firstDropdown,
+              ]}
+            >
+              {search
+                ? renderFilterDropdown(
+                  'Genre',
+                  selectedMultipleGenresForFiltering,
+                  genreFilterOptions,
+                  setSelectedMultipleGenresForFiltering,
+                )
+                : renderGenreDropdown('Genre', selectedGenre, genreFilterOptions)}
+              {renderFilterDropdown(
+                'Topic',
+                selectedTopicsForFiltering,
+                topicFilterOptions,
+                setSelectedTopicsForFiltering,
+              )}
+              {renderFilterDropdown(
+                'Tone',
+                selectedTonesForFiltering,
+                toneFilterOptions,
+                setSelectedTonesForFiltering,
+              )}
+            </ScrollView>
+          )}
+
+        {search && (
+          <View>
+            <TouchableOpacity onPress={() => clearFilters()}>
+              <Text>Clear Filters</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+
         {/* {search && ( */}
         {/*   <View style={styles.default}> */}
         {/*     <Button */}
@@ -572,43 +614,6 @@ function SearchScreen() {
             </View>
           ))}
 
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[
-            styles.dropdownContainer,
-            styles.firstDropdown,
-          ]}
-        >
-          {search
-            ? renderFilterDropdown(
-                'Genre',
-                selectedMultipleGenresForFiltering,
-                genreFilterOptions,
-                setSelectedMultipleGenresForFiltering,
-              )
-            : renderGenreDropdown('Genre', selectedGenre, genreFilterOptions)}
-          {renderFilterDropdown(
-            'Topic',
-            selectedTopicsForFiltering,
-            topicFilterOptions,
-            setSelectedTopicsForFiltering,
-          )}
-          {renderFilterDropdown(
-            'Tone',
-            selectedTonesForFiltering,
-            toneFilterOptions,
-            setSelectedTonesForFiltering,
-          )}
-        </ScrollView>
-
-        {search && (
-          <View>
-            <TouchableOpacity onPress={() => clearFilters()}>
-              <Text>Clear Filters</Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {showGenreCarousals ? (
           <ScrollView
@@ -696,7 +701,7 @@ function SearchScreen() {
         {/*   title="Genre" */}
         {/* /> */}
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 

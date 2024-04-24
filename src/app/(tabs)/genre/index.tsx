@@ -1,5 +1,5 @@
 import { useLocalSearchParams, router } from 'expo-router';
-import { useEffect, useState, useMemo, ReactNode } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -7,13 +7,14 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import { MultiSelect } from 'react-native-element-dropdown';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
+
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchGenreStoryById } from '../../../queries/genres';
 import { fetchStoryPreviewByIds } from '../../../queries/stories';

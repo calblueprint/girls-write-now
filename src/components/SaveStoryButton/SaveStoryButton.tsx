@@ -7,6 +7,7 @@ import {
   deleteUserStoryToReadingList,
   isStoryInReadingList,
 } from '../../queries/savedStories';
+import { Channel, usePubSub } from '../../utils/PubSubContext';
 import { useSession } from '../../utils/AuthContext';
 import { usePubSub } from '../../utils/PubSubContext';
 
@@ -26,7 +27,7 @@ export default function SaveStoryButton({
   const [storyIsSaved, setStoryIsSaved] = useState<boolean | null>(
     defaultState,
   );
-  const { channels, initializeChannel, publish } = usePubSub();
+  const { publish, channels, getPubSubValue } = usePubSub();
 
   useEffect(() => {
     if (defaultState != null) {
@@ -35,20 +36,18 @@ export default function SaveStoryButton({
 
     isStoryInReadingList(storyId, user?.id).then(storyInReadingList => {
       setStoryIsSaved(storyInReadingList);
-      initializeChannel(storyId);
     });
   }, [storyId]);
 
   useEffect(() => {
-    // if another card updates this story, update it here also
-    if (typeof channels[storyId] !== 'undefined') {
-      setStoryIsSaved(channels[storyId] ?? false);
+    if (getPubSubValue(Channel.SAVED_STORIES, storyId) != null) {
+      setStoryIsSaved(getPubSubValue(Channel.SAVED_STORIES, storyId) ?? false);
     }
-  }, [channels[storyId]]);
+  }, [channels[Channel.SAVED_STORIES][storyId]]);
 
   const saveStory = async (saved: boolean) => {
     setStoryIsSaved(saved);
-    publish(storyId, saved); // update other cards with this story
+    publish(Channel.SAVED_STORIES, storyId, saved); // update other cards with this story
 
     if (saved) {
       await addUserStoryToReadingList(user?.id, storyId);

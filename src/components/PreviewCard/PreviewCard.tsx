@@ -8,14 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Emoji from 'react-native-emoji';
 
 import styles from './styles';
 import { fetchAllReactionsToStory } from '../../queries/reactions';
-import { Reactions } from '../../queries/types';
 import globalStyles from '../../styles/globalStyles';
-import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 import ReactionDisplay from '../ReactionDisplay/ReactionDisplay';
+import SaveStoryButton from '../SaveStoryButton/SaveStoryButton';
 
 const placeholderImage =
   'https://gwn-uploads.s3.amazonaws.com/wp-content/uploads/2021/10/10120952/Girls-Write-Now-logo-avatar.png';
@@ -26,7 +24,7 @@ type PreviewCardProps = {
   storyId: number;
   author: string;
   authorImage: string;
-  defaultSavedStoriesState?: boolean;
+  defaultSavedStoriesState?: boolean | null;
   excerpt: { html: string };
   tags: string[];
   reactions?: string[] | null;
@@ -41,7 +39,7 @@ function PreviewCard({
   authorImage,
   excerpt,
   tags,
-  defaultSavedStoriesState = false,
+  defaultSavedStoriesState = null,
   pressFunction,
   reactions: preloadedReactions = null,
 }: PreviewCardProps) {
@@ -56,7 +54,7 @@ function PreviewCard({
     (async () => {
       const temp = await fetchAllReactionsToStory(storyId);
       if (temp != null) {
-        setReactions(temp.map(r => r.reaction));
+        setReactions(temp.filter(r => r != null));
         return;
       }
       setReactions([]);
@@ -103,7 +101,7 @@ function PreviewCard({
           </View>
         </View>
         <View style={styles.tagsContainer}>
-          <ReactionDisplay reactions={reactions ?? []} />
+          <ReactionDisplay storyId={storyId} reactions={reactions ?? []} />
           <View style={styles.tagsRow}>
             {(tags?.length ?? 0) > 0 && (
               <View style={styles.tag}>

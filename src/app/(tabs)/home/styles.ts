@@ -38,8 +38,7 @@ const styles = StyleSheet.create({
     marginRight: 24,
   },
   featuredDescription: {
-    marginBottom: 16,
-    marginTop: 8,
+    marginBottom: 24,
     marginRight: 24,
   },
 });

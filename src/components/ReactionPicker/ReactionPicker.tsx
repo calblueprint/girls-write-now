@@ -5,22 +5,31 @@ import { View, TouchableOpacity } from 'react-native';
 
 import styles from './styles';
 import Emoji from 'react-native-emoji';
-import { addReactionToStory, deleteReactionToStory } from '../../queries/reactions';
+import {
+  addReactionToStory,
+  deleteReactionToStory,
+} from '../../queries/reactions';
 import { useSession } from '../../utils/AuthContext';
 import { Channel, usePubSub } from '../../utils/PubSubContext';
 
 type ReactionPickerProps = {
-  storyId: number
-}
+  storyId: number;
+};
 
 const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
   const { user } = useSession();
-  const { publish } = usePubSub()
+  const { publish } = usePubSub();
   const [showReactions, setShowReactions] = useState(false);
-  const [currentReaction, setCurrentReaction] = useState('')
+  const [currentReaction, setCurrentReaction] = useState('');
 
   const toggleReactions = () => setShowReactions(!showReactions);
-  const reactionMapping: Record<string, number> = { "heart": 2, "clap": 3, "muscle": 4, "cry": 5, "hugging_face": 6 };
+  const reactionMapping: Record<string, number> = {
+    heart: 2,
+    clap: 3,
+    muscle: 4,
+    cry: 5,
+    hugging_face: 6,
+  };
 
   const handleReactionPress = (reactionName: string) => {
     if (currentReaction == reactionName) {
@@ -28,7 +37,7 @@ const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
     } else {
       addReaction(reactionName);
     }
-  }
+  };
 
   const addReaction = (reactionName: string) => {
     setCurrentReaction(reactionName);
@@ -36,15 +45,15 @@ const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
 
     const reactionId = reactionMapping[reactionName];
     addReactionToStory(user?.id, storyId, reactionId);
-  }
+  };
 
   const removeReaction = (reactionName: string) => {
-    setCurrentReaction("");
+    setCurrentReaction('');
     publish(Channel.REACTIONS, storyId, false);
 
     const reactionId = reactionMapping[reactionName];
     deleteReactionToStory(user?.id, storyId, reactionId);
-  }
+  };
 
   return (
     <TouchableOpacity style={styles.reactionView} onPress={toggleReactions}>
@@ -55,11 +64,13 @@ const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
           <>
             <View style={{ marginLeft: 12 }} />
             {Object.keys(reactionMapping).map((reaction, i) => (
-              <TouchableOpacity key={i} onPress={() => handleReactionPress(reaction)}>
+              <TouchableOpacity
+                key={i}
+                onPress={() => handleReactionPress(reaction)}
+              >
                 <Emoji name={reaction} />
               </TouchableOpacity>
-            )
-            )}
+            ))}
           </>
         )}
       </View>

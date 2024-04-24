@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
 export enum Channel {
-  REACTIONS = "reactions",
-  SAVED_STORIES = "saved_stories",
-  FAVORITES = "favorites"
+  REACTIONS = 'reactions',
+  SAVED_STORIES = 'saved_stories',
+  FAVORITES = 'favorites',
 }
 
 type channel = Record<number, boolean | undefined>;
@@ -35,29 +35,31 @@ export function BooleanPubSubProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [channels, setChannels] = useState<Record<Channel, channel>>(
-    { [Channel.FAVORITES]: {}, [Channel.REACTIONS]: {}, [Channel.SAVED_STORIES]: {} },
-  );
+  const [channels, setChannels] = useState<Record<Channel, channel>>({
+    [Channel.FAVORITES]: {},
+    [Channel.REACTIONS]: {},
+    [Channel.SAVED_STORIES]: {},
+  });
 
   const publish = (channel: Channel, id: number, message: boolean) => {
-    let thisChannel = { ...channels[channel], [id]: message }
+    let thisChannel = { ...channels[channel], [id]: message };
     setChannels({ ...channels, [channel]: thisChannel });
   };
 
   const subscribe = (channel: Channel, id: number) => {
     return useMemo(() => channels[channel][id], [channels[channel][id]]);
-  }
+  };
 
   const getPubSubValue = (channel: Channel, id: number) => {
     return channels[channel][id];
-  }
+  };
 
   const authContextValue = {
     channels,
     publish,
     subscribe,
     getPubSubValue,
-  }
+  };
 
   return (
     <BooleanPubSubContext.Provider value={authContextValue}>

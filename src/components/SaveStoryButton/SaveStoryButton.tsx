@@ -9,15 +9,12 @@ import {
 } from '../../queries/savedStories';
 import { Channel, usePubSub } from '../../utils/PubSubContext';
 import { useSession } from '../../utils/AuthContext';
-import { usePubSub } from '../../utils/PubSubContext';
 
 type SaveStoryButtonProps = {
   storyId: number;
   defaultState?: boolean | null;
 };
 
-const saveStoryImage = require('../../../assets/save_story.png');
-const savedStoryImage = require('../../../assets/saved_story.png');
 
 export default function SaveStoryButton({
   storyId,
@@ -56,23 +53,31 @@ export default function SaveStoryButton({
     }
   };
 
+  const renderSavedStoryImage = () => {
+    return (
+      <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <Path
+          d="M4.375 19.375V18.125H13.125V19.375H4.375ZM4.375 14.375V13.125H18.125V14.375H4.375ZM4.375 9.375V8.125H18.125V9.375H4.375ZM20.4375 22.885L16.865 19.3125L17.75 18.4275L20.4375 21.1013L25.75 15.7887L26.635 16.6875L20.4375 22.885Z"
+          fill="#703929"
+        />
+      </Svg>
+    )
+  }
+
+  const renderSaveStoryImage = () => {
+    return (
+      <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <Path
+          d="M4.375 19.375V18.125H13.125V19.375H4.375ZM4.375 14.375V13.125H18.125V14.375H4.375ZM4.375 9.375V8.125H18.125V9.375H4.375ZM20.625 24.375V19.375H15.625V18.125H20.625V13.125H21.875V18.125H26.875V19.375H21.875V24.375H20.625Z"
+          fill="black"
+        />
+      </Svg>
+    )
+  }
+
   return (
     <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
-      {storyIsSaved ? (
-        <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-          <Path
-            d="M4.375 19.375V18.125H13.125V19.375H4.375ZM4.375 14.375V13.125H18.125V14.375H4.375ZM4.375 9.375V8.125H18.125V9.375H4.375ZM20.4375 22.885L16.865 19.3125L17.75 18.4275L20.4375 21.1013L25.75 15.7887L26.635 16.6875L20.4375 22.885Z"
-            fill="#703929"
-          />
-        </Svg>
-      ) : (
-        <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-          <Path
-            d="M4.375 19.375V18.125H13.125V19.375H4.375ZM4.375 14.375V13.125H18.125V14.375H4.375ZM4.375 9.375V8.125H18.125V9.375H4.375ZM20.625 24.375V19.375H15.625V18.125H20.625V13.125H21.875V18.125H26.875V19.375H21.875V24.375H20.625Z"
-            fill="black"
-          />
-        </Svg>
-      )}
-    </TouchableOpacity>
+      {storyIsSaved ? renderSavedStoryImage() : renderSaveStoryImage()}
+    </TouchableOpacity >
   );
 }

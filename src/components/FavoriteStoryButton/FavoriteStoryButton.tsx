@@ -18,7 +18,7 @@ export default function FavoriteStoryButton({
   storyId,
 }: FavoriteStoryButtonProps) {
   const { user } = useSession();
-  const { publish } = usePubSub()
+  const { publish } = usePubSub();
   const [storyIsFavorited, setStoryIsFavorited] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function FavoriteStoryButton({
 
   useEffect(() => {
     isStoryInFavorites(storyId, user?.id).then(storyInFavorites => {
-      setStoryIsFavorited(storyInFavorites)
+      setStoryIsFavorited(storyInFavorites);
       publish(Channel.FAVORITES, storyId, storyInFavorites);
     });
   }, [storyId]);
@@ -54,8 +54,8 @@ export default function FavoriteStoryButton({
           fill="#EB563B"
         />
       </Svg>
-    )
-  }
+    );
+  };
 
   const renderNotFavoritedIcon = () => {
     return (
@@ -65,12 +65,12 @@ export default function FavoriteStoryButton({
           fill="black"
         />
       </Svg>
-    )
-  }
+    );
+  };
 
   return (
     <TouchableOpacity onPress={() => favoriteStory(!storyIsFavorited)}>
       {storyIsFavorited ? renderFavoritedIcon() : renderNotFavoritedIcon()}
-    </TouchableOpacity >
+    </TouchableOpacity>
   );
 }

@@ -15,7 +15,6 @@ type SaveStoryButtonProps = {
   defaultState?: boolean | null;
 };
 
-
 export default function SaveStoryButton({
   storyId,
   defaultState = null,
@@ -61,8 +60,8 @@ export default function SaveStoryButton({
           fill="#703929"
         />
       </Svg>
-    )
-  }
+    );
+  };
 
   const renderSaveStoryImage = () => {
     return (
@@ -72,12 +71,12 @@ export default function SaveStoryButton({
           fill="black"
         />
       </Svg>
-    )
-  }
+    );
+  };
 
   return (
     <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
       {storyIsSaved ? renderSavedStoryImage() : renderSaveStoryImage()}
-    </TouchableOpacity >
+    </TouchableOpacity>
   );
 }

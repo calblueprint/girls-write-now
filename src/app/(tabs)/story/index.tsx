@@ -82,7 +82,7 @@ function StoryScreen() {
             showsVerticalScrollIndicator={false}
           >
             <BackButton pressFunction={() => router.back()} />
-            <View style={styles.container}>
+            <View >
               {story?.featured_media ? (
                 <Image
                   style={styles.image}
@@ -190,7 +190,7 @@ function StoryScreen() {
             </Button>
             <View style={styles.bottomReactionContainer} />
           </ScrollView>
-          <ReactionPicker />
+          <ReactionPicker storyId={parseInt(storyId as string, 10)} />
         </View>
       )}
     </SafeAreaView>

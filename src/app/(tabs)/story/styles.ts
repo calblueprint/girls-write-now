@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 24,
     paddingRight: 24,
-    paddingTop: 48,
   },
   image: {
     width: '100%',
@@ -118,10 +117,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#EB563B',
-  },
-  bottomReactionContainer: {
-    flex: 1,
-    justifyContent: 'space-around',
   },
 });
 

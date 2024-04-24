@@ -9,6 +9,7 @@ export type IconType =
   | 'search_outline'
   | 'close_modal_button'
   | 'red_x'
+  | 'share_outline'
   | 'green_check'
   | 'hide_password'
   | 'grey_dot'

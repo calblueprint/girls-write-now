@@ -190,7 +190,6 @@ function HomeScreen() {
             <Text style={[globalStyles.h3, styles.subheading]}>
               Recommended For You
             </Text>
-            <ReactionPicker />
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}

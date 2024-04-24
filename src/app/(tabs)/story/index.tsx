@@ -1,5 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import * as cheerio from 'cheerio';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -7,7 +7,6 @@ import {
   ScrollView,
   Share,
   Text,
-  TouchableOpacity,
   View,
   useWindowDimensions,
 } from 'react-native';
@@ -24,7 +23,7 @@ import SaveStoryButton from '../../../components/SaveStoryButton/SaveStoryButton
 import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
-import globalStyles from '../../../styles/globalStyles';
+import globalStyles, { fonts } from '../../../styles/globalStyles';
 import BackButton from '../../../components/BackButton/BackButton';
 import colors from '../../../styles/colors';
 
@@ -70,15 +69,7 @@ function StoryScreen() {
       console.log(error);
     }
   };
-  const htmlContent = story?.excerpt?.html ? story.excerpt.html : '';
 
-  // Add the quotation marks after the start of the <p> tag and before the end of the </p> tag
-  const modifiedExcerpt = htmlContent
-    .replace(/<p [^>]*>/, match => `${match}&ldquo;`)
-    .replace('</p>', '&rdquo;</p>');
-  console.log(typeof htmlContent);
-
-  console.log('TESTING CONTENT', htmlContent);
   return (
     <SafeAreaView style={[globalStyles.tabBarContainer, styles.container]}>
       {isLoading ? (
@@ -90,6 +81,7 @@ function StoryScreen() {
             ref={scrollRef}
             showsVerticalScrollIndicator={false}
           >
+            <BackButton pressFunction={() => router.back()} />
             <View style={styles.container}>
               {story?.featured_media ? (
                 <Image
@@ -114,7 +106,7 @@ function StoryScreen() {
                 style={styles.genres}
                 horizontal
                 data={story.genre_medium}
-                keyExtractor={(item, index) => index.toString()} // Add a key extractor for performance optimization
+                keyExtractor={(_, index) => index.toString()} // Add a key extractor for performance optimization
                 renderItem={({ item, index }) => (
                   <View
                     style={[
@@ -137,13 +129,16 @@ function StoryScreen() {
             </View>
 
             <RenderHTML
-              source={{ html: modifiedExcerpt }}
+              source={{ html: `"${cheerio.load(story.excerpt.html ?? "").text()}"` }}
               baseStyle={globalStyles.h2}
+              contentWidth={width}
+              systemFonts={fonts}
               tagsStyles={{ p: globalStyles.h2 }}
               ignoredStyles={['color', 'fontSize', 'fontWeight']} // Ignore these inline styles
             />
 
-            <RenderHTML source={story.content} baseStyle={styles.story} />
+            <RenderHTML systemFonts={fonts} source={story.content} contentWidth={width}
+              baseStyle={styles.story} />
 
             <View style={styles.button_style}>
               <Icon type="share_outline" />
@@ -151,7 +146,8 @@ function StoryScreen() {
             </View>
             <Text style={styles.authorProcess}>Author's Process</Text>
 
-            <RenderHTML source={story.process} baseStyle={styles.process} />
+            <RenderHTML systemFonts={fonts} source={story.process} contentWidth={width}
+              baseStyle={styles.process} />
 
             <View style={styles.author}>
               <Image

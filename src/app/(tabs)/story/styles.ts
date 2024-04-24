@@ -1,13 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 import globalStyles from '../../../styles/globalStyles';
+import colors from '../../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
     paddingLeft: 24,
     paddingRight: 24,
     paddingTop: 48,
@@ -24,11 +21,6 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 2,
   },
   title: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 24,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
     marginBottom: 16,
   },
   author: {
@@ -36,13 +28,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginBottom: 16,
-  },
-  authorText: {
-    fontFamily: 'Manrope-Regular',
-    fontSize: 12,
-    fontWeight: '400',
-    textAlign: 'left',
-    color: 'black',
   },
   genres: {
     display: 'flex',
@@ -128,6 +113,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#EB563B',
+  },
+  bottomReactionContainer: {
+    flex: 1,
+    justifyContent: 'space-around',
   },
 });
 

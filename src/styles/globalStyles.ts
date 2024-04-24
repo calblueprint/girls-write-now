@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import colors from './colors';
 
 export default StyleSheet.create({
@@ -8,6 +9,15 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     paddingHorizontal: 24,
+  },
+
+  tabBarContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 24,
+    paddingBottom: 60,
   },
   authContainer: {
     marginHorizontal: 38,
@@ -78,6 +88,12 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
+  body2Bold: {
+    fontFamily: 'Manrope-Bold',
+    fontSize: 16,
+    textAlign: 'left',
+    color: 'black',
+  },
   body3: {
     fontFamily: 'Manrope-Regular',
     fontSize: 18,
@@ -111,9 +127,14 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: 'black',
   },
-
   subtext: {
     fontFamily: 'Manrope-Regular',
+    fontSize: 12,
+    textAlign: 'left',
+    color: 'black',
+  },
+  subtextBold: {
+    fontFamily: 'Manrope-Bold',
     fontSize: 12,
     textAlign: 'left',
     color: 'black',
@@ -124,8 +145,9 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: colors.error,
   },
-
   mt20: {
     marginTop: 20,
   },
 });
+
+export const fonts = ['Manrope-Bold', 'Manrope-Regular', 'Manrope-Semibold'];

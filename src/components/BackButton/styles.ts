@@ -4,7 +4,8 @@ import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   backButton: {
-    paddingTop: 20,
+    paddingTop: 30,
+    paddingBottom: 16,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',

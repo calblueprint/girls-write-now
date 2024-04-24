@@ -14,9 +14,11 @@ export default StyleSheet.create({
     textDecorationLine: 'underline',
   },
   redirectText: {
-    textAlign: 'center',
-    marginBottom: 64,
+    gap: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 16,
+    marginBottom: 64,
   },
   title: {
     paddingTop: 64,
@@ -40,8 +42,5 @@ export default StyleSheet.create({
   },
   inputs: {
     paddingBottom: 8,
-  },
-  navigation: {
-    // marginTop: 'auto',
   },
 });

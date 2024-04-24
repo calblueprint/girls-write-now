@@ -8,19 +8,16 @@ const styles = StyleSheet.create({
     color: '#EB563B',
     textDecorationLine: 'underline',
   },
-
   container: {
+    paddingHorizontal: 24,
     width: '100%',
-    marginTop: 24,
     flex: 1,
   },
-
   flatListStyle: {
     paddingTop: 15,
   },
   scrollViewContainer: {
-    marginTop: 30,
-    marginBottom: 15,
+    marginVertical: 15,
     width: '100%',
   },
   noStoriesText: {
@@ -31,6 +28,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   renderStories: {
+    paddingBottom: 10,
     flex: 1,
   },
   headerContainer: {},

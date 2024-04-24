@@ -5,37 +5,24 @@ import colors from '../../styles/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'pink',
+    justifyContent: 'flex-end',
+    // flexDirection: 'row'
   },
   reactionView: {
-    flexDirection: 'row',
-    position: 'absolute',
-    backgroundColor: '#D9D9D9',
-    display: 'flex',
     borderRadius: 20,
-    height: 40,
-    padding: 13,
-    alignSelf: 'flex-start',
+    padding: 10,
+    alignSelf: 'center',
+    marginBottom: 10,
   },
   reactionsContainer: {
     flexDirection: 'row',
-    position: 'absolute',
+    gap: 5,
+    justifyContent: 'space-between',
     padding: 10,
+    position: 'absolute', // Positioning the container above the toggle button
     bottom: 50,
     backgroundColor: '#D9D9D9',
     borderRadius: 20,
-  },
-  icon_container: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    paddingBottom: 50,
-  },
-  font: {
-    color: 'white',
-    fontSize: 40,
   },
 });
 

@@ -11,6 +11,7 @@ import supabase from './supabase';
 type FilterAction =
   | { type: 'SET_TAGS'; tags: TagFilter[] }
   | { type: 'TOGGLE_FILTER'; id: number }
+  | { type: 'SET_FILTER'; id: number; value: boolean }
   | { type: 'CLEAR_ALL'; category: string }
   | { type: 'TOGGLE_MAIN_GENRE'; mainGenreId: number };
 
@@ -76,6 +77,15 @@ export const useFilterReducer = () =>
             ...prevState,
             filters: nestedFilters,
             isLoading: false,
+          };
+        case 'SET_FILTER':
+          return {
+            ...prevState,
+            filters: mapParentsAndChildren(prevState.filters, fitler =>
+              fitler.id == action.id
+                ? { ...fitler, active: action.value }
+                : fitler,
+            ),
           };
         case 'TOGGLE_FILTER':
           return {
@@ -156,6 +166,7 @@ export function FilterContextProvider({
       } as TagFilter;
     });
   };
+
   useEffect(() => {
     getTags().then(tags => dispatch({ type: 'SET_TAGS', tags: tags ?? [] }));
   }, []);

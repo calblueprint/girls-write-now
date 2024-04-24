@@ -1,5 +1,5 @@
 import { useLocalSearchParams, router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -7,205 +7,167 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
-import FilterModal, {
-  CATEGORIES as FilterCategories,
-} from '../../../components/FilterModal/FilterModal';
-import GenreStoryPreviewCard from '../../../components/GenreStoryPreviewCard/GenreStoryPreviewCard';
-import { fetchGenreStoryPreviews, fetchGenres } from '../../../queries/genres';
-import { fetchStoryPreviewById } from '../../../queries/stories';
-import { StoryPreview, GenreStories, Genre } from '../../../queries/types';
+
+import PreviewCard from '../../../components/PreviewCard/PreviewCard';
+import { fetchGenreStoryById } from '../../../queries/genres';
+import { fetchStoryPreviewByIds } from '../../../queries/stories';
+import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
-import { TagFilter, useFilter } from '../../../utils/FilterContext';
 
 function GenreScreen() {
-  const { filters } = useFilter();
-  const [genreStoryInfo, setGenreStoryInfo] = useState<GenreStories[]>();
+  const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
   const [genreStoryIds, setGenreStoryIds] = useState<string[]>([]);
   const [subgenres, setSubgenres] = useState<string[]>([]);
   const [allStoryPreviews, setAllStoryPreviews] = useState<StoryPreview[]>([]);
+  const [filteredStoryPreviews, setFilteredStoryPreviews] = useState<
+    StoryPreview[]
+  >([]);
   const [selectedSubgenre, setSelectedSubgenre] = useState<string>('');
   const [mainGenre, setMainGenre] = useState<string>('');
   const [isLoading, setLoading] = useState(true);
-  const [genreTones, setgenreTones] = useState<string[]>([]);
-  const [genreTopics, setgenreTopics] = useState<string[]>([]);
-  const [currTone, setCurrTone] = useState<string>('');
-  const [currTopic, setCurrTopic] = useState<string>('');
-  const [toneTopicFilters, setToneTopicFilters] = useState<string[]>([]);
-  const params = useLocalSearchParams<{ genreId: string }>();
-  const params2 = useLocalSearchParams<{ genreType: string }>();
-  const params3 = useLocalSearchParams<{ genreName: string }>();
-  const { genreId } = params;
-  const { genreType } = params2;
-  const { genreName } = params3;
+  const [toneFilterOptions, setToneFilterOptions] = useState<string[]>([]);
+  const [topicFilterOptions, setTopicFilterOptions] = useState<string[]>([]);
+  const [selectedTonesForFiltering, setSelectedTonesForFiltering] = useState<
+    string[]
+  >([]);
+  const [selectedTopicsForFiltering, setSelectedTopicsForFiltering] = useState<
+    string[]
+  >([]);
+  const { genreId, genreType, genreName } = useLocalSearchParams<{
+    genreId: string;
+    genreType: GenreType;
+    genreName: string;
+  }>();
 
-  console.log('passing in genreId params:', genreId);
-  console.log('testing passing in genreType', genreType);
-  console.log('testing genreName', genreName);
+  useEffect(() => {
+    const checkTopic = (preview: StoryPreview): boolean => {
+      if (preview?.topic == null) return false;
+      if (selectedTopicsForFiltering.length == 0) return true;
+      else
+        return selectedTopicsForFiltering.every(t => preview.topic.includes(t));
+    };
+    const checkTone = (preview: StoryPreview): boolean => {
+      if (preview?.tone == null) return false;
+      if (selectedTonesForFiltering.length == 0) return true;
+      else
+        return selectedTonesForFiltering.every(t => preview.tone.includes(t));
+    };
 
-  async function getAllStoryIds(
-    genreStories: GenreStories[],
-  ): Promise<string[]> {
-    const allStoryIds: string[] = [];
-    for (const subgenre of genreStories) {
-      if (subgenre.genre_story_previews[0] != null) {
-        subgenre.genre_story_previews.forEach(id => {
-          allStoryIds.push(id);
-        });
-      }
-    }
-    return allStoryIds;
-  }
-
-  async function findStoryIdsByName(
-    subgenre_name: string,
-    genreStories: GenreStories[],
-  ): Promise<string[]> {
-    const filteredStoryIds: string[] = [];
-    const matchingGenreStory = genreStories.find(
-      subgenre => subgenre.subgenre_name === subgenre_name,
+    const filteredPreviews = allStoryPreviews.filter(
+      preview => checkTopic(preview) && checkTone(preview),
     );
-    if (matchingGenreStory?.genre_story_previews[0] != null) {
-      matchingGenreStory.genre_story_previews.forEach(id => {
-        filteredStoryIds.push(id);
-      });
-    } else {
+    setFilteredStoryPreviews(filteredPreviews);
+  }, [selectedTopicsForFiltering, selectedTonesForFiltering]);
+
+  function getAllStoryIds(genreStories: GenreStories[]): string[] {
+    return genreStories
+      .map(story => story.genre_story_previews)
+      .flat()
+      .filter(story => story !== null);
+  }
+
+  function filterStoriesBySubgenreName(
+    subgenreName: string,
+    stories: GenreStories[],
+  ): string[] {
+    const matchingGenreStory = stories.find(
+      subgenre => subgenre.subgenre_name === subgenreName,
+    );
+
+    return matchingGenreStory?.genre_story_previews ?? [];
+  }
+
+  function getSubgenres(stories: GenreStories[]): string[] {
+    const subgenres = stories.map(subgenre => subgenre.subgenre_name);
+    return ['All', ...subgenres];
+  }
+
+  function filterBySubgenre(subgenre: string) {
+    setLoading(true);
+    setSelectedSubgenre(subgenre);
+    if (!genreStoryData) {
       setLoading(false);
       return [];
     }
-    console.log('testing find story IDs by Name Function:', filteredStoryIds);
-    return filteredStoryIds;
-  }
 
-  async function getSubgenres(genreStories: GenreStories[]): Promise<string[]> {
-    const subGenres: string[] = [];
-    subGenres.push('All');
-    for (const subgenre of genreStories) {
-      subGenres.push(subgenre.subgenre_name);
-    }
-    return subGenres;
-  }
-
-  async function filterBySubgenre(filter_name: string) {
-    setLoading(true);
-    setSelectedSubgenre(filter_name);
-    if (!genreStoryInfo) {
-      return [];
-    }
-    if (filter_name === 'All') {
-      const storyIds = await getAllStoryIds(genreStoryInfo);
-      setGenreStoryIds(storyIds);
+    if (subgenre === 'All') {
+      setGenreStoryIds(getAllStoryIds(genreStoryData));
     } else {
-      const filteredStoryIds = await findStoryIdsByName(
-        filter_name,
-        genreStoryInfo,
+      const filteredStoryIds = filterStoriesBySubgenreName(
+        subgenre,
+        genreStoryData,
       );
-      setGenreStoryIds(filteredStoryIds);
-      setLoading(false);
-      setgenreTones([]);
-      setgenreTopics([]);
-    }
-  }
 
-  //will be triggered when users click checkboxes, will concat all of these clicked and added to a usestate?
-  //this concatted array will be passed into filterByToneAndTopic array which will go through, genreStoryInfo, and filter
-  //out each story based on the array that is passed into this fu
-  async function filterByToneAndTopic(filters: string[]) {
-    setLoading(true);
-    setToneTopicFilters(filters);
-    if (!genreStoryInfo) {
-      return [];
+      setGenreStoryIds(filteredStoryIds);
+      setToneFilterOptions([]);
+      setTopicFilterOptions([]);
+      setLoading(false);
     }
   }
 
   useEffect(() => {
     const getGenre = async () => {
-      const genreStoryPreviewData: GenreStories[] =
-        await fetchGenreStoryPreviews(parseInt(genreId as string, 10));
-      const getGenres: string[] = await getSubgenres(genreStoryPreviewData);
-      setSubgenres(getGenres);
-      setGenreStoryInfo(genreStoryPreviewData);
-      setMainGenre(genreStoryPreviewData[0].parent_name);
-      if (genreType === 'parent_genre') {
-        console.log(
-          'running if check on genreType, populating usestate with all data',
-        );
-        const allStoryIds = await getAllStoryIds(genreStoryPreviewData);
-        setGenreStoryIds(allStoryIds);
+      setLoading(true);
+
+      const genreStoryData: GenreStories[] = await fetchGenreStoryById(
+        parseInt(genreId as string, 10),
+      );
+
+      setGenreStoryData(genreStoryData);
+      setMainGenre(genreStoryData[0].parent_name);
+      setSubgenres(getSubgenres(genreStoryData));
+
+      if (genreType == GenreType.PARENT) {
         setSelectedSubgenre('All'); //if user clicks see all, selected should be 'ALL'
-      } else if (genreType === 'subgenre') {
-        const filteredStoryIds = await findStoryIdsByName(
+        setGenreStoryIds(getAllStoryIds(genreStoryData));
+      } else if (genreType == GenreType.SUBGENRE) {
+        setSelectedSubgenre(genreName || ''); //if user clicks a specific genre, selected should be genreName
+
+        const filteredStoryIds = filterStoriesBySubgenreName(
           genreName || '',
-          genreStoryPreviewData,
+          genreStoryData,
         );
         setGenreStoryIds(filteredStoryIds);
-        setSelectedSubgenre(genreName || ''); //if user clicks a specific genre, selected should be genreName
+
+        setLoading(false);
       }
     };
     getGenre();
   }, [genreName]);
 
-  const flattenenedFilters = Array.from(filters)
-    .map(([id, parent]) => [...parent.children, parent as TagFilter])
-    .flat();
-  const activeFilterNames = flattenenedFilters.filter(({ active }) => active);
-
-  const activeGenreNames = activeFilterNames
-    .filter(({ category }) => category == FilterCategories.GENRE)
-    .map(({ name }) => name);
-  const activeToneNames = activeFilterNames
-    .filter(({ category }) => category == FilterCategories.TONE)
-    .map(({ name }) => name);
-  const activeTopicNames = activeFilterNames
-    .filter(({ category }) => category == FilterCategories.TOPIC)
-    .map(({ name }) => name);
-
   useEffect(() => {
     const showAllStoryPreviews = async () => {
-      if (genreStoryIds.length > 0) {
-        setLoading(true);
-        const previews: StoryPreview[] = [];
-        const tones: string[] = [];
-        const topics: string[] = [];
-        for (const idString of genreStoryIds) {
-          const id = parseInt(idString, 10);
-          try {
-            const storyPreview: StoryPreview[] =
-              await fetchStoryPreviewById(id);
-            previews.push(storyPreview[0]);
-            storyPreview[0].tone.forEach(item => {
-              tones.push(item);
-            });
-            storyPreview[0].topic.forEach(item => {
-              topics.push(item);
-            });
-            console.log('testing storyPreview outputs:', storyPreview);
-          } catch (error) {
-            console.log(
-              `There was an error while trying to fetch a story preview by id: ${error}`,
-            );
-          }
-        }
-        const filteredTopics: string[] = topics.filter(
-          (item): item is string => item !== null,
-        );
-        const filteredTones: string[] = tones.filter(
-          (item): item is string => item !== null,
-        );
-        setAllStoryPreviews(previews.flat());
-        setgenreTopics(filteredTopics);
-        setgenreTones(filteredTones);
-        console.log('testing tone usestate');
-        setLoading(false);
-      } else {
-        setLoading(false); //if there are no story IDs, we cannot load anything, there are no results
-      }
+      setLoading(true);
+
+      const previews: StoryPreview[] = await fetchStoryPreviewByIds(
+        genreStoryIds as any,
+      );
+
+      const tones: string[] = previews
+        .reduce((acc: string[], current: StoryPreview) => {
+          return acc.concat(current.tone);
+        }, [] as string[])
+        .filter(tone => tone !== null);
+      const topics: string[] = previews
+        .reduce((acc: string[], current: StoryPreview) => {
+          return acc.concat(current.topic);
+        }, [] as string[])
+        .filter(topic => topic !== null);
+
+      setAllStoryPreviews(previews.flat());
+      setFilteredStoryPreviews(previews.flat());
+      setTopicFilterOptions([...new Set(topics)]);
+      setToneFilterOptions([...new Set(tones)]);
+
+      setLoading(false);
     };
 
     if (genreStoryIds.length > 0) {
@@ -213,117 +175,153 @@ function GenreScreen() {
     }
   }, [genreStoryIds]);
 
+  const renderGenreScrollSelector = () => {
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        style={styles.scrollViewContainer}
+      >
+        {subgenres.map((subgenre, index) => (
+          <TouchableOpacity
+            onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
+            style={{ paddingHorizontal: 20, paddingTop: 5 }}
+            key={index}
+          >
+            <Text
+              style={selectedSubgenre === subgenre ? styles.textSelected : null}
+              key={index}
+            >
+              {subgenre}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    );
+  };
+
+  const renderGenreHeading = () => {
+    return (
+      <View>
+        <Text style={globalStyles.h1}>
+          {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
+        </Text>
+        {/* <Text style={[globalStyles.subHeading1]}> */}
+        {/* {' '} */}
+        {/* Subheading about{' '} */}
+        {/* {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre} */}
+        {/* ...Include Later? */}
+        {/* </Text> */}
+      </View>
+    );
+  };
+
+  const renderFilterDropdown = (
+    placeholder: string,
+    value: string[],
+    data: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+  ) => {
+    return (
+      <MultiSelect
+        mode="default"
+        style={[styles.dropdown, styles.secondDropdown]}
+        value={value}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={globalStyles.body1}
+        inputSearchStyle={globalStyles.body1}
+        itemTextStyle={globalStyles.body1}
+        dropdownPosition="bottom"
+        itemContainerStyle={styles.itemContainer}
+        iconStyle={styles.iconStyle}
+        data={data.map(topic => {
+          return { label: topic, value: topic };
+        })}
+        renderSelectedItem={() => <View />}
+        maxHeight={400}
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
+        onChange={item => {
+          if (item) {
+            setter(item);
+          }
+        }}
+      />
+    );
+  };
+
+  const renderNoStoryText = () => {
+    return (
+      <View>
+        <Text style={styles.noStoriesText}>Sorry!</Text>
+        <Text style={styles.noStoriesText2}>
+          There are no stories under this Genre or Subgenre. Please continue to
+          search for other stories
+        </Text>
+      </View>
+    );
+  };
+
+  const renderStories = () => {
+    return (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={filteredStoryPreviews}
+        style={styles.flatListStyle}
+        renderItem={({ item }) => (
+          <PreviewCard
+            key={item.id}
+            storyId={item.id}
+            tags={item.genre_medium.concat(item.tone).concat(item.topic)}
+            author={item.author_name}
+            image={item.featured_media}
+            authorImage={item.author_image}
+            title={item.title}
+            excerpt={item.excerpt}
+            pressFunction={() => {
+              router.push({
+                pathname: '/story',
+                params: { storyId: item.id.toString() },
+              });
+            }}
+          />
+        )}
+      />
+    );
+  };
+
   return (
-    <SafeAreaView style={[globalStyles.container, { marginHorizontal: -8 }]}>
+    <SafeAreaView
+      style={[globalStyles.tabBarContainer, { paddingHorizontal: 0 }]}
+    >
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <BackButton
-            pressFunction={() =>
-              router.push({
-                pathname: '/search',
-              })
-            }
-          />
-          <View>
-            <Text style={[globalStyles.h1, { marginTop: 15 }]}>
-              {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
-            </Text>
-            <Text style={[globalStyles.subHeading1]}>
-              {' '}
-              Subheading about{' '}
-              {selectedSubgenre === 'All' ? mainGenre : selectedSubgenre}
-              ...Include Later?
-            </Text>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            style={styles.scrollViewContainer}
-          >
-            {subgenres.map((subgenre, index) => (
-              <TouchableOpacity
-                onPress={() => filterBySubgenre(subgenre)} //onPress will trigger the filterBySubgenre function
-                style={{ marginRight: 40 }}
-              >
-                <Text
-                  style={
-                    selectedSubgenre === subgenre ? styles.textSelected : null
-                  }
-                  key={index}
-                >
-                  {subgenre}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <BackButton pressFunction={() => router.back()} />
+
+          {useMemo(renderGenreHeading, [selectedSubgenre, mainGenre])}
+          {useMemo(renderGenreScrollSelector, [subgenres, selectedSubgenre])}
         </View>
+
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          <Dropdown
-            mode="default"
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={globalStyles.body1}
-            inputSearchStyle={globalStyles.body1}
-            itemTextStyle={globalStyles.body1}
-            dropdownPosition="bottom"
-            itemContainerStyle={styles.itemContainer}
-            iconStyle={styles.iconStyle}
-            data={genreTones.map(tone => {
-              return { label: tone, value: tone };
-            })}
-            maxHeight={400}
-            labelField="label"
-            valueField="value"
-            placeholder="Tone"
-            renderRightIcon={() => (
-              <Icon name="arrow-drop-down" type="material" />
-            )}
-            onChange={item => {
-              if (item) {
-                // Check if item is not null or undefined
-                setCurrTone(item.label); // Use the label property of the selected item
-              }
-            }}
-          />
-
-          <Dropdown
-            mode="default"
-            style={[styles.dropdown, styles.secondDropdown]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={globalStyles.body1}
-            inputSearchStyle={globalStyles.body1}
-            itemTextStyle={globalStyles.body1}
-            dropdownPosition="bottom"
-            itemContainerStyle={styles.itemContainer}
-            iconStyle={styles.iconStyle}
-            data={genreTopics.map(topic => {
-              return { label: topic, value: topic };
-            })}
-            maxHeight={400}
-            labelField="label"
-            valueField="value"
-            placeholder="Topic"
-            renderRightIcon={() => (
-              <Icon name="arrow-drop-down" type="material" />
-            )}
-            onChange={item => {
-              if (item) {
-                // Check if item is not null or undefined
-                setCurrTone(item.label); // Use the label property of the selected item
-              }
-            }}
-          />
+          {renderFilterDropdown(
+            'Tone',
+            selectedTonesForFiltering,
+            toneFilterOptions,
+            setSelectedTonesForFiltering,
+          )}
+          {renderFilterDropdown(
+            'Topic',
+            selectedTopicsForFiltering,
+            topicFilterOptions,
+            setSelectedTopicsForFiltering,
+          )}
         </View>
 
-        {genreStoryIds.length === 0 ? ( // Check if there are no story IDs
-          <View>
-            <Text style={styles.noStoriesText}>Sorry!</Text>
-            <Text style={styles.noStoriesText2}>
-              There are no stories under this Genre or Subgenre. Please continue
-              to search for other stories
-            </Text>
-          </View>
+        {genreStoryIds.length === 0 && !isLoading ? (
+          renderNoStoryText()
         ) : (
           <>
             <View style={styles.renderStories}>
@@ -332,33 +330,7 @@ function GenreScreen() {
                   <ActivityIndicator />
                 </View>
               ) : (
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={allStoryPreviews}
-                  style={styles.flatListStyle}
-                  renderItem={({ item }) => (
-                    <GenreStoryPreviewCard
-                      key={item.title}
-                      topic={item.topic}
-                      tone={item.tone}
-                      genreMedium={item.genre_medium}
-                      allTags={item.genre_medium
-                        .concat(item.tone)
-                        .concat(item.topic)}
-                      authorName={item.author_name}
-                      storyImage={item.featured_media}
-                      authorImage={item.author_image}
-                      storyTitle={item.title}
-                      excerpt={item.excerpt}
-                      pressFunction={() => {
-                        router.push({
-                          pathname: '/story',
-                          params: { storyId: item.id.toString() },
-                        });
-                      }}
-                    />
-                  )}
-                />
+                renderStories()
               )}
             </View>
           </>
@@ -366,6 +338,11 @@ function GenreScreen() {
       </View>
     </SafeAreaView>
   );
+}
+
+export enum GenreType {
+  PARENT = 'parent',
+  SUBGENRE = 'subgenre',
 }
 
 export default GenreScreen;

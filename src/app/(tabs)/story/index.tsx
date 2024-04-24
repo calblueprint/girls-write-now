@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   ScrollView,
   Share,
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Button } from 'react-native-paper';
 import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,6 +23,8 @@ import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
+import BackButton from '../../../components/BackButton/BackButton';
+import colors from '../../../styles/colors';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -30,6 +33,8 @@ function StoryScreen() {
 
   const params = useLocalSearchParams<{ storyId: string }>();
   const { storyId } = params;
+
+  const { width } = useWindowDimensions();
 
   const scrollUp = () => {
     scrollRef.current?.scrollTo({ x: 0, y: 0 });
@@ -73,7 +78,7 @@ function StoryScreen() {
 
   console.log('TESTING CONTENT', htmlContent);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[globalStyles.tabBarContainer, styles.container]}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -151,7 +156,14 @@ function StoryScreen() {
                 style={styles.authorImage}
                 source={{ uri: story.author_image }}
               />
-              <Text style={styles.authorText}>By {story.author_name}</Text>
+              <Text
+                style={[
+                  globalStyles.subHeading1Bold,
+                  { textDecorationLine: 'underline' },
+                ]}
+              >
+                By {story.author_name}
+              </Text>
             </View>
 
             <Button

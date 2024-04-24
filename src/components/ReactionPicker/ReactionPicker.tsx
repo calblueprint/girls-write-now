@@ -1,46 +1,80 @@
 import { faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { useEffect, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 
 import styles from './styles';
-import globalStyles from '../../styles/globalStyles';
+import Emoji from 'react-native-emoji';
+import {
+  addReactionToStory,
+  deleteReactionToStory,
+} from '../../queries/reactions';
+import { useSession } from '../../utils/AuthContext';
+import { Channel, usePubSub } from '../../utils/PubSubContext';
 
-const ReactionPicker = () => {
+type ReactionPickerProps = {
+  storyId: number;
+};
+
+const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
+  const { user } = useSession();
+  const { publish } = usePubSub();
   const [showReactions, setShowReactions] = useState(false);
+  const [currentReaction, setCurrentReaction] = useState('');
 
   const toggleReactions = () => setShowReactions(!showReactions);
+  const reactionMapping: Record<string, number> = {
+    heart: 2,
+    clap: 3,
+    muscle: 4,
+    cry: 5,
+    hugging_face: 6,
+  };
 
-  // Dummy onPress functions
-  const onSmilePress = () => console.log('Smile pressed');
-  const onHeartPress = () => console.log('Heart pressed');
-  const onThumbsUpPress = () => console.log('Thumbs up pressed');
-  const onLaughPress = () => console.log('Laugh pressed');
+  const handleReactionPress = (reactionName: string) => {
+    if (currentReaction == reactionName) {
+      removeReaction(reactionName);
+    } else {
+      addReaction(reactionName);
+    }
+  };
+
+  const addReaction = (reactionName: string) => {
+    setCurrentReaction(reactionName);
+    publish(Channel.REACTIONS, storyId, true);
+
+    const reactionId = reactionMapping[reactionName];
+    addReactionToStory(user?.id, storyId, reactionId);
+  };
+
+  const removeReaction = (reactionName: string) => {
+    setCurrentReaction('');
+    publish(Channel.REACTIONS, storyId, false);
+
+    const reactionId = reactionMapping[reactionName];
+    deleteReactionToStory(user?.id, storyId, reactionId);
+  };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.reactionView} onPress={toggleReactions}>
+    <TouchableOpacity style={styles.reactionView} onPress={toggleReactions}>
+      <View style={styles.reactionsContainer}>
         <FontAwesomeIcon icon={faFaceSmile} size={15} color="#ffffff" />
 
         {showReactions && (
-          <View style={styles.reactionsContainer}>
-            <TouchableOpacity onPress={onHeartPress}>
-              <Text>❤️</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onSmilePress}>
-              <Text>🙂</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onThumbsUpPress}>
-              <Text>👍</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onLaughPress}>
-              <Text>😂</Text>
-            </TouchableOpacity>
-          </View>
+          <>
+            <View style={{ marginLeft: 12 }} />
+            {Object.keys(reactionMapping).map((reaction, i) => (
+              <TouchableOpacity
+                key={i}
+                onPress={() => handleReactionPress(reaction)}
+              >
+                <Emoji name={reaction} />
+              </TouchableOpacity>
+            ))}
+          </>
         )}
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 

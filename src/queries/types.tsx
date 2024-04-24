@@ -11,6 +11,20 @@ export interface StoryPreview {
   genre_medium: string[];
 }
 
+export interface StoryPreviewWithPreloadedReactions {
+  id: number;
+  date: string;
+  title: string;
+  excerpt: { html: string };
+  featured_media: string;
+  author_name: string;
+  author_image: string;
+  topic: string[];
+  tone: string[];
+  genre_medium: string[];
+  reactions: string[];
+}
+
 export interface Author {
   id: number;
   name: string;
@@ -24,6 +38,7 @@ export interface RecentSearch {
   value: string;
   numResults: number;
 }
+
 export interface Story {
   id: number;
   date: string;
@@ -46,6 +61,7 @@ export interface StoryCard {
   title: string;
   author_name: string;
   featured_media: string;
+  author_image: string;
 }
 
 export interface Subgenre {
@@ -65,4 +81,9 @@ export interface GenreStories {
   subgenre_id: number;
   subgenre_name: string;
   genre_story_previews: string[];
+}
+
+export interface Reactions {
+  reaction_id: number;
+  reaction: string;
 }

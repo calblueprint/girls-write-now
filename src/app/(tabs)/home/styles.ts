@@ -19,9 +19,15 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 16,
   },
-  scrollView: {
-    marginBottom: 20,
+  scrollView1: {
+    paddingBottom: 16,
     flexGrow: 0,
+    padding: 8,
+  },
+  scrollView2: {
+    paddingBottom: 20,
+    flexGrow: 0,
+    padding: 8,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -32,8 +38,7 @@ const styles = StyleSheet.create({
     marginRight: 24,
   },
   featuredDescription: {
-    marginBottom: 16,
-    marginTop: 8,
+    marginBottom: 24,
     marginRight: 24,
   },
 });

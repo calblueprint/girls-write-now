@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   FlatList,
   ScrollView,
-  Share,
   Text,
   View,
   useWindowDimensions,
@@ -18,14 +17,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import Icon from '../../../../assets/icons';
 import AuthorImage from '../../../components/AuthorImage/AuthorImage';
-import FavoriteStoryButton from '../../../components/FavoriteStoryButton/FavoriteStoryButton';
-import SaveStoryButton from '../../../components/SaveStoryButton/SaveStoryButton';
 import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
 import globalStyles, { fonts } from '../../../styles/globalStyles';
 import BackButton from '../../../components/BackButton/BackButton';
-import colors from '../../../styles/colors';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import OptionBar from '../../../components/OptionBar/OptionBar';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -51,25 +49,6 @@ function StoryScreen() {
     });
   }, [storyId]);
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message: `Check out this story from Girls Write Now!!!\n${story.link}/`,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <SafeAreaView style={[globalStyles.tabBarContainer, styles.container]}>
       {isLoading ? (
@@ -77,12 +56,13 @@ function StoryScreen() {
       ) : (
         <View>
           <ScrollView
+            stickyHeaderIndices={[5]}
             bounces
             ref={scrollRef}
             showsVerticalScrollIndicator={false}
           >
             <BackButton pressFunction={() => router.back()} />
-            <View >
+            <View style={styles.container}>
               {story?.featured_media ? (
                 <Image
                   style={styles.image}
@@ -93,7 +73,7 @@ function StoryScreen() {
               )}
             </View>
 
-            <Text style={styles.title}>{story?.title}</Text>
+            <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
 
             <AuthorImage
               author_name={story.author_name}
@@ -122,11 +102,8 @@ function StoryScreen() {
                 )}
               />
 
-              <View style={styles.button_style}>
-                <Icon type="share_outline" />
-                <Text style={styles.shareButtonText}>Share Story</Text>
-              </View>
             </View>
+            <OptionBar story={story} storyId={parseInt(storyId as string, 10)} />
 
             <RenderHTML
               source={{ html: `"${cheerio.load(story.excerpt.html ?? "").text()}"` }}
@@ -137,17 +114,26 @@ function StoryScreen() {
               ignoredStyles={['color', 'fontSize', 'fontWeight']} // Ignore these inline styles
             />
 
-            <RenderHTML systemFonts={fonts} source={story.content} contentWidth={width}
+            <View style={{ marginTop: 32 }} />
+
+            <RenderHTML
+              systemFonts={fonts}
+              source={story.content}
+              contentWidth={width}
               baseStyle={styles.story} />
 
-            <View style={styles.button_style}>
+            <TouchableOpacity>
               <Icon type="share_outline" />
-              <Text style={styles.shareButtonText}>Share Story</Text>
-            </View>
+            </TouchableOpacity>
+
             <Text style={styles.authorProcess}>Author's Process</Text>
 
-            <RenderHTML systemFonts={fonts} source={story.process} contentWidth={width}
-              baseStyle={styles.process} />
+            <RenderHTML
+              systemFonts={fonts}
+              source={story.process}
+              contentWidth={width}
+              baseStyle={styles.process}
+            />
 
             <View style={styles.author}>
               <Image
@@ -163,23 +149,9 @@ function StoryScreen() {
                 By {story.author_name}
               </Text>
             </View>
-            <View style={styles.options}>
-              <SaveStoryButton storyId={parseInt(storyId as string, 10)} />
-              <FavoriteStoryButton storyId={parseInt(storyId as string, 10)} />
-              <Button
-                textColor="black"
-                buttonColor={colors.gwnOrange}
-                icon="share"
-                onPress={onShare}
-                style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-              >
-                <Text
-                  style={[globalStyles.bodyUnderline, styles.shareButtonText]}
-                >
-                  Share Story
-                </Text>
-              </Button>
-            </View>
+
+            <OptionBar story={story} storyId={parseInt(storyId as string, 10)} />
+
             <Button
               textColor="black"
               icon="arrow-up"
@@ -190,7 +162,6 @@ function StoryScreen() {
             </Button>
             <View style={styles.bottomReactionContainer} />
           </ScrollView>
-          <ReactionPicker storyId={parseInt(storyId as string, 10)} />
         </View>
       )}
     </SafeAreaView>

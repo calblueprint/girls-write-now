@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   },
   genresBorder: {
     backgroundColor: '#D9D9D9',
+    padding: 10,
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 10,
@@ -48,13 +49,11 @@ const styles = StyleSheet.create({
   genresText: {
     fontFamily: 'Manrope-Regular',
     fontSize: 12,
-    fontWeight: '400',
     color: 'white',
   },
   shareButtonText: {
     fontFamily: 'Manrope-Regular',
     fontSize: 14,
-    fontWeight: '400',
     color: 'white',
     marginLeft: -5,
     textDecorationLine: 'underline',
@@ -68,15 +67,13 @@ const styles = StyleSheet.create({
   story: {
     fontFamily: 'Manrope-Regular',
     fontSize: 16,
-    fontWeight: '400',
     textAlign: 'left',
     color: 'black',
     marginBottom: 16,
   },
   authorProcess: {
-    fontFamily: 'Manrope-Regular',
+    fontFamily: 'Manrope-Bold',
     fontSize: 20,
-    fontWeight: 'bold',
     textAlign: 'left',
     color: 'black',
     marginBottom: 5,
@@ -85,20 +82,13 @@ const styles = StyleSheet.create({
   process: {
     fontFamily: 'Manrope-Regular',
     fontSize: 16,
-    fontWeight: '400',
     textAlign: 'left',
     color: 'black',
     marginBottom: 16,
   },
-  options: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
   backToTopButtonText: {
-    fontFamily: 'Manrope-Regular',
+    fontFamily: 'Manrope-Bold',
     fontSize: 15,
-    fontWeight: '800',
     textAlign: 'left',
     color: 'black',
     textDecorationLine: 'underline',

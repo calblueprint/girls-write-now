@@ -18,7 +18,7 @@ export default function FavoriteStoryButton({
   storyId,
 }: FavoriteStoryButtonProps) {
   const { user } = useSession();
-  const { publish } = usePubSub();
+  const { channels, publish } = usePubSub();
   const [storyIsFavorited, setStoryIsFavorited] = useState(false);
 
   useEffect(() => {
@@ -33,6 +33,15 @@ export default function FavoriteStoryButton({
       publish(Channel.FAVORITES, storyId, storyInFavorites);
     });
   }, [storyId]);
+
+  useEffect(() => {
+    const value = channels[Channel.FAVORITES][storyId];
+    if (value == undefined) {
+      return;
+    }
+
+    setStoryIsFavorited(value);
+  }, [channels[Channel.FAVORITES][storyId]])
 
   const favoriteStory = async (favorited: boolean) => {
     setStoryIsFavorited(favorited);

@@ -68,7 +68,7 @@ const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
                 key={i}
                 onPress={() => handleReactionPress(reaction)}
               >
-                <Emoji name={reaction} />
+                <Emoji style={{ fontSize: 15 }} name={reaction} />
               </TouchableOpacity>
             ))}
           </>

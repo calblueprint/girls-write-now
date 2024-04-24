@@ -1,13 +1,13 @@
 import { router } from 'expo-router';
 import {
-  GestureResponderEvent,
   Text,
   TouchableOpacity,
   View,
-  Image,
 } from 'react-native';
+import { Image } from 'expo-image';
 
 import styles from './styles';
+import globalStyles from '../../styles/globalStyles';
 
 type AuthorImageProps = {
   author_name: string;
@@ -31,7 +31,7 @@ function AuthorImage({
       }}
     >
       <View style={styles.author_container}>
-        <Text style={styles.author_text}>Authors:</Text>
+        <Text style={globalStyles.body1Bold}>Authors:</Text>
         <View style={styles.author}>
           <Image
             style={styles.author_image}

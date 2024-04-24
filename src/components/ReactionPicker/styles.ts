@@ -12,15 +12,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     alignSelf: 'center',
-    marginBottom: 10,
   },
   reactionsContainer: {
+    flex: 1,
     flexDirection: 'row',
     gap: 5,
     justifyContent: 'space-between',
     padding: 10,
     position: 'absolute', // Positioning the container above the toggle button
-    bottom: 50,
+    bottom: -2,
     backgroundColor: '#D9D9D9',
     borderRadius: 20,
   },

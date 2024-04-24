@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
 
@@ -18,7 +18,7 @@ export default function FavoriteStoryButton({
   storyId,
 }: FavoriteStoryButtonProps) {
   const { user } = useSession();
-  const { publish } = usePubSub();
+  const { channels, publish } = usePubSub();
   const [storyIsFavorited, setStoryIsFavorited] = useState(false);
 
   useEffect(() => {
@@ -34,6 +34,15 @@ export default function FavoriteStoryButton({
     });
   }, [storyId]);
 
+  useEffect(() => {
+    const value = channels[Channel.FAVORITES][storyId];
+    if (value == undefined) {
+      return;
+    }
+
+    setStoryIsFavorited(value);
+  }, [channels[Channel.FAVORITES][storyId]]);
+
   const favoriteStory = async (favorited: boolean) => {
     setStoryIsFavorited(favorited);
 
@@ -46,7 +55,7 @@ export default function FavoriteStoryButton({
     }
   };
 
-  const renderFavoritedIcon = () => {
+  const renderFavoritedIcon = useMemo(() => {
     return (
       <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
         <Path
@@ -55,9 +64,9 @@ export default function FavoriteStoryButton({
         />
       </Svg>
     );
-  };
+  }, []);
 
-  const renderNotFavoritedIcon = () => {
+  const renderNotFavoritedIcon = useMemo(() => {
     return (
       <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
         <Path
@@ -66,11 +75,11 @@ export default function FavoriteStoryButton({
         />
       </Svg>
     );
-  };
+  }, []);
 
   return (
     <TouchableOpacity onPress={() => favoriteStory(!storyIsFavorited)}>
-      {storyIsFavorited ? renderFavoritedIcon() : renderNotFavoritedIcon()}
+      {storyIsFavorited ? renderFavoritedIcon : renderNotFavoritedIcon}
     </TouchableOpacity>
   );
 }

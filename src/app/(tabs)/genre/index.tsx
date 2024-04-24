@@ -7,6 +7,7 @@ import {
   Text,
   FlatList,
 } from 'react-native';
+
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';

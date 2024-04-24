@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
 
@@ -52,7 +52,7 @@ export default function SaveStoryButton({
     }
   };
 
-  const renderSavedStoryImage = () => {
+  const renderSavedStoryImage = useMemo(() => {
     return (
       <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
         <Path
@@ -61,9 +61,9 @@ export default function SaveStoryButton({
         />
       </Svg>
     );
-  };
+  }, []);
 
-  const renderSaveStoryImage = () => {
+  const renderSaveStoryImage = useMemo(() => {
     return (
       <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
         <Path
@@ -72,11 +72,11 @@ export default function SaveStoryButton({
         />
       </Svg>
     );
-  };
+  }, []);
 
   return (
     <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>
-      {storyIsSaved ? renderSavedStoryImage() : renderSaveStoryImage()}
+      {storyIsSaved ? renderSavedStoryImage : renderSaveStoryImage}
     </TouchableOpacity>
   );
 }

@@ -2,26 +2,52 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 import Emoji from 'react-native-emoji';
 import globalStyles from '../../styles/globalStyles';
+import { Channel, usePubSub } from '../../utils/PubSubContext';
+import { useEffect, useState } from 'react';
 
 type ReactionDisplayProps = {
-  reactions: string[];
+  reactions: (string | null)[];
+  storyId: number;
 };
 
-function ReactionDisplay({ reactions }: ReactionDisplayProps) {
-  const reactionColors: Record<string, string> = {
-    heart: '#FFCCCB',
-    clap: '#FFD580',
-    cry: '#89CFF0',
-    hugging_face: '#ffc3bf',
-    muscle: '#eddcf7',
-  };
+const reactionColors: Record<string, string> = {
+  heart: '#FFCCCB',
+  clap: '#FFD580',
+  cry: '#89CFF0',
+  hugging_face: '#ffc3bf',
+  muscle: '#eddcf7',
+};
+
+function ReactionDisplay({ reactions, storyId }: ReactionDisplayProps) {
+  const { channels, getPubSubValue } = usePubSub();
+  const [reactionCount, setReactionCount] = useState(0);
+
+  const cleanedReactions = reactions.filter(reaction => reaction != null);
   const defaultColor = reactionColors['heart'];
-  const setOfReactions = [...reactions];
+  const setOfReactions = [...cleanedReactions];
   setOfReactions.push('heart');
   setOfReactions.push('clap');
   setOfReactions.push('muscle');
 
   const reactionDisplay = [...new Set(setOfReactions)].slice(0, 3);
+  const serverReactionCount = cleanedReactions?.length ?? 0;
+
+  useEffect(() => {
+    setReactionCount(serverReactionCount);
+  }, [reactions]);
+
+  useEffect(() => {
+    const value = getPubSubValue(Channel.REACTIONS, storyId);
+    if (value == undefined) {
+      return;
+    }
+
+    if (value) {
+      setReactionCount(serverReactionCount + 1);
+    } else {
+      setReactionCount(serverReactionCount);
+    }
+  }, [channels[Channel.REACTIONS][storyId]]);
 
   return (
     <View
@@ -31,6 +57,8 @@ function ReactionDisplay({ reactions }: ReactionDisplayProps) {
       }}
     >
       {reactionDisplay.map(reaction => {
+        if (reaction == null) return;
+
         return (
           <View
             key={reaction}
@@ -50,7 +78,7 @@ function ReactionDisplay({ reactions }: ReactionDisplayProps) {
       })}
       <View style={styles.reactionNumber}>
         <Text style={[globalStyles.subtext, styles.reactionText]}>
-          {reactions?.length ?? 0}
+          {reactionCount}
         </Text>
       </View>
     </View>

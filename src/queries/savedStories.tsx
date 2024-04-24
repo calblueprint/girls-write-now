@@ -1,4 +1,5 @@
 import supabase from '../utils/supabase';
+import { StoryPreview } from './types';
 
 enum SavedList {
   FAVORITES = 'favorites',
@@ -9,44 +10,27 @@ async function fetchUserStories(
   user_id: string | undefined,
   name: string | undefined,
 ) {
-  const { data: storyObjects, error } = await supabase
-    .from('saved_stories')
-    .select('story_id')
-    .eq('user_id', user_id)
-    .eq('name', name);
+  let { data, error } = await supabase.rpc('get_saved_stories_for_user', {
+    user_id_string: user_id,
+    saved_list_name: name,
+  });
 
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(
-        `An error occured when trying to fetch user saved stories: ${JSON.stringify(
+        `An error occured when trying to get user saved stories: ${JSON.stringify(
           error,
         )}`,
       );
     }
-    return [];
   }
 
-  let storyData = [];
-  for (const storyObject of storyObjects) {
-    const storyId = storyObject['story_id'];
-    const { data, error } = await supabase.rpc('fetch_story', {
-      input_id: storyId,
-    });
+  // console.log(data[0]);
+  // console.log("As preview:");
+  // console.log(data[0] as StoryPreview)
+  // console.log(data as StoryPreview[]);
 
-    if (error || data.length == 0) {
-      if (process.env.NODE_ENV !== 'production') {
-        throw new Error(
-          `An error occured when trying to use rpc to get story data: ${JSON.stringify(
-            error,
-          )}`,
-        );
-      }
-    } else {
-      storyData.push(data[0]);
-    }
-  }
-
-  return storyData;
+  return data as StoryPreview[];
 }
 
 export async function fetchUserStoriesFavorites(user_id: string | undefined) {

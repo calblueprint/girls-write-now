@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import colors from '../../../styles/colors';
+import globalStyles from '../../../styles/globalStyles';
 
 const styles = StyleSheet.create({
   textSelected: {
@@ -12,7 +13,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
   },
-
   flatListStyle: {
     paddingTop: 15,
   },

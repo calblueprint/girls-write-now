@@ -16,6 +16,7 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
+import ReactionPicker from '../../../components/ReactionPicker/ReactionPicker';
 import BackButton from '../../../components/BackButton/BackButton';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
@@ -201,6 +202,9 @@ function StoryScreen() {
           >
             <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
           </Button>
+          <View style={styles.bottomReactionContainer}>
+            <ReactionPicker storyId={parseInt(storyId as string, 10)} />
+          </View>
         </ScrollView>
       )}
     </SafeAreaView>

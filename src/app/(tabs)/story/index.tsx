@@ -1,12 +1,11 @@
-import { useLocalSearchParams, router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import * as cheerio from 'cheerio';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   ScrollView,
-  Share,
   Text,
-  TouchableOpacity,
   View,
   useWindowDimensions,
 } from 'react-native';
@@ -16,11 +15,12 @@ import { RenderHTML } from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
-import BackButton from '../../../components/BackButton/BackButton';
+import AuthorImage from '../../../components/AuthorImage/AuthorImage';
 import { fetchStory } from '../../../queries/stories';
 import { Story } from '../../../queries/types';
-import colors from '../../../styles/colors';
 import globalStyles, { fonts } from '../../../styles/globalStyles';
+import BackButton from '../../../components/BackButton/BackButton';
+import OptionBar from '../../../components/OptionBar/OptionBar';
 
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -46,51 +46,102 @@ function StoryScreen() {
     });
   }, [storyId]);
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message: `Check out this story from Girls Write Now!!!\n${story.link}/`,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <SafeAreaView style={[globalStyles.tabBarContainer, styles.container]}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <ScrollView
-          bounces
-          ref={scrollRef}
-          showsVerticalScrollIndicator={false}
-        >
-          <BackButton pressFunction={() => router.back()} />
-
-          <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
-
-          <TouchableOpacity
-            onPress={() => {
-              router.push({
-                pathname: '/author',
-                params: { author: story.author_id.toString() },
-              });
-            }}
+        <View>
+          <ScrollView
+            stickyHeaderIndices={[5]}
+            bounces
+            ref={scrollRef}
+            showsVerticalScrollIndicator={false}
           >
+            <BackButton pressFunction={() => router.back()} />
+            <View style={styles.container}>
+              {story?.featured_media ? (
+                <Image
+                  style={styles.image}
+                  source={{ uri: story.featured_media }}
+                />
+              ) : (
+                <Text>No image available</Text>
+              )}
+            </View>
+
+            <Text style={[globalStyles.h1, styles.title]}>{story?.title}</Text>
+
+            <AuthorImage
+              author_name={story.author_name}
+              author_Uri={story.author_image}
+              author_id={story.author_id.toString()}
+            />
+
+            <View>
+              <FlatList
+                style={styles.genres}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={[
+                  ...story.genre_medium,
+                  ...story.tone,
+                  ...story.topic,
+                ].filter(tag => tag != null)}
+                keyExtractor={(_, index) => index.toString()} // Add a key extractor for performance optimization
+                renderItem={({ item, index }) => (
+                  <View
+                    style={[
+                      styles.genresBorder,
+                      {
+                        backgroundColor:
+                          index % 2 === 0 ? '#E66E3F' : '#B49BC6',
+                      },
+                    ]}
+                  >
+                    <Text style={styles.genresText}>{item}</Text>
+                  </View>
+                )}
+              />
+            </View>
+            <OptionBar
+              story={story}
+              storyId={parseInt(storyId as string, 10)}
+            />
+
+            <RenderHTML
+              source={{
+                html: `"${cheerio.load(story.excerpt.html ?? '').text()}"`,
+              }}
+              baseStyle={globalStyles.h2}
+              contentWidth={width}
+              systemFonts={fonts}
+              tagsStyles={{ p: globalStyles.h2 }}
+              ignoredStyles={['color', 'fontSize', 'fontWeight']} // Ignore these inline styles
+            />
+
+            <View style={{ marginTop: 32 }} />
+
+            <RenderHTML
+              systemFonts={fonts}
+              source={story.content}
+              contentWidth={width}
+              baseStyle={styles.story}
+            />
+
+            <Text style={styles.authorProcess}>Author's Process</Text>
+
+            <RenderHTML
+              systemFonts={fonts}
+              source={story.process}
+              contentWidth={width}
+              baseStyle={styles.process}
+            />
+
             <View style={styles.author}>
               <Image
                 style={styles.authorImage}
-                source={{ uri: story.author_image ? story.author_image : '' }}
+                source={{ uri: story.author_image }}
               />
               <Text
                 style={[
@@ -101,107 +152,23 @@ function StoryScreen() {
                 By {story.author_name}
               </Text>
             </View>
-          </TouchableOpacity>
 
-          <View>
-            <FlatList
-              style={styles.genres}
-              horizontal
-              data={story.genre_medium}
-              renderItem={({ item }) => (
-                <View style={styles.genresBorder}>
-                  <Text style={[globalStyles.button1, styles.genresText]}>
-                    {item}
-                  </Text>
-                </View>
-              )}
+            <OptionBar
+              story={story}
+              storyId={parseInt(storyId as string, 10)}
             />
 
             <Button
               textColor="black"
-              buttonColor={colors.gwnOrange}
-              icon="share"
-              onPress={onShare}
+              icon="arrow-up"
+              onPress={scrollUp}
               style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
             >
-              <Text
-                style={[globalStyles.bodyUnderline, styles.shareButtonText]}
-              >
-                Share Story
-              </Text>
+              <Text style={styles.backToTopButtonText}>Back To Top</Text>
             </Button>
-          </View>
-
-          <RenderHTML
-            contentWidth={width}
-            source={story.excerpt}
-            baseStyle={{ ...globalStyles.body3, ...styles.excerpt }}
-            systemFonts={fonts}
-          />
-
-          <RenderHTML
-            contentWidth={width}
-            source={story.content}
-            baseStyle={{ ...globalStyles.body1, ...styles.story }}
-            systemFonts={fonts}
-          />
-
-          <Button
-            textColor="black"
-            buttonColor={colors.gwnOrange}
-            icon="share"
-            onPress={onShare}
-            style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-          >
-            <Text style={[globalStyles.bodyUnderline, styles.shareButtonText]}>
-              Share Story
-            </Text>
-          </Button>
-
-          <Text style={[globalStyles.h3, styles.authorProcess]}>
-            Author's Process
-          </Text>
-
-          <RenderHTML
-            contentWidth={width}
-            source={story.process}
-            baseStyle={{ ...globalStyles.body1, ...styles.process }}
-            systemFonts={fonts}
-          />
-
-          <TouchableOpacity
-            onPress={() => {
-              router.push({
-                pathname: '/author',
-                params: { author: story.author_id.toString() },
-              });
-            }}
-          >
-            <View style={styles.author}>
-              <Image
-                style={styles.authorImage}
-                source={{ uri: story.author_image ? story.author_image : '' }}
-              />
-              <Text
-                style={[
-                  globalStyles.subHeading1Bold,
-                  { textDecorationLine: 'underline' },
-                ]}
-              >
-                By {story.author_name}
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          <Button
-            textColor="black"
-            icon="arrow-up"
-            onPress={scrollUp}
-            style={{ width: 125, marginBottom: 16, borderRadius: 10 }}
-          >
-            <Text style={globalStyles.bodyBoldUnderline}>Back To Top</Text>
-          </Button>
-        </ScrollView>
+            <View style={styles.bottomReactionContainer} />
+          </ScrollView>
+        </View>
       )}
     </SafeAreaView>
   );

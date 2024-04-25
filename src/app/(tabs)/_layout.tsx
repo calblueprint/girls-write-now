@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Icon from '../../../assets/icons';
 import colors from '../../styles/colors';
+import globalStyles from '../../styles/globalStyles';
 
 function HomeIcon({ color }: { color: string }) {
   return (
@@ -36,7 +37,7 @@ function TabNav() {
     <Tabs
       backBehavior="history"
       screenOptions={{
-        tabBarLabelStyle: { fontSize: 14 },
+        tabBarLabelStyle: globalStyles.body1,
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: colors.citrus,
         tabBarInactiveTintColor: colors.fadedBlack,

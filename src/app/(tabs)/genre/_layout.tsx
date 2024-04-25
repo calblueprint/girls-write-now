@@ -1,10 +1,14 @@
 import { Stack } from 'expo-router';
 
+import { FilterContextProvider } from '../../../utils/FilterContext';
+
 function StackLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <FilterContextProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack>
+    </FilterContextProvider>
   );
 }
 

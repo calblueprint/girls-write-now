@@ -7,18 +7,19 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import { MultiSelect } from 'react-native-element-dropdown';
-import { Icon } from 'react-native-elements';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './styles';
 import BackButton from '../../../components/BackButton/BackButton';
+
 import PreviewCard from '../../../components/PreviewCard/PreviewCard';
 import { fetchGenreStoryById } from '../../../queries/genres';
 import { fetchStoryPreviewByIds } from '../../../queries/stories';
 import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
+import { FilterDropdown } from '../../../components/FilterDropdown/FilterDropdown';
 
 function GenreScreen() {
   const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
@@ -215,42 +216,6 @@ function GenreScreen() {
     );
   };
 
-  const renderFilterDropdown = (
-    placeholder: string,
-    value: string[],
-    data: string[],
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    return (
-      <MultiSelect
-        mode="default"
-        style={[styles.dropdown, styles.secondDropdown]}
-        value={value}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={globalStyles.body1}
-        inputSearchStyle={globalStyles.body1}
-        itemTextStyle={globalStyles.body1}
-        dropdownPosition="bottom"
-        itemContainerStyle={styles.itemContainer}
-        iconStyle={styles.iconStyle}
-        data={data.map(topic => {
-          return { label: topic, value: topic };
-        })}
-        renderSelectedItem={() => <View />}
-        maxHeight={400}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
-        renderRightIcon={() => <Icon name="arrow-drop-down" type="material" />}
-        onChange={item => {
-          if (item) {
-            setter(item);
-          }
-        }}
-      />
-    );
-  };
-
   const renderNoStoryText = () => {
     return (
       <View>
@@ -304,18 +269,18 @@ function GenreScreen() {
         </View>
 
         <View style={[styles.dropdownContainer, styles.firstDropdown]}>
-          {renderFilterDropdown(
-            'Tone',
-            selectedTonesForFiltering,
-            toneFilterOptions,
-            setSelectedTonesForFiltering,
-          )}
-          {renderFilterDropdown(
-            'Topic',
-            selectedTopicsForFiltering,
-            topicFilterOptions,
-            setSelectedTopicsForFiltering,
-          )}
+          <FilterDropdown
+            placeholder="Topic"
+            value={selectedTopicsForFiltering}
+            data={topicFilterOptions}
+            setter={setSelectedTopicsForFiltering}
+          />
+          <FilterDropdown
+            placeholder="Tone"
+            value={selectedTonesForFiltering}
+            data={toneFilterOptions}
+            setter={setSelectedTonesForFiltering}
+          />
         </View>
 
         {genreStoryIds.length === 0 && !isLoading ? (

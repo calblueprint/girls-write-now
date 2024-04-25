@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   overlayText: {
     color: colors.white,
     textAlign: 'right',
-    fontSize: 14,
   },
 });
 

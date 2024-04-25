@@ -39,7 +39,7 @@ function ContentCard({
     (async () => {
       const temp = await fetchAllReactionsToStory(id);
       if (temp != null) {
-        setReactions(temp.map(r => r.reaction));
+        setReactions(temp);
         return;
       }
 
@@ -76,8 +76,8 @@ function ContentCard({
             </Text>
           </View>
           <View style={styles.buttons}>
-            <ReactionDisplay reactions={reactions ?? []} />
-            <TouchableOpacity>
+            <ReactionDisplay storyId={storyId} reactions={reactions ?? []} />
+            <TouchableOpacity style={{ marginTop: 'auto' }}>
               <SaveStoryButton storyId={storyId} />
             </TouchableOpacity>
           </View>

@@ -1,11 +1,14 @@
 import { BottomSheet, CheckBox } from '@rneui/themed';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import 'react-native-gesture-handler';
+import ChildFilter from './ChildFilter';
+import ParentFilter from './ParentFilter';
 import styles from './styles';
 import Icon from '../../../assets/icons';
+import { TagFilter, useFilter } from '../../utils/FilterContext';
 
 type FilterModalProps = {
   isVisible: boolean;
@@ -13,33 +16,32 @@ type FilterModalProps = {
   title: string;
 };
 
-function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
-  const [checked1, toggleChecked1] = useState(false);
-  const [checked2, toggleChecked2] = useState(false);
-  const [checked3, toggleChecked3] = useState(false);
+export enum CATEGORIES {
+  GENRE = 'genre-medium',
+  TOPIC = 'topic',
+  TONE = 'tone',
+}
 
-  const genres = [
-    {
-      title: 'Fiction',
-      state: checked1,
-      setState: toggleChecked1,
+function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
+  const { dispatch, filters } = useFilter();
+
+  const toggleParentFilter = useCallback(
+    (id: number) => {
+      dispatch({ type: 'TOGGLE_MAIN_GENRE', mainGenreId: id });
     },
-    {
-      title: 'Erasure & Found Poetry',
-      state: checked2,
-      setState: toggleChecked2,
+    [dispatch],
+  );
+
+  const toggleChildFilter = useCallback(
+    (id: number) => {
+      dispatch({ type: 'TOGGLE_FILTER', id });
     },
-    {
-      title: 'Non-Fiction',
-      state: checked3,
-      setState: toggleChecked3,
-    },
-  ];
+    [dispatch],
+  );
 
   return (
     <SafeAreaProvider>
       <BottomSheet
-        modalProps={{}}
         isVisible={isVisible}
         containerStyle={styles.modalBackground}
         scrollViewProps={{ bounces: false }}
@@ -54,26 +56,36 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.modalTitle}> {title} </Text>
-            <ScrollView
-              showsVerticalScrollIndicator
-              bounces={false}
-              style={styles.scrollView}
-            >
-              {genres.map(item => {
+            <FlatList
+              data={Array.from(filters)}
+              renderItem={({ item }) => {
+                const [_, parentFilter] = item;
                 return (
-                  <CheckBox
-                    key={item.title}
-                    title={item.title}
-                    checked={item.state}
-                    onPress={() => item.setState(!item.state)}
-                    iconType="material-community"
-                    checkedIcon="checkbox-marked"
-                    uncheckedIcon="checkbox-blank-outline"
-                    checkedColor="black"
-                  />
+                  <>
+                    <ParentFilter
+                      id={parentFilter.id}
+                      name={parentFilter.name}
+                      checked={parentFilter.active}
+                      onPress={toggleParentFilter}
+                    />
+
+                    <FlatList
+                      data={parentFilter.children}
+                      renderItem={({ item }) => {
+                        return (
+                          <ChildFilter
+                            id={item.id}
+                            name={item.name}
+                            checked={item.active}
+                            onPress={toggleChildFilter}
+                          />
+                        );
+                      }}
+                    />
+                  </>
                 );
-              })}
-            </ScrollView>
+              }}
+            />
           </View>
         </View>
       </BottomSheet>

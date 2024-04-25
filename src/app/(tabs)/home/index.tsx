@@ -22,6 +22,11 @@ import { StoryCard, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
+/*
+ * This screen displays the home screen of the app.
+ * It displays the featured stories, recommended stories, and new stories. Note: recommended stories are only displayed if there are recent stories (that the user read, from the search screen)
+ * The featured stories header and description can be edited via the admin dashboard. Links in the description are automatically converted to hyperlinks
+ */
 function HomeScreen() {
   const { user } = useSession();
   const [username, setUsername] = useState('');

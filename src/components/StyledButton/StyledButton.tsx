@@ -9,6 +9,10 @@ type StyledButtonProps = {
   onPress: () => void;
 };
 
+/*
+ * A pre styled button
+ * Used throughout the auth flow, and on the setting screen
+ */
 function StyledButton({ disabled, onPress, text }: StyledButtonProps) {
   return (
     <Button

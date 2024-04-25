@@ -15,6 +15,9 @@ type GenreCardProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+/*
+ * Card displayed on the search screen, representing a single clickable genre tile.
+ */
 function GenreCard({ subgenres, pressFunction, cardColor }: GenreCardProps) {
   return (
     <TouchableOpacity onPress={pressFunction}>

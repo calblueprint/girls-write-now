@@ -12,6 +12,10 @@ type BackButtonProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+/*
+ * Universal pre styled back button
+ * pressFunction will usually be `router.back()`
+ */
 function BackButton({ pressFunction }: BackButtonProps) {
   return (
     <TouchableOpacity onPress={pressFunction}>

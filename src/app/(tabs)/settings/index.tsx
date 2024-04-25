@@ -23,6 +23,11 @@ import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
 
+/*
+ * This screen shows the user's profile information, and allows the user to edit profile information.
+ * If the user starts updating their information, the "log out" button will become a "save edits" button.
+ * The birthday can only be set once per account. Once it is set, it cannot be changed again.
+ */
 function SettingsScreen() {
   const { session, signOut } = useSession();
   const [loading, setLoading] = useState(true);

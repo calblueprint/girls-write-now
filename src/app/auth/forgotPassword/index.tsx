@@ -15,6 +15,11 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
+/*
+ * Handles the user's request to reset their password.
+ * Redirects to the verify page if the username/email is valid
+ * Uses `useDebounce` to check if the username/email is valid only when the user stops typing
+ */
 function ForgotPasswordScreen() {
   const { resetPassword } = useSession();
   const [email, setEmail] = useState('');

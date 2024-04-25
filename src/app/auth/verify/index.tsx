@@ -11,6 +11,13 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
+/*
+ * The OTP verification screen. This is where the user can enter the 6-digit code from their email.
+ * When redirecting to this screen, you need to pass in the parameters `{ finalRedirect: string, userEmail: string }`
+ * The final redirect is the path to redirect to if the verification is successful. The userEmail is for display purposes.
+ * The user can resend the code, and a `Toast` will appear if the resend was successful.
+ * If the code is invalid, a red error message under the OTP text input will be displayed
+ */
 function VerificationScreen() {
   const { user, verifyOtp, resendVerification } = useSession();
   const [errorMessage, setErrorMessage] = useState('');

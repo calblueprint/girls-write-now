@@ -8,6 +8,10 @@ type AccountDataDisplayProps = {
   value: string | React.ReactNode;
 };
 
+/*
+ * Used on the setting page. Displays information about the user's account.
+ * For example label="First Name" value="John"
+ */
 function AccountDataDisplay({ label, value }: AccountDataDisplayProps) {
   return (
     <View style={styles.view}>

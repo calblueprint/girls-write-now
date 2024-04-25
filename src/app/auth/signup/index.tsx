@@ -16,6 +16,10 @@ import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
 
+/*
+ * The screen where users can create a new account
+ * The user can only sign up once all the requirement are met
+ */
 function SignUpScreen() {
   const { signUp } = useSession();
 

@@ -10,6 +10,11 @@ import {
   Manrope_600SemiBold,
 } from '@expo-google-fonts/manrope';
 
+/**
+ * The entry point to the app. While the app is loading, it shows the SplashScreen.
+ * It loads the fonts used in the app, and, if the user is signed it, it redirects the user to home.
+ * Otherwise, it redirects the user to the login page
+ */
 function StartPage() {
   const { session, isLoading } = useSession();
   const [delay, setDelay] = useState(true);

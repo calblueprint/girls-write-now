@@ -17,6 +17,10 @@ type Option = {
   value: string;
 };
 
+/*
+ * A prestyled dropdown selector.
+ * Used primarily in the auth flows.
+ */
 function UserSelectorInput({
   options,
   label,

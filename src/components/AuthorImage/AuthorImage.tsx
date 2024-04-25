@@ -12,6 +12,10 @@ type AuthorImageProps = {
   //   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+/*
+ * Displays the author's profile picture in a circle with the text "Authors:" before it, followed by the author's name
+ * Used exclusively on the story screen
+ */
 function AuthorImage({
   author_name,
   author_id,

@@ -24,6 +24,11 @@ type ContentCardProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+/*
+ * Displays a story for use in horizontal ScrollView
+ * Includes options to save the story, and see the reactions to a story
+ * Uses the PubSubContext to update its icons based on user interaction
+ */
 function ContentCard({
   id,
   title,

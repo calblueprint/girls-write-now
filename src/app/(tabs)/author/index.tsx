@@ -16,6 +16,11 @@ import {
 import { Author, StoryPreview } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 
+/*
+ * This screen displays information about an author.
+ * When redirecting to this page, you must supply the parameter `{ author: string }`, which is the string of a number representing the id of the author.
+ * This id is parsed to get the integer id, used to fetch the author's data.
+ */
 function AuthorScreen() {
   const [authorInfo, setAuthorInfo] = useState<Author>();
   const [authorStoryPreview, setAuthorStoryPreview] =

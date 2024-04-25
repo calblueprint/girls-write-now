@@ -18,6 +18,10 @@ const reactionColors: Record<string, string> = {
   muscle: '#eddcf7',
 };
 
+/*
+ * Displays the reactions for a story.
+ * Automatically updates based on user interaction using the PubSubContext.
+ */
 function ReactionDisplay({ reactions, storyId }: ReactionDisplayProps) {
   const { channels, getPubSubValue } = usePubSub();
   const [reactionCount, setReactionCount] = useState(0);

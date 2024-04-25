@@ -16,6 +16,10 @@ type UserStringInputProps = {
   onChange?: (text: string) => any;
 };
 
+/*
+ * A prestyled text input.
+ * Used primarily in the auth flow.
+ */
 export default function UserStringInput({
   placeholder,
   value,

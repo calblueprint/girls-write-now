@@ -12,6 +12,10 @@ import { useSession } from '../../../utils/AuthContext';
 import PasswordComplexityText from '../../../components/PasswordComplexityText/PasswordComplexityText';
 import { isPasswordSameAsBefore } from '../../../queries/profiles';
 
+/*
+ * The screen where the user enters their new password, after verifying their email.
+ * The user can only reset their password once all requirements are met.
+ */
 function ResetPasswordScreen() {
   const { session, updateUser, signOut } = useSession();
   const [password, setPassword] = useState('');

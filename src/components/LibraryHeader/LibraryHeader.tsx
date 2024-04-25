@@ -8,6 +8,10 @@ import globalStyles from '../../styles/globalStyles';
 import colors from '../../styles/colors';
 import { useSession } from '../../utils/AuthContext';
 
+/*
+ * The header of the library screen
+ * Displays the settings button, and the user's username
+ */
 export default function LibraryHeader() {
   const { user } = useSession();
 

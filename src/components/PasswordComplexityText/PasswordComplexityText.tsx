@@ -10,6 +10,9 @@ type PasswordComplexityTextProps = {
   condition: boolean;
 };
 
+/*
+ * Used to represent a password requirement
+ */
 export default function PasswordComplexityText({
   condition,
   message,

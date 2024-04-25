@@ -1,4 +1,3 @@
-import React from 'react';
 import { GestureResponderEvent, Pressable, View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -11,6 +10,10 @@ type RecentSearchCardProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+/*
+ * Represents a search made by the user in the past
+ * Will only show up if the user clicks "enter" or "done" on their keyboard when searching
+ */
 function RecentSearchCard({
   value,
   numResults,

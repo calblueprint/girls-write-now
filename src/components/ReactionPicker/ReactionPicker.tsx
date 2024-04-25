@@ -16,6 +16,10 @@ type ReactionPickerProps = {
   storyId: number;
 };
 
+/*
+ * Allows the user to select a reaction to a story.
+ * Published the update using the PubSubContext to update ReactionDisplays
+ */
 const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
   const { user } = useSession();
   const { publish } = usePubSub();

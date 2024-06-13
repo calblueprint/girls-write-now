@@ -128,13 +128,13 @@ function SettingsScreen() {
         },
         {
           text: 'Cancel',
-          onPress: () => { },
+          onPress: () => {},
           style: 'cancel',
         },
       ],
       {
         cancelable: true,
-        onDismiss: () => { },
+        onDismiss: () => {},
       },
     );
 

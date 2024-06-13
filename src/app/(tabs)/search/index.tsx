@@ -68,6 +68,13 @@ const setRecentStory = async (recentStories: StoryPreview[]) => {
   }
 };
 
+/*
+ * This screen handles all the story searching. It initially loads all stories, and functions to filter the stories.
+ * When the user first lands on the page, or if the "cancel" button on the search bar is clicked, all the genres tiles are shown. Using the genre dropdown is equivilent to clicking on a genre tile in this state.
+ * When a genre tile is selected, the user is redirected to the genre screen.
+ * When the user starts using the search bar, the stories are filtered based on the search. The user can further filter down the search based on the genre/topic/tone dropdowns. All filters must match for a story to be shown. Only genres/topics/tones that return results based on ONLY the text search are shown in the dropdown. Selected genre/topic/tone dropdowns will not affect the options in the dropdowns, only changing the search text. Selecting an option changes the color of the dropdown.
+ * Stories are preloaded with reaction to reduce the amount of network requests sent to supabase.
+ */
 function SearchScreen() {
   const [allStories, setAllStories] = useState<
     StoryPreviewWithPreloadedReactions[]

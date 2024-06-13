@@ -24,6 +24,10 @@ const toastConfig: ToastConfig = {
   ),
 };
 
+/*
+ * A component to provide a toast notification to the user.
+ * User primarily in on the auth verify screen.
+ */
 function ToastComponent() {
   return <Toast config={toastConfig} />;
 }

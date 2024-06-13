@@ -14,6 +14,11 @@ type FavoriteStoryButtonProps = {
   storyId: number;
 };
 
+/*
+ * A button that handles the state of the favorite story icon.
+ * Automatically updates using PubSubContext based on user interaction.
+ * Changes the icon displayed based on if the story is already favorited
+ */
 export default function FavoriteStoryButton({
   storyId,
 }: FavoriteStoryButtonProps) {

@@ -22,6 +22,12 @@ import globalStyles, { fonts } from '../../../styles/globalStyles';
 import BackButton from '../../../components/BackButton/BackButton';
 import OptionBar from '../../../components/OptionBar/OptionBar';
 
+/*
+ * This screen displays the story based on the params `{ storyId: string }`
+ * It loads the story from supabase based on the storyId.
+ * It uses the `react-native-render-html` to render the stories HTML from wordpress.
+ * The user can also add the story to favorites/reading, and react to the story from this screen.
+ */
 function StoryScreen() {
   const [isLoading, setLoading] = useState(true);
   const scrollRef = React.useRef<any>(null);
@@ -84,9 +90,9 @@ function StoryScreen() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 data={[
-                  ...story.genre_medium,
-                  ...story.tone,
-                  ...story.topic,
+                  ...(story.genre_medium ?? []),
+                  ...(story.tone ?? []),
+                  ...(story.topic ?? []),
                 ].filter(tag => tag != null)}
                 keyExtractor={(_, index) => index.toString()} // Add a key extractor for performance optimization
                 renderItem={({ item, index }) => (

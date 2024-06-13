@@ -21,6 +21,12 @@ import { StoryPreview, GenreStories } from '../../../queries/types';
 import globalStyles from '../../../styles/globalStyles';
 import { FilterDropdown } from '../../../components/FilterDropdown/FilterDropdown';
 
+/*
+ * This screen allows the user to filter stories based on the tone and topic for a specific genre.
+ * When redirecting to this page, you must supply the parameters `{ genreId: string; genreType: GenreType; genreName: string }`
+ * genreType is a enum, which can either be a Parent or Child. Parent genre's are genre's with children. Ex. Filter is a parent of Children's Fiction.
+ * useEffects are triggered when a dropdown tone/topic is selected, and updates the screen with the correct filtered stories.
+ */
 function GenreScreen() {
   const [genreStoryData, setGenreStoryData] = useState<GenreStories[]>();
   const [genreStoryIds, setGenreStoryIds] = useState<string[]>([]);

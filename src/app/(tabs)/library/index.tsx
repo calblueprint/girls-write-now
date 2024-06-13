@@ -15,6 +15,10 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import { Channel, usePubSub } from '../../../utils/PubSubContext';
 
+/*
+ * This screen displays the user's saved and favorited stories.
+ * The screen recieves updates from PreviewCard and ContentCard from the PubSubContext via the usePubSub hook. If a story is favorited, the channel will be updated, and a useEffect is triggered. The screen is updated after 4 seconds of the update. This is to give the user time to resave a story on the library page if they accidently unsave it.
+ */
 function LibraryScreen() {
   const { user } = useSession();
   const [favoritesSelected, setFavoritesSelected] = useState(true);

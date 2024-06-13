@@ -21,6 +21,10 @@ import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+/*
+ * The screen that lets the user enter information about themselves that will be associated to their account
+ * The birthday can only be changed once, so a warning is shown if the user sets a birthday. If a birthday is not set, it can be set on the setting screen
+ */
 function OnboardingScreen() {
   const { session, user } = useSession();
   const [loading, setLoading] = useState(true);

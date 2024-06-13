@@ -14,6 +14,11 @@ type FilterDropdownProps = {
   setter: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
+/*
+ * Dropdown used for filtering stories
+ * Will change the border color to `selectedBorderColor` if an option is selected
+ * Primarily used on the search and genre screens
+ */
 function FilterDropdown({
   placeholder,
   value,

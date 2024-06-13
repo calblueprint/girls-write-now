@@ -13,6 +13,9 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 
+/*
+ * The screen to handle a user's login request
+ */
 function LoginScreen() {
   const sessionHandler = useSession();
   const [emailOrUsername, setEmailOrUsername] = useState('');

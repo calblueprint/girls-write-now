@@ -31,6 +31,11 @@ type PreviewCardProps = {
   pressFunction: (event: GestureResponderEvent) => void;
 };
 
+/*
+ * Displays the preview of a story.
+ * Shows author, title, story image, and excerpt.
+ * Allows the user to see the current reaction count, and add the story to their saved list
+ */
 function PreviewCard({
   title,
   image,

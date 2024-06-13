@@ -15,6 +15,11 @@ type SaveStoryButtonProps = {
   defaultState?: boolean | null;
 };
 
+/*
+ * Keeps state of a story's saved story button.
+ * Changes the icon of the component based on whether the story is saved or not.
+ * Updates live based on the PubSubContext
+ */
 export default function SaveStoryButton({
   storyId,
   defaultState = null,

@@ -12,6 +12,9 @@ type OptionBarProps = {
   story: Story;
 };
 
+/*
+ * Contains the reaction picker, saved story button, favorite story button, and share button to be displayed on the story screen.
+ */
 function OptionBar({ storyId, story }: OptionBarProps) {
   const onShare = async () => {
     try {

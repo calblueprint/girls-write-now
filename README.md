@@ -4,6 +4,24 @@ This project is designed and developed by a team of UC Berkeley students through
 
 Learn more about [Girls Write Now](https://girlswritenow.org/) and [Cal Blueprint](https://calblueprint.org/).
 
+## App Preview
+
+### Story Search/Filtering
+
+https://github.com/calblueprint/girls-write-now/assets/34043950/6277c625-fa8a-495d-b2eb-ba70807cfd87
+
+### Story Recommendation
+
+![Simulator Screen Recording - iPhone 15 - 2024-04-25 at 14 09 19](https://github.com/calblueprint/girls-write-now/assets/34043950/6a92dbf7-be0e-4210-8a66-35fddd578fee)
+
+### Saving/Favoriting Stories
+
+![saved stories](https://github.com/calblueprint/girls-write-now/assets/34043950/e40b5a50-d53c-497a-8b70-433def6dde67)
+
+### Reacting To Stories
+
+![reactions](https://github.com/calblueprint/girls-write-now/assets/34043950/32d5c54e-5a4e-4517-8475-ea38b2e4cf69)
+
 ---
 
 ## Getting Started

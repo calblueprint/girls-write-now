@@ -9,6 +9,7 @@ type AuthorCardProps = {
   bio: string;
   artist_statement: string;
 };
+
 function AuthorCard({
   name,
   pronouns,

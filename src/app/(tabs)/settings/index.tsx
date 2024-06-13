@@ -122,19 +122,19 @@ function SettingsScreen() {
       '',
       [
         {
-          text: 'Cancel',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        {
           text: 'OK',
           onPress: onDelete,
           style: 'destructive',
         },
+        {
+          text: 'Cancel',
+          onPress: () => { },
+          style: 'cancel',
+        },
       ],
       {
         cancelable: true,
-        onDismiss: () => {},
+        onDismiss: () => { },
       },
     );
 

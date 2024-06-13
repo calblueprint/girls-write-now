@@ -7,6 +7,7 @@ import {
   Platform,
   Pressable,
   Appearance,
+  TouchableOpacity,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -22,6 +23,7 @@ import colors from '../../../styles/colors';
 import globalStyles from '../../../styles/globalStyles';
 import { useSession } from '../../../utils/AuthContext';
 import supabase from '../../../utils/supabase';
+import { deleteUser } from '../../../queries/auth';
 
 /*
  * This screen shows the user's profile information, and allows the user to edit profile information.
@@ -113,6 +115,37 @@ function SettingsScreen() {
   useEffect(() => {
     if (!session) resetAndPushToRouter('/auth/login');
   }, [session]);
+
+  const showAlert = () =>
+    Alert.alert(
+      'Are you sure you want to delete your account?',
+      '',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: onDelete,
+          style: 'destructive',
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      },
+    );
+
+  const onDelete = async () => {
+    const uuid = session?.user.id;
+
+    if (uuid) {
+      deleteUser(uuid);
+      signOut();
+    }
+  };
 
   const updateProfile = async () => {
     try {
@@ -206,7 +239,39 @@ function SettingsScreen() {
           </View>
 
           <Text style={[globalStyles.h1, styles.heading]}>Settings</Text>
-          <Text style={[globalStyles.h2, styles.subheading]}>Account</Text>
+          <View
+            style={[
+              styles.subheading,
+              { flex: 1, gap: 14, flexDirection: 'row' },
+            ]}
+          >
+            <Text style={globalStyles.h2}>Account</Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignSelf: 'flex-end',
+                paddingBottom: 3,
+              }}
+            >
+              <Text style={[globalStyles.errorMessage, { color: colors.grey }]}>
+                (
+              </Text>
+              <TouchableOpacity onPress={showAlert}>
+                <Text
+                  style={[
+                    globalStyles.errorMessage,
+                    { color: colors.grey, textDecorationLine: 'underline' },
+                  ]}
+                >
+                  Delete account
+                </Text>
+              </TouchableOpacity>
+              <Text style={[globalStyles.errorMessage, { color: colors.grey }]}>
+                )
+              </Text>
+            </View>
+          </View>
 
           <View style={styles.staticData}>
             <AccountDataDisplay label="First Name" value={firstName} />

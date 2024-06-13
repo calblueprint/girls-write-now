@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import SplashScreen from '../components/SplashScreen/SplashScreen';
 import { useSession } from '../utils/AuthContext';
+
 import {
   useFonts,
   Manrope_700Bold,

@@ -20,7 +20,7 @@ import { Channel, usePubSub } from '../../../utils/PubSubContext';
  * The screen recieves updates from PreviewCard and ContentCard from the PubSubContext via the usePubSub hook. If a story is favorited, the channel will be updated, and a useEffect is triggered. The screen is updated after 4 seconds of the update. This is to give the user time to resave a story on the library page if they accidently unsave it.
  */
 function LibraryScreen() {
-  const { user } = useSession();
+  const { user, guest } = useSession();
   const [favoritesSelected, setFavoritesSelected] = useState(true);
   const [readingSelected, setReadingSelected] = useState(false);
   const [favoriteStories, setFavoriteStories] = useState<StoryPreview[]>([]);
@@ -66,6 +66,7 @@ function LibraryScreen() {
   };
 
   useEffect(() => {
+    if (guest) return;
     if (updateFavoritesListTimeout) {
       clearTimeout(updateFavoritesListTimeout);
     }
@@ -80,6 +81,7 @@ function LibraryScreen() {
   }, [channels[Channel.FAVORITES]]);
 
   useEffect(() => {
+    if (guest) return;
     if (updateReadingListTimeout) {
       clearTimeout(updateReadingListTimeout);
     }
@@ -94,6 +96,8 @@ function LibraryScreen() {
   }, [channels[Channel.SAVED_STORIES]]);
 
   useEffect(() => {
+    if (guest) return;
+
     (async () => {
       await Promise.all([
         fetchUserStoriesFavorites(user?.id).then(favorites =>
@@ -144,28 +148,35 @@ function LibraryScreen() {
       <View style={{ width: '100%', flex: 1, marginBottom: 100 }}>
         {favoritesSelected &&
           (favoriteStories.length > 0 ? (
-            <FlatList data={favoriteStories} renderItem={renderItem} />
+            <FlatList
+              data={favoriteStories}
+              renderItem={obj => renderItem(obj as any)}
+            />
           ) : (
             <View style={{ paddingBottom: 16 }}>
               <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                Favorited stories
+                {guest ? 'Sign in' : 'Favorited stories'}
               </Text>
               <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                will appear here.
+                {guest ? 'to favorite stories.' : 'will appear here.'}
               </Text>
             </View>
           ))}
 
         {readingSelected &&
           (readingListStories.length > 0 ? (
-            <FlatList data={readingListStories} renderItem={renderItem} />
+            <FlatList
+              data={readingListStories}
+              renderItem={obj => renderItem(obj as any)}
+            />
           ) : (
             <View style={{ paddingBottom: 16 }}>
               <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                Saved stories
+                {guest}
+                {guest ? 'Sign in' : 'Saved stories'}
               </Text>
               <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
-                will appear here.
+                {guest ? 'to save stories.' : 'will appear here.'}
               </Text>
             </View>
           ))}

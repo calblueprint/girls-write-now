@@ -4,6 +4,7 @@ import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   dropdown: {
+    zIndex: 1,
     borderColor: colors.darkGrey,
     flexGrow: 0,
     flexShrink: 0,

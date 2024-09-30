@@ -31,6 +31,11 @@ function LoginScreen() {
     router.replace(path);
   };
 
+  const guestLogin = async () => {
+    sessionHandler.proceedAsGuest();
+    router.replace('/home');
+  };
+
   const signIn = async () => {
     setLoading(true);
 
@@ -122,10 +127,14 @@ function LoginScreen() {
         </View>
 
         <View style={styles.redirectText}>
-          <Text style={globalStyles.body1}>Don&apos;t have an account?</Text>
+          <Text style={globalStyles.body1}>No account?</Text>
           <Link style={globalStyles.bodyBoldUnderline} href="/auth/signup">
             Sign Up
           </Link>
+          <Text style={globalStyles.body1}>or</Text>
+          <Text style={globalStyles.bodyBoldUnderline} onPress={guestLogin}>
+            Proceed as Guest
+          </Text>
         </View>
       </View>
     </SafeAreaView>

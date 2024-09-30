@@ -266,11 +266,13 @@ function SignUpScreen() {
                 onPress={signUpWithEmail}
               />
             </View>
-            <View style={styles.redirectText}>
-              <Text style={globalStyles.body1}>Already have an account?</Text>
-              <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
-                Log In
-              </Link>
+            <View style={styles.bottomText}>
+              <View style={styles.redirectText}>
+                <Text style={globalStyles.body1}>Already have an account?</Text>
+                <Link style={globalStyles.bodyBoldUnderline} href="/auth/login">
+                  Log In
+                </Link>
+              </View>
             </View>
           </View>
         </ScrollView>

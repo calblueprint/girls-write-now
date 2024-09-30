@@ -42,7 +42,7 @@ function OptionBar({ storyId, story }: OptionBarProps) {
       <View style={styles.right}>
         <SaveStoryButton storyId={storyId} />
         <FavoriteStoryButton storyId={storyId} />
-        <TouchableOpacity onPress={onShare}>
+        <TouchableOpacity onPress={onShare} style={{ marginTop: 2 }}>
           <Icon type="share_outline" />
         </TouchableOpacity>
       </View>

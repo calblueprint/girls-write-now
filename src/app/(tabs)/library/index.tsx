@@ -148,7 +148,10 @@ function LibraryScreen() {
       <View style={{ width: '100%', flex: 1, marginBottom: 100 }}>
         {favoritesSelected &&
           (favoriteStories.length > 0 ? (
-            <FlatList data={favoriteStories} renderItem={renderItem} />
+            <FlatList
+              data={favoriteStories}
+              renderItem={obj => renderItem(obj as any)}
+            />
           ) : (
             <View style={{ paddingBottom: 16 }}>
               <Text style={[globalStyles.h3, { textAlign: 'center' }]}>
@@ -162,7 +165,10 @@ function LibraryScreen() {
 
         {readingSelected &&
           (readingListStories.length > 0 ? (
-            <FlatList data={readingListStories} renderItem={renderItem} />
+            <FlatList
+              data={readingListStories}
+              renderItem={obj => renderItem(obj as any)}
+            />
           ) : (
             <View style={{ paddingBottom: 16 }}>
               <Text style={[globalStyles.h3, { textAlign: 'center' }]}>

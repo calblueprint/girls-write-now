@@ -1,10 +1,11 @@
 import { Tabs } from 'expo-router';
-import { Platform, View } from 'react-native';
+import { Alert, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import Icon from '../../../assets/icons';
+import Icon, { IconType } from '../../../assets/icons';
 import colors from '../../styles/colors';
 import globalStyles from '../../styles/globalStyles';
+import { useSession } from '../../utils/AuthContext';
 
 function HomeIcon({ color }: { color: string }) {
   return (
@@ -22,15 +23,18 @@ function SearchIcon({ color }: { color: string }) {
   );
 }
 
-function LibraryIcon({ color }: { color: string }) {
-  return (
-    <Icon
-      type={color === colors.fadedBlack ? 'library_inactive' : 'library_active'}
-    />
-  );
+function LibraryIcon({ color, guest }: { color: string; guest: boolean }) {
+  let icon: IconType;
+  if (guest) {
+    icon = 'library_inactive';
+  } else {
+    icon = color === colors.fadedBlack ? 'library_inactive' : 'library_active';
+  }
+  return <Icon type={icon} />;
 }
 
 function TabNav() {
+  const { guest } = useSession();
   const insets = useSafeAreaInsets();
 
   return (
@@ -86,8 +90,9 @@ function TabNav() {
         options={{
           headerShown: false,
           tabBarLabel: 'Library',
-          tabBarIcon: ({ color }) => LibraryIcon({ color }),
+          tabBarIcon: ({ color }) => LibraryIcon({ color, guest }),
         }}
+        listeners={{}}
       />
       <Tabs.Screen
         name="settings"

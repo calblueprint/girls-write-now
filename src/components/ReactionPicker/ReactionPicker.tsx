@@ -1,7 +1,7 @@
 import { faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useEffect, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
 
 import styles from './styles';
 import Emoji from 'react-native-emoji';
@@ -21,7 +21,7 @@ type ReactionPickerProps = {
  * Published the update using the PubSubContext to update ReactionDisplays
  */
 const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
-  const { user } = useSession();
+  const { user, guest } = useSession();
   const { publish } = usePubSub();
   const [showReactions, setShowReactions] = useState(false);
   const [currentReaction, setCurrentReaction] = useState('');
@@ -36,6 +36,12 @@ const ReactionPicker = ({ storyId }: ReactionPickerProps) => {
   };
 
   const handleReactionPress = (reactionName: string) => {
+    if (guest) {
+      Alert.alert(
+        'You are not signed in',
+        'Create an account to react to stories.',
+      );
+    }
     if (currentReaction == reactionName) {
       removeReaction(reactionName);
     } else {

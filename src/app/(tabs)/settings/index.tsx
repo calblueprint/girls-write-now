@@ -31,7 +31,7 @@ import { deleteUser } from '../../../queries/auth';
  * The birthday can only be set once per account. Once it is set, it cannot be changed again.
  */
 function SettingsScreen() {
-  const { session, signOut } = useSession();
+  const { session, signOut, guest } = useSession();
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [username, setUsername] = useState('');
@@ -157,7 +157,7 @@ function SettingsScreen() {
         ...(gender && { gender }),
         ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
-        ...(birthday && { birthday }),
+        ...(birthdayExists && { birthday }),
       };
 
       // Check if user exists

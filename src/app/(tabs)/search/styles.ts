@@ -83,11 +83,10 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   emptySearch: {
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'center',
-    alignItems: 'center',
-    marginTop: '60%',
+    // display: 'flex',
+    // flexDirection: 'column',
+    // textAlign: 'center',
+    // alignItems: 'center',
   },
   cancelButton: {
     color: colors.grey,
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
     color: '#797979',
   },
   dropdownContainer: {
+    zIndex: 1,
     marginLeft: 10,
     marginTop: 13,
     marginBottom: 30,

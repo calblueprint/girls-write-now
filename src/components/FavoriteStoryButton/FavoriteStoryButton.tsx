@@ -9,6 +9,7 @@ import {
 } from '../../queries/savedStories';
 import { useSession } from '../../utils/AuthContext';
 import { Channel, usePubSub } from '../../utils/PubSubContext';
+import { Alert } from 'react-native';
 
 type FavoriteStoryButtonProps = {
   storyId: number;
@@ -22,17 +23,21 @@ type FavoriteStoryButtonProps = {
 export default function FavoriteStoryButton({
   storyId,
 }: FavoriteStoryButtonProps) {
-  const { user } = useSession();
+  const { user, guest } = useSession();
   const { channels, publish } = usePubSub();
   const [storyIsFavorited, setStoryIsFavorited] = useState(false);
 
   useEffect(() => {
+    if (guest) return;
+
     isStoryInFavorites(storyId, user?.id).then(storyInReadingList => {
       setStoryIsFavorited(storyInReadingList);
     });
   }, [storyId]);
 
   useEffect(() => {
+    if (guest) return;
+
     isStoryInFavorites(storyId, user?.id).then(storyInFavorites => {
       setStoryIsFavorited(storyInFavorites);
       publish(Channel.FAVORITES, storyId, storyInFavorites);
@@ -81,6 +86,21 @@ export default function FavoriteStoryButton({
       </Svg>
     );
   }, []);
+
+  if (guest) {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          Alert.alert(
+            'You are not signed in',
+            'Create an account to favorite stories.',
+          )
+        }
+      >
+        {renderNotFavoritedIcon}
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <TouchableOpacity onPress={() => favoriteStory(!storyIsFavorited)}>

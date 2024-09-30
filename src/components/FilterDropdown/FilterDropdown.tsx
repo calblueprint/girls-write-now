@@ -84,7 +84,11 @@ function FilterSingleDropdown({
       style={styles.dropdown}
       value={value}
       placeholderStyle={[globalStyles.body1, styles.placeholderStyle]}
-      selectedTextStyle={globalStyles.body1}
+      selectedTextStyle={[
+        globalStyles.body1,
+        styles.placeholderStyle,
+        { color: colors.black },
+      ]}
       inputSearchStyle={globalStyles.body1}
       itemTextStyle={globalStyles.body1}
       dropdownPosition="bottom"

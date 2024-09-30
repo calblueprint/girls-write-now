@@ -25,7 +25,7 @@ export type TagFilter = {
   parent: number | null;
 };
 
-type ParentFilter = { children: TagFilter[] } & TagFilter;
+export type ParentFilter = { children: TagFilter[] } & TagFilter;
 
 export interface FilterState {
   filters: Map<number, ParentFilter>;

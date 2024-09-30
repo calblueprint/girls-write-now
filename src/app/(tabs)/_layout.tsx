@@ -92,18 +92,7 @@ function TabNav() {
           tabBarLabel: 'Library',
           tabBarIcon: ({ color }) => LibraryIcon({ color, guest }),
         }}
-        listeners={{
-          tabPress: e => {
-            if (guest) {
-              Alert.alert(
-                'You are not signed in',
-                'Sign in to access your library.',
-              );
-
-              e.preventDefault();
-            }
-          },
-        }}
+        listeners={{}}
       />
       <Tabs.Screen
         name="settings"

@@ -76,6 +76,9 @@ export function AuthContextProvider({
       .then(({ data: { session: newSession } }) => {
         setSession(newSession);
         setUser(newSession ? newSession.user : null);
+        if (newSession) {
+          setGuest(false);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -106,6 +109,7 @@ export function AuthContextProvider({
     }); // will trigger the use effect to update the session
 
     setUser(value.data.user);
+    if (value.data.user) setGuest(false);
     return value;
   };
 
@@ -121,6 +125,7 @@ export function AuthContextProvider({
     });
 
     setUser(value.data.user);
+    if (value.data.user) setGuest(false);
     return value;
   };
 
@@ -128,6 +133,7 @@ export function AuthContextProvider({
     await supabase.auth.signOut();
     setUser(null);
     setSession(null);
+    setGuest(false);
   };
 
   const verifyOtp = async (email: string, token: string) => {

@@ -9,6 +9,7 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -31,6 +32,7 @@ import {
   FilterDropdown,
   FilterSingleDropdown,
 } from '../../../components/FilterDropdown/FilterDropdown';
+import { Icon } from 'react-native-elements';
 
 const getRecentSearch = async () => {
   try {
@@ -370,7 +372,11 @@ function SearchScreen() {
             setShowRecents(true);
             setShowGenreCarousals(false);
           }}
-          searchIcon
+          searchIcon={
+            Platform.OS === 'ios' ? (
+              <Icon name="search" color={colors.grey} />
+            ) : undefined
+          }
           clearIcon={false}
           cancelButtonProps={{
             buttonTextStyle: [globalStyles.body1Bold, styles.cancelButton],

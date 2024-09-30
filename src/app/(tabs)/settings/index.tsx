@@ -157,7 +157,7 @@ function SettingsScreen() {
         ...(gender && { gender }),
         ...(pronouns && { pronouns }),
         ...(raceEthnicity && { race_ethnicity: raceEthnicity }),
-        ...(birthday && { birthday }),
+        ...(birthdayExists && { birthday }),
       };
 
       // Check if user exists

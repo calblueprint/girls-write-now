@@ -13,12 +13,18 @@ export default StyleSheet.create({
     fontWeight: '700',
     textDecorationLine: 'underline',
   },
+  bottomText: {
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'column',
+    gap: 4,
+    marginTop: 16,
+    marginBottom: 64,
+  },
   redirectText: {
     gap: 8,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 16,
-    marginBottom: 64,
   },
   title: {
     paddingTop: 64,

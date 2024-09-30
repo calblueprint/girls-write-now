@@ -18,6 +18,8 @@ import supabase from './supabase';
 
 export interface AuthState {
   session: Session | null;
+  guest: boolean; // apple wants us to allow users to use the app without an account
+  proceedAsGuest: () => void;
   user: User | null;
   isLoading: boolean;
   signIn: (newSession: Session | null) => void;
@@ -64,6 +66,7 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [session, setSession] = useState<Session | null>(null);
+  const [guest, setGuest] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -80,11 +83,20 @@ export function AuthContextProvider({
 
     supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
+      if (newSession) {
+        setGuest(false);
+      }
     });
   }, []);
 
   const signIn = (newSession: Session | null) => {
     setSession(newSession);
+  };
+
+  const proceedAsGuest = async () => {
+    setGuest(true);
+    setSession(null);
+    setUser(null);
   };
 
   const signInWithEmail = async (email: string, password: string) => {
@@ -144,6 +156,7 @@ export function AuthContextProvider({
   const authContextValue = useMemo(
     () => ({
       user,
+      guest,
       session,
       isLoading,
       signUp,
@@ -151,11 +164,12 @@ export function AuthContextProvider({
       signInWithEmail,
       signOut,
       verifyOtp,
+      proceedAsGuest,
       updateUser,
       resetPassword,
       resendVerification,
     }),
-    [session, user, isLoading],
+    [session, user, isLoading, guest],
   );
 
   return (

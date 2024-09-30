@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
     position: 'absolute', // Positioning the container above the toggle button
-    bottom: -2,
+    bottom: -4,
     backgroundColor: '#D9D9D9',
     borderRadius: 20,
   },

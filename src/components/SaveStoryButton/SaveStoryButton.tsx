@@ -9,6 +9,7 @@ import {
 } from '../../queries/savedStories';
 import { Channel, usePubSub } from '../../utils/PubSubContext';
 import { useSession } from '../../utils/AuthContext';
+import { Alert, View } from 'react-native';
 
 type SaveStoryButtonProps = {
   storyId: number;
@@ -24,13 +25,14 @@ export default function SaveStoryButton({
   storyId,
   defaultState = null,
 }: SaveStoryButtonProps) {
-  const { user } = useSession();
+  const { user, guest } = useSession();
   const [storyIsSaved, setStoryIsSaved] = useState<boolean | null>(
     defaultState,
   );
   const { publish, channels, getPubSubValue } = usePubSub();
 
   useEffect(() => {
+    if (guest) return;
     if (defaultState != null) {
       return;
     }
@@ -41,6 +43,8 @@ export default function SaveStoryButton({
   }, [storyId]);
 
   useEffect(() => {
+    if (guest) return;
+
     if (getPubSubValue(Channel.SAVED_STORIES, storyId) != null) {
       setStoryIsSaved(getPubSubValue(Channel.SAVED_STORIES, storyId) ?? false);
     }
@@ -78,6 +82,21 @@ export default function SaveStoryButton({
       </Svg>
     );
   }, []);
+
+  if (guest) {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          Alert.alert(
+            'You are not signed in',
+            'Create an account to save stories to your library.',
+          )
+        }
+      >
+        {renderSaveStoryImage}
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <TouchableOpacity onPress={() => saveStory(!storyIsSaved)}>

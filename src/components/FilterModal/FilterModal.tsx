@@ -1,14 +1,17 @@
-import { BottomSheet, CheckBox } from '@rneui/themed';
-import { useCallback, useState } from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { BottomSheet } from '@rneui/themed';
+import { useCallback } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import ChildFilter from './ChildFilter';
-import ParentFilter from './ParentFilter';
 import styles from './styles';
 import Icon from '../../../assets/icons';
-import { TagFilter, useFilter } from '../../utils/FilterContext';
+import {
+  useFilter,
+  type ParentFilter as ParentFilterType,
+} from '../../utils/FilterContext';
+import ParentFilter from './ParentFilter';
 
 type FilterModalProps = {
   isVisible: boolean;
@@ -59,7 +62,7 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
             <FlatList
               data={Array.from(filters)}
               renderItem={({ item }) => {
-                const [_, parentFilter] = item;
+                const [_, parentFilter] = item as [number, ParentFilterType];
                 return (
                   <>
                     <ParentFilter
@@ -71,7 +74,7 @@ function FilterModal({ isVisible, setIsVisible, title }: FilterModalProps) {
 
                     <FlatList
                       data={parentFilter.children}
-                      renderItem={({ item }) => {
+                      renderItem={({ item }: { item: any }) => {
                         return (
                           <ChildFilter
                             id={item.id}

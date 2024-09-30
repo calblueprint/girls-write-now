@@ -401,7 +401,7 @@ function SearchScreen() {
           }}
         />
 
-        {((search && searchResults.length > 0) || showGenreCarousals) && (
+        {(search || showGenreCarousals) && (
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -440,15 +440,6 @@ function SearchScreen() {
             />
           </ScrollView>
         )}
-
-        {/* {search && ( */}
-        {/*   <View style={styles.default}> */}
-        {/*     <Button */}
-        {/*       title="Show Filter Modal" */}
-        {/*       onPress={() => setFilterVisible(true)} */}
-        {/*     /> */}
-        {/*   </View> */}
-        {/* )} */}
 
         {showRecents &&
           (search && searchResults.length > 0 ? (

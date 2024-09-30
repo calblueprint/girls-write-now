@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   reactionNumber: {
-    marginLeft: 16,
+    marginLeft: 10,
     marginTop: 16,
   },
 });
